@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { cn } from '@/helpers'
@@ -51,7 +52,6 @@ import {
     PAPER_SIZES,
     PAPER_SIZE_GROUPS,
 } from '../../generated-reports.constants'
-import { clampMinMax } from './generated-report-helper.utils'
 
 const SIZING_UNITS: TPaperSizeUnit[] = ['px', 'in', 'cm', 'mm', 'pt']
 
@@ -101,6 +101,7 @@ export function GenerateReportTemplatePicker({
                     })
                 )
             } catch {
+                toast.error('Template is broken. Please report to admin.')
                 setRenderedHtml(
                     "<p style='color:red;padding:20px;'>Failed to render template.</p>"
                 )
@@ -108,7 +109,7 @@ export function GenerateReportTemplatePicker({
                 setLoading(false)
             }
         },
-        []
+        [inputW]
     )
 
     useEffect(() => {
@@ -149,24 +150,21 @@ export function GenerateReportTemplatePicker({
     }
 
     const dimSchema = z.coerce.number().min(0.01).max(99999)
+
     const handleApplyDimensions = () => {
         if (!selected) return
+
         const parsedW = dimSchema.safeParse(inputW)
         const parsedH = dimSchema.safeParse(inputH)
-        const newW = parsedW.success
-            ? clampMinMax(parsedW.data, selected.min_width, selected.max_width)
-            : pageW
-        const newH = parsedH.success
-            ? clampMinMax(
-                  parsedH.data,
-                  selected.min_height,
-                  selected.max_height
-              )
-            : pageH
-        setPageW(newW)
-        setPageH(newH)
-        setInputW(String(newW))
-        setInputH(String(newH))
+
+        // If valid numbers, use them. Otherwise, stay as is.
+        const nextW = parsedW.success ? parsedW.data : pageW
+        const nextH = parsedH.success ? parsedH.data : pageH
+
+        setPageW(nextW)
+        setPageH(nextH)
+        setInputW(String(nextW))
+        setInputH(String(nextH))
     }
 
     const resetDimensions = () => {
@@ -197,7 +195,7 @@ export function GenerateReportTemplatePicker({
                             placeholder="Search templates…"
                         />
                     </div>
-                    <CommandList className="max-h-[320px] flex-1 px-2 py-2">
+                    <CommandList className="max-h-[320px] ecoop-scroll flex-1 px-2 py-2">
                         <CommandEmpty className="py-6 text-center text-xs text-muted-foreground">
                             No templates found.
                         </CommandEmpty>
@@ -397,7 +395,7 @@ export function GenerateReportTemplatePicker({
                         //     }}
                         // >
                         <iframe
-                            className="border-0 block"
+                            className="border-0 block rounded-xl"
                             sandbox="allow-same-origin"
                             srcDoc={iframeSrcDoc}
                             style={{

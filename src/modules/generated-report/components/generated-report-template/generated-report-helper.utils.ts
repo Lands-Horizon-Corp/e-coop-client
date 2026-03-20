@@ -33,13 +33,6 @@ export function getDefaultGeneratedReportTemplate(
     return REPORT_REGISTRY[type]?.[0]
 }
 
-export const clampMinMax = (val: number, min?: number, max?: number) => {
-    if (min != null && val < min) return min
-    if (max != null && val > max) return max
-    return val
-}
-
-/** Approximate conversion of value+unit to CSS px for scaling calculations */
 export const toPx = (value: number, unit: TPaperSizeUnit): number => {
     switch (unit) {
         case 'in':

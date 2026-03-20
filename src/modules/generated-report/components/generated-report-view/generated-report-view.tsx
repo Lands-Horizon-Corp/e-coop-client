@@ -5,13 +5,8 @@ import { toReadableDateTime } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import PdfViewer from '@/modules/pdf/components/pdf-viewer/pdf-viewer'
 import { format } from 'date-fns'
-import { Download, FileText, Printer } from 'lucide-react'
 
-import { RefreshIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 
@@ -27,8 +22,7 @@ import {
 import {
     ReportErrorState,
     ReportLoadingState,
-    statusBadgeVariant,
-    statusLabel,
+    ReportViewerHeader,
 } from './generated-report-components'
 import { useReportViewerStore } from './global-generate-report-viewer.store'
 
@@ -93,75 +87,20 @@ export function ReportViewer({
                 className
             )}
         >
-            <div className="flex p-4 flex-row items-start justify-between gap-4">
-                <div className="flex items-start gap-3 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap min-w-0">
-                        <FileText className="size-4 mt-0.5 shrink-0 text-muted-foreground" />
-
-                        <h2 className="text-sm text-foreground truncate min-w-0">
-                            {report?.name ?? 'Loading report...'}
-                        </h2>
-
-                        {report?.status && (
-                            <Badge variant={statusBadgeVariant(report.status)}>
-                                {statusLabel(report.status)}
-                            </Badge>
-                        )}
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-2 shrink-0">
-                    {report?.media?.file_type?.includes('pdf') && (
-                        <Button
-                            disabled={!isComplete}
-                            onClick={() => onReportPrint?.(report)}
-                            size="sm"
-                            variant="outline"
-                        >
-                            <Printer className="h-4 w-4" />
-                            Print
-                        </Button>
-                    )}
-
-                    {report && (
-                        <Button
-                            disabled={!isComplete}
-                            onClick={() => onReportDownload?.(report)}
-                            size="sm"
-                            variant="outline"
-                        >
-                            <Download className="h-4 w-4" />
-                            Download
-                        </Button>
-                    )}
-                    <Button
-                        className="rounded-full"
-                        disabled={isPending || isRefetching}
-                        onClick={() => refetch()}
-                        size="icon-sm"
-                        variant="outline"
-                    >
-                        {isPending || isRefetching ? (
-                            <LoadingSpinner />
-                        ) : (
-                            <RefreshIcon />
-                        )}
-                    </Button>
-                </div>
-            </div>
+            <ReportViewerHeader
+                isComplete={isComplete}
+                isPending={isPending}
+                isRefetching={isRefetching}
+                onReportDownload={onReportDownload}
+                onReportPrint={onReportPrint}
+                refetch={refetch}
+                report={report}
+            />
 
             <div className="px-4">
                 {isPending && (
                     <div className="w-full min-w-0 h-[500px] rounded-2xl border border-dashed bg-muted/20 flex flex-col items-center justify-center">
                         <div className="h-8 w-8 rounded-full border-4 border-muted border-t-primary animate-spin" />
-                    </div>
-                )}
-
-                {!isPending && (error || !report) && (
-                    <div className="w-full min-w-0 h-[500px] rounded-2xl border border-dashed bg-muted/20 flex flex-col items-center justify-center">
-                        <p className="text-sm text-destructive">
-                            {error ?? 'Report not found.'}
-                        </p>
                     </div>
                 )}
 
@@ -171,11 +110,19 @@ export function ReportViewer({
                     </div>
                 )}
 
-                {!isPending && isFailed && (
+                {!isPending && isFailed ? (
                     <div className="w-full min-w-0 h-[500px] rounded-2xl border border-dashed bg-muted/20 flex flex-col items-center justify-center">
-                        <ReportErrorState message={report?.system_message} />
+                        <ReportErrorState
+                            message={report?.system_message ?? error}
+                        />
                     </div>
-                )}
+                ) : !isPending && (!report || error) ? (
+                    <div className="w-full min-w-0 h-[500px] rounded-2xl border border-dashed bg-muted/20 flex flex-col items-center justify-center">
+                        <p className="text-sm text-destructive">
+                            {error ?? 'Report not found.'}
+                        </p>
+                    </div>
+                ) : null}
 
                 {!isPending &&
                     isComplete &&

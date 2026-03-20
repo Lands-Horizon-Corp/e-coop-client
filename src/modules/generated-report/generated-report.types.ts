@@ -115,10 +115,14 @@ export interface GeneratedReportTemplate<T = unknown> {
 
     template: string
 
-    max_width: number
-    max_height: number
-    min_width: number
-    min_height: number
+    // niremove ko dahil contradicting to sa input and changeable unit.
+    // example max-width dito is 14in, pag binago ko unit to mm, 14mm lang allowable which is too small
+    // kaya remove nalang
+
+    // max_width: number
+    // max_height: number
+    // min_width: number
+    // min_height: number
 
     default_unit: TPaperSizeUnit
     model: TModelName
