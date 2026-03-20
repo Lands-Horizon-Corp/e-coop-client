@@ -13,6 +13,7 @@ import {
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import { IComakerMemberProfile } from '../comaker-member-profile'
+import { IGeneratedReport } from '../generated-report'
 import { ILoanGuide } from '../loan-guide'
 // import { IAmortizationSchedule } from '../amortization'
 import type {
@@ -83,7 +84,7 @@ export const printLoanTransaction = async ({
 }) => {
     const response = await API.put<
         ILoanTransactionPrintRequest,
-        ILoanTransaction
+        IGeneratedReport
     >(`${loanTransactionAPIRoute}/${loanTransactionId}/print`, payload)
     return response.data
 }
@@ -258,7 +259,7 @@ export const useUpdateLoanTransactionSignature = createMutationFactory<
 
 // PRINT
 export const usePrintLoanTransaction = createMutationFactory<
-    ILoanTransaction,
+    IGeneratedReport,
     Error,
     { loanTransactionId: TEntityId; payload: ILoanTransactionPrintRequest }
 >({

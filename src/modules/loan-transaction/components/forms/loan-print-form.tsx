@@ -8,8 +8,11 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { TPrintSettingsSchema } from '@/modules/generated-report'
-import { PrintConfigSectionDialog } from '@/modules/generated-report/components/forms/print-config-section'
+import {
+    IGeneratedReport,
+    TWithReportConfigSchema,
+} from '@/modules/generated-report'
+import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -28,7 +31,7 @@ import { IClassProps, IForm, TEntityId } from '@/types'
 
 import { usePrintLoanTransaction } from '../../loan-transaction.service'
 import {
-    ILoanTransaction,
+    // ILoanTransaction,
     TORLoanVoucherSettings,
 } from '../../loan-transaction.types'
 import {
@@ -45,7 +48,7 @@ export interface ILoanTransactionPrintFormProps
         IClassProps,
         IForm<
             Partial<TLoanTransactionPrintSchema>,
-            ILoanTransaction,
+            IGeneratedReport,
             Error,
             TLoanTransactionPrintSchema
         > {
@@ -67,7 +70,6 @@ const LoanTransactionPrintForm = ({
             voucher: '',
             check_number: '',
             ...formProps.defaultValues,
-            module: formProps.defaultValues?.module ?? 'loan-transaction',
             check_date: toInputDateString(
                 formProps.defaultValues?.check_date || new Date()
             ),
@@ -89,9 +91,20 @@ const LoanTransactionPrintForm = ({
             ...formProps,
         })
 
-    const onSubmit = form.handleSubmit(async (payload) => {
+    const onSubmit = form.handleSubmit(async ({ report_config, ...rest }) => {
         toast.promise(
-            printMutation.mutateAsync({ loanTransactionId, payload }),
+            printMutation.mutateAsync({
+                loanTransactionId,
+                payload: {
+                    ...rest,
+                    report_config: {
+                        ...report_config,
+                        filters: {
+                            loan_transaction_id: loanTransactionId,
+                        },
+                    },
+                },
+            }),
             {
                 loading: 'Printing...',
                 success: 'Loan Printed',
@@ -144,11 +157,11 @@ const LoanTransactionPrintForm = ({
 
     useEffect(() => {
         if (!formProps.defaultValues?.voucher) return
-        const currentName = form.getValues('name')
+        const currentName = form.getValues('report_config.name')
         if (currentName) return
 
         form.setValue(
-            'name',
+            'report_config.name',
             `loan_voucher_${form.getValues('voucher')}_release`
         )
     }, [form, formProps])
@@ -244,12 +257,12 @@ const LoanTransactionPrintForm = ({
                                 />
                             )}
                         />
-                        <PrintConfigSectionDialog
-                            printConfigProps={{
-                                // whe're sure na the form instance have the print settings schema LMAO XD
-                                form: form as unknown as UseFormReturn<TPrintSettingsSchema>,
-                                registryKey: 'loan_transaction_print_voucher',
-                            }}
+                        {/* <PrintConfigSectionDialog */}
+                        <PrintSettingsSection
+                            form={
+                                form as unknown as UseFormReturn<TWithReportConfigSchema>
+                            }
+                            registryKey={'loan_transaction_print_voucher'}
                         />
                     </fieldset>
                     <FormFooterResetSubmit

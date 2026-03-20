@@ -3,11 +3,13 @@ import { ReactNode } from 'react'
 import { toast } from 'sonner'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import {
     hasPermissionFromAuth,
     useAuthStore,
 } from '@/modules/authentication/authgentication.store'
+import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -26,6 +28,7 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
+import { LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES } from '../../loan-transaction-reports/loan-transaction-templates'
 import {
     useDeleteLoanTransactionById,
     useReprintLoanTransaction,
@@ -700,15 +703,23 @@ export const LoanTransactionTableActionManager = () => {
                 <LoanTransactionPrintFormModal
                     formProps={{
                         defaultValues: {
-                            name: loanTransaction.voucher
-                                ? `loan_voucher_${loanTransaction.voucher}_release`
-                                : `loan_${loanTransaction.id}_voucher_release`,
+                            report_config: {
+                                name: `loan_release_${toReadableDate(loanTransaction.created_at, 'MMddyy_mmss')}.pdf`,
+                                ...LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES[0],
+                                filters: {},
+                                module: 'LoanTransaction',
+                            },
                             check_date: loanTransaction.check_date,
                             check_number: loanTransaction.check_number,
                             voucher: loanTransaction.voucher,
                         },
                         loanTransactionId: loanTransaction.id,
                         orSettings: resolvedOrSettings,
+                        onSuccess(data) {
+                            useReportViewerStore.getState().open({
+                                reportId: data.id,
+                            })
+                        },
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

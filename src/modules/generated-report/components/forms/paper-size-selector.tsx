@@ -18,11 +18,10 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 
+import { TPaperSizeUnit } from '../../generated-report.types'
 import { PAPER_SIZES } from '../../generated-reports.constants'
 
 export type TPaperSizeName = keyof typeof PAPER_SIZES
-
-export type TPaperSizeUnit = 'mm' | 'in' | 'pt'
 
 export interface PaperSize {
     name: string

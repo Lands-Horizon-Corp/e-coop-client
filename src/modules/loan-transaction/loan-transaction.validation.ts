@@ -8,7 +8,7 @@ import {
 
 import { ComakerCollateralSchema } from '../comaker-collateral'
 import { ComakerMemberProfileSchema } from '../comaker-member-profile'
-import { PrintSettingsSchema } from '../generated-report'
+import { WithReportConfigSchema } from '../generated-report'
 import { LoanClearanceAnalysisSchema } from '../loan-clearance-analysis'
 import { LoanClearanceAnalysisInstitutionSchema } from '../loan-clearance-analysis-institution'
 import { LoanTermsAndConditionAmountReceiptSchema } from '../loan-terms-and-condition-amount-receipt'
@@ -439,7 +439,7 @@ export const LoanTransactionPrintSchema = z
                 return isNaN(date.getTime()) ? val : date.toISOString()
             }),
     })
-    .extend(PrintSettingsSchema.shape)
+    .and(WithReportConfigSchema)
     .refine(
         (data) => {
             if (data.check_number && data.check_number.trim() !== '') {

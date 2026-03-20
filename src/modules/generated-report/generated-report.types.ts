@@ -4,152 +4,11 @@ import { IGeneratedReportsDownloadUsers } from '../generated-reports-download-us
 import { IMedia } from '../media'
 import { IUser } from '../user'
 import { TPaperSizeName } from './components/forms/paper-size-selector'
-import { PAPER_SIZES, TPaperSizeUnit } from './generated-reports.constants'
-
-export const ACCOUNT_MODEL_NAMES = [
-    'AccountHistory',
-    'Account',
-    'AccountCategory',
-    'AccountClassification',
-    'AccountTag',
-    'AdjustmentEntry',
-    'AdjustmentTag',
-    'AutomaticLoanDeduction',
-    'Bank',
-    'BatchFunding',
-    'BillAndCoins',
-    'branch',
-    'branchSetting',
-    'BrowseExcludeIncludeAccounts',
-    'CancelledCashCheckVoucher',
-    'CashCheckVoucher',
-    'CashCheckVoucherEntry',
-    'CashCheckVoucherTag',
-    'CashCount',
-    'Category',
-    'ChargesRateByRangeOrMinimumAmount',
-    'ChargesRateByTerm',
-    'ChargesRateScheme',
-    'ChargesRateSchemeAccount',
-    'ChargesRateSchemeModeOfPayment',
-    'CheckRemittance',
-    'Collateral',
-    'CollectorsMemberAccountEntry',
-    'ComakerCollateral',
-    'ComakerMemberProfile',
-    'Company',
-    'ComputationSheet',
-    'ContactUs',
-    'Currency',
-    'Disbursement',
-    'DisbursementTransaction',
-    'Feedback',
-    'FinancialStatementGrouping',
-    'FinancialStatementDefinition',
-    'FinesMaturity',
-    'Footstep',
-    'Funds',
-    'GeneralAccountGroupingNetSurplusNegative',
-    'GeneralLedgerTag',
-    'GeneralLedger',
-    'GeneralLedgerAccountsGrouping',
-    'GeneralLedgerDefinition',
-    'GeneratedReport',
-    'GroceryComputationSheet',
-    'GroceryComputationSheetMonthly',
-    'Holiday',
-    'Area',
-    'IncludeNegativeAccount',
-    'InterestMaturity',
-    'InterestRateByTerm',
-    'InterestRateByTermsHeader',
-    'InterestRatePercentage',
-    'InterestRateScheme',
-    'InvitationCode',
-    'JournalVoucher',
-    'JournalVoucherEntry',
-    'JournalVoucherTag',
-    'LoanClearanceAnalysis',
-    'LoanClearanceAnalysisInstitution',
-    'LoanComakerMember',
-    'LoanGuaranteedFund',
-    'LoanGuaranteedFundPerMonth',
-    'LoanLedger',
-    'LoanPurpose',
-    'LoanStatus',
-    'LoanTag',
-    'LoanTermsAndConditionAmountReceipt',
-    'LoanTermsAndConditionSuggestedPayment',
-    'LoanTransaction',
-    'LoanTransactionEntry',
-    'Media',
-    'MemberAccountingLedger',
-    'MemberAddress',
-    'MemberAsset',
-    'MemberBankCard',
-    'MemberCenter',
-    'MemberCenterHistory',
-    'MemberClassification',
-    'MemberClassificationHistory',
-    'MemberClassificationInterestRate',
-    'MemberCloseRemark',
-    'MemberContactReference',
-    'MemberDamayanExtensionEntry',
-    'MemberDeductionEntry',
-    'MemberDepartment',
-    'MemberDepartmentHistory',
-    'MemberEducationalAttainment',
-    'MemberExpense',
-    'MemberGender',
-    'MemberGenderHistory',
-    'MemberGovernmentBenefit',
-    'MemberGroup',
-    'MemberGroupHistory',
-    'MemberIncome',
-    'MemberJointAccount',
-    'MemberMutualFundHistory',
-    'MemberOccupation',
-    'MemberOccupationHistory',
-    'MemberOtherInformationEntry',
-    'MemberProfile',
-    'MemberProfileMedia',
-    'MemberRelativeAccount',
-    'MemberType',
-    'MemberTypeHistory',
-    'BrowseReference',
-    'BrowseReferenceByAmount',
-    'BrowseReferenceInterestRateByUltimaMembershipDate',
-    'BrowseReferenceInterestRateByUltimaMembershipDatePerYear',
-    'MemberVerification',
-    'QRMemberProfile',
-    'QRInvitationCode',
-    'QRUser',
-    'Core',
-    'Notification',
-    'OnlineRemittance',
-    'Organization',
-    'OrganizationCategory',
-    'OrganizationDailyUsage',
-    'OrganizationMedia',
-    'PaymentType',
-    'PermissionTemplate',
-    'PostDatedCheck',
-    'SubscriptionPlan',
-    'TagTemplate',
-    'TimeDepositComputation',
-    'TimeDepositComputationPreMature',
-    'TimeDepositType',
-    'Timesheet',
-    'Transaction',
-    'TransactionBatch',
-    'TransactionTag',
-    'UnbalancedAccount',
-    'User',
-    'UserOrganization',
-    'UserRating',
-    'VoucherPayTo',
-    'none',
-] as const
+import {
+    ACCOUNT_MODEL_NAMES,
+    PAPER_SIZES,
+    PAPER_SIZE_UNIT,
+} from './generated-reports.constants'
 
 export type TModelName = (typeof ACCOUNT_MODEL_NAMES)[number]
 
@@ -172,7 +31,9 @@ export type TGeneratedReportType = (typeof GENERATE_REPORT_TYPE)[number]
 export type TGeneratedReportStatus =
     | 'pending'
     | 'in_progress'
-    | 'complete'
+    | 'formatting'
+    | 'uploading'
+    | 'completed'
     | 'failed'
 
 export interface IGeneratedReport extends IBaseEntityMeta {
@@ -182,8 +43,9 @@ export interface IGeneratedReport extends IBaseEntityMeta {
     media: IMedia
     name: string
     description: string
-    status: TGeneratedReportStatus
 
+    status: TGeneratedReportStatus
+    progress: number
     system_message: string
 
     filter_search: string
@@ -195,6 +57,12 @@ export interface IGeneratedReport extends IBaseEntityMeta {
     template?: string
 
     download_users: IGeneratedReportsDownloadUsers[]
+
+    width: number
+    height: number
+    unit: TPaperSizeUnit
+
+    landscape: boolean
 }
 
 export interface IGeneratedReportRequest {
@@ -239,31 +107,31 @@ export type TemplateOptions = {
 
 // for template & preview
 
-export type SizingUnit = 'in' | 'cm' | 'mm' | 'pt' | 'px'
-
-export type TemplateSource = string | (() => Promise<{ default: string }>)
+export type TPaperSizeUnit = (typeof PAPER_SIZE_UNIT)[number]
 
 export interface GeneratedReportTemplate<T = unknown> {
     id: string
-    name: string
+    template_name: string
 
-    template: TemplateSource
+    template: string
 
     max_width: number
     max_height: number
     min_width: number
     min_height: number
 
-    default_unit: SizingUnit
+    default_unit: TPaperSizeUnit
+    model: TModelName
 
     width: string // combined ng value sa default sizing unit 18in
     height: string // combined ng value sa default sizing unit 14in
 
     page_size?: (typeof PAPER_SIZES)[number]
 
-    filter?: Record<string, unknown>
-
     preview_data: T
+
+    lock_organization_id?: TEntityId[]
+    lock_branch_id?: TEntityId[]
 }
 
 export type GeneratedReportTemplateCollection<T = unknown> =

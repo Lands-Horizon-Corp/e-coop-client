@@ -45,7 +45,7 @@ import {
 import {
     GeneratedReportTemplate,
     GeneratedReportTemplateCollection,
-    SizingUnit,
+    TPaperSizeUnit,
 } from '../../generated-report.types'
 import {
     PAPER_SIZES,
@@ -53,14 +53,14 @@ import {
 } from '../../generated-reports.constants'
 import { clampMinMax } from './generated-report-helper.utils'
 
-const SIZING_UNITS: SizingUnit[] = ['px', 'in', 'cm', 'mm', 'pt']
+const SIZING_UNITS: TPaperSizeUnit[] = ['px', 'in', 'cm', 'mm', 'pt']
 
 export interface GenerateReportTemplatePickerProps {
     templates?: GeneratedReportTemplateCollection
     registryKey?: GeneratedReportRegistryKey | GeneratedReportRegistryKey[]
     onSelect?: (
         template: GeneratedReportTemplate,
-        dimensions: { width: string; height: string; unit: SizingUnit }
+        dimensions: { width: string; height: string; unit: TPaperSizeUnit }
     ) => void
 }
 
@@ -87,16 +87,13 @@ export function GenerateReportTemplatePicker({
     const [pageH, setPageH] = useState(1100)
     const [inputW, setInputW] = useState('800')
     const [inputH, setInputH] = useState('1100')
-    const [unit, setUnit] = useState<SizingUnit>('px')
+    const [unit, setUnit] = useState<TPaperSizeUnit>('px')
 
     const renderTemplate = useCallback(
         async (item: GeneratedReportTemplate) => {
             setLoading(true)
             try {
-                const source =
-                    typeof item.template === 'function'
-                        ? (await item.template()).default
-                        : item.template
+                const source = item.template
                 setRenderedHtml(
                     nunjucks.renderString(source, {
                         ...(item.preview_data ? { ...item.preview_data } : {}),
@@ -186,7 +183,7 @@ export function GenerateReportTemplatePicker({
     const iframeSrcDoc = `<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0;width:${pageW}${unit};height:${pageH}${unit};overflow:hidden;font-family:'Segoe UI',sans-serif;}</style></head><body>${renderedHtml}</body></html>`
 
     return (
-        <div className="max-w-5xl w-full mx-auto bg-popover ring-4 ring-muted border border-border rounded-xl h-[80vh] p-0 gap-0 flex">
+        <div className="max-w-5xl w-full mx-auto bg-popover ring-4 ring-muted border border-border overflow-clip rounded-xl h-[80vh] p-0 gap-0 flex">
             <aside className="flex !w-64 flex-col border-r border-border bg-muted/30">
                 <Command className="rounded-none border-0 bg-transparent">
                     <div className="p-4 pb-0">
@@ -215,7 +212,7 @@ export function GenerateReportTemplatePicker({
                                         )}
                                         key={item.id}
                                         onSelect={() => handleSelect(item)}
-                                        value={item.name}
+                                        value={item.template_name}
                                     >
                                         <div className="flex w-full items-center justify-between">
                                             <span
@@ -226,7 +223,7 @@ export function GenerateReportTemplatePicker({
                                                         : 'text-foreground'
                                                 )}
                                             >
-                                                {item.name}
+                                                {item.template_name}
                                             </span>
                                             {isActive && (
                                                 <CheckIcon className="size-4 text-primary" />
@@ -260,7 +257,7 @@ export function GenerateReportTemplatePicker({
                                     setPageH(paper.height)
                                     setInputW(String(paper.width))
                                     setInputH(String(paper.height))
-                                    setUnit(paper.unit as SizingUnit)
+                                    setUnit(paper.unit as TPaperSizeUnit)
                                 }}
                             >
                                 <SelectTrigger className="h-8 text-xs">
@@ -325,7 +322,9 @@ export function GenerateReportTemplatePicker({
                                 Unit
                             </Label>
                             <Select
-                                onValueChange={(v: SizingUnit) => setUnit(v)}
+                                onValueChange={(v: TPaperSizeUnit) =>
+                                    setUnit(v)
+                                }
                                 value={unit}
                             >
                                 <SelectTrigger className="h-8 text-xs">
@@ -374,7 +373,7 @@ export function GenerateReportTemplatePicker({
                             variant="secondary"
                         >
                             {pageW}
-                            {unit} × {pageH}
+                            {unit} x {pageH}
                             {unit}
                         </Badge>
                         <Separator className="h-4" orientation="vertical" />
@@ -415,7 +414,7 @@ export function GenerateReportTemplatePicker({
                 <footer className="flex items-center justify-between border-t border-border bg-background px-6 py-3">
                     <div className="flex flex-col">
                         <span className="text-xs font-medium text-foreground">
-                            {selected?.name}
+                            {selected?.template_name}
                         </span>
                         <span className="text-[10px] text-muted-foreground">
                             Ready for export

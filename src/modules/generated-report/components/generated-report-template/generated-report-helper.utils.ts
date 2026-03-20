@@ -4,7 +4,7 @@ import {
 } from '../../generated-report-template-registry'
 import {
     GeneratedReportTemplate,
-    SizingUnit,
+    TPaperSizeUnit,
 } from '../../generated-report.types'
 
 export function getGeneratedReportTemplates(
@@ -40,7 +40,7 @@ export const clampMinMax = (val: number, min?: number, max?: number) => {
 }
 
 /** Approximate conversion of value+unit to CSS px for scaling calculations */
-export const toPx = (value: number, unit: SizingUnit): number => {
+export const toPx = (value: number, unit: TPaperSizeUnit): number => {
     switch (unit) {
         case 'in':
             return value * 96

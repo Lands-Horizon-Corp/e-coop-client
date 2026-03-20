@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { z } from 'zod'
 
+import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
 import API from '@/providers/api'
 import { entityIdSchema } from '@/validation'
 
@@ -88,7 +89,7 @@ function GeneratedReports() {
         const today = new Date().toISOString().split('T')[0]
         const dimensions = PAPER_SIZES[selectedSize]
         const requestPayload: ICreateReportRequest = {
-            module: 'MEMBERSHIP',
+            module: 'LoanTransaction',
             name: `Member_Report_${today}.pdf`,
             width: dimensions.width,
             height: dimensions.height,
@@ -125,6 +126,10 @@ function GeneratedReports() {
             >('/api/v1/generated-report', requestPayload)
 
             const data = response.data
+
+            useReportViewerStore.getState().open({
+                reportId: data.id,
+            })
 
             setReportData(data) // Now the types match!
             setCurrentStatus(data.status)
@@ -207,18 +212,20 @@ function GeneratedReports() {
                         </Button>
                     </div>
                 ) : (
-                    <div className="space-y-4 animate-in zoom-in-95 duration-300">
-                        <div className="flex items-center gap-2">
-                            <Badge className="bg-green-600">SUCCESS</Badge>
-                            <span className="text-sm text-muted-foreground">
-                                Report Ready ({reportData.status})
-                            </span>
-                        </div>
+                    <>
+                        {/* <ReportViewer reportId={reportData.id} /> */}
+                        {/* // <div className="space-y-4 animate-in zoom-in-95 duration-300">
+                    //     <div className="flex items-center gap-2">
+                    //         <Badge className="bg-green-600">SUCCESS</Badge>
+                    //         <span className="text-sm text-muted-foreground">
+                    //             Report Ready ({reportData.status})
+                    //         </span>
+                    //     </div>
 
-                        <div className="p-4 bg-muted/50 border rounded-md font-mono text-[10px] break-all text-muted-foreground">
-                            {reportData.media?.url ||
-                                'The PDF is being generated in the background. Check back in a moment.'}
-                        </div>
+                    //     <div className="p-4 bg-muted/50 border rounded-md font-mono text-[10px] break-all text-muted-foreground">
+                    //         {reportData.media?.url ||
+                    //             'The PDF is being generated in the background. Check back in a moment.'}
+                    //     </div> */}
 
                         <div className="flex gap-3">
                             <Button
@@ -241,7 +248,7 @@ function GeneratedReports() {
                                 New Report
                             </Button>
                         </div>
-                    </div>
+                    </>
                 )}
             </div>
         </div>

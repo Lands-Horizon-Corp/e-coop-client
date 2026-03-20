@@ -44,7 +44,7 @@ import {
 import {
     GeneratedReportTemplate,
     GeneratedReportTemplateCollection,
-    SizingUnit,
+    TPaperSizeUnit,
 } from '../../generated-report.types'
 import {
     PAPER_SIZES,
@@ -52,14 +52,14 @@ import {
 } from '../../generated-reports.constants'
 import { clampMinMax, toPx } from './generated-report-helper.utils'
 
-const SIZING_UNITS: SizingUnit[] = ['px', 'in', 'cm', 'mm', 'pt']
+const SIZING_UNITS: TPaperSizeUnit[] = ['px', 'in', 'cm', 'mm', 'pt']
 
 export interface GenerateReportTemplatePickerProps {
     templates?: GeneratedReportTemplateCollection
     registryKey?: GeneratedReportRegistryKey | GeneratedReportRegistryKey[]
     onSelect?: (
         template: GeneratedReportTemplate,
-        dimensions: { width: string; height: string; unit: SizingUnit }
+        dimensions: { width: string; height: string; unit: TPaperSizeUnit }
     ) => void
 }
 
@@ -86,7 +86,7 @@ export function GenerateReportTemplatePicker({
     const [pageH, setPageH] = useState(1100)
     const [inputW, setInputW] = useState('800')
     const [inputH, setInputH] = useState('1100')
-    const [unit, setUnit] = useState<SizingUnit>('px')
+    const [unit, setUnit] = useState<TPaperSizeUnit>('px')
 
     const renderTemplate = useCallback(
         async (item: GeneratedReportTemplate) => {
@@ -283,7 +283,7 @@ export function GenerateReportTemplatePicker({
                                     setPageH(paper.height)
                                     setInputW(String(paper.width))
                                     setInputH(String(paper.height))
-                                    setUnit(paper.unit as SizingUnit)
+                                    setUnit(paper.unit as TPaperSizeUnit)
                                 }}
                             >
                                 <SelectTrigger className="h-8 text-xs">
@@ -348,7 +348,7 @@ export function GenerateReportTemplatePicker({
                                 Unit
                             </Label>
                             <Select
-                                onValueChange={(v: SizingUnit) => setUnit(v)}
+                                onValueChange={(v: TPaperSizeUnit) => setUnit(v)}
                                 value={unit}
                             >
                                 <SelectTrigger className="h-8 text-xs">

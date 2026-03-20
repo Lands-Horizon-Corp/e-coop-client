@@ -3,6 +3,7 @@ import { RefObject, useEffect, useRef, useState } from 'react'
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import { GlobalReportViewer } from '@/modules/generated-report/components/generated-report-view/generated-report-view'
 import TimeMachineTimeStatusBar from '@/modules/user-organization/components/time-machine-time-status-bar'
 import GlobalHotkeysProvider from '@/providers/global-hotkeys-provider'
 import { ScrollContext } from '@/providers/scroll-parent-provider'
@@ -28,9 +29,9 @@ function RouteComponent() {
             {/* <CursorFollow /> */}
             <OrgBranchUrlGuard>
                 <SidebarProvider>
+                    <GlobalReportViewer />
                     <OrgBranchSidebar />
                     <GlobalHotkeysProvider />
-
                     <ScrollContext.Provider
                         value={
                             scrollRef as unknown as RefObject<HTMLDivElement>
