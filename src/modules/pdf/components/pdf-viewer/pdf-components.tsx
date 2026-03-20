@@ -46,27 +46,26 @@ export const PdfHeaderTitle = ({
     fileUrl,
     fileTitle,
     className,
-
     canPrint = true,
     canDownload = true,
-
     onClose,
 }: {
     fileUrl?: string | null
     fileTitle: string
+    fileSize?: number
     className?: string
     onClose?: () => void
 } & PdfHeaderProps) => {
     // pang download
     const handleDownload = useCallback(() => {
         if (!fileUrl) return
-        downloadPDF(fileUrl, fileTitle)
+        downloadPDF({ url: fileUrl, fallbackName: fileTitle })
     }, [fileUrl, fileTitle])
 
     // pang print
     const handlePrint = useCallback(() => {
         if (!fileUrl) return
-        printPDF(fileUrl)
+        printPDF({ fileUrl })
     }, [fileUrl])
 
     return (

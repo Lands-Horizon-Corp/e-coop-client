@@ -1,16 +1,24 @@
-export const downloadPDF = (url: string, filename?: string) => {
-    const link = document.createElement('a')
-    link.href = url
-    link.download = filename ?? ''
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-}
+import { downloadFileService } from '@/helpers/file-download'
 
-export const printPDF = async (fileUrl: string) => {
+export const downloadPDF = downloadFileService
+
+export const printPDF = async ({
+    fileUrl,
+    isMassive = false,
+}: {
+    fileUrl: string
+    isMassive?: boolean
+}) => {
+    if (isMassive) {
+        const printWindow = window.open(fileUrl, '_blank')
+        if (printWindow) {
+            printWindow.focus()
+        }
+        return
+    }
+
     const res = await fetch(fileUrl)
     const blob = await res.blob()
-
     const downloadUrl = URL.createObjectURL(blob)
 
     const iframe = document.createElement('iframe')
@@ -18,22 +26,7 @@ export const printPDF = async (fileUrl: string) => {
     iframe.src = downloadUrl
 
     document.body.appendChild(iframe)
-
     iframe.onload = () => {
         iframe.contentWindow?.print()
     }
-
-    // const iframe = document.createElement('iframe')
-    // iframe.style.display = 'none'
-    // iframe.src = fileUrl
-    // document.body.appendChild(iframe)
-    // iframe.onload = () => {
-    //     iframe.contentWindow?.print()
-    //     setTimeout(() => document.body.removeChild(iframe), 1000)
-    // }
-
-    // const win = window.open(fileUrl)
-    // win?.addEventListener('load', () => {
-    //     win.print()
-    // })
 }

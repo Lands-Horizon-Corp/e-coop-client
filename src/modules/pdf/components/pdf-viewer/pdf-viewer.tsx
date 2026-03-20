@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { IS_STAGING } from '@/constants'
 import { cn } from '@/helpers'
+import { getFileNameFromUrl } from '@/helpers/file-download'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { Document, Page, pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
@@ -77,7 +78,11 @@ const PdfViewer = ({
     onClose,
     onPdfLoadSuccess,
 }: PdfViewerProps) => {
-    const fileTitle = file instanceof File ? file.name : fileName || 'PDF View'
+    const fileTitle =
+        file instanceof File
+            ? file.name
+            : fileName ||
+              (typeof file === 'string' ? getFileNameFromUrl(file) : 'PDF View')
 
     const [numPages, setNumPages] = useState(0)
     const [firstPageHeight, setFirstPageHeight] = useState<number | null>(null)
@@ -103,6 +108,7 @@ const PdfViewer = ({
         } else {
             setFileUrl(file)
         }
+
         return () => {
             if (url) URL.revokeObjectURL(url)
         }
