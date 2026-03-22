@@ -2,30 +2,58 @@ import z from 'zod'
 
 import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
+const isoDateString = z
+    .string()
+    .min(1, 'Date is required')
+    .refine((val) => !isNaN(new Date(val).getTime()), {
+        message: 'Invalid date',
+    })
+    .transform((val) => {
+        const date = new Date(val + 'T00:00:00Z')
+        return date.toISOString().replace('.000', '')
+    })
+
 export const CheckWarehousingSchema = z.object({
-    // IDs
     member_profile_id: entityIdSchema,
     bank_id: entityIdSchema,
     employee_user_id: entityIdSchema,
+
     media_id: entityIdSchema.optional().nullable(),
+
     check_number: z
         .string()
         .min(1, 'Check number is required')
         .max(255, 'Check number is too long'),
-    check_date: z.string().min(1, 'Check date is required'),
-    date: z.string().min(1, 'Warehousing date is required'),
-    clear_days: z.number().min(0, 'Clear days cannot be negative').default(0),
-    amount: z.number().gt(0, 'Amount must be greater than 0'),
+
+    // ✅ ISO dates
+    check_date: isoDateString,
+    date: isoDateString,
+
+    clear_days: isoDateString,
+
+    /**
+     * Optional: auto-compute date_cleared
+     * If you want manual input → keep isoDateString.optional()
+     * If computed → use .transform below instead
+     */
+    date_cleared: z.coerce.number().optional(),
+
+    amount: z.coerce.number().gt(0, 'Amount must be greater than 0'),
+
     reference_number: z
         .string()
         .max(255, 'Reference number is too long')
-        .optional()
-        .nullable(),
+        .optional(),
+
     description: z
         .string()
         .optional()
-        .nullable()
         .transform(descriptionTransformerSanitizer),
+
+    media: z.any(),
+    member_profile: z.any(),
+    bank: z.any(),
+    employee_user: z.any(),
 })
 
 export type TCheckWarehousingSchema = z.infer<typeof CheckWarehousingSchema>

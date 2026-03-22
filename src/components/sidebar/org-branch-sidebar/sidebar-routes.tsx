@@ -1,5 +1,6 @@
 import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { TUserType } from '@/modules/user'
+import { Warehouse } from 'lucide-react'
 
 import {
     BadgeCheckFillIcon,
@@ -391,6 +392,12 @@ export const generateSidebarGroups = (
                     // resourceType: 'Account',
                     // }),
                     // shortDescription: 'View and manage accounts',
+                },
+                {
+                    type: 'item',
+                    icon: Warehouse,
+                    title: 'Check Warehouse',
+                    url: `${baseUrl}/check-warehousing`,
                 },
             ],
         },

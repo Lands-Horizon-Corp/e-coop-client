@@ -24,8 +24,8 @@ export interface ICheckWarehousing extends IBaseEntityMeta {
 
     check_number: string
     check_date: string
-    clear_days: number
-    date_cleared?: string
+    clear_days: string
+    date_cleared?: number
     amount: number
     reference_number: string
     date: string

@@ -86,6 +86,7 @@ import { Route as OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardR
 import { Route as OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory-maintenance)/inventory-category'
 import { Route as OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory-maintenance)/inventory-brand'
 import { Route as OrgOrgnameBranchBranchnameinventoryInventoryRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory)/inventory'
+import { Route as OrgOrgnameBranchBranchnameinventoryCheckWarehousingRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory)/check-warehousing'
 import { Route as OrgOrgnameBranchBranchnameemployeesViewEmployeesRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/view-employees'
 import { Route as OrgOrgnameBranchBranchnameemployeesTimesheetsRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/timesheets'
 import { Route as OrgOrgnameBranchBranchnameemployeesPermissionTemplateRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/permission-template'
@@ -571,6 +572,12 @@ const OrgOrgnameBranchBranchnameinventoryInventoryRoute =
     path: '/inventory',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnameinventoryCheckWarehousingRoute =
+  OrgOrgnameBranchBranchnameinventoryCheckWarehousingRouteImport.update({
+    id: '/(inventory)/check-warehousing',
+    path: '/check-warehousing',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
 const OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute =
   OrgOrgnameBranchBranchnameemployeesViewEmployeesRouteImport.update({
     id: '/(employees)/view-employees',
@@ -874,6 +881,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
   '/org/$orgname/branch/$branchname/view-employees': typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  '/org/$orgname/branch/$branchname/check-warehousing': typeof OrgOrgnameBranchBranchnameinventoryCheckWarehousingRoute
   '/org/$orgname/branch/$branchname/inventory': typeof OrgOrgnameBranchBranchnameinventoryInventoryRoute
   '/org/$orgname/branch/$branchname/inventory-brand': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute
   '/org/$orgname/branch/$branchname/inventory-category': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute
@@ -983,6 +991,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
   '/org/$orgname/branch/$branchname/view-employees': typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  '/org/$orgname/branch/$branchname/check-warehousing': typeof OrgOrgnameBranchBranchnameinventoryCheckWarehousingRoute
   '/org/$orgname/branch/$branchname/inventory': typeof OrgOrgnameBranchBranchnameinventoryInventoryRoute
   '/org/$orgname/branch/$branchname/inventory-brand': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute
   '/org/$orgname/branch/$branchname/inventory-category': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute
@@ -1098,6 +1107,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(employees)/permission-template': typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/(employees)/timesheets': typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
   '/org/$orgname/branch/$branchname/(employees)/view-employees': typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  '/org/$orgname/branch/$branchname/(inventory)/check-warehousing': typeof OrgOrgnameBranchBranchnameinventoryCheckWarehousingRoute
   '/org/$orgname/branch/$branchname/(inventory)/inventory': typeof OrgOrgnameBranchBranchnameinventoryInventoryRoute
   '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-brand': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute
   '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-category': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute
@@ -1213,6 +1223,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/permission-template'
     | '/org/$orgname/branch/$branchname/timesheets'
     | '/org/$orgname/branch/$branchname/view-employees'
+    | '/org/$orgname/branch/$branchname/check-warehousing'
     | '/org/$orgname/branch/$branchname/inventory'
     | '/org/$orgname/branch/$branchname/inventory-brand'
     | '/org/$orgname/branch/$branchname/inventory-category'
@@ -1322,6 +1333,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/permission-template'
     | '/org/$orgname/branch/$branchname/timesheets'
     | '/org/$orgname/branch/$branchname/view-employees'
+    | '/org/$orgname/branch/$branchname/check-warehousing'
     | '/org/$orgname/branch/$branchname/inventory'
     | '/org/$orgname/branch/$branchname/inventory-brand'
     | '/org/$orgname/branch/$branchname/inventory-category'
@@ -1436,6 +1448,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(employees)/permission-template'
     | '/org/$orgname/branch/$branchname/(employees)/timesheets'
     | '/org/$orgname/branch/$branchname/(employees)/view-employees'
+    | '/org/$orgname/branch/$branchname/(inventory)/check-warehousing'
     | '/org/$orgname/branch/$branchname/(inventory)/inventory'
     | '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-brand'
     | '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-category'
@@ -2033,6 +2046,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryInventoryRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/(inventory)/check-warehousing': {
+      id: '/org/$orgname/branch/$branchname/(inventory)/check-warehousing'
+      path: '/check-warehousing'
+      fullPath: '/org/$orgname/branch/$branchname/check-warehousing'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryCheckWarehousingRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(employees)/view-employees': {
       id: '/org/$orgname/branch/$branchname/(employees)/view-employees'
       path: '/view-employees'
@@ -2457,6 +2477,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute: typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
   OrgOrgnameBranchBranchnameemployeesTimesheetsRoute: typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
   OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute: typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  OrgOrgnameBranchBranchnameinventoryCheckWarehousingRoute: typeof OrgOrgnameBranchBranchnameinventoryCheckWarehousingRoute
   OrgOrgnameBranchBranchnameinventoryInventoryRoute: typeof OrgOrgnameBranchBranchnameinventoryInventoryRoute
   OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute
   OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute
@@ -2540,6 +2561,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameemployeesTimesheetsRoute,
     OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute:
       OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute,
+    OrgOrgnameBranchBranchnameinventoryCheckWarehousingRoute:
+      OrgOrgnameBranchBranchnameinventoryCheckWarehousingRoute,
     OrgOrgnameBranchBranchnameinventoryInventoryRoute:
       OrgOrgnameBranchBranchnameinventoryInventoryRoute,
     OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute:

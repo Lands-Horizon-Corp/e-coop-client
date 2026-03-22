@@ -805,6 +805,16 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
             'Delete',
         ] as TPermissionAction[],
     },
+    {
+        resource: 'CheckWarehousing',
+        label: 'Check Warehousing',
+        description: 'Allow delete action for check warehousing',
+        supportedActions: [
+            'Create',
+            'OwnDelete',
+            'Delete',
+        ] as TPermissionAction[],
+    },
 ] as const satisfies PermissionResourceAction[]
 
 export const PERMISSION_BASE_RESOURCE = PERMISSION_ALL_RESOURCE_ACTION.map(
