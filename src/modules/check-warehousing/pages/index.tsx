@@ -15,6 +15,7 @@ const CheckWarehousingPage = () => {
     return (
         <PageContainer>
             <PermissionGuard action="Read" resourceType="CheckWarehousing">
+                <CheckWarehousingSummaryBar />
                 <CheckWarehousingCreateUpdateFormModal {...createModal} />
                 <CheckWarehousingTable
                     className="max-h-[90vh] min-h-[90vh] w-full"
@@ -28,7 +29,6 @@ const CheckWarehousingPage = () => {
                         },
                     }}
                 />
-                <CheckWarehousingSummaryBar />
             </PermissionGuard>
         </PageContainer>
     )

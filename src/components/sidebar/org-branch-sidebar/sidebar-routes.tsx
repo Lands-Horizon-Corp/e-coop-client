@@ -377,6 +377,12 @@ export const generateSidebarGroups = (
                     }),
                     shortDescription: 'Automates daily accounting processes',
                 },
+                {
+                    type: 'item',
+                    icon: Warehouse,
+                    title: 'Check Warehouse',
+                    url: `${baseUrl}/check-warehousing`,
+                },
             ],
         },
         {
@@ -392,12 +398,6 @@ export const generateSidebarGroups = (
                     // resourceType: 'Account',
                     // }),
                     // shortDescription: 'View and manage accounts',
-                },
-                {
-                    type: 'item',
-                    icon: Warehouse,
-                    title: 'Check Warehouse',
-                    url: `${baseUrl}/check-warehousing`,
                 },
             ],
         },

@@ -29,14 +29,14 @@ export const CheckWarehousingSchema = z.object({
     check_date: isoDateString,
     date: isoDateString,
 
-    clear_days: isoDateString,
+    clear_days: z.coerce.number().optional(),
 
     /**
      * Optional: auto-compute date_cleared
      * If you want manual input → keep isoDateString.optional()
      * If computed → use .transform below instead
      */
-    date_cleared: z.coerce.number().optional(),
+    date_cleared: isoDateString,
 
     amount: z.coerce.number().gt(0, 'Amount must be greater than 0'),
 

@@ -10,14 +10,12 @@ import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
 import EmployeePicker from '@/modules/employee/components/employee-picker'
-import { IMedia } from '@/modules/media/media.types'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -48,9 +46,8 @@ export interface ICheckWarehousingFormProps
         > {
     checkWarehousingId?: TEntityId
 }
-
 /**
- * 🧾 FORM
+ * 🧾 FORM (Rearranged with Single Member Selection)
  */
 const CheckWarehousingCreateUpdateForm = ({
     className,
@@ -63,8 +60,7 @@ const CheckWarehousingCreateUpdateForm = ({
         defaultValues: {
             check_number: '',
             check_date: '',
-            date: '',
-            clear_days: '',
+            clear_days: 0,
             amount: 0,
             reference_number: '',
             description: '',
@@ -125,233 +121,317 @@ const CheckWarehousingCreateUpdateForm = ({
     const clearDays = form.watch('clear_days')
 
     useEffect(() => {
+        // Only auto-calculate if we have both values
         if (!checkDate || !clearDays) return
 
-        const days =
-            new Date(checkDate).getDate() + new Date(clearDays).getDate()
+        const baseDate = new Date(checkDate)
 
-        form.setValue('date_cleared', days)
-    }, [checkDate, clearDays])
+        // Check if the date is valid to prevent "Invalid Date" errors
+        if (isNaN(baseDate.getTime())) return
 
-    console.log(new Date(checkDate).getDate())
+        // Add the number of days
+        const resultDate = new Date(baseDate)
+        resultDate.setDate(resultDate.getDate() + Number(clearDays))
 
+        // Format to YYYY-MM-DD for the HTML date input
+        const formattedDate = resultDate.toISOString().split('T')[0]
+
+        // Update date_cleared.
+        // This only triggers when check_date or clear_days changes.
+        form.setValue('date_cleared', formattedDate, {
+            shouldDirty: true,
+        })
+    }, [checkDate, clearDays, form])
     return (
         <Form {...form}>
             <form
-                className={cn('flex w-full flex-col gap-y-4', className)}
+                className={cn('flex w-full flex-col gap-y-6', className)}
                 onSubmit={onSubmit}
                 ref={formRef}
             >
                 <fieldset
-                    className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    className="space-y-6"
                     disabled={isPending || formProps.readOnly}
                 >
-                    <fieldset className="space-y-3">
-                        {/* CHECK NUMBER */}
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Member Profile for Shortage"
-                            name={'member_profile_id'}
-                            render={() => (
-                                <MemberPicker
-                                    onSelect={(selectedMember) => {
-                                        form.setValue(
-                                            `member_profile_id`,
-                                            selectedMember.id,
-                                            {
-                                                shouldDirty: true,
-                                            }
-                                        )
-                                        form.setValue(
-                                            'member_profile',
-                                            selectedMember
-                                        )
-                                    }}
-                                    placeholder="Select member profile"
-                                    value={form.getValues('member_profile')}
-                                />
-                            )}
-                        />
+                    {/* TOP SECTION: SINGLE MEMBER SELECT */}
+                    <FormFieldWrapper
+                        control={form.control}
+                        label="P.B. No. / Member Name"
+                        name={'member_profile_id'}
+                        render={() => (
+                            <MemberPicker
+                                onSelect={(selectedMember) => {
+                                    form.setValue(
+                                        `member_profile_id`,
+                                        selectedMember.id,
+                                        { shouldDirty: true }
+                                    )
+                                    form.setValue(
+                                        'member_profile',
+                                        selectedMember
+                                    )
+                                }}
+                                placeholder="Search and select member..."
+                                value={form.getValues('member_profile')}
+                            />
+                        )}
+                    />
 
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Bank *"
-                            name="bank_id"
-                            render={({ field }) => (
-                                <BankCombobox
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    onChange={(selectedBank) =>
-                                        field.onChange(selectedBank.id)
-                                    }
-                                    placeholder="Select a bank"
-                                    value={field.value}
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Bank"
-                            name="employee_user_id"
-                            render={(field) => (
-                                <EmployeePicker
-                                    {...field}
-                                    mode="owner"
-                                    onSelect={(value) => {
-                                        form.setValue(
-                                            'employee_user_id',
-                                            value.id
-                                        )
-                                        form.setValue('employee_user', value)
-                                    }}
-                                    placeholder="Select Employee"
-                                    value={form.getValues('employee_user')}
-                                />
-                            )}
-                        />
+                    <hr />
 
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Check Number"
-                            name="check_number"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    placeholder="Check Number"
-                                />
-                            )}
-                        />
-
-                        {/* CHECK DATE */}
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Check Date"
-                            name="check_date"
-                            render={({ field }) => (
-                                <Input
-                                    type="date"
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                />
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Clear Days"
-                            name="clear_days"
-                            render={({ field }) => (
-                                <Input
-                                    type="date"
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Date cleared"
-                            name="date_cleared"
-                            render={({ field }) => (
-                                <Input
-                                    type="number"
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    onChange={(e) =>
-                                        field.onChange(Number(e.target.value))
-                                    }
-                                    value={field.value ?? ''}
-                                />
-                            )}
-                        />
-                        {/* WAREHOUSING DATE */}
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Warehousing Date"
-                            name="date"
-                            render={({ field }) => (
-                                <Input
-                                    type="date"
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                />
-                            )}
-                        />
-
-                        {/* AMOUNT */}
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Amount"
-                            name="amount"
-                            render={({ field }) => (
-                                <Input
-                                    type="number"
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    placeholder="0.00"
-                                />
-                            )}
-                        />
-
-                        {/* CLEAR DAYS */}
-
-                        {/* REFERENCE */}
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Reference Number"
-                            name="reference_number"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    placeholder="Reference Number"
-                                />
-                            )}
-                        />
-
-                        {/* IMAGE */}
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Check Image"
-                            name="media_id"
-                            render={({ field }) => {
-                                const value = form.watch('media')
-
-                                return (
-                                    <ImageField
-                                        {...field}
-                                        onChange={(img) => {
-                                            if (img) field.onChange(img.id)
-                                            else field.onChange(undefined)
-
-                                            form.setValue('media', img)
-                                        }}
-                                        placeholder="Upload Check Image"
-                                        value={
-                                            value
-                                                ? (value as IMedia).download_url
-                                                : value
-                                        }
+                    {/* SECTION: CHECK INFORMATION */}
+                    <div className="space-y-3">
+                        <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                            Check Information
+                        </h3>
+                        <div className="grid grid-cols-1 gap-y-2">
+                            {/* Check No */}
+                            <div className="grid grid-cols-3 items-center gap-4">
+                                <label className="text-sm font-medium">
+                                    Check No:
+                                </label>
+                                <div className="col-span-2">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="check_number"
+                                        render={({ field }) => (
+                                            <Input
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                            />
+                                        )}
                                     />
-                                )
-                            }}
-                        />
+                                </div>
+                            </div>
 
-                        {/* DESCRIPTION */}
+                            {/* Check Date */}
+                            <div className="grid grid-cols-3 items-center gap-4">
+                                <label className="text-sm font-medium">
+                                    Check Date:
+                                </label>
+                                <div className="col-span-2">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="check_date"
+                                        render={({ field }) => (
+                                            <Input
+                                                type="date"
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                            />
+                                        )}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Clear Days */}
+                            <div className="grid grid-cols-3 items-center gap-4">
+                                <label className="text-sm font-medium">
+                                    Clear Days:
+                                </label>
+                                <div className="col-span-2">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="clear_days"
+                                        render={({ field }) => (
+                                            <Input
+                                                type="number"
+                                                {...field}
+                                                onChange={(e) =>
+                                                    field.onChange(
+                                                        Number(e.target.value)
+                                                    )
+                                                }
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                placeholder="e.g. 3"
+                                            />
+                                        )}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Date Cleared */}
+                            <div className="grid grid-cols-3 items-center gap-4">
+                                <label className="text-sm font-medium">
+                                    Date Cleared:
+                                </label>
+                                <div className="col-span-2">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="date_cleared"
+                                        render={({ field }) => (
+                                            <Input
+                                                type="date"
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                            />
+                                        )}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Bank */}
+                            <div className="grid grid-cols-3 items-center gap-4">
+                                <label className="text-sm font-medium">
+                                    Bank:
+                                </label>
+                                <div className="col-span-2">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="bank_id"
+                                        render={({ field }) => (
+                                            <BankCombobox
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                onChange={(selectedBank) =>
+                                                    field.onChange(
+                                                        selectedBank.id
+                                                    )
+                                                }
+                                                value={field.value}
+                                            />
+                                        )}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Amount */}
+                            <div className="grid grid-cols-3 items-center gap-4">
+                                <label className="text-sm font-medium">
+                                    Amount:
+                                </label>
+                                <div className="col-span-2">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="amount"
+                                        render={({ field }) => (
+                                            <Input
+                                                type="number"
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                placeholder="0.00"
+                                            />
+                                        )}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    {/* SECTION: O.R. INFORMATION */}
+                    <div className="space-y-3">
+                        <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                            O.R. Information
+                        </h3>
+                        <div className="grid grid-cols-1 gap-y-2">
+                            {/* Ref No */}
+                            <div className="grid grid-cols-3 items-center gap-4">
+                                <label className="text-sm font-medium">
+                                    Ref. No.
+                                </label>
+                                <div className="col-span-2">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="reference_number"
+                                        render={({ field }) => (
+                                            <Input
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                            />
+                                        )}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Date */}
+                            <div className="grid grid-cols-3 items-center gap-4">
+                                <label className="text-sm font-medium">
+                                    Date:
+                                </label>
+                                <div className="col-span-2">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="date"
+                                        render={({ field }) => (
+                                            <Input
+                                                type="date"
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                            />
+                                        )}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Teller / Employee */}
+                            <div className="grid grid-cols-3 items-center gap-4">
+                                <label className="text-sm font-medium">
+                                    Teller/Coll.:
+                                </label>
+                                <div className="col-span-2">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="employee_user_id"
+                                        render={(field) => (
+                                            <EmployeePicker
+                                                {...field}
+                                                mode="owner"
+                                                onSelect={(value) => {
+                                                    form.setValue(
+                                                        'employee_user_id',
+                                                        value.id
+                                                    )
+                                                    form.setValue(
+                                                        'employee_user',
+                                                        value
+                                                    )
+                                                }}
+                                                value={form.getValues(
+                                                    'employee_user'
+                                                )}
+                                            />
+                                        )}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    {/* SECTION: REMARKS */}
+                    <div className="space-y-2">
+                        <label className="text-sm font-bold">Remarks</label>
                         <FormFieldWrapper
                             control={form.control}
-                            label="Description"
                             name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
                                     disabled={isDisabled(field.name)}
-                                    placeholder="Description"
+                                    className="min-h-[80px]"
                                 />
                             )}
                         />
-                    </fieldset>
+                    </div>
                 </fieldset>
 
                 <FormFooterResetSubmit
@@ -371,7 +451,6 @@ const CheckWarehousingCreateUpdateForm = ({
         </Form>
     )
 }
-
 /**
  * 🧩 MODAL
  */
