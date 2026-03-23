@@ -5,11 +5,13 @@ export const downloadPDF = downloadFileService
 export const printPDF = async ({
     fileUrl,
     isMassive = false,
+    isPasswordProtected = false,
 }: {
     fileUrl: string
     isMassive?: boolean
+    isPasswordProtected?: boolean
 }) => {
-    if (isMassive) {
+    if (isMassive || isPasswordProtected) {
         const printWindow = window.open(fileUrl, '_blank')
         if (printWindow) {
             printWindow.focus()

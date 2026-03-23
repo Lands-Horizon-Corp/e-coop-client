@@ -1,6 +1,7 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 
 import { cn } from '@/helpers'
+import { useInfoModalStore } from '@/store/info-modal-store'
 import { Virtualizer } from '@tanstack/react-virtual'
 
 import {
@@ -48,14 +49,18 @@ export const PdfHeaderTitle = ({
     className,
     canPrint = true,
     canDownload = true,
+    isPasswordProtected = false,
     onClose,
 }: {
     fileUrl?: string | null
     fileTitle: string
     fileSize?: number
     className?: string
+    isPasswordProtected?: boolean
     onClose?: () => void
 } & PdfHeaderProps) => {
+    const { onOpen } = useInfoModalStore()
+
     // pang download
     const handleDownload = useCallback(() => {
         if (!fileUrl) return
@@ -65,8 +70,18 @@ export const PdfHeaderTitle = ({
     // pang print
     const handlePrint = useCallback(() => {
         if (!fileUrl) return
-        printPDF({ fileUrl })
-    }, [fileUrl])
+        if (isPasswordProtected)
+            return onOpen({
+                title: 'PDF Password Protected',
+                description:
+                    'Password protected PDF is not printable on current page, print will open in new tab for security reason.',
+                onConfirm: () => {
+                    printPDF({ fileUrl, isPasswordProtected })
+                },
+            })
+
+        printPDF({ fileUrl, isPasswordProtected })
+    }, [fileUrl, isPasswordProtected, onOpen])
 
     return (
         <div

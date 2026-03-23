@@ -23,7 +23,7 @@ import {
     PdfSkeletonPage,
 } from './pdf-components'
 
-// UGLY SHIT To be enhanced later
+// worker
 if (!IS_STAGING) {
     pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@5.4.296/build/pdf.worker.min.mjs`
 } else {
@@ -34,7 +34,9 @@ if (!IS_STAGING) {
 }
 
 export interface PdfViewerProps
-    extends IClassProps, PdfHeaderProps, PdfFooterProps {
+    extends IClassProps,
+        PdfHeaderProps,
+        PdfFooterProps {
     file?: File | string | null
     fileName?: string
     onClose?: () => void
@@ -49,9 +51,11 @@ export interface PdfViewerProps
 
     hideFooterControl?: boolean
     onPdfLoadSuccess?: ({ document }: { document: DocumentCallback }) => void
+
+    onHasPassword?: () => void
+    onPasswordValid?: () => void
 }
 
-// DEFAULTS
 const DEFAULT_PAGE_WIDTH = 800
 const DEFAULT_ESTIMATE = 1122
 
@@ -77,12 +81,17 @@ const PdfViewer = ({
 
     onClose,
     onPdfLoadSuccess,
+
+    onHasPassword,
+    onPasswordValid,
 }: PdfViewerProps) => {
     const fileTitle =
         file instanceof File
             ? file.name
             : fileName ||
-              (typeof file === 'string' ? getFileNameFromUrl(file) : 'PDF View')
+              (typeof file === 'string'
+                  ? getFileNameFromUrl(file)
+                  : 'PDF View')
 
     const [numPages, setNumPages] = useState(0)
     const [firstPageHeight, setFirstPageHeight] = useState<number | null>(null)
@@ -95,7 +104,6 @@ const PdfViewer = ({
         overscan: 2,
     })
 
-    // file pang resolve
     const [fileUrl, setFileUrl] = useState<string | null>(null)
 
     useEffect(() => {
@@ -114,20 +122,28 @@ const PdfViewer = ({
         }
     }, [file])
 
-    // pang password shit
     const [passwordNeeded, setPasswordNeeded] = useState(false)
     const [passwordError, setPasswordError] = useState(false)
     const [cancelled, setCancelled] = useState(false)
+
     const passwordCallbackRef = useRef<((pw: string) => void) | null>(null)
+
+    const hadPasswordRef = useRef(false)
 
     const handlePassword = useCallback(
         (callback: (password: string) => void, reason: number) => {
             passwordCallbackRef.current = callback
+
             setPasswordNeeded(true)
             setPasswordError(reason === 2)
             setCancelled(false)
+
+            if (!hadPasswordRef.current) {
+                onHasPassword?.()
+            }
+            hadPasswordRef.current = true
         },
-        []
+        [onHasPassword]
     )
 
     const handlePasswordSubmit = useCallback((password: string) => {
@@ -147,8 +163,8 @@ const PdfViewer = ({
         setPasswordError(false)
     }, [])
 
-    // pang zooming (scale) shit
     const [scale, setScale] = useState(defaultScale)
+
     useEffect(() => {
         const el = parentRef.current
         if (!el || !canZoom) return
@@ -156,7 +172,9 @@ const PdfViewer = ({
         const handleWheel = (e: WheelEvent) => {
             if (!e.ctrlKey && !e.metaKey) return
             e.preventDefault()
+
             const delta = -Math.sign(e.deltaY) * zoomStep
+
             setScale((s) => {
                 const next = Math.round((s + delta) * 100) / 100
                 return Math.max(minScale, Math.min(maxScale, next))
@@ -178,12 +196,7 @@ const PdfViewer = ({
             ref={parentRef}
         >
             {cancelled ? (
-                <div
-                    className={cn(
-                        'flex items-center justify-center',
-                        className
-                    )}
-                >
+                <div className="flex items-center justify-center">
                     <PdfPasswordRequired
                         onCancel={() => onClose?.()}
                         onRetry={handleRetry}
@@ -197,9 +210,11 @@ const PdfViewer = ({
                         className={cn('z-50', hideHeader && 'hidden')}
                         fileTitle={fileTitle}
                         fileUrl={fileUrl}
+                        isPasswordProtected={passwordNeeded}
                         onClose={onClose}
                         onPrint={onPrint}
                     />
+
                     <Document
                         file={file}
                         loading={
@@ -220,8 +235,19 @@ const PdfViewer = ({
                         onLoadSuccess={(document: DocumentCallback) => {
                             setNumPages(document.numPages)
                             setFirstPageHeight(null)
+
+                            const wasPasswordProtected =
+                                hadPasswordRef.current
+
                             setPasswordNeeded(false)
                             setPasswordError(false)
+
+                            // ✅ password success trigger
+                            if (wasPasswordProtected) {
+                                onPasswordValid?.()
+                                hadPasswordRef.current = false
+                            }
+
                             onPdfLoadSuccess?.({ document })
                         }}
                         onPassword={handlePassword}
@@ -236,9 +262,7 @@ const PdfViewer = ({
                                     data-index={virtualRow.index}
                                     key={virtualRow.key}
                                     ref={virtualizer.measureElement}
-                                    style={{
-                                        top: virtualRow.start,
-                                    }}
+                                    style={{ top: virtualRow.start }}
                                 >
                                     <Page
                                         className="rounded-xl overflow-clip"
@@ -269,6 +293,7 @@ const PdfViewer = ({
                             ))}
                         </div>
                     </Document>
+
                     <PdfFooterControl
                         canPaginate={canPaginate}
                         canZoom={canZoom}
@@ -285,6 +310,7 @@ const PdfViewer = ({
                     />
                 </>
             )}
+
             <PdfPasswordDialog
                 error={passwordError}
                 onCancel={handlePasswordCancel}
