@@ -213,7 +213,7 @@ const InventoryBrandPicker = forwardRef<HTMLButtonElement, Props>(
                     variant="secondary"
                 >
                     <span className="inline-flex w-full items-center justify-between text-sm text-foreground/90">
-                        <span className="inline-flex w-full items-center gap-x-2">
+                        <span className="inline-flex w-[90%] items-center gap-x-2">
                             {isFetching && (
                                 <div className="flex size-6 items-center justify-center rounded-full bg-primary/10">
                                     <LoadingSpinner className="size-3" />

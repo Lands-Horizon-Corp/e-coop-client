@@ -231,7 +231,6 @@ const InventorySupplierPicker = forwardRef<HTMLButtonElement, Props>(
                         }}
                     />
                 </GenericPicker>
-
                 <Button
                     className={cn(
                         'w-full items-center justify-between rounded-md border p-0 px-2',
@@ -244,7 +243,7 @@ const InventorySupplierPicker = forwardRef<HTMLButtonElement, Props>(
                     variant="secondary"
                 >
                     <span className="inline-flex w-full items-center justify-between text-sm text-foreground/90">
-                        <span className="inline-flex w-full items-center gap-x-2">
+                        <span className="inline-flex truncate w-[90%] items-center gap-x-2">
                             {isFetching && (
                                 <div className="flex size-6 items-center justify-center rounded-full bg-primary/10">
                                     <LoadingSpinner className="size-3" />
@@ -252,7 +251,7 @@ const InventorySupplierPicker = forwardRef<HTMLButtonElement, Props>(
                             )}
 
                             {!value ? (
-                                <span className="text-foreground/70">
+                                <span className="text-foreground/70 min-w-full v1 truncate">
                                     {placeholder || 'Select supplier'}
                                 </span>
                             ) : (
@@ -261,13 +260,11 @@ const InventorySupplierPicker = forwardRef<HTMLButtonElement, Props>(
                                 </span>
                             )}
                         </span>
-
                         {allowShorcutCommand && (
                             <span className="mr-2 text-sm">⌘ ↵</span>
                         )}
+                        <ChevronDownIcon />
                     </span>
-
-                    <ChevronDownIcon />
                 </Button>
             </>
         )

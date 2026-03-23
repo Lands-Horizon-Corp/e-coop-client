@@ -5,6 +5,7 @@ import PageContainer from '@/components/containers/page-container'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
+import { CheckWarehousingSummaryBar } from '../components/check-warehouse-sumarry'
 import CheckWarehousingTable from '../components/check-warehouse-table'
 import { CheckWarehousingCreateUpdateFormModal } from '../components/create-update-check-warehousing-modal'
 
@@ -27,6 +28,7 @@ const CheckWarehousingPage = () => {
                         },
                     }}
                 />
+                <CheckWarehousingSummaryBar />
             </PermissionGuard>
         </PageContainer>
     )
