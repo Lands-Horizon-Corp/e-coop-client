@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import qs from 'query-string'
 
 import { Logger } from '@/helpers/loggers'
 import {
@@ -78,14 +79,21 @@ export const updateLoanTransactionSignature = async ({
 export const printLoanTransaction = async ({
     loanTransactionId,
     payload,
+    commit = true,
 }: {
     loanTransactionId: TEntityId
     payload: ILoanTransactionPrintRequest
+    commit?: boolean
 }) => {
+    const url = qs.stringifyUrl({
+        url: `${loanTransactionAPIRoute}/${loanTransactionId}/print`,
+        query: { commit },
+    })
+
     const response = await API.put<
         ILoanTransactionPrintRequest,
         IGeneratedReport
-    >(`${loanTransactionAPIRoute}/${loanTransactionId}/print`, payload)
+    >(url, payload)
     return response.data
 }
 
@@ -261,7 +269,11 @@ export const useUpdateLoanTransactionSignature = createMutationFactory<
 export const usePrintLoanTransaction = createMutationFactory<
     IGeneratedReport,
     Error,
-    { loanTransactionId: TEntityId; payload: ILoanTransactionPrintRequest }
+    {
+        loanTransactionId: TEntityId
+        payload: ILoanTransactionPrintRequest
+        commit?: boolean
+    }
 >({
     mutationFn: (data) => printLoanTransaction(data),
     defaultInvalidates: [['auth', 'context']],

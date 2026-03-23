@@ -1,10 +1,14 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { toReadableDate } from '@/helpers/date-utils'
 import {
     hasPermissionFromAuth,
     useAuthStore,
 } from '@/modules/authentication/authgentication.store'
+import { TReportConfigSchema } from '@/modules/generated-report'
+import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
+import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -17,6 +21,7 @@ import {
     TORJournalVoucherSettings,
     useDeleteJournalVoucherById,
 } from '../..'
+import { JOURNAL_VOUCHER_PRINT_TEMPLATES } from '../../reports/jornal-voucher-template'
 import JournalVoucherApproveReleaseDisplayModal, {
     TJournalVoucherApproveReleaseDisplayMode,
 } from '../forms/journal-voucher-approve-release-modal'
@@ -253,9 +258,24 @@ export const JournalVoucherTableActionManager = () => {
             {state.action === 'print' && (
                 <JournalVoucherPrintFormModal
                     formProps={{
-                        defaultValues: journalVoucher,
+                        defaultValues: {
+                            ...journalVoucher,
+                            report_config: {
+                                ...getTemplateAt(
+                                    JOURNAL_VOUCHER_PRINT_TEMPLATES,
+                                    0
+                                ),
+                                name: `journal_voucher_${toReadableDate(journalVoucher.created_at, 'MMddyy_mmss')}.pdf`,
+                                module: 'JournalVoucher',
+                            } as TReportConfigSchema,
+                        },
                         journalVoucherId: journalVoucher.id,
                         orSettings: resolvedOrSettings,
+                        onSuccess: (data) => {
+                            useReportViewerStore.getState().open({
+                                reportId: data.id,
+                            })
+                        },
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

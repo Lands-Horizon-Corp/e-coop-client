@@ -1,10 +1,14 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { toReadableDate } from '@/helpers/date-utils'
 import {
     hasPermissionFromAuth,
     useAuthStore,
 } from '@/modules/authentication/authgentication.store'
+import { TReportConfigSchema } from '@/modules/generated-report'
+import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
+import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -17,6 +21,7 @@ import {
     TORCashCheckSettings,
     useDeleteCashCheckVoucherById,
 } from '../..'
+import { CASH_CHECK_VOUCHER_PRINT_TEMPLATES } from '../../reports/cash-check-voucher-templates'
 import CashCheckEntryUpdateFormModal from '../forms/cash-check-entry-form-modal'
 import CashCheckVoucherTransactionSignatureUpdateFormModal from '../forms/cash-check-signature-form-modal'
 import CashCheckVoucherApproveReleaseDisplayModal from '../forms/cash-check-voucher-approve-release-display-modal'
@@ -272,8 +277,22 @@ export const CashCheckVoucherTableActionManager = () => {
                         defaultValues: {
                             cash_voucher_number:
                                 state.defaultValues?.cash_voucher_number,
+                            report_config: {
+                                ...getTemplateAt(
+                                    CASH_CHECK_VOUCHER_PRINT_TEMPLATES,
+                                    0
+                                ),
+                                name: `cash_check_voucher_${toReadableDate(state.defaultValues.created_at, 'MMddyy_mmss')}.pdf`,
+                                filters: {},
+                                module: 'CashCheckVoucher',
+                            } as TReportConfigSchema,
                         },
                         orSettings: resolvedOrSettings,
+                        onSuccess(data) {
+                            useReportViewerStore.getState().open({
+                                reportId: data.id,
+                            })
+                        },
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

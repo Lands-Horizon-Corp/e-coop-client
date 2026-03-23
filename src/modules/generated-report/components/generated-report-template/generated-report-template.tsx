@@ -45,7 +45,6 @@ import {
 } from '../../generated-report-template-registry'
 import {
     GeneratedReportTemplate,
-    GeneratedReportTemplateCollection,
     TPaperSizeUnit,
 } from '../../generated-report.types'
 import {
@@ -55,30 +54,33 @@ import {
 
 const SIZING_UNITS: TPaperSizeUnit[] = ['px', 'in', 'cm', 'mm', 'pt']
 
-export interface GenerateReportTemplatePickerProps {
-    templates?: GeneratedReportTemplateCollection
+export interface GenerateReportTemplatePickerProps<T = unknown> {
+    templates?: GeneratedReportTemplate<T>[]
     registryKey?: GeneratedReportRegistryKey | GeneratedReportRegistryKey[]
     onSelect?: (
-        template: GeneratedReportTemplate,
+        template: GeneratedReportTemplate<T>,
         dimensions: { width: string; height: string; unit: TPaperSizeUnit }
     ) => void
 }
 
-export function GenerateReportTemplatePicker({
+export function GenerateReportTemplatePicker<T = unknown>({
     templates,
     registryKey,
     onSelect,
-}: GenerateReportTemplatePickerProps) {
-    const resolvedTemplates: GeneratedReportTemplateCollection = useMemo(() => {
+}: GenerateReportTemplatePickerProps<T>) {
+    const resolvedTemplates: GeneratedReportTemplate<T>[] = useMemo(() => {
         if (templates) return templates
         if (!registryKey) return []
-        const keys = Array.isArray(registryKey) ? registryKey : [registryKey]
-        const results = keys.flatMap((key) => REPORT_REGISTRY[key] ?? [])
 
-        return results
+        const keys = Array.isArray(registryKey) ? registryKey : [registryKey]
+
+        return keys.flatMap(
+            (key) =>
+                (REPORT_REGISTRY[key] as GeneratedReportTemplate<T>[]) ?? []
+        ) as GeneratedReportTemplate<T>[]
     }, [templates, registryKey])
 
-    const [selected, setSelected] = useState<GeneratedReportTemplate | null>(
+    const [selected, setSelected] = useState<GeneratedReportTemplate<T> | null>(
         null
     )
     const [renderedHtml, setRenderedHtml] = useState('')
@@ -127,7 +129,7 @@ export function GenerateReportTemplatePicker({
         }
     }, [selected, resolvedTemplates, renderTemplate])
 
-    const handleSelect = (item: GeneratedReportTemplate) => {
+    const handleSelect = (item: GeneratedReportTemplate<T>) => {
         setSelected(item)
         const w = parseFloat(item.width) || 800
         const h = parseFloat(item.height) || 1100
@@ -181,7 +183,7 @@ export function GenerateReportTemplatePicker({
     const iframeSrcDoc = `<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0;width:${pageW}${unit};height:${pageH}${unit};overflow:hidden;font-family:'Segoe UI',sans-serif;}</style></head><body>${renderedHtml}</body></html>`
 
     return (
-        <div className="max-w-5xl w-full mx-auto bg-popover ring-4 ring-muted border border-border overflow-clip rounded-xl h-[80vh] p-0 gap-0 flex">
+        <div className="max-w-6xl w-full mx-auto bg-popover ring-4 ring-muted border border-border overflow-clip rounded-xl h-[80vh] p-0 gap-0 flex">
             <aside className="flex !w-64 flex-col border-r border-border bg-muted/30">
                 <Command className="rounded-none border-0 bg-transparent">
                     <div className="p-4 pb-0">
@@ -444,7 +446,7 @@ export function GenerateReportTemplatePickerModal({
     return (
         <Dialog {...modalProps}>
             {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-            <DialogContent className="!max-w-5xl h-[80vh] !bg-transparent p-0 gap-0 flex flex-col">
+            <DialogContent className="!max-w-6xl h-[80vh] !bg-transparent p-0 gap-0 flex flex-col">
                 <DialogHeader className="px-6 py-4 hidden border-b border-border shrink-0">
                     <DialogTitle className="text-lg">
                         Select Template

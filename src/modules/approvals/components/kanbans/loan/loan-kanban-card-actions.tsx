@@ -18,7 +18,7 @@ import { LoanTransactionCreateUpdateFormModal } from '@/modules/loan-transaction
 import LoanApproveReleaseDisplayModal from '@/modules/loan-transaction/components/loan-approve-release-display-modal'
 import LoanTransactionOtherAction from '@/modules/loan-transaction/components/loan-other-actions'
 import { LoanTagsManagerPopover } from '@/modules/loan-transaction/components/loan-tag-manager'
-import { LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES } from '@/modules/loan-transaction/loan-transaction-reports/loan-transaction-templates'
+import { LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES } from '@/modules/loan-transaction/reports/loan-transaction-templates'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 // import useGeneratedReportConfigStore from '@/store/generated-report-config-store'

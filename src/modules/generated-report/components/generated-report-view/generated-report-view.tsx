@@ -42,6 +42,7 @@ export function ReportViewer({
     onReportPrint,
 }: GenerateReportViewerProps) {
     const [report, setReport] = useState<IGeneratedReport | undefined>()
+    const [isUnlocked, setIsUnlocked] = useState(false)
 
     const {
         data,
@@ -54,12 +55,19 @@ export function ReportViewer({
         id: reportId,
         options: {
             refetchInterval: report?.status === 'pending' ? 10_000 : false,
+            refetchOnWindowFocus: false,
         },
     })
 
     useEffect(() => {
         setReport(data)
     }, [data, status])
+
+    useEffect(() => {
+        setIsUnlocked(false)
+    }, [report?.id])
+
+    const canDownload = report && (!report?.has_password || isUnlocked)
 
     const error = serverRequestErrExtractor({ error: fetchError })
 
@@ -89,6 +97,7 @@ export function ReportViewer({
         >
             <ReportViewerHeader
                 isComplete={isComplete}
+                isLocked={canDownload}
                 isPending={isPending}
                 isRefetching={isRefetching}
                 onReportDownload={onReportDownload}
@@ -130,7 +139,10 @@ export function ReportViewer({
                         <PdfViewer
                             className="w-full h-[75vh]"
                             file={report.media?.download_url}
-                            // hideHeader
+                            hideHeader
+                            onPasswordValid={() => {
+                                setIsUnlocked(true)
+                            }}
                             // className="flex-1 h-[500px] w-full flex"
                             pageWidth={800}
                         />

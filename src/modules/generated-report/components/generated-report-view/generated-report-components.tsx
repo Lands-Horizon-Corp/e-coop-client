@@ -5,12 +5,15 @@ import { toast } from 'sonner'
 import { downloadFileService } from '@/helpers/file-download'
 import { IGeneratedReport } from '@/modules/generated-report/generated-report.types'
 import { printPDF } from '@/modules/pdf/pdf-utils'
+import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Download, FileText, Printer } from 'lucide-react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { RefreshIcon, XIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Kbd } from '@/components/ui/kbd'
 
 import { TGeneratedReportStatus } from '../../generated-report.types'
 
@@ -79,6 +82,7 @@ interface ReportViewerHeaderProps {
     isComplete: boolean
     isPending: boolean
     isRefetching: boolean
+    isLocked?: boolean
     onReportPrint?: (report: IGeneratedReport) => void
     onReportDownload?: (report: IGeneratedReport) => void
     refetch: () => void
@@ -90,29 +94,73 @@ export const ReportViewerHeader: React.FC<ReportViewerHeaderProps> = ({
     isComplete,
     isPending,
     isRefetching,
+    isLocked,
     onReportPrint,
     onReportDownload,
     refetch,
     className,
 }) => {
+    const { onOpen } = useConfirmModalStore()
+
     const handlePrint = useCallback(() => {
         if (!report?.media.download_url)
             return toast.warning('No report to download')
         const fileUrl = report?.media?.download_url
-        printPDF({ fileUrl })
+
+        if (!isLocked && report.has_password)
+            return onOpen({
+                title: 'Password protected',
+                description: 'Please unlock the PDF first',
+            })
+
+        if (report.has_password) {
+            return onOpen({
+                title: 'PDF Print Redirect',
+                description:
+                    'Due to the document password protected, printing in this page is restricted. Redirecting to new Tab for security reason.',
+                onConfirm: () => {
+                    printPDF({
+                        fileUrl,
+                        isPasswordProtected: report.has_password,
+                    })
+                    onReportPrint?.(report)
+                },
+            })
+        }
+
+        printPDF({ fileUrl, isPasswordProtected: report.has_password })
         onReportPrint?.(report)
-    }, [onReportPrint, report])
+    }, [report, isLocked, onOpen, onReportPrint])
 
     const handleDownload = useCallback(async () => {
         if (!report?.media.download_url)
             return toast.warning('No report to download')
+        if (!isLocked && report.has_password)
+            return onOpen({
+                title: 'Password protected',
+                description: 'Please unlock the PDF first',
+            })
+
         downloadFileService({ url: report?.media.download_url, mode: 'fetch' })
         onReportDownload?.(report)
-    }, [onReportDownload, report])
+    }, [isLocked, onOpen, onReportDownload, report])
+
+    useHotkeys('ctrl+p', (e) => {
+        e.preventDefault()
+        handlePrint()
+    })
+
+    useHotkeys('ctrl+d', (e) => {
+        e.preventDefault()
+        handleDownload()
+    })
+
+    const isActionDisabled =
+        !report || !isComplete || (report.has_password && !isLocked)
 
     return (
         <div
-            className={`flex p-4 flex-row items-start justify-between gap-4 ${className}`}
+            className={`flex p-4 flex-row items-center justify-between gap-4 ${className}`}
         >
             <div className="flex items-start gap-3 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap min-w-0">
@@ -133,25 +181,33 @@ export const ReportViewerHeader: React.FC<ReportViewerHeaderProps> = ({
             <div className="flex items-center gap-2 shrink-0">
                 {report?.media?.file_type?.includes('pdf') && (
                     <Button
-                        disabled={!isComplete}
+                        disabled={isActionDisabled}
                         onClick={() => report && handlePrint()}
-                        size="sm"
+                        size="xs"
                         variant="outline"
                     >
                         <Printer className="h-4 w-4" />
                         Print
+                        <span>
+                            <Kbd className="mr-1">Ctrl</Kbd>
+                            <Kbd>P</Kbd>
+                        </span>
                     </Button>
                 )}
 
                 {report && (
                     <Button
-                        disabled={!isComplete}
+                        disabled={isActionDisabled}
                         onClick={() => report && handleDownload()}
-                        size="sm"
+                        size="xs"
                         variant="outline"
                     >
                         <Download className="h-4 w-4" />
                         Download
+                        <span>
+                            <Kbd className="mr-1">Ctrl</Kbd>
+                            <Kbd>D</Kbd>
+                        </span>
                     </Button>
                 )}
 

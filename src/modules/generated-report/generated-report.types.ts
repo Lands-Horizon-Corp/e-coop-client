@@ -56,6 +56,8 @@ export interface IGeneratedReport extends IBaseEntityMeta {
     paper_size?: string
     template?: string
 
+    has_password?: boolean
+
     download_users: IGeneratedReportsDownloadUsers[]
 
     width: number
@@ -138,5 +140,4 @@ export interface GeneratedReportTemplate<T = unknown> {
     lock_branch_id?: TEntityId[]
 }
 
-export type GeneratedReportTemplateCollection<T = unknown> =
-    GeneratedReportTemplate<T>[]
+export type GeneratedReportTemplateCollection = GeneratedReportTemplate[]

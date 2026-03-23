@@ -17,12 +17,13 @@ import { TAPIQueryOptions, TEntityId } from '@/types'
 import type {
     IJournalVoucher,
     IJournalVoucherPaginated,
-    IJournalVoucherPrintRequest,
     IJournalVoucherRequest,
     TJournalActionMode,
     TJournalVoucherMode,
+    TJournalVoucherPrintSchema,
     TPrintMode,
 } from '../journal-voucher'
+import { IGeneratedReport } from '../playground/components/generated-reports'
 
 const {
     apiCrudHooks,
@@ -188,21 +189,35 @@ export const useJournalVoucherActions = createMutationFactory<
 })
 
 // PRINT JOURNAL VOUCHER
-const printJournalVoucher = async (data: {
+const printJournalVoucher = async ({
+    journalVoucherId,
+    payload,
+    commit = true,
+}: {
     journalVoucherId: TEntityId
-    payload: IJournalVoucherPrintRequest
+    payload: TJournalVoucherPrintSchema
+    commit?: boolean
 }) => {
+    const url = qs.stringifyUrl({
+        url: `${journalVoucherAPIRoute}/${journalVoucherId}/print`,
+        query: { commit },
+    })
+
     const response = await API.put<
-        IJournalVoucherPrintRequest,
-        IJournalVoucher
-    >(`${journalVoucherAPIRoute}/${data.journalVoucherId}/print`, data.payload)
+        TJournalVoucherPrintSchema,
+        IGeneratedReport
+    >(url, payload)
     return response.data
 }
 
 export const usePrintJournalVoucherTransaction = createMutationFactory<
-    IJournalVoucher,
+    IGeneratedReport,
     Error,
-    { journalVoucherId: TEntityId; payload: IJournalVoucherPrintRequest }
+    {
+        journalVoucherId: TEntityId
+        payload: TJournalVoucherPrintSchema
+        commit?: boolean
+    }
 >({
     mutationFn: (data) => printJournalVoucher(data),
     defaultInvalidates: [['auth', 'context']],

@@ -64,10 +64,6 @@ export interface IJournalVoucherRequest {
     journal_voucher_entries_deleted?: TEntityId[]
 }
 
-export interface IJournalVoucherPrintRequest {
-    cash_voucher_number: string
-}
-
 export enum EJournalVoucherStatus {
     Draft = 'draft',
     Posted = 'posted',

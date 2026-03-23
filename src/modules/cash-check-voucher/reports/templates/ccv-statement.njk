@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cash Check Voucher</title>
+        <style>
+            @page {
+                size: A5;
+                margin: 0;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                background-color: #f9fafb;
+            }
+
+            body {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .voucher-container {
+                /* Variables preserved for A5 optimization */
+                --fs-xs: 8px;
+                --fs-sm: 9px;
+                --fs-base: 10px;
+                --fs-lg: 11px;
+                --fs-xl: 13px;
+                --fs-2xl: 16px;
+
+                padding: 0.4in;
+                /* Slightly larger padding for A5 elegance */
+                background: white;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+                color: #1f2937;
+                font-size: var(--fs-sm);
+                line-height: 1.3;
+                width: 100%;
+                min-height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* Header Section */
+            .voucher-header {
+                text-align: center;
+                margin-bottom: 0.4rem;
+                padding-bottom: 0.25rem;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .voucher-header h1 {
+                font-size: var(--fs-lg);
+                font-weight: 800;
+                color: #111827;
+                text-transform: uppercase;
+            }
+
+            .voucher-header .header-address {
+                font-size: var(--fs-xs);
+                color: #6b7280;
+            }
+
+            .voucher-header .header-tin {
+                font-size: var(--fs-xs);
+                color: #575656;
+            }
+
+            .voucher-title {
+                font-size: var(--fs-xl);
+                font-weight: 800;
+                color: #111827;
+                margin-top: 0.3rem;
+                text-transform: uppercase;
+                letter-spacing: 0.02em;
+            }
+
+            /* Info Grid - Standardized Reusable Class */
+            .voucher-info-grid {
+                display: grid;
+                grid-template-columns: 1.5fr 1fr;
+                /* Adjusted for A5 balance */
+                gap: 0.5rem;
+                margin-bottom: 0.6rem;
+            }
+
+            .info-group p {
+                display: flex;
+                align-items: baseline;
+                margin-bottom: 2px;
+            }
+
+            .info-label {
+                font-size: var(--fs-xs);
+                font-weight: 600;
+                color: #575656;
+                width: 75px;
+                /* Fixed width for alignment */
+                flex-shrink: 0;
+            }
+
+            .info-value {
+                font-size: var(--fs-sm);
+                color: #1f2937;
+                font-weight: 700;
+                word-break: break-word;
+            }
+
+            .info-subtext {
+                font-size: var(--fs-xs);
+                color: #6b7280;
+                margin-top: 1px;
+                display: block;
+            }
+
+            /* Table Section */
+            .voucher-table-wrapper {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .voucher-table-wrapper table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: var(--fs-sm);
+            }
+
+            .voucher-table-wrapper th {
+                text-transform: uppercase;
+                font-weight: 700;
+                color: #374151;
+                padding: 0.3rem 0.2rem;
+                border-bottom: 2px solid #e5e7eb;
+                text-align: left;
+            }
+
+            .voucher-table-wrapper td {
+                padding: 0.3rem 0.2rem;
+                border-bottom: 1px solid #f3f4f6;
+            }
+
+            .text-right {
+                text-align: right;
+                font-family: monospace;
+            }
+
+            .row-highlight {
+                background: #f8fafc;
+                font-weight: 600;
+            }
+
+            .voucher-totals {
+                background: #f3f4f6;
+                font-weight: 700;
+                border-top: 1px solid #9ca3af;
+            }
+
+            /* Amount in Words */
+            .voucher-amount-box {
+                margin: 0.5rem 0;
+                padding: 0.4rem;
+                background: linear-gradient(to right, #fef3c7, #fde68a);
+                border: 1px solid #fbbf24;
+                border-radius: 3px;
+                color: #78350f;
+                font-size: var(--fs-sm);
+                font-weight: 700;
+                text-align: center;
+                text-transform: uppercase;
+            }
+
+            /* Check Details Box */
+            .voucher-check-details {
+                display: flex;
+                justify-content: space-around;
+                margin-bottom: 0.8rem;
+                padding: 0.3rem;
+                border: 1px dashed #d1d5db;
+                border-radius: 4px;
+                font-size: var(--fs-sm);
+            }
+
+            /* Signature Section - Standardized Reusable Layout */
+            .voucher-signature-section {
+                margin-top: 1.5rem;
+                /* Following content naturally */
+            }
+
+            .sig-row {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .sig-item {
+                text-align: center;
+            }
+
+            .sig-label {
+                font-size: var(--fs-xs);
+                font-weight: 700;
+                color: #6b7280;
+                text-transform: uppercase;
+                margin-bottom: 2px;
+            }
+
+            .sig-line {
+                border-bottom: 1px solid #9ca3af;
+                min-height: 1.2rem;
+                font-weight: 600;
+                font-size: var(--fs-sm);
+                color: #1f2937;
+                padding-top: 4px;
+            }
+
+            @media print {
+                body {
+                    background-color: white;
+                }
+                * {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="voucher-container">
+            <header class="voucher-header">
+                <h1>{{ header_title }}</h1>
+                <p class="header-address">{{ header_address }}</p>
+                <p class="header-tin">TIN: {{ tax_number }}</p>
+                <h2 class="voucher-title">{{ report_title }}</h2>
+            </header>
+
+            <div class="voucher-info-grid">
+                <div class="info-group">
+                    <p>
+                        <span class="info-label">Pay To:</span>
+                        <span class="info-value">{{ pay_to }}</span></p>
+                    <span class="info-subtext">
+                        <b>Address:</b>
+                        {{ address }}</span>
+                    <span class="info-subtext">
+                        <b>Particulars:</b>
+                        {{ particulars }}</span>
+                </div>
+                <div class="info-group">
+                    <p>
+                        <span class="info-label">Voucher No:</span>
+                        <span class="info-value">{{ voucher_no }}</span></p>
+                    <p>
+                        <span class="info-label">Entry Date:</span>
+                        <span class="info-value">{{ entry_date }}</span></p>
+                    <p>
+                        <span class="info-label">Date:</span>
+                        <span class="info-value">{{ date }}</span></p>
+                </div>
+            </div>
+
+            <div class="voucher-table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Account Title</th>
+                            <th class="text-right">Debit (₱)</th>
+                            <th class="text-right">Credit (₱)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in account_entries %}
+                            <tr>
+                                <td>{{ entry.account_title }}</td>
+                                <td class="text-right">{{ entry.debit }}</td>
+                                <td class="text-right">{{ entry.credit }}</td>
+                            </tr>
+                        {% endfor %}
+
+                        {% if cash_on_hand_total_debit or cash_on_hand_total_credit %}
+                            <tr class="row-highlight">
+                                <td>CASH ON HAND TOTAL</td>
+                                <td class="text-right">{{ cash_on_hand_total_debit }}</td>
+                                <td class="text-right">{{ cash_on_hand_total_credit }}</td>
+                            </tr>
+                        {% endif %}
+
+                        <tr class="voucher-totals">
+                            <td>TOTAL</td>
+                            <td class="text-right">{{ total_debit }}</td>
+                            <td class="text-right">{{ total_credit }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="voucher-amount-box">
+            *** {{ total_amount_into_words }} ONLY ***
+        </div>
+
+            <div class="voucher-check-details">
+                <div>
+                    <span class="info-label">Check Date:</span><span class="info-value">{{ check_date }}</span></div>
+                <div>
+                    <span class="info-label">Check No:</span><span class="info-value">{{ check_number }}</span></div>
+            </div>
+
+            <div class="voucher-signature-section">
+                <div class="sig-row">
+                    <div class="sig-item">
+                        <p class="sig-label">Prepared By</p>
+                        <div class="sig-line">{{ prepared_by }}</div>
+                    </div>
+                    <div class="sig-item">
+                        <p class="sig-label">Payee / Received By</p>
+                        <div class="sig-line">{{ payee }}</div>
+                    </div>
+                </div>
+                <div class="sig-row">
+                    <div class="sig-item">
+                        <p class="sig-label">Certified Correct</p>
+                        <div class="sig-line">{{ certified_correct }}</div>
+                    </div>
+                    <div class="sig-item">
+                        <p class="sig-label">Paid By</p>
+                        <div class="sig-line">{{ paid_by }}</div>
+                    </div>
+                </div>
+                <div class="sig-row" style="grid-template-columns: 1fr; padding: 0 25%;">
+                    <div class="sig-item">
+                        <p class="sig-label">Approved for Payment</p>
+                        <div class="sig-line">{{ approved_for_payment }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

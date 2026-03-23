@@ -34,9 +34,7 @@ if (!IS_STAGING) {
 }
 
 export interface PdfViewerProps
-    extends IClassProps,
-        PdfHeaderProps,
-        PdfFooterProps {
+    extends IClassProps, PdfHeaderProps, PdfFooterProps {
     file?: File | string | null
     fileName?: string
     onClose?: () => void
@@ -89,9 +87,7 @@ const PdfViewer = ({
         file instanceof File
             ? file.name
             : fileName ||
-              (typeof file === 'string'
-                  ? getFileNameFromUrl(file)
-                  : 'PDF View')
+              (typeof file === 'string' ? getFileNameFromUrl(file) : 'PDF View')
 
     const [numPages, setNumPages] = useState(0)
     const [firstPageHeight, setFirstPageHeight] = useState<number | null>(null)
@@ -236,8 +232,7 @@ const PdfViewer = ({
                             setNumPages(document.numPages)
                             setFirstPageHeight(null)
 
-                            const wasPasswordProtected =
-                                hadPasswordRef.current
+                            const wasPasswordProtected = hadPasswordRef.current
 
                             setPasswordNeeded(false)
                             setPasswordError(false)

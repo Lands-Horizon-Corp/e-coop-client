@@ -9,7 +9,9 @@ import {
     hasPermissionFromAuth,
     useAuthStore,
 } from '@/modules/authentication/authgentication.store'
+import { TReportConfigSchema } from '@/modules/generated-report'
 import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
+import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -28,7 +30,6 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
-import { LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES } from '../../loan-transaction-reports/loan-transaction-templates'
 import {
     useDeleteLoanTransactionById,
     useReprintLoanTransaction,
@@ -39,6 +40,7 @@ import {
     TORLoanVoucherSettings,
 } from '../../loan-transaction.types'
 import { resolveLoanDatesToStatus } from '../../loan-transaction.utils'
+import { LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES } from '../../reports/loan-transaction-templates'
 import { LoanEditFormModal } from '../forms/loan-edit-form'
 import { LoanTransactionPrintFormModal } from '../forms/loan-print-form'
 import { LoanTransactionCreateUpdateFormModal } from '../forms/loan-transaction-create-update-form'
@@ -704,11 +706,13 @@ export const LoanTransactionTableActionManager = () => {
                     formProps={{
                         defaultValues: {
                             report_config: {
+                                ...getTemplateAt(
+                                    LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES,
+                                    0
+                                ),
                                 name: `loan_release_${toReadableDate(loanTransaction.created_at, 'MMddyy_mmss')}.pdf`,
-                                ...LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES[0],
-                                filters: {},
                                 module: 'LoanTransaction',
-                            },
+                            } as TReportConfigSchema,
                             check_date: loanTransaction.check_date,
                             check_number: loanTransaction.check_number,
                             voucher: loanTransaction.voucher,

@@ -1,3 +1,4 @@
+import { toReadableDate } from '@/helpers/date-utils'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import {
     ICashCheckVoucher,
@@ -10,12 +11,16 @@ import CashCheckVoucherCreateUpdateFormModal from '@/modules/cash-check-voucher/
 import CashCheckVoucherPrintFormModal from '@/modules/cash-check-voucher/components/forms/cash-check-voucher-print-form-modal'
 import CashCheckVoucherOtherAction from '@/modules/cash-check-voucher/components/tables/cash-check-other-voucher'
 import { TCashCheckVoucherApproveReleaseDisplayMode } from '@/modules/cash-check-voucher/components/tables/row-action-context'
-import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
+import { CASH_CHECK_VOUCHER_PRINT_TEMPLATES } from '@/modules/cash-check-voucher/reports/cash-check-voucher-templates'
+import { TReportConfigSchema } from '@/modules/generated-report'
+// import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
 import { useGenerateReport } from '@/modules/generated-report/components/generate-report-hooks/use-report-generate'
+import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
+import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import useGeneratedReportConfigStore from '@/store/generated-report-config-store'
 
 import { EyeIcon, PencilFillIcon, SignatureLightIcon } from '@/components/icons'
-import { CashCheckVoucherTemplates } from '@/components/templates/template-cash-check-disbursement'
+// import { CashCheckVoucherTemplates } from '@/components/templates/template-cash-check-disbursement'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -112,7 +117,7 @@ export const CashCheckVoucherCardActions = ({
         handleReleaseModal,
         printModal,
         handleOpenPrintModal,
-        generateReport,
+        // generateReport,
     } = useCardKanbanActions({ cashCheckVoucher, refetch })
 
     const { clear } = useGeneratedReportConfigStore()
@@ -151,13 +156,27 @@ export const CashCheckVoucherCardActions = ({
                 formProps={{
                     orSettings: resolvedOrSettings,
                     cashCheckVoucherId: cashCheckVoucher.id,
-                    onSuccess: () => {
+                    defaultValues: {
+                        report_config: {
+                            ...getTemplateAt(
+                                CASH_CHECK_VOUCHER_PRINT_TEMPLATES,
+                                0
+                            ),
+                            name: `cash_check_voucher_${toReadableDate(cashCheckVoucher.created_at, 'MMddyy_mmss')}.pdf`,
+                            module: 'CashCheckVoucher',
+                        } as TReportConfigSchema,
+                    },
+                    onSuccess: (data) => {
                         refetch()
+
+                        useReportViewerStore.getState().open({
+                            reportId: data.id,
+                        })
                         createGeneratedReport?.handleGenerateReport()
                     },
                 }}
             />
-            <PrintReportFormModal
+            {/* <PrintReportFormModal
                 {...generateReport}
                 formProps={{
                     defaultValues: {
@@ -176,12 +195,14 @@ export const CashCheckVoucherCardActions = ({
                     templateOptions: CashCheckVoucherTemplates,
                 }}
                 title="Generate to Print"
-            />
+            /> */}
             <CashCheckVoucherTransactionSignatureUpdateFormModal
                 {...cashCheckSignatureVoucher}
                 formProps={{
                     cashCheckVoucherId: cashCheckVoucher.id,
-                    defaultValues: { ...cashCheckVoucher },
+                    defaultValues: {
+                        ...cashCheckVoucher,
+                    },
                     readOnly: isReleased,
                 }}
             />
@@ -240,7 +261,7 @@ export const CashCheckVoucherCardActions = ({
                             <CashCheckVoucherOtherAction
                                 onApprove={handleApproveModal}
                                 onPrint={() => {
-                                    generateReport.onOpenChange(true)
+                                    handleOpenPrintModal()
                                 }}
                                 onRefetch={refetch}
                                 onRelease={handleReleaseModal}

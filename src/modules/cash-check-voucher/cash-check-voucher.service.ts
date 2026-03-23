@@ -24,6 +24,7 @@ import type {
     TCashCheckVoucherPrintRequest,
 } from '../cash-check-voucher'
 import { getPaginatedJournalVoucher } from '../journal-voucher'
+import { IGeneratedReport } from '../playground/components/generated-reports'
 
 const {
     apiCrudHooks,
@@ -193,24 +194,34 @@ export const useCashCheckVoucherActions = createMutationFactory<
 })
 
 // PRINT CASH CHECK VOUCHER
-const printCashCheckVoucher = async (data: {
+const printCashCheckVoucher = async ({
+    payload,
+    cashCheckVoucherId,
+    commit = true,
+}: {
     cashCheckVoucherId: TEntityId
     payload: TCashCheckVoucherPrintRequest
+    commit?: boolean
 }) => {
+    const url = qs.stringifyUrl({
+        url: `${cashCheckVoucherAPIRoute}/${cashCheckVoucherId}/print`,
+        query: { commit },
+    })
     const response = await API.put<
         TCashCheckVoucherPrintRequest,
-        ICashCheckVoucher
-    >(
-        `${cashCheckVoucherAPIRoute}/${data.cashCheckVoucherId}/print`,
-        data.payload
-    )
+        IGeneratedReport
+    >(url, payload)
     return response.data
 }
 
 export const usePrintCashCheckVoucherTransaction = createMutationFactory<
-    ICashCheckVoucher,
+    IGeneratedReport,
     Error,
-    { cashCheckVoucherId: TEntityId; payload: TCashCheckVoucherPrintRequest }
+    {
+        cashCheckVoucherId: TEntityId
+        payload: TCashCheckVoucherPrintRequest
+        commit?: boolean
+    }
 >({
     mutationFn: (data) => printCashCheckVoucher(data),
     defaultInvalidates: [['auth', 'context']],

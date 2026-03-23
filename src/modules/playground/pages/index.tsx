@@ -1,5 +1,5 @@
 import { GenerateReportTemplatePicker } from '@/modules/generated-report/components/generated-report-template/generated-report-template'
-import { LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES } from '@/modules/loan-transaction/loan-transaction-reports/loan-transaction-templates'
+import { LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES } from '@/modules/loan-transaction/reports/loan-transaction-templates'
 
 import AuthGuard from '@/components/wrappers/auth-guard'
 import UserOrgGuard from '@/components/wrappers/user-org-guard'
