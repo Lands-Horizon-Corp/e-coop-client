@@ -2,17 +2,6 @@ import z from 'zod'
 
 import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
-const isoDateString = z
-    .string()
-    .min(1, 'Date is required')
-    .refine((val) => !isNaN(new Date(val).getTime()), {
-        message: 'Invalid date',
-    })
-    .transform((val) => {
-        const date = new Date(val + 'T00:00:00Z')
-        return date.toISOString().replace('.000', '')
-    })
-
 export const CheckWarehousingSchema = z.object({
     member_profile_id: entityIdSchema,
     bank_id: entityIdSchema,
@@ -25,18 +14,11 @@ export const CheckWarehousingSchema = z.object({
         .min(1, 'Check number is required')
         .max(255, 'Check number is too long'),
 
-    // ✅ ISO dates
-    check_date: isoDateString,
-    date: isoDateString,
+    check_date: z.coerce.date(),
+    date: z.coerce.date(),
 
     clear_days: z.coerce.number().optional(),
-
-    /**
-     * Optional: auto-compute date_cleared
-     * If you want manual input → keep isoDateString.optional()
-     * If computed → use .transform below instead
-     */
-    date_cleared: isoDateString,
+    date_cleared: z.coerce.date(),
 
     amount: z.coerce.number().gt(0, 'Amount must be greater than 0'),
 

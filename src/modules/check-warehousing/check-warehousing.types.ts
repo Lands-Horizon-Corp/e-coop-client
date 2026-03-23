@@ -23,15 +23,14 @@ export interface ICheckWarehousing extends IBaseEntityMeta {
     media?: IMedia
 
     check_number: string
-    check_date: string
+    check_date: Date
     clear_days: string
-    date_cleared?: number
+    date_cleared?: Date | string
     amount: number
     reference_number: string
-    date: string
+    date: Date | string
     description: string
 }
-
 export type ICheckWarehousingRequest = z.infer<typeof CheckWarehousingSchema>
 
 export interface ICheckWarehousingPaginated extends IPaginatedResult<ICheckWarehousing> {}

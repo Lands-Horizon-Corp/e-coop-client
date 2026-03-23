@@ -10,12 +10,14 @@ import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
 import EmployeePicker from '@/modules/employee/components/employee-picker'
+import { IMedia } from '@/modules/media'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -59,7 +61,6 @@ const CheckWarehousingCreateUpdateForm = ({
         mode: 'onSubmit',
         defaultValues: {
             check_number: '',
-            check_date: '',
             clear_days: 0,
             amount: 0,
             reference_number: '',
@@ -133,12 +134,7 @@ const CheckWarehousingCreateUpdateForm = ({
         const resultDate = new Date(baseDate)
         resultDate.setDate(resultDate.getDate() + Number(clearDays))
 
-        // Format to YYYY-MM-DD for the HTML date input
-        const formattedDate = resultDate.toISOString().split('T')[0]
-
-        // Update date_cleared.
-        // This only triggers when check_date or clear_days changes.
-        form.setValue('date_cleared', formattedDate, {
+        form.setValue('date_cleared', resultDate, {
             shouldDirty: true,
         })
     }, [checkDate, clearDays, form])
@@ -222,6 +218,13 @@ const CheckWarehousingCreateUpdateForm = ({
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
+                                                value={
+                                                    field.value instanceof Date
+                                                        ? field.value
+                                                              .toISOString()
+                                                              .split('T')[0]
+                                                        : field.value
+                                                }
                                             />
                                         )}
                                     />
@@ -272,6 +275,13 @@ const CheckWarehousingCreateUpdateForm = ({
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
+                                                value={
+                                                    field.value instanceof Date
+                                                        ? field.value
+                                                              .toISOString()
+                                                              .split('T')[0]
+                                                        : field.value
+                                                }
                                             />
                                         )}
                                     />
@@ -375,6 +385,13 @@ const CheckWarehousingCreateUpdateForm = ({
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
+                                                value={
+                                                    field.value instanceof Date
+                                                        ? field.value
+                                                              .toISOString()
+                                                              .split('T')[0]
+                                                        : field.value
+                                                }
                                             />
                                         )}
                                     />
@@ -397,13 +414,14 @@ const CheckWarehousingCreateUpdateForm = ({
                                                 onSelect={(value) => {
                                                     form.setValue(
                                                         'employee_user_id',
-                                                        value.id
+                                                        value.user_id
                                                     )
                                                     form.setValue(
                                                         'employee_user',
                                                         value
                                                     )
                                                 }}
+                                                key={'user_id'}
                                                 value={form.getValues(
                                                     'employee_user'
                                                 )}
@@ -432,6 +450,33 @@ const CheckWarehousingCreateUpdateForm = ({
                             )}
                         />
                     </div>
+                    {/* IMAGE */}
+                    <FormFieldWrapper
+                        control={form.control}
+                        label="Check Image"
+                        name="media_id"
+                        render={({ field }) => {
+                            const value = form.watch('media')
+
+                            return (
+                                <ImageField
+                                    {...field}
+                                    onChange={(img) => {
+                                        if (img) field.onChange(img.id)
+                                        else field.onChange(undefined)
+
+                                        form.setValue('media', img)
+                                    }}
+                                    placeholder="Upload Check Image"
+                                    value={
+                                        value
+                                            ? (value as IMedia).download_url
+                                            : value
+                                    }
+                                />
+                            )
+                        }}
+                    />
                 </fieldset>
 
                 <FormFooterResetSubmit

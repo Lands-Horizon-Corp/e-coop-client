@@ -1,3 +1,4 @@
+import { toReadableDate } from '@/helpers/date-utils'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -8,6 +9,7 @@ import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinSlashIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
+import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
@@ -70,7 +72,7 @@ const CheckWarehousingTableColumns = (
         id: 'check_number',
         accessorKey: 'check_number',
         header: (props) => (
-            <DataTableColumnHeader {...props} title="Check">
+            <DataTableColumnHeader {...props} title="Check Details">
                 <ColumnActions {...props}>
                     <TextFilter<ICheckWarehousing>
                         displayText="Check Number"
@@ -87,21 +89,24 @@ const CheckWarehousingTableColumns = (
             <div className="flex min-w-0 items-center gap-3">
                 <PreviewMediaWrapper media={media}>
                     <ImageDisplay
-                        className="h-9 w-9 rounded-md border bg-muted object-cover"
+                        className="h-9 w-9 rounded-md border bg-muted object-cover shadow-sm"
                         src={media?.download_url}
                     />
                 </PreviewMediaWrapper>
-                <span className="truncate font-semibold">
-                    {check_number || '-'}
-                </span>
+                <div className="flex flex-col">
+                    <span className="truncate font-bold text-foreground">
+                        {check_number || '-'}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                        Number
+                    </span>
+                </div>
             </div>
         ),
-        enableSorting: true,
-        enableResizing: true,
-        size: 180,
-        minSize: 150,
+        size: 200,
     },
 
+    // 2. FINANCIAL: The Money
     {
         id: 'amount',
         accessorKey: 'amount',
@@ -110,12 +115,18 @@ const CheckWarehousingTableColumns = (
             row: {
                 original: { amount },
             },
-        }) => <span className="font-medium">₱ {amount?.toLocaleString()}</span>,
-        enableSorting: true,
+        }) => (
+            <span className="font-bold text-primary">
+                ₱{' '}
+                {amount?.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                })}
+            </span>
+        ),
         size: 140,
-        minSize: 120,
     },
 
+    // 3. TIMING GROUP: When was it written?
     {
         id: 'check_date',
         accessorKey: 'check_date',
@@ -124,9 +135,49 @@ const CheckWarehousingTableColumns = (
         ),
         cell: ({ row }) => {
             const { check_date } = row.original
-            return <span>{check_date || '-'}</span>
+            return (
+                <span className="whitespace-nowrap font-medium">
+                    {check_date ? toReadableDate(check_date) : '-'}
+                </span>
+            )
         },
-        enableSorting: true,
+        size: 140,
+    },
+    {
+        id: 'date_cleared',
+        accessorKey: 'date_cleared',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Date Cleared" />
+        ),
+        cell: ({ row }) => {
+            const { date_cleared } = row.original
+            if (!date_cleared)
+                return <span className="text-muted-foreground/50">-</span>
+            return (
+                <div className="flex items-center gap-2">
+                    <div className="size-2 rounded-full bg-green-500" />{' '}
+                    {/* Visual Status Dot */}
+                    <span className="font-semibold text-green-700 dark:text-green-400">
+                        {toReadableDate(date_cleared)}
+                    </span>
+                </div>
+            )
+        },
+        size: 150,
+    },
+
+    // 4. PROCESS GROUP: When was it recorded and how long to clear?
+    {
+        id: 'date',
+        accessorKey: 'date',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Entry Date" />
+        ),
+        cell: ({ row }) => (
+            <span className="text-muted-foreground italic">
+                {row.original.date ? toReadableDate(row.original.date) : '-'}
+            </span>
+        ),
         size: 140,
     },
 
@@ -134,61 +185,56 @@ const CheckWarehousingTableColumns = (
         id: 'clear_days',
         accessorKey: 'clear_days',
         header: (props) => (
-            <DataTableColumnHeader {...props} title="Clear Days" />
+            <DataTableColumnHeader {...props} title="Clearing" />
         ),
         cell: ({ row }) => {
             const { clear_days } = row.original
-            return <span>{clear_days} day(s)</span>
+            return (
+                <Badge variant="secondary" className="font-normal">
+                    {clear_days} day(s)
+                </Badge>
+            )
         },
-        enableSorting: true,
         size: 120,
     },
 
+    // 5. METADATA: Secondary Searchable Info
     {
         id: 'reference_number',
         accessorKey: 'reference_number',
         header: (props) => (
-            <DataTableColumnHeader {...props} title="Reference">
+            <DataTableColumnHeader {...props} title="Ref #">
                 <ColumnActions {...props}>
                     <TextFilter<ICheckWarehousing>
-                        displayText="Reference Number"
+                        displayText="Reference"
                         field="reference_number"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
         ),
-        cell: ({ row }) => <span>{row.original.reference_number || '-'}</span>,
-        enableSorting: true,
-        size: 180,
+        cell: ({ row }) => (
+            <span className="font-mono text-xs uppercase">
+                {row.original.reference_number || '-'}
+            </span>
+        ),
+        size: 150,
     },
 
     {
         id: 'description',
         accessorKey: 'description',
         header: (props) => (
-            <DataTableColumnHeader {...props} title="Description">
-                <ColumnActions {...props}>
-                    <TextFilter<ICheckWarehousing>
-                        displayText="Description"
-                        field="description"
-                    />
-                </ColumnActions>
-            </DataTableColumnHeader>
+            <DataTableColumnHeader {...props} title="Description" />
         ),
         cell: ({ row }) => (
-            <div className="text-wrap!">{row.original.description || '-'}</div>
+            <div
+                className="max-w-[200px] truncate text-muted-foreground italic"
+                title={row.original.description}
+            >
+                {row.original.description || '-'}
+            </div>
         ),
-        enableSorting: true,
-        size: 220,
-    },
-
-    {
-        id: 'date',
-        accessorKey: 'date',
-        header: (props) => <DataTableColumnHeader {...props} title="Date" />,
-        cell: ({ row }) => <span>{row.original.date || '-'}</span>,
-        enableSorting: true,
-        size: 140,
+        size: 200,
     },
 
     ...createUpdateColumns<ICheckWarehousing>(),
