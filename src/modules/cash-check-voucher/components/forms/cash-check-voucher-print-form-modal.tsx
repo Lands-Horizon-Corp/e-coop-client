@@ -13,9 +13,11 @@ import {
     TORCashCheckSettings,
     usePrintCashCheckVoucherTransaction,
 } from '@/modules/cash-check-voucher'
-import { TWithReportConfigSchema } from '@/modules/generated-report'
+import {
+    IGeneratedReport,
+    TWithReportConfigSchema,
+} from '@/modules/generated-report'
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
-import { IGeneratedReport } from '@/modules/playground/components/generated-reports'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'

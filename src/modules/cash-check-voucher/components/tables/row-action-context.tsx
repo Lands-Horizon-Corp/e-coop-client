@@ -27,6 +27,7 @@ import CashCheckVoucherTransactionSignatureUpdateFormModal from '../forms/cash-c
 import CashCheckVoucherApproveReleaseDisplayModal from '../forms/cash-check-voucher-approve-release-display-modal'
 import CashCheckVoucherCreateUpdateFormModal from '../forms/cash-check-voucher-create-udate-form-modal'
 import CashCheckVoucherPrintFormModal from '../forms/cash-check-voucher-print-form-modal'
+import { CashCheckVoucherReprintFormModal } from '../forms/cash-check-voucher-reprint-form'
 import CashCheckVoucherOtherAction from './cash-check-other-voucher'
 import { ICashCheckVoucherTableActionComponentProp } from './columns'
 
@@ -36,6 +37,7 @@ export type CashCheckVoucherActionType =
     | 'check-entry'
     | 'signature'
     | 'print'
+    | 'reprint'
     | 'approve'
     | 'release'
 
@@ -111,6 +113,13 @@ const useCashCheckVoucherActions = ({
             extra: { onDeleteSuccess },
         })
     }
+    const handleReprintModal = () => {
+        open('reprint', {
+            id: cashCheckVoucher.id,
+            defaultValues: cashCheckVoucher,
+            extra: { onDeleteSuccess },
+        })
+    }
     const handleApproveModal = () => {
         open('approve', {
             id: cashCheckVoucher.id,
@@ -135,6 +144,7 @@ const useCashCheckVoucherActions = ({
         handleApproveModal,
         handleReleaseModal,
         handleOpenPrintModal,
+        handleReprintModal,
     }
 }
 
@@ -155,6 +165,7 @@ export const CashCheckJournalVoucherAction = ({
         handleOpenPrintModal,
         handleApproveModal,
         handleReleaseModal,
+        handleReprintModal,
     } = useCashCheckVoucherActions({ row, onDeleteSuccess })
 
     return (
@@ -177,6 +188,7 @@ export const CashCheckJournalVoucherAction = ({
                         onApprove={handleApproveModal}
                         onPrint={handleOpenPrintModal}
                         onRelease={handleReleaseModal}
+                        onReprint={handleReprintModal}
                         row={row}
                     />
                 }
@@ -199,6 +211,7 @@ export const CashCheckVoucherRowContext = ({
         handleApproveModal,
         handleReleaseModal,
         handleOpenPrintModal,
+        handleReprintModal,
     } = useCashCheckVoucherActions({ row, onDeleteSuccess })
 
     return (
@@ -220,6 +233,7 @@ export const CashCheckVoucherRowContext = ({
                         onApprove={handleApproveModal}
                         onPrint={handleOpenPrintModal}
                         onRelease={handleReleaseModal}
+                        onReprint={handleReprintModal}
                         row={row}
                         type="context"
                     />
@@ -283,11 +297,34 @@ export const CashCheckVoucherTableActionManager = () => {
                                     0
                                 ),
                                 name: `cash_check_voucher_${toReadableDate(state.defaultValues.created_at, 'MMddyy_mmss')}.pdf`,
-                                filters: {},
                                 module: 'CashCheckVoucher',
                             } as TReportConfigSchema,
                         },
                         orSettings: resolvedOrSettings,
+                        onSuccess(data) {
+                            useReportViewerStore.getState().open({
+                                reportId: data.id,
+                            })
+                        },
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
+            {state.action === 'reprint' && state.defaultValues && (
+                <CashCheckVoucherReprintFormModal
+                    formProps={{
+                        defaultValues: {
+                            report_config: {
+                                ...getTemplateAt(
+                                    CASH_CHECK_VOUCHER_PRINT_TEMPLATES,
+                                    0
+                                ),
+                                name: `cash_check_voucher_${toReadableDate(state.defaultValues.created_at, 'MMddyy_mmss')}.pdf`,
+                                module: 'CashCheckVoucher',
+                            } as TReportConfigSchema,
+                        },
+                        cashCheckVoucherId: state.defaultValues.id,
                         onSuccess(data) {
                             useReportViewerStore.getState().open({
                                 reportId: data.id,

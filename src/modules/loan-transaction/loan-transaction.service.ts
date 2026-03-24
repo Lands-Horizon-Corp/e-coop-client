@@ -31,6 +31,7 @@ import type {
     ILoanTransactionSuggestedRequest,
     ILoanTransactionSummary,
     TLoanMode,
+    TLoanTransactionReprintSchema,
 } from '../loan-transaction'
 
 const {
@@ -283,14 +284,24 @@ export const usePrintLoanTransaction = createMutationFactory<
 
 // RE-PRINT
 export const useReprintLoanTransaction = createMutationFactory<
-    ILoanTransaction,
+    IGeneratedReport,
     Error,
-    { loanTransactionId: TEntityId }
+    {
+        loanTransactionId: TEntityId
+        payload: TLoanTransactionReprintSchema
+        commit?: boolean
+    }
 >({
-    mutationFn: async (data) => {
-        const response = await API.put<void, ILoanTransaction>(
-            `${loanTransactionAPIRoute}/${data.loanTransactionId}/print-only`
-        )
+    mutationFn: async ({ loanTransactionId, payload, commit = true }) => {
+        const url = qs.stringifyUrl({
+            url: `${loanTransactionAPIRoute}/${loanTransactionId}/print-only`,
+            query: { commit },
+        })
+
+        const response = await API.put<
+            TLoanTransactionReprintSchema,
+            IGeneratedReport
+        >(url, payload)
         return response.data
     },
     invalidationFn: (args) =>

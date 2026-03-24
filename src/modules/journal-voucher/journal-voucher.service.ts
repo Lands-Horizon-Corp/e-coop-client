@@ -14,6 +14,7 @@ import {
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
+import { IGeneratedReport } from '../generated-report'
 import type {
     IJournalVoucher,
     IJournalVoucherPaginated,
@@ -21,9 +22,9 @@ import type {
     TJournalActionMode,
     TJournalVoucherMode,
     TJournalVoucherPrintSchema,
+    TJournalVoucherReprintSchema,
     TPrintMode,
 } from '../journal-voucher'
-import { IGeneratedReport } from '../playground/components/generated-reports'
 
 const {
     apiCrudHooks,
@@ -220,6 +221,34 @@ export const usePrintJournalVoucherTransaction = createMutationFactory<
     }
 >({
     mutationFn: (data) => printJournalVoucher(data),
+    defaultInvalidates: [['auth', 'context']],
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(journalVoucherBaseKey, args),
+})
+
+//REPRINT
+export const useReprintJournalVoucherTransaction = createMutationFactory<
+    IGeneratedReport,
+    Error,
+    {
+        journalVoucherId: TEntityId
+        payload: TJournalVoucherReprintSchema
+        commit?: boolean
+    }
+>({
+    mutationFn: async ({ journalVoucherId, payload, commit = true }) => {
+        const url = qs.stringifyUrl({
+            url: `${journalVoucherAPIRoute}/${journalVoucherId}/print-only`,
+            query: { commit },
+        })
+
+        const response = await API.put<
+            TJournalVoucherReprintSchema,
+            IGeneratedReport
+        >(url, payload)
+
+        return response.data
+    },
     defaultInvalidates: [['auth', 'context']],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(journalVoucherBaseKey, args),

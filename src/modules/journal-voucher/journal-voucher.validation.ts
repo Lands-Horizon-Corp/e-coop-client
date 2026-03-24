@@ -88,3 +88,9 @@ export type TJournalVoucherSchema = z.infer<typeof JournalVoucherSchema>
 export type TJournalVoucherPrintSchema = z.infer<
     typeof JournalVoucherPrintSchema
 >
+
+export const JournalVoucherReprintSchema = WithReportConfigSchema
+
+export type TJournalVoucherReprintSchema = z.infer<
+    typeof JournalVoucherReprintSchema
+>

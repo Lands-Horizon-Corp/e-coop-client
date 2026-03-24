@@ -32,7 +32,6 @@ import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 import {
     useDeleteLoanTransactionById,
-    useReprintLoanTransaction,
     useUndoPrintLoanTransaction,
 } from '../../loan-transaction.service'
 import {
@@ -43,6 +42,7 @@ import { resolveLoanDatesToStatus } from '../../loan-transaction.utils'
 import { LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES } from '../../reports/loan-transaction-templates'
 import { LoanEditFormModal } from '../forms/loan-edit-form'
 import { LoanTransactionPrintFormModal } from '../forms/loan-print-form'
+import { LoanTransactionReprintFormModal } from '../forms/loan-reprint-form'
 import { LoanTransactionCreateUpdateFormModal } from '../forms/loan-transaction-create-update-form'
 import { LoanTransactionSignatureUpdateFormModal } from '../forms/loan-transaction-signature-form'
 import LoanApproveReleaseDisplayModal, {
@@ -56,6 +56,8 @@ export type LoanTransactionActionType =
     | 'loan-edit'
     | 'signature'
     | 'print'
+    | 'reprint'
+    | 'reprint'
     | 'approve-release'
     | 'delete'
 
@@ -93,7 +95,6 @@ const useLoanTransactionActions = ({
         },
     })
 
-    const reprintMutation = useReprintLoanTransaction()
     const unprintMutation = useUndoPrintLoanTransaction()
 
     const loanApplicationStatus = resolveLoanDatesToStatus(loanTransaction)
@@ -108,6 +109,14 @@ const useLoanTransactionActions = ({
 
     const handleOpenEdit = () => {
         open('edit', {
+            id: loanTransaction.id,
+            defaultValues: loanTransaction,
+            extra: { onDeleteSuccess },
+        })
+    }
+
+    const handleReprint = () => {
+        open('reprint', {
             id: loanTransaction.id,
             defaultValues: loanTransaction,
             extra: { onDeleteSuccess },
@@ -158,10 +167,8 @@ const useLoanTransactionActions = ({
         loanTransaction,
         loanApplicationStatus,
 
-        reprintMutation,
         unprintMutation,
-        isPrintingProcess:
-            reprintMutation.isPending || unprintMutation.isPending,
+        isPrintingProcess: unprintMutation.isPending,
 
         isDeletingLoanTransaction,
         handleEdit,
@@ -170,6 +177,7 @@ const useLoanTransactionActions = ({
         handleSignature,
         handlePrint,
         handleDelete,
+        handleReprint,
         openApprovalModal,
     }
 }
@@ -188,7 +196,6 @@ export const LoanTransactionAction = ({
         loanTransaction,
         loanApplicationStatus,
 
-        reprintMutation,
         unprintMutation,
         isPrintingProcess,
 
@@ -197,6 +204,7 @@ export const LoanTransactionAction = ({
         handleEditLoan,
         handleSignature,
         handlePrint,
+        handleReprint,
         handleDelete,
         openApprovalModal,
     } = useLoanTransactionActions({ row, onDeleteSuccess })
@@ -283,35 +291,9 @@ export const LoanTransactionAction = ({
                                 resource: loanTransaction,
                             })
                         }
-                        onClick={() => {
-                            toast.promise(
-                                reprintMutation.mutateAsync({
-                                    loanTransactionId: loanTransaction.id,
-                                }),
-                                {
-                                    loading: (
-                                        <span>
-                                            <PrinterFillIcon className="inline mr-1" />{' '}
-                                            Printing... Please wait...
-                                        </span>
-                                    ),
-                                    success: 'Reprinted',
-                                    error: (error) =>
-                                        serverRequestErrExtractor({
-                                            error,
-                                        }),
-                                }
-                            )
-                        }}
+                        onClick={handleReprint}
                     >
-                        {reprintMutation.isPending ? (
-                            <LoadingSpinner className="mr-1 size-3" />
-                        ) : (
-                            <PrinterFillIcon
-                                className="mr-2"
-                                strokeWidth={1.5}
-                            />
-                        )}
+                        <PrinterFillIcon className="mr-2" strokeWidth={1.5} />
                         Re-print
                     </DropdownMenuItem>
                     <DropdownMenuItem
@@ -428,7 +410,6 @@ export const LoanTransactionRowContext = ({
         loanTransaction,
         loanApplicationStatus,
 
-        reprintMutation,
         unprintMutation,
         isPrintingProcess,
 
@@ -437,6 +418,7 @@ export const LoanTransactionRowContext = ({
         handleEditLoan,
         handleSignature,
         handlePrint,
+        handleReprint,
         handleDelete,
         openApprovalModal,
     } = useLoanTransactionActions({ row, onDeleteSuccess })
@@ -522,35 +504,9 @@ export const LoanTransactionRowContext = ({
                                 resource: loanTransaction,
                             })
                         }
-                        onClick={() => {
-                            toast.promise(
-                                reprintMutation.mutateAsync({
-                                    loanTransactionId: loanTransaction.id,
-                                }),
-                                {
-                                    loading: (
-                                        <span>
-                                            <PrinterFillIcon className="inline mr-1" />{' '}
-                                            Printing... Please wait...
-                                        </span>
-                                    ),
-                                    success: 'Reprinted',
-                                    error: (error) =>
-                                        serverRequestErrExtractor({
-                                            error,
-                                        }),
-                                }
-                            )
-                        }}
+                        onClick={handleReprint}
                     >
-                        {reprintMutation.isPending ? (
-                            <LoadingSpinner className="mr-1 size-3" />
-                        ) : (
-                            <PrinterFillIcon
-                                className="mr-2"
-                                strokeWidth={1.5}
-                            />
-                        )}
+                        <PrinterFillIcon className="mr-2" strokeWidth={1.5} />
                         Re-print
                     </ContextMenuItem>
                     <ContextMenuItem
@@ -719,6 +675,31 @@ export const LoanTransactionTableActionManager = () => {
                         },
                         loanTransactionId: loanTransaction.id,
                         orSettings: resolvedOrSettings,
+                        onSuccess(data) {
+                            useReportViewerStore.getState().open({
+                                reportId: data.id,
+                            })
+                        },
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
+
+            {state.action === 'reprint' && loanTransaction && (
+                <LoanTransactionReprintFormModal
+                    formProps={{
+                        defaultValues: {
+                            report_config: {
+                                ...getTemplateAt(
+                                    LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES,
+                                    0
+                                ),
+                                name: `loan_release_${toReadableDate(loanTransaction.created_at, 'MMddyy_mmss')}.pdf`,
+                                module: 'LoanTransaction',
+                            } as TReportConfigSchema,
+                        },
+                        loanTransactionId: loanTransaction.id,
                         onSuccess(data) {
                             useReportViewerStore.getState().open({
                                 reportId: data.id,

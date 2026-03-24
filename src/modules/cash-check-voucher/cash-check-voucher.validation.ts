@@ -190,5 +190,11 @@ export type TCashCheckVoucherPrintSchema = z.infer<
     typeof CashCheckVoucherPrintSchema
 >
 
+export const CashCheckVoucherReprintSchema = WithReportConfigSchema
+
+export type TCashCheckVoucherReprintSchema = z.infer<
+    typeof CashCheckVoucherReprintSchema
+>
+
 export type TCashCheckVoucherSchema = z.infer<typeof CashCheckVoucherSchema>
 export type TCashCheckSignatureSchema = z.infer<typeof CashCheckSignatureSchema>

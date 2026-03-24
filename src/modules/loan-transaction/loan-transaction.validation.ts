@@ -456,6 +456,12 @@ export type TLoanTransactionPrintSchema = z.infer<
     typeof LoanTransactionPrintSchema
 >
 
+export const LoanTransactionReprintSchema = WithReportConfigSchema
+
+export type TLoanTransactionReprintSchema = z.infer<
+    typeof LoanTransactionReprintSchema
+>
+
 export const LoanTransactionSuggestedSchema = z.object({
     amount: z.coerce.number().min(1, 'Amount must be at least 1'),
     principal: z.coerce.number().min(1, 'Principal Amount Required'),

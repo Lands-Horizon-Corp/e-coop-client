@@ -1,5 +1,7 @@
 import { UseFormReturn } from 'react-hook-form'
 
+import { useHotkeys } from 'react-hotkeys-hook'
+
 import { PrinterFillIcon } from '@/components/icons'
 import { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -13,6 +15,7 @@ import {
 } from '@/components/ui/dialog'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import { Kbd } from '@/components/ui/kbd'
 import PasswordInput from '@/components/ui/password-input'
 import { Separator } from '@/components/ui/separator'
 
@@ -42,6 +45,16 @@ type Props = {
 
 export function PrintSettingsSection({ form, ...otherConfig }: Props) {
     const modalState = useModalState()
+
+    useHotkeys(
+        'alt+enter',
+        (e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            modalState.onOpenChange(true)
+        },
+        { enableOnFormTags: true }
+    )
 
     const { control, setValue } = form
 
@@ -180,8 +193,17 @@ export function PrintSettingsSection({ form, ...otherConfig }: Props) {
                             },
                         }}
                         trigger={
-                            <Button className="col-span-2 w-full" type="button">
-                                Choose Template
+                            <Button
+                                className="col-span-2 w-full"
+                                size="sm"
+                                type="button"
+                                variant="secondary"
+                            >
+                                Template
+                                <span>
+                                    <Kbd className="mr-1">Alt</Kbd>
+                                    <Kbd>Enter</Kbd>
+                                </span>
                             </Button>
                         }
                     />

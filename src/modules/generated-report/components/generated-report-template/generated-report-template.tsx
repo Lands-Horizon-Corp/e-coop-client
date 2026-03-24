@@ -5,6 +5,7 @@ import { z } from 'zod'
 
 import { cn } from '@/helpers'
 import nunjucks from 'nunjucks'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { CheckIcon, RotateLeftIcon, UserCogIcon } from '@/components/icons'
 import { IModalProps } from '@/components/modals/modal'
@@ -27,6 +28,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import { Kbd } from '@/components/ui/kbd'
 import { Label } from '@/components/ui/label'
 import {
     Select,
@@ -148,7 +150,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
                 height: `${pageH}${unit}`,
                 unit,
             })
-        }
+        } else toast.warning('No template selected')
     }
 
     const dimSchema = z.coerce.number().min(0.01).max(99999)
@@ -181,6 +183,18 @@ export function GenerateReportTemplatePicker<T = unknown>({
     }
 
     const iframeSrcDoc = `<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0;width:${pageW}${unit};height:${pageH}${unit};overflow:hidden;font-family:'Segoe UI',sans-serif;}</style></head><body>${renderedHtml}</body></html>`
+
+    useHotkeys(
+        'alt+enter',
+        (e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            handleConfirm()
+        },
+        {
+            enableOnFormTags: true,
+        }
+    )
 
     return (
         <div className="max-w-6xl w-full mx-auto bg-popover ring-4 ring-muted border border-border overflow-clip rounded-xl h-[80vh] p-0 gap-0 flex">
@@ -348,7 +362,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
                         <Button
                             className="h-8 flex-1 text-xs"
                             onClick={resetDimensions}
-                            size="sm"
+                            size="xs"
                             variant="outline"
                         >
                             <RotateLeftIcon className="mr-1.5 h-3 w-3" />
@@ -357,7 +371,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
                         <Button
                             className="h-8 flex-1 text-xs"
                             onClick={handleApplyDimensions}
-                            size="sm"
+                            size="xs"
                         >
                             Apply
                         </Button>
@@ -420,13 +434,21 @@ export function GenerateReportTemplatePicker<T = unknown>({
                             Ready for export
                         </span>
                     </div>
-                    <Button
-                        className="px-8 shadow-template-cta"
-                        disabled={!selected || loading}
-                        onClick={handleConfirm}
-                    >
-                        Use This Template
-                    </Button>
+                    <div>
+                        <span>
+                            <Kbd className="mr-1">Alt</Kbd>
+                            <Kbd>Enter</Kbd>
+                        </span>
+                        <Button
+                            className="px-8 ml-2 shadow-template-cta"
+                            disabled={!selected || loading}
+                            onClick={handleConfirm}
+                            size="xs"
+                            variant="secondary"
+                        >
+                            Use Template
+                        </Button>
+                    </div>
                 </footer>
             </main>
         </div>

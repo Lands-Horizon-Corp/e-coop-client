@@ -7,7 +7,10 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { TWithReportConfigSchema } from '@/modules/generated-report'
+import {
+    IGeneratedReport,
+    TWithReportConfigSchema,
+} from '@/modules/generated-report'
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import {
     JournalVoucherPrintSchema,
@@ -15,7 +18,6 @@ import {
     TORJournalVoucherSettings,
     usePrintJournalVoucherTransaction,
 } from '@/modules/journal-voucher'
-import { IGeneratedReport } from '@/modules/playground/components/generated-reports'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'

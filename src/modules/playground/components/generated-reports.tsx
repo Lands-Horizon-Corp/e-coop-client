@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { z } from 'zod'
 
+import { IGeneratedReport } from '@/modules/generated-report'
 import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
 import API from '@/providers/api'
 import { entityIdSchema } from '@/validation'
@@ -70,7 +71,6 @@ export const GeneratedReportSchema = z.object({
 })
 
 export type ICreateReportRequest = z.infer<typeof CreateReportRequestSchema>
-export type IGeneratedReport = z.infer<typeof GeneratedReportSchema>
 
 /**
  * 3. COMPONENT
@@ -230,9 +230,12 @@ function GeneratedReports() {
                         <div className="flex gap-3">
                             <Button
                                 className="flex-1"
-                                disabled={!reportData.media?.url}
+                                disabled={!reportData.media?.download_url}
                                 onClick={() =>
-                                    window.open(reportData.media?.url, '_blank')
+                                    window.open(
+                                        reportData.media?.download_url,
+                                        '_blank'
+                                    )
                                 }
                             >
                                 View PDF
