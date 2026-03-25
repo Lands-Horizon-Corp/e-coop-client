@@ -1,7 +1,11 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { toReadableDate } from '@/helpers/date-utils'
 import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
+import { TReportConfigSchema } from '@/modules/generated-report'
+import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
+import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -11,9 +15,11 @@ import { useTableRowActionStore } from '@/components/data-table/store/data-table
 
 import { useDeleteOtherFundById } from '../../other-fund.service'
 import { IOtherFund } from '../../other-fund.types'
+import { OTHER_FUND_PRINT_TEMPLATES } from '../../reports/other-fund-templates'
 import OtherFundCreateUpdateFormModal from '../forms/create-update-other-fund-modal'
 import OtherFundApproveReleaseDisplayModal from '../forms/other-fund-approve-release-modal'
 import OtherFundPrintFormModal from '../forms/other-fund-print-modal'
+import { OtherFundReprintFormModal } from '../forms/other-fund-reprint-form'
 import { IOtherFundTableActionComponentProp } from './columns'
 import { OtherFundOtherAction } from './other-fund-other-action'
 
@@ -24,6 +30,7 @@ export type TOtherFundApproveReleaseDisplayMode =
 export type OtherFundActionType =
     | 'edit'
     | 'print'
+    | 'reprint'
     | 'approve-release'
     | 'delete'
 
@@ -84,6 +91,14 @@ export const useOtherFundAction = ({
         })
     }
 
+    const handleOpenReprintModal = () => {
+        open('reprint', {
+            id: otherFund.id,
+            defaultValues: otherFund,
+            extra: { onDeleteSuccess },
+        })
+    }
+
     const handleApproveModal = () => {
         open('approve-release', {
             id: otherFund.id,
@@ -106,6 +121,7 @@ export const useOtherFundAction = ({
         handleEdit,
         handleDelete,
         handleOpenPrintModal,
+        handleOpenReprintModal,
         handleApproveModal,
         handleReleaseModal,
     }
@@ -126,6 +142,7 @@ export const OtherFundAction = ({
         handleApproveModal,
         handleOpenPrintModal,
         handleReleaseModal,
+        handleOpenReprintModal,
     } = useOtherFundAction({ row, onDeleteSuccess })
 
     return (
@@ -145,6 +162,7 @@ export const OtherFundAction = ({
                     onApprove={handleApproveModal}
                     onPrint={handleOpenPrintModal}
                     onRelease={handleReleaseModal}
+                    onReprint={handleOpenReprintModal}
                     row={row}
                 />
             }
@@ -169,6 +187,7 @@ export const OtherFundRowContext = ({
         handleApproveModal,
         handleReleaseModal,
         handleOpenPrintModal,
+        handleOpenReprintModal,
     } = useOtherFundAction({ row, onDeleteSuccess })
 
     return (
@@ -188,6 +207,7 @@ export const OtherFundRowContext = ({
                         onApprove={handleApproveModal}
                         onPrint={handleOpenPrintModal}
                         onRelease={handleReleaseModal}
+                        onReprint={handleOpenReprintModal}
                         row={row}
                         type="context"
                     />
@@ -233,7 +253,44 @@ export const OtherFundTableActionManager = () => {
             {state.action === 'print' && (
                 <OtherFundPrintFormModal
                     formProps={{
-                        defaultValues: otherFund,
+                        defaultValues: {
+                            ...otherFund,
+                            report_config: {
+                                ...getTemplateAt(OTHER_FUND_PRINT_TEMPLATES, 0),
+                                name: `other_fund_${toReadableDate(otherFund.created_at, 'MMddyy_mmss')}.pdf`,
+                                module: 'OtherFund',
+                            } as TReportConfigSchema,
+                        },
+                        onSuccess: (data) => {
+                            useReportViewerStore.getState().open({
+                                reportId: data.id,
+                            })
+                            close()
+                        },
+                        otherFundId: otherFund.id,
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
+
+            {state.action === 'reprint' && (
+                <OtherFundReprintFormModal
+                    formProps={{
+                        defaultValues: {
+                            ...otherFund,
+                            report_config: {
+                                ...getTemplateAt(OTHER_FUND_PRINT_TEMPLATES, 0),
+                                name: `other_fund_${toReadableDate(otherFund.created_at, 'MMddyy_mmss')}.pdf`,
+                                module: 'OtherFund',
+                            } as TReportConfigSchema,
+                        },
+                        onSuccess: (data) => {
+                            useReportViewerStore.getState().open({
+                                reportId: data.id,
+                            })
+                            close()
+                        },
                         otherFundId: otherFund.id,
                     }}
                     onOpenChange={close}

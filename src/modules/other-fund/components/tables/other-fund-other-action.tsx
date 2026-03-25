@@ -25,6 +25,7 @@ type IOtherFundTableActionComponentProp = {
     onApprove?: () => void
     onRelease?: () => void
     onRefetch?: () => void
+    onReprint?: () => void
 }
 
 export const OtherFundOtherAction = ({
@@ -34,6 +35,7 @@ export const OtherFundOtherAction = ({
     onApprove,
     onRelease,
     onRefetch,
+    onReprint,
 }: IOtherFundTableActionComponentProp) => {
     const otherFund = 'original' in row ? row.original : row
 
@@ -104,6 +106,19 @@ export const OtherFundOtherAction = ({
             onSelect: onPrint,
             isVisible:
                 !isPrinted &&
+                hasPermissionFromAuth({
+                    action: ['Update'],
+                    resourceType: 'ApprovalsOtherFundPrinted',
+                }),
+        },
+        {
+            label: 'Reprint',
+            icon: (
+                <PrinterIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+            ),
+            onSelect: onReprint,
+            isVisible:
+                isPrinted &&
                 hasPermissionFromAuth({
                     action: ['Update'],
                     resourceType: 'ApprovalsOtherFundPrinted',

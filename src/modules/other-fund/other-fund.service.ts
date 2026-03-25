@@ -14,6 +14,7 @@ import {
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
+import { IGeneratedReport, generatedReportBaseKey } from '../generated-report'
 import type {
     IOtherFund,
     IOtherFundPaginated,
@@ -21,12 +22,10 @@ import type {
     IOtherFundRequest,
     TOtherFundActionMode,
     TOtherFundMode,
+    TOtherFundReprintSchema,
     TPrintMode,
 } from '../other-fund'
-import {
-    otherFundEntryAPIRoute,
-    otherFundEntryBaseKey,
-} from '../other-fund-entry'
+import { otherFundEntryBaseKey } from '../other-fund-entry'
 
 const {
     apiCrudHooks,
@@ -176,51 +175,56 @@ export const useOtherFundActions = createMutationFactory<
 })
 
 export const usePrintOtherFundTransaction = createMutationFactory<
-    IOtherFund,
+    IGeneratedReport,
     Error,
-    { otherFundId: TEntityId; payload: IOtherFundPrintRequest }
+    {
+        otherFundId: TEntityId
+        payload: IOtherFundPrintRequest
+        commit?: boolean
+    }
 >({
-    mutationFn: async (data) => {
-        const response = await API.put<IOtherFundPrintRequest, IOtherFund>(
-            `${otherFundAPIRoute}/${data.otherFundId}/print`,
-            data.payload
-        )
+    mutationFn: async ({ otherFundId, payload, commit = true }) => {
+        const url = qs.stringifyUrl({
+            url: `${otherFundAPIRoute}/${otherFundId}/print`,
+            query: { commit },
+        })
+
+        const response = await API.put<
+            IOtherFundPrintRequest,
+            IGeneratedReport
+        >(url, payload)
         return response.data
     },
-    defaultInvalidates: [['auth', 'context']],
+    defaultInvalidates: [[generatedReportBaseKey, 'inprogress', 'all']],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(otherFundBaseKey, args),
 })
 
 //Re print
 export const useReprintOtherFund = createMutationFactory<
-    IOtherFund,
+    IGeneratedReport,
     Error,
-    { otherFundId: TEntityId }
+    {
+        otherFundId: TEntityId
+        payload: TOtherFundReprintSchema
+        commit?: boolean
+    }
 >({
-    mutationFn: async (data) => {
-        const response = await API.put<void, IOtherFund>(
-            `${otherFundEntryAPIRoute}/${data.otherFundId}/print-only`
-        )
+    mutationFn: async ({ otherFundId, payload, commit = true }) => {
+        const url = qs.stringifyUrl({
+            url: `${otherFundAPIRoute}/${otherFundId}/print-only`,
+            query: { commit },
+        })
+
+        const response = await API.put<
+            TOtherFundReprintSchema,
+            IGeneratedReport
+        >(url, payload)
         return response.data
     },
+    defaultInvalidates: [[generatedReportBaseKey, 'inprogress', 'all']],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(otherFundEntryBaseKey, args),
 })
-
-//print
-export const usePrintOtherFund = async ({
-    otherFundId,
-    payload,
-}: {
-    otherFundId: TEntityId
-    payload: IOtherFundPrintRequest
-}) => {
-    const response = await API.put<IOtherFundPrintRequest, IOtherFund>(
-        `${otherFundEntryAPIRoute}/${otherFundId}/print`,
-        payload
-    )
-    return response.data
-}
 
 export const logger = Logger.getInstance('other-fund')

@@ -6,6 +6,7 @@ import {
     entityIdSchema,
 } from '@/validation'
 
+import { WithReportConfigSchema } from '../generated-report'
 import { OtherFundEntrySchema } from '../other-fund-entry'
 
 export const OtherFundSchema = z.object({
@@ -75,9 +76,14 @@ export const OtherFundSchema = z.object({
 
 export type TOtherFundSchema = z.infer<typeof OtherFundSchema>
 
-export const OtherFundPrintSchema = z.object({
-    cash_voucher_number: z.string().min(1, 'Voucher Number is required'),
-    or_auto_generated: z.boolean().optional().default(false),
-})
+export const OtherFundPrintSchema = z
+    .object({
+        cash_voucher_number: z.string().min(1, 'Voucher Number is required'),
+        or_auto_generated: z.boolean().optional().default(false),
+    })
+    .and(WithReportConfigSchema)
+
+export const OtherFundReprintSchema = WithReportConfigSchema
 
 export type TOtherFundPrintSchema = z.infer<typeof OtherFundPrintSchema>
+export type TOtherFundReprintSchema = z.infer<typeof OtherFundReprintSchema>

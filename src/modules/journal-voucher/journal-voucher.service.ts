@@ -68,7 +68,6 @@ export const {
 
 export const useGetAllJournalVoucher = ({
     mode,
-
     query,
     options,
 }: {
@@ -254,10 +253,7 @@ export const useReprintJournalVoucherTransaction = createMutationFactory<
         return response.data
     },
 
-    defaultInvalidates: [
-        ['auth', 'context'],
-        [generatedReportBaseKey, 'inprogress', 'all'],
-    ],
+    defaultInvalidates: [[generatedReportBaseKey, 'inprogress', 'all']],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(journalVoucherBaseKey, args),
 })

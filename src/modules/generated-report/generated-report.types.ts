@@ -143,3 +143,19 @@ export interface GeneratedReportTemplate<T = unknown> {
 }
 
 export type GeneratedReportTemplateCollection = GeneratedReportTemplate[]
+
+// COMMON REPORT TEMPLATE INJECTABLE DATA
+
+export interface IBaseReportTemplateData {
+    header_title: string
+    header_address: string
+    tax_number: string
+    report_title: string
+
+    print_count?: number
+}
+
+export interface IBaseReportTemplateCheck {
+    check_number?: number
+    check_date?: number
+}

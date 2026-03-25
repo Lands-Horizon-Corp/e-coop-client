@@ -1,10 +1,13 @@
-import { GeneratedReportTemplate } from '@/modules/generated-report'
+import {
+    GeneratedReportTemplate,
+    IBaseReportTemplateData,
+} from '@/modules/generated-report'
 
 import JV_A5 from './templates/jv-a5.njk?raw'
 import JV_BANKBOOK from './templates/jv-bankbook.njk?raw'
 import JV_STATEMENT from './templates/jv-statement.njk?raw'
 
-export interface IJournalVoucherPrintTemplate {
+export interface IJournalVoucherPrintTemplate extends IBaseReportTemplateData {
     header_title: string
     header_address: string
     tax_number: string

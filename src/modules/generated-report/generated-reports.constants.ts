@@ -125,6 +125,7 @@ export const ACCOUNT_MODEL_NAMES = [
     'OrganizationCategory',
     'OrganizationDailyUsage',
     'OrganizationMedia',
+    'OtherFund',
     'PaymentType',
     'PermissionTemplate',
     'PostDatedCheck',

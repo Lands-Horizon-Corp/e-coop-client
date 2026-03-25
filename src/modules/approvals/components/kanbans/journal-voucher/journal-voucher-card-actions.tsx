@@ -2,7 +2,6 @@ import { toReadableDate } from '@/helpers/date-utils'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import { TReportConfigSchema } from '@/modules/generated-report'
 // import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
-import { useGenerateReport } from '@/modules/generated-report/components/generate-report-hooks/use-report-generate'
 import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import {
@@ -17,7 +16,6 @@ import JournalVoucherPrintFormModal from '@/modules/journal-voucher/components/f
 import JournalVoucherCreateUpdateFormModal from '@/modules/journal-voucher/components/forms/journal-voucher-create-update-modal'
 import JournalVoucherOtherAction from '@/modules/journal-voucher/components/tables/journal-voucher-other-action'
 import { JOURNAL_VOUCHER_PRINT_TEMPLATES } from '@/modules/journal-voucher/reports/jornal-voucher-template'
-import useGeneratedReportConfigStore from '@/store/generated-report-config-store'
 
 import { EyeIcon, PencilFillIcon } from '@/components/icons'
 // import { JournalVoucherTemplates } from '@/components/templates/template-journal-entry'
@@ -97,14 +95,6 @@ export const JournalVoucherCardActions = ({
 
     const isReleased = !!journalVoucher.released_date
 
-    const { clear } = useGeneratedReportConfigStore()
-
-    const createGeneratedReport = useGenerateReport({
-        onSuccess: () => {
-            clear()
-        },
-    })
-
     const {
         currentAuth: { user_organization },
     } = useAuthStore()
@@ -148,7 +138,6 @@ export const JournalVoucherCardActions = ({
                         useReportViewerStore.getState().open({
                             reportId: data.id,
                         })
-                        createGeneratedReport?.handleGenerateReport()
                         printModal.onOpenChange(false)
                     },
                 }}

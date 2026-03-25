@@ -1,14 +1,17 @@
-import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
-import { useGenerateReport } from '@/modules/generated-report/components/generate-report-hooks/use-report-generate'
+import { toReadableDate } from '@/helpers/date-utils'
+import { TReportConfigSchema } from '@/modules/generated-report'
+import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
+import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import { IOtherFund } from '@/modules/other-fund'
 import OtherFundCreateUpdateFormModal from '@/modules/other-fund/components/forms/create-update-other-fund-modal'
 import OtherFundApproveReleaseDisplayModal, {
     TOtherFundApproveReleaseDisplayMode,
 } from '@/modules/other-fund/components/forms/other-fund-approve-release-modal'
 import OtherFundPrintFormModal from '@/modules/other-fund/components/forms/other-fund-print-modal'
+import { OtherFundReprintFormModal } from '@/modules/other-fund/components/forms/other-fund-reprint-form'
 import { OtherFundTagsManagerPopover } from '@/modules/other-fund/components/other-fund-tag-manager'
 import { OtherFundOtherAction } from '@/modules/other-fund/components/tables/other-fund-other-action'
-import useGeneratedReportConfigStore from '@/store/generated-report-config-store'
+import { OTHER_FUND_PRINT_TEMPLATES } from '@/modules/other-fund/reports/other-fund-templates'
 
 import { EyeIcon, PencilFillIcon } from '@/components/icons'
 // Ensure this exists
@@ -31,6 +34,7 @@ interface UseOtherFundActionsProps {
 
 const useOtherFundActions = ({ otherFund }: UseOtherFundActionsProps) => {
     const printModal = useModalState()
+    const reprintModal = useModalState()
     const approveModal = useModalState()
     const releaseModal = useModalState()
     const generateReport = useModalState()
@@ -55,6 +59,7 @@ const useOtherFundActions = ({ otherFund }: UseOtherFundActionsProps) => {
     return {
         otherFund,
         printModal,
+        reprintModal,
         handleOpenPrintModal,
         approveModal,
         handleApproveModal,
@@ -77,24 +82,16 @@ export const OtherFundCardActions = ({
 }) => {
     const {
         printModal,
-        handleOpenPrintModal,
+        reprintModal,
         approveModal,
         handleApproveModal,
         releaseModal,
         handleReleaseModal,
         handleOpenViewModal,
         otherFundModalState,
-        generateReport,
     } = useOtherFundActions({ otherFund, refetch })
 
     const isReleased = !!otherFund.released_date
-    const { clear } = useGeneratedReportConfigStore()
-
-    const createGeneratedReport = useGenerateReport({
-        onSuccess: () => {
-            clear()
-        },
-    })
 
     return (
         <>
@@ -107,39 +104,49 @@ export const OtherFundCardActions = ({
                 }}
             />
 
-            {/* Final Print Modal (Post-Generation) */}
             <OtherFundPrintFormModal
                 {...printModal}
                 formProps={{
-                    defaultValues: { ...otherFund },
+                    defaultValues: {
+                        ...otherFund,
+                        report_config: {
+                            ...getTemplateAt(OTHER_FUND_PRINT_TEMPLATES, 0),
+                            name: `other_fund_${toReadableDate(otherFund.created_at, 'MMddyy_mmss')}.pdf`,
+                            module: 'OtherFund',
+                        } as TReportConfigSchema,
+                    },
                     otherFundId: otherFund.id,
-                    onSuccess: () => {
+                    onSuccess: (data) => {
                         refetch?.()
-                        createGeneratedReport?.handleGenerateReport()
+                        useReportViewerStore.getState().open({
+                            reportId: data.id,
+                        })
+                        close()
                         printModal.onOpenChange(false)
                     },
                 }}
             />
 
-            {/* Report Generation Modal */}
-            <PrintReportFormModal
-                {...generateReport}
+            <OtherFundReprintFormModal
+                {...reprintModal}
                 formProps={{
                     defaultValues: {
-                        name: 'Other Fund Record',
-                        description: 'Generated Fund Voucher',
-                        generated_report_type: 'pdf',
-                        url: `/api/v1/other-fund/${otherFund.id}`,
+                        report_config: {
+                            ...getTemplateAt(OTHER_FUND_PRINT_TEMPLATES, 0),
+                            name: `other_fund_${toReadableDate(otherFund.created_at, 'MMddyy_mmss')}.pdf`,
+                            module: 'OtherFund',
+                        } as TReportConfigSchema,
                     },
-                    onSuccess: () => {
-                        handleOpenPrintModal()
-                        generateReport.onOpenChange(false)
-                    },
-                    onSubmit: () => {
-                        handleOpenPrintModal()
+                    otherFundId: otherFund.id,
+                    onSuccess: (data) => {
+                        refetch?.()
+                        useReportViewerStore.getState().open({
+                            reportId: data.id,
+                        })
+                        close()
+                        reprintModal.onOpenChange(false)
                     },
                 }}
-                title="Generate to Print"
             />
 
             {/* Workflow Modals (Approve/Undo/Release) */}
@@ -190,10 +197,13 @@ export const OtherFundCardActions = ({
                             <OtherFundOtherAction
                                 onApprove={handleApproveModal}
                                 onPrint={() => {
-                                    generateReport.onOpenChange(true)
+                                    printModal.onOpenChange(true)
                                 }}
                                 onRefetch={refetch}
                                 onRelease={handleReleaseModal}
+                                onReprint={() =>
+                                    reprintModal.onOpenChange(true)
+                                }
                                 row={otherFund}
                             />
                         </DropdownMenuContent>

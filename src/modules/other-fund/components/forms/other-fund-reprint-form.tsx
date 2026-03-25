@@ -10,59 +10,58 @@ import {
     TWithReportConfigSchema,
 } from '@/modules/generated-report'
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
-import {
-    OtherFundPrintSchema,
-    TOtherFundPrintSchema,
-    usePrintOtherFundTransaction,
-} from '@/modules/other-fund'
-import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import { Input } from '@/components/ui/input'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-export interface IOtherFundPrintFormProps
+import { useReprintOtherFund } from '../..'
+import {
+    OtherFundReprintSchema,
+    TOtherFundReprintSchema,
+} from '../../other-fund.validation'
+
+export interface IOtherFundReprintFormProps
     extends
         IClassProps,
         IForm<
-            Partial<TOtherFundPrintSchema>,
+            Partial<TOtherFundReprintSchema>,
             IGeneratedReport,
             Error,
-            TOtherFundPrintSchema
+            TOtherFundReprintSchema
         > {
     otherFundId: TEntityId
 }
 
-const OtherFundPrintForm = ({
+const OtherFundReprintForm = ({
     otherFundId,
     className,
     ...formProps
-}: IOtherFundPrintFormProps) => {
-    const form = useForm<TOtherFundPrintSchema>({
-        resolver: standardSchemaResolver(OtherFundPrintSchema),
+}: IOtherFundReprintFormProps) => {
+    const form = useForm<TOtherFundReprintSchema>({
+        resolver: standardSchemaResolver(OtherFundReprintSchema),
         mode: 'onSubmit',
         reValidateMode: 'onChange',
         defaultValues: {
-            cash_voucher_number: '',
             ...formProps.defaultValues,
         },
     })
 
-    const printMutation = usePrintOtherFundTransaction({
+    const printMutation = useReprintOtherFund({
         options: {
-            onSuccess: formProps.onSuccess,
+            onSuccess: (generatedReport) => {
+                formProps.onSuccess?.(generatedReport)
+            },
             onError: formProps.onError,
         },
     })
 
-    const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TOtherFundPrintSchema>({
+    const { formRef, handleFocusError } =
+        useFormHelper<TOtherFundReprintSchema>({
             form,
             ...formProps,
         })
@@ -73,7 +72,7 @@ const OtherFundPrintForm = ({
                 otherFundId,
                 payload: {
                     ...rest,
-                    reportConfig: {
+                    report_config: {
                         ...report_config,
                         filters: {
                             other_fund_id: otherFundId,
@@ -82,8 +81,8 @@ const OtherFundPrintForm = ({
                 },
             }),
             {
-                loading: 'Printing Other Fund...',
-                success: 'Other Fund Printed',
+                loading: 'Printing...',
+                success: 'Other Fund Reprinted',
                 error: (error) =>
                     `Something went wrong: ${serverRequestErrExtractor({ error })}`,
             }
@@ -91,20 +90,13 @@ const OtherFundPrintForm = ({
     }, handleFocusError)
 
     const { error: rawError, isPending, reset } = printMutation
-    const error = serverRequestErrExtractor({ error: rawError })
 
-    useHotkeys(
-        'alt + E',
-        (e) => {
-            e.preventDefault()
-        },
-        { enableOnFormTags: true },
-        [form]
-    )
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                autoComplete="off"
                 className={cn('flex w-full flex-col gap-y-4', className)}
                 onSubmit={onSubmit}
                 ref={formRef}
@@ -113,20 +105,6 @@ const OtherFundPrintForm = ({
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                     disabled={isPending || formProps.readOnly}
                 >
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Voucher *"
-                        name="cash_voucher_number"
-                        render={({ field }) => (
-                            <Input
-                                {...field}
-                                autoComplete="off"
-                                disabled={isDisabled(field.name)}
-                                id={field.name}
-                                placeholder="Voucher Number"
-                            />
-                        )}
-                    />
                     <PrintSettingsSection
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
@@ -134,6 +112,7 @@ const OtherFundPrintForm = ({
                         registryKey={'other_fund_print_template'}
                     />
                 </fieldset>
+
                 <FormFooterResetSubmit
                     disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
@@ -150,26 +129,26 @@ const OtherFundPrintForm = ({
     )
 }
 
-export const OtherFundPrintFormModal = ({
+export const OtherFundReprintFormModal = ({
     className,
     formProps,
     title = 'Other Fund Print',
-    description = 'Input required details to print the Other Fund record.',
+    description = 'Print other fund transaction',
     ...props
 }: IModalProps & {
-    formProps: Omit<IOtherFundPrintFormProps, 'className'>
+    formProps: Omit<IOtherFundReprintFormProps, 'className'>
 }) => {
     return (
         <Modal
-            className={cn('max-w-lg!', className)}
+            className={cn('!max-w-lg', className)}
             description={description}
             title={title}
             {...props}
         >
-            <OtherFundPrintForm
+            <OtherFundReprintForm
                 {...formProps}
-                onSuccess={(data) => {
-                    formProps?.onSuccess?.(data)
+                onSuccess={(createdData) => {
+                    formProps?.onSuccess?.(createdData)
                     props.onOpenChange?.(false)
                 }}
             />
@@ -177,4 +156,4 @@ export const OtherFundPrintFormModal = ({
     )
 }
 
-export default OtherFundPrintFormModal
+export default OtherFundReprintForm
