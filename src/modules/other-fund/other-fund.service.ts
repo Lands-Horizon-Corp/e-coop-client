@@ -23,6 +23,10 @@ import type {
     TOtherFundMode,
     TPrintMode,
 } from '../other-fund'
+import {
+    otherFundEntryAPIRoute,
+    otherFundEntryBaseKey,
+} from '../other-fund-entry'
 
 const {
     apiCrudHooks,
@@ -60,7 +64,6 @@ export const {
     useDeleteById: useDeleteOtherFundById,
     useDeleteMany: useDeleteManyOtherFund,
 } = apiCrudHooks
-
 
 export const useGetAllOtherFund = ({
     mode,
@@ -188,5 +191,36 @@ export const usePrintOtherFundTransaction = createMutationFactory<
     invalidationFn: (args) =>
         updateMutationInvalidationFn(otherFundBaseKey, args),
 })
+
+//Re print
+export const useReprintOtherFund = createMutationFactory<
+    IOtherFund,
+    Error,
+    { otherFundId: TEntityId }
+>({
+    mutationFn: async (data) => {
+        const response = await API.put<void, IOtherFund>(
+            `${otherFundEntryAPIRoute}/${data.otherFundId}/print-only`
+        )
+        return response.data
+    },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(otherFundEntryBaseKey, args),
+})
+
+//print
+export const usePrintOtherFund = async ({
+    otherFundId,
+    payload,
+}: {
+    otherFundId: TEntityId
+    payload: IOtherFundPrintRequest
+}) => {
+    const response = await API.put<IOtherFundPrintRequest, IOtherFund>(
+        `${otherFundEntryAPIRoute}/${otherFundId}/print`,
+        payload
+    )
+    return response.data
+}
 
 export const logger = Logger.getInstance('other-fund')
