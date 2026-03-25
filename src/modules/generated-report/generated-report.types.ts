@@ -64,6 +64,8 @@ export interface IGeneratedReport extends IBaseEntityMeta {
     height: number
     unit: TPaperSizeUnit
 
+    expiration_days?: number
+
     landscape: boolean
 }
 

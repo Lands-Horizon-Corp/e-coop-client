@@ -14,7 +14,7 @@ import {
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import { IComakerMemberProfile } from '../comaker-member-profile'
-import { IGeneratedReport } from '../generated-report'
+import { IGeneratedReport, generatedReportBaseKey } from '../generated-report'
 import { ILoanGuide } from '../loan-guide'
 // import { IAmortizationSchedule } from '../amortization'
 import type {
@@ -277,7 +277,10 @@ export const usePrintLoanTransaction = createMutationFactory<
     }
 >({
     mutationFn: (data) => printLoanTransaction(data),
-    defaultInvalidates: [['auth', 'context']],
+    defaultInvalidates: [
+        ['auth', 'context'],
+        [generatedReportBaseKey, 'inprogress', 'all'],
+    ],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(loanTransactionBaseKey, args),
 })
@@ -306,6 +309,7 @@ export const useReprintLoanTransaction = createMutationFactory<
     },
     invalidationFn: (args) =>
         updateMutationInvalidationFn(loanTransactionBaseKey, args),
+    defaultInvalidates: [[generatedReportBaseKey, 'inprogress', 'all']],
 })
 
 // UNDO PRINT

@@ -14,7 +14,7 @@ import {
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
-import { IGeneratedReport } from '../generated-report'
+import { IGeneratedReport, generatedReportBaseKey } from '../generated-report'
 import type {
     IJournalVoucher,
     IJournalVoucherPaginated,
@@ -221,7 +221,11 @@ export const usePrintJournalVoucherTransaction = createMutationFactory<
     }
 >({
     mutationFn: (data) => printJournalVoucher(data),
-    defaultInvalidates: [['auth', 'context']],
+
+    defaultInvalidates: [
+        ['auth', 'context'],
+        [generatedReportBaseKey, 'inprogress', 'all'],
+    ],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(journalVoucherBaseKey, args),
 })
@@ -249,7 +253,11 @@ export const useReprintJournalVoucherTransaction = createMutationFactory<
 
         return response.data
     },
-    defaultInvalidates: [['auth', 'context']],
+
+    defaultInvalidates: [
+        ['auth', 'context'],
+        [generatedReportBaseKey, 'inprogress', 'all'],
+    ],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(journalVoucherBaseKey, args),
 })

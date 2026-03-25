@@ -5,22 +5,23 @@ import { cn } from '@/helpers'
 import { PaginationState } from '@tanstack/react-table'
 import { useHotkeys } from 'react-hotkeys-hook'
 
-import RefreshButton from '@/components/buttons/refresh-button'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import {
     DownloadIcon,
     ExcelFileFillIcon,
-    FinanceReportsIcon,
+    FileFillIcon,
+    FunnelIcon,
     PDFFileFillIcon,
+    RefreshIcon,
     ReportsIcon,
     ReportsSearchIcon,
     StarIcon,
     UserIcon,
 } from '@/components/icons'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
-import { ButtonGroup } from '@/components/ui/button-group'
-import { Card, CardContent, CardFooter } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import EmptyState from '@/components/ui/empty-state'
 import { Separator } from '@/components/ui/separator'
 import {
@@ -31,6 +32,7 @@ import {
     SheetTrigger,
 } from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import useFilterState from '@/hooks/use-filter-state'
 import { useModalState } from '@/hooks/use-modal-state'
@@ -69,7 +71,7 @@ const GeneratedReportTabOptions: {
 
 export const DEFAULT_MODEL: TModelName = 'none'
 
-const GeneratedReportActions = () => {
+const GeneratedReportListContent = () => {
     const [activeTab, setActiveTab] = useState<TModeGeneratedReport>('search')
     const [selectedModelAccount, setSelectedModel] =
         useState<TModelName>(DEFAULT_MODEL)
@@ -77,7 +79,7 @@ const GeneratedReportActions = () => {
         pageIndex: PAGINATION_INITIAL_INDEX,
         pageSize: 50,
     })
-    const [isAll, setIsAll] = useState(false)
+    const [ownerFilter, setOwnerFilter] = useState<'me' | 'all'>('me')
 
     const { sortingStateBase64, setSortingState } = useDataTableSorting()
 
@@ -126,105 +128,103 @@ const GeneratedReportActions = () => {
     }, [])
 
     const isFavorite = activeTab === 'me-favorites' || activeTab === 'favorites'
-    const AllVariant = isAll ? 'default' : 'outline'
-    const MEvariant = !isAll ? 'default' : 'outline'
 
     return (
-        <div className="flex flex-col p-1 h-full">
-            <h2 className="text-xl flex items-center font-bold text-foreground mb-2">
-                <FinanceReportsIcon className="mr-2" />
+        <div className="flex flex-col h-full">
+            <h4 className="text-base px-4 py-2 flex items-center">
+                <FileFillIcon className="mr-2" />
                 Generated Reports
-            </h2>
-            <div className="grid gap-y-2 py-2">
-                <div className="inline-flex justify-between items-center ">
-                    <ButtonGroup className="justify-start w-full">
-                        <Button
-                            onClick={() => {
-                                setIsAll(false)
-                                handleTabChange('me-search')
-                            }}
-                            size={'sm'}
-                            variant={MEvariant}
+            </h4>
+            <Separator className="" />
+            <div className="space-y-1 p-4 py-2">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <Tabs
+                            onValueChange={(v) =>
+                                setOwnerFilter(v as 'me' | 'all')
+                            }
+                            value={ownerFilter}
                         >
-                            <UserIcon className="size-4" />
-                            Me
-                        </Button>
+                            <TabsList className="h-8">
+                                <TabsTrigger className="text-xs" value="me">
+                                    <UserIcon className="size-4" />
+                                    Me
+                                </TabsTrigger>
+                                <TabsTrigger className="text-xs" value="all">
+                                    <ReportsSearchIcon className="size-4" />
+                                    All
+                                </TabsTrigger>
+                            </TabsList>
+                        </Tabs>
+                    </div>
+                    <div className="flex gap-1">
                         <Button
+                            className="size-8"
+                            disabled={isLoading || isFetching}
                             onClick={() => {
-                                setIsAll(true)
-                                handleTabChange('search')
+                                refetch()
                             }}
-                            size={'sm'}
-                            variant={AllVariant}
+                            size="icon"
+                            variant="ghost"
                         >
-                            I<ReportsSearchIcon className="size-4" />
-                            All
+                            {isLoading ? (
+                                <LoadingSpinner />
+                            ) : (
+                                <RefreshIcon className="size-4" />
+                            )}
                         </Button>
-                    </ButtonGroup>
-                    <RefreshButton
-                        isLoading={isLoading || isFetching}
-                        onClick={() => {
-                            refetch()
-                        }}
-                    />
-                    <ReportFilter
-                        onModelChange={(selectedModel) => {
-                            setSelectedModel(selectedModel)
-                        }}
-                        selectedModel={selectedModelAccount}
-                        setFilter={setFilter}
-                        setSortingState={setSortingState}
-                    />
-                </div>
-                <div className="flex items-center justify-between w-full ">
-                    {!isAll ? (
-                        <ButtonGroup className="w-full">
-                            {GeneralReport.map((opt) => (
+                        <ReportFilter
+                            onModelChange={(selectedModel) => {
+                                setSelectedModel(selectedModel)
+                            }}
+                            selectedModel={selectedModelAccount}
+                            setFilter={setFilter}
+                            setSortingState={setSortingState}
+                            trigger={
                                 <Button
-                                    className="gap-2 px-3 py-2 w-[25%] text-sm font-medium"
-                                    key={opt.value}
-                                    onClick={() => handleTabChange(opt.value)}
-                                    size="sm"
-                                    variant={
-                                        activeTab === opt.value
-                                            ? 'default'
-                                            : 'outline'
-                                    }
+                                    className="size-8"
+                                    disabled={isLoading}
+                                    size="icon"
+                                    variant="ghost"
                                 >
-                                    {opt.icon && (
-                                        <span className="">{opt.icon}</span>
-                                    )}
-                                    {opt.label}
+                                    <FunnelIcon className="size-4" />
                                 </Button>
-                            ))}
-                        </ButtonGroup>
-                    ) : (
-                        <ButtonGroup className="w-full">
-                            {PersonalReport.map((opt) => (
-                                <Button
-                                    className="gap-2 px-3 py-2 w-[25%] text-sm font-medium"
-                                    key={opt.value}
-                                    onClick={() => handleTabChange(opt.value)}
-                                    size="sm"
-                                    variant={
-                                        activeTab === opt.value
-                                            ? 'default'
-                                            : 'outline'
-                                    }
-                                >
-                                    {opt.icon && (
-                                        <span className="">{opt.icon}</span>
-                                    )}
-                                    {opt.label}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    )}
-                </div>
+                            }
+                        />
+                    </div>
+                </div>{' '}
+                <Tabs
+                    defaultValue="all"
+                    onValueChange={(value) =>
+                        handleTabChange(
+                            value as unknown as TModeGeneratedReport
+                        )
+                    }
+                    value={activeTab}
+                >
+                    <TabsList>
+                        {ownerFilter !== 'me'
+                            ? GeneralReport.map((opt) => (
+                                  <TabsTrigger
+                                      key={opt.value}
+                                      value={opt.value}
+                                  >
+                                      {opt.label}
+                                  </TabsTrigger>
+                              ))
+                            : PersonalReport.map((opt) => (
+                                  <TabsTrigger
+                                      key={opt.value}
+                                      value={opt.value}
+                                  >
+                                      {opt.label}
+                                  </TabsTrigger>
+                              ))}
+                    </TabsList>
+                </Tabs>
             </div>
-            <Separator className="my-2" />
-            <Card className="flex-1 bg-transparent  shadow-none overflow-y-auto ecoop-scroll border-0 ">
-                <CardContent className="p-0 py-2 pr-2 max-h-fit min-h-[90%]">
+            <div className="flex-1 bg-transparent  shadow-none overflow-y-auto ecoop-scroll border-0 ">
+                <div className="p-4 py-2  max-h-fit min-h-[90%]">
                     {isLoading && (
                         <div className="p-3 flex flex-col space-y-7">
                             {Array.from({ length: 5 }).map((_, index) => {
@@ -269,8 +269,10 @@ const GeneratedReportActions = () => {
                             ))}
                         </div>
                     )}
-                </CardContent>
-                <CardFooter className="p-0 sticky bottom-0 bg-sidebar">
+                </div>
+
+                <div className="p-0 sticky bottom-0 bg-sidebar">
+                    <Separator className="" />
                     <MiniPaginationBar
                         className="w-full border-0"
                         disablePageMove={isFetching}
@@ -293,13 +295,23 @@ const GeneratedReportActions = () => {
                             totalSize: GeneratedReports?.totalSize || 0,
                         }}
                     />
-                </CardFooter>
-            </Card>
+                </div>
+            </div>
         </div>
     )
 }
 
-const GeneratedReportsButton = ({ className }: { className?: string }) => {
+const GeneratedReportsList = () => {
+    return (
+        <Card className="h-full w-full bg-popover overflow-clip rounded-xl ring-4 ring-muted/60 border-muted shadow-xl flex-shrink-0">
+            <CardContent className="h-full p-0">
+                <GeneratedReportListContent />
+            </CardContent>
+        </Card>
+    )
+}
+
+const GeneratedReportsListSheet = ({ className }: { className?: string }) => {
     const { open, onOpenChange } = useModalState()
 
     useHotkeys(
@@ -333,16 +345,13 @@ const GeneratedReportsButton = ({ className }: { className?: string }) => {
                 <SheetContent
                     className="bg-transparent shadow-none min-w-xl border-0 flex flex-row p-4 gap-4"
                     closeClassName="top-7 right-7"
+                    forceMount={true}
                 >
-                    <Card className="h-full  w-full bg-card rounded-xl shadow-xl flex-shrink-0">
-                        <CardContent className="h-full p-4">
-                            <GeneratedReportActions />
-                        </CardContent>
-                    </Card>
+                    <GeneratedReportsList />
                 </SheetContent>
             </Sheet>
         </div>
     )
 }
 
-export default GeneratedReportsButton
+export default GeneratedReportsListSheet

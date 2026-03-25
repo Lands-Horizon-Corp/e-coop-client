@@ -28,6 +28,7 @@ import { useReportViewerStore } from './global-generate-report-viewer.store'
 
 export interface GenerateReportViewerProps extends IClassProps {
     reportId: TEntityId
+    defaultReport?: IGeneratedReport
 
     onReportStatusChange?: (status: TGeneratedReportStatus) => void
     onReportDownload?: (report: IGeneratedReport) => void
@@ -37,6 +38,7 @@ export interface GenerateReportViewerProps extends IClassProps {
 export function ReportViewer({
     reportId,
     className,
+    defaultReport,
     onReportStatusChange,
     onReportDownload,
     onReportPrint,
@@ -54,6 +56,7 @@ export function ReportViewer({
     } = useGetGeneratedReportById({
         id: reportId,
         options: {
+            initialData: defaultReport,
             refetchInterval: report?.status === 'pending' ? 10_000 : false,
             refetchOnWindowFocus: false,
         },
@@ -143,7 +146,6 @@ export function ReportViewer({
                             onPasswordValid={() => {
                                 setIsUnlocked(true)
                             }}
-                            // className="flex-1 h-[500px] w-full flex"
                             pageWidth={800}
                         />
                     )}

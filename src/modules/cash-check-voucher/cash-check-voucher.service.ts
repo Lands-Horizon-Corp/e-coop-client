@@ -24,7 +24,7 @@ import type {
     TCashCheckVoucherPrintRequest,
     TCashCheckVoucherReprintSchema,
 } from '../cash-check-voucher'
-import { IGeneratedReport } from '../generated-report'
+import { IGeneratedReport, generatedReportBaseKey } from '../generated-report'
 import { getPaginatedJournalVoucher } from '../journal-voucher'
 
 const {
@@ -225,7 +225,10 @@ export const usePrintCashCheckVoucherTransaction = createMutationFactory<
     }
 >({
     mutationFn: (data) => printCashCheckVoucher(data),
-    defaultInvalidates: [['auth', 'context']],
+    defaultInvalidates: [
+        ['auth', 'context'],
+        [generatedReportBaseKey, 'inprogress', 'all'],
+    ],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(cashCheckVoucherBaseKey, args),
 })
@@ -251,7 +254,10 @@ export const useReprintCashCheckVoucherTransaction = createMutationFactory<
         >(url, payload)
         return response.data
     },
-    defaultInvalidates: [['auth', 'context']],
+    defaultInvalidates: [
+        ['auth', 'context'],
+        [generatedReportBaseKey, 'inprogress', 'all'],
+    ],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(cashCheckVoucherBaseKey, args),
 })

@@ -25,7 +25,7 @@ import {
 import { TSortingState } from '@/types'
 
 import { TModelName } from '../../generated-report.types'
-import { DEFAULT_MODEL } from './generated-reports-button'
+import { DEFAULT_MODEL } from './generated-reports-list'
 import ModelCombobox from './model-combobox'
 
 type ReportFilterProps = {
@@ -38,6 +38,7 @@ type ReportFilterProps = {
     setSortingState: React.Dispatch<
         React.SetStateAction<TSortingState<unknown>>
     >
+    trigger?: React.ReactNode
 }
 
 export const ReportFilter = ({
@@ -45,26 +46,28 @@ export const ReportFilter = ({
     selectedModel,
     setFilter,
     setSortingState,
+    trigger,
 }: ReportFilterProps) => {
     const handleResetFilter = () => {
         setFilter('created_at', undefined)
         setSortingState([])
         onModelChange(DEFAULT_MODEL)
     }
-
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button
-                    className="gap-2 ml-2 px-3 py-2 text-sm font-medium"
-                    variant="outline"
-                >
-                    <FilterIcon className="size-4" />
-                </Button>
+                {trigger ?? (
+                    <Button
+                        className="gap-2 ml-2 px-3 py-2 text-sm font-medium"
+                        variant="outline"
+                    >
+                        <FilterIcon className="size-4" />
+                    </Button>
+                )}
             </DropdownMenuTrigger>
             <DropdownMenuContent
                 align="start"
-                className="w-80 p-3 border-0"
+                className="w-80 p-3"
                 side="right"
             >
                 <DropdownMenuLabel className="px-3 pt-3 text-sm font-medium">

@@ -4,6 +4,7 @@ import { Outlet, createFileRoute } from '@tanstack/react-router'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { GlobalReportViewer } from '@/modules/generated-report/components/generated-report-view/generated-report-view'
+import { ReportListenerHeadless } from '@/modules/generated-report/components/report-listener/report-listener.headless'
 import TimeMachineTimeStatusBar from '@/modules/user-organization/components/time-machine-time-status-bar'
 import GlobalHotkeysProvider from '@/providers/global-hotkeys-provider'
 import { ScrollContext } from '@/providers/scroll-parent-provider'
@@ -32,6 +33,7 @@ function RouteComponent() {
                     <GlobalReportViewer />
                     <OrgBranchSidebar />
                     <GlobalHotkeysProvider />
+                    <ReportListenerHeadless />
                     <ScrollContext.Provider
                         value={
                             scrollRef as unknown as RefObject<HTMLDivElement>
