@@ -190,7 +190,7 @@ const CheckWarehousingTableColumns = (
         cell: ({ row }) => {
             const { clear_days } = row.original
             return (
-                <Badge variant="secondary" className="font-normal">
+                <Badge className="font-normal" variant="secondary">
                     {clear_days} day(s)
                 </Badge>
             )

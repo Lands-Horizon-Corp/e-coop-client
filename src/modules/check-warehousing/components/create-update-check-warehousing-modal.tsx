@@ -244,14 +244,14 @@ const CheckWarehousingCreateUpdateForm = ({
                                             <Input
                                                 type="number"
                                                 {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
                                                 onChange={(e) =>
                                                     field.onChange(
                                                         Number(e.target.value)
                                                     )
                                                 }
-                                                disabled={isDisabled(
-                                                    field.name
-                                                )}
                                                 placeholder="e.g. 3"
                                             />
                                         )}
@@ -410,6 +410,7 @@ const CheckWarehousingCreateUpdateForm = ({
                                         render={(field) => (
                                             <EmployeePicker
                                                 {...field}
+                                                key={'user_id'}
                                                 mode="owner"
                                                 onSelect={(value) => {
                                                     form.setValue(
@@ -421,7 +422,6 @@ const CheckWarehousingCreateUpdateForm = ({
                                                         value
                                                     )
                                                 }}
-                                                key={'user_id'}
                                                 value={form.getValues(
                                                     'employee_user'
                                                 )}
@@ -444,8 +444,8 @@ const CheckWarehousingCreateUpdateForm = ({
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    disabled={isDisabled(field.name)}
                                     className="min-h-[80px]"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />

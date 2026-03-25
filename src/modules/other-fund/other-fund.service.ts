@@ -61,9 +61,7 @@ export const {
     useDeleteMany: useDeleteManyOtherFund,
 } = apiCrudHooks
 
-/**
- * Get All Other Funds with specific modes (e.g., release-today)
- */
+
 export const useGetAllOtherFund = ({
     mode,
     query,

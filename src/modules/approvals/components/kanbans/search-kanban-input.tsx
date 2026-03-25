@@ -13,7 +13,11 @@ import { Label } from '@/components/ui/label'
 
 import { TKanbanMenuItem } from './hook/use-search-kanban'
 
-type kanbanType = 'journal-voucher' | 'cash-check-voucher' | 'loan'
+type kanbanType =
+    | 'journal-voucher'
+    | 'cash-check-voucher'
+    | 'loan'
+    | 'other-fund'
 
 type TSearchKanbanInputProps<T = string> = {
     searchTerm: string
@@ -47,14 +51,15 @@ export const SearchKanbanInput = <T extends string>({
     const route = useNavigate()
 
     const handleRedirectToSearchPage = () => {
-        let url = ''
+        let url = '/org/$orgname/branch/$branchname/'
         if (kanbanType === 'cash-check-voucher') {
-            url =
-                '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher'
+            url = `${url}cash-check-journal-voucher`
         } else if (kanbanType === 'loan') {
-            url = '/org/$orgname/branch/$branchname/loan/loans'
+            url = `${url}loan`
+        } else if (kanbanType === 'other-fund') {
+            url = `${url}other-fund`
         } else {
-            url = '/org/$orgname/branch/$branchname/accounting/journal-voucher'
+            url = `${url}journal-voucher`
         }
         route({
             to: url,
@@ -99,9 +104,9 @@ export const SearchKanbanInput = <T extends string>({
                                     {searchTerm && (
                                         <Badge
                                             className={cn(
-                                                'shrink-1 absolute right-10 top-1/2 -translate-y-1/2 text-xs py-0',
+                                                'shrink absolute right-10 top-1/2 -translate-y-1/2 text-xs py-0',
                                                 searchAllModes &&
-                                                    'bg-primary/9 !h-fit text-primary border-primary/20'
+                                                    'bg-primary/9 h-fit! text-primary border-primary/20'
                                             )}
                                             variant="secondary"
                                         >

@@ -24,11 +24,11 @@ export interface ICheckWarehousing extends IBaseEntityMeta {
 
     check_number: string
     check_date: Date
-    clear_days: string
-    date_cleared?: Date | string
+    clear_days: number
+    date_cleared: Date
     amount: number
     reference_number: string
-    date: Date | string
+    date: Date
     description: string
 }
 export type ICheckWarehousingRequest = z.infer<typeof CheckWarehousingSchema>

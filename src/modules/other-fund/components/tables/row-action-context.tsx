@@ -12,6 +12,7 @@ import { useTableRowActionStore } from '@/components/data-table/store/data-table
 import { useDeleteOtherFundById } from '../../other-fund.service'
 import { IOtherFund } from '../../other-fund.types'
 import OtherFundCreateUpdateFormModal from '../forms/create-update-other-fund-modal'
+import OtherFundApproveReleaseDisplayModal from '../forms/other-fund-approve-release-modal'
 import OtherFundPrintFormModal from '../forms/other-fund-print-modal'
 import { IOtherFundTableActionComponentProp } from './columns'
 import { OtherFundOtherAction } from './other-fund-other-action'
@@ -206,15 +207,11 @@ export const OtherFundTableActionManager = () => {
         OtherFundActionExtra
     >()
 
-    // const {
-    //     currentAuth: { user_organization },
-    // } = useAuthStore()
-
     if (!state || !state.defaultValues) return null
 
     const otherFund = state.defaultValues
     const isPrinted = !!otherFund.printed_date
-    // const approveReleaseMode = state.extra?.approveReleaseMode ?? 'approve'
+    const approveReleaseMode = state.extra?.approveReleaseMode ?? 'approve'
 
     return (
         <>
@@ -245,14 +242,14 @@ export const OtherFundTableActionManager = () => {
             )}
 
             {/* Approve/Release Action */}
-            {/* {state.action === 'approve-release' && (
+            {state.action === 'approve-release' && (
                 <OtherFundApproveReleaseDisplayModal
-                    otherFund={otherFund}
                     mode={approveReleaseMode}
                     onOpenChange={close}
                     open={state.isOpen}
+                    otherFund={otherFund}
                 />
-            )} */}
+            )}
         </>
     )
 }
