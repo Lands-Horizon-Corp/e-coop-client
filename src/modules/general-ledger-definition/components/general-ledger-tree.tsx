@@ -54,19 +54,6 @@ const GeneralLedgerDefinitionTreeViewer = () => {
         },
     })
 
-    // const hanldeFoundPath = (glId: TEntityId) => {
-    //     const foundPath = findNodePathByGlIdOnly(
-    //         generalLedgerDefinitions,
-    //         [],
-    //         glId
-    //     )
-
-    //     if (foundPath) {
-    //         expandPath(foundPath)
-    //         setTargetNodeId(foundPath[foundPath.length - 1])
-    //     }
-    // }
-
     const topLevelSensors = useSensors(useSensor(PointerSensor))
 
     useEffect(() => {

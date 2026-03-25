@@ -4,6 +4,7 @@ import PageContainer from '@/components/containers/page-container'
 import {
     BadgeCheckFillIcon,
     BookOpenIcon,
+    MoneyBagIcon,
     MoneyCheck2Icon,
     MoneyCheckIcon,
 } from '@/components/icons'
@@ -13,6 +14,7 @@ import Approval from '../approval'
 import CashCheckVoucherKanban from '../kanbans/cash-check-voucher/cash-check-voucher-kanban'
 import JournalVoucherKanban from '../kanbans/journal-voucher/journal-voucher-kanban'
 import LoanKanban from '../kanbans/loan/loan-kanban'
+import OtherFundKanban from '../kanbans/other-fund/other-fund-kanban'
 
 type journalMenuTriggerType = {
     name: string
@@ -59,6 +61,11 @@ const ApprovalTabPage = () => {
             value: 'loans',
             icon: <MoneyCheckIcon className="size-4 text-muted-foreground" />,
         },
+        {
+            name: 'Other Funds',
+            value: 'otherFund',
+            icon: <MoneyBagIcon className="size-4 text-muted-foreground" />,
+        },
     ]
     const journalVoucherItem: journalVoucherItemType = [
         {
@@ -76,6 +83,10 @@ const ApprovalTabPage = () => {
         {
             value: 'loans',
             content: <LoanKanban className="min-h-[91dvh]" />,
+        },
+        {
+            value: 'otherFund',
+            content: <OtherFundKanban className="min-h-[91dvh]" />,
         },
     ]
 

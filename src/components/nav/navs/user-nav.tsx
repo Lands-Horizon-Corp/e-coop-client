@@ -14,6 +14,7 @@ import NavProfileMenu from '@/modules/user-profile/components/nav/nav-profile-me
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
+import Clock from '@/components/clock'
 import { BadgeCheckFillIcon } from '@/components/icons'
 import LiveToggle from '@/components/live-toggle'
 import NavThemeToggle from '@/components/nav/nav-components/nav-theme-toggle'
@@ -51,7 +52,7 @@ const UserNav = ({
             keydown: true,
         }
     )
-    // Secondary nav items (collapsible)
+
     const SECONDARY_NAV_ITEMS = [
         {
             important: false,
@@ -130,6 +131,8 @@ const UserNav = ({
                     homeUrl={homeUrl}
                 />
             </NavContainer>
+
+            <Clock />
 
             <NavContainer className="pointer-events-auto">
                 <div className="flex items-center">

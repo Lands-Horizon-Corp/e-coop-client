@@ -137,7 +137,7 @@ const JournalVoucherApproveReleaseDisplayModal = ({
 
     return (
         <Modal
-            className={cn('!max-w-2xl', className)}
+            className={cn('max-w-2xl!', className)}
             description={description}
             descriptionClassName="sr-only"
             title={title}
@@ -147,7 +147,7 @@ const JournalVoucherApproveReleaseDisplayModal = ({
             <div className="space-y-4 max-w-full min-w-0 pt-2">
                 <JournalVoucherCard journalVoucher={journalVoucher} />
                 <JournalKanbanInfoItem
-                    className="!p-2"
+                    className="p-2!"
                     content={journalVoucher.cash_voucher_number}
                     icon={<TicketIcon className="inline mr-2 size-5" />}
                     infoTitle={journalVoucher.cash_voucher_number}

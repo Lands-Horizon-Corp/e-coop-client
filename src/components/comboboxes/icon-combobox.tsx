@@ -114,7 +114,7 @@ const IconCombobox = forwardRef<HTMLButtonElement, Props>(
                                         }}
                                         value={name}
                                     >
-                                        <Icon className="mr-1 !size-5 text-muted-foreground duration-300 ease-in-out group-hover:text-foreground" />
+                                        <Icon className="mr-1 size-5! text-muted-foreground duration-300 ease-in-out group-hover:text-foreground" />
                                         <span className="text-muted-foreground duration-200 group-hover:text-foreground">
                                             {name}
                                         </span>

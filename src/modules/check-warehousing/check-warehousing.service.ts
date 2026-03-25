@@ -22,6 +22,7 @@ const { baseQueryKey, apiCrudHooks, apiCrudService } = createDataLayerFactory<
 export const checkWarehousingBaseQueryKey = baseQueryKey
 export const { API, route: checkWarehousingAPIRoute } = apiCrudService
 
+export const { deleteMany: deleteManyWarehousing } = apiCrudService
 export const {
     useCreate: useCreateCheck,
     useGetById: useGetCheckById,

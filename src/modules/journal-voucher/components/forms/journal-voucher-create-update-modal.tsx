@@ -647,7 +647,7 @@ const JournalVoucherCreateUpdateForm = ({
                             <kbd className="text-xs">
                                 {isEditMode ? 'Update' : 'Create'}
                             </kbd>
-                            <CommandShortcut className="bg-accent text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-primary">
+                            <CommandShortcut className="bg-secondary text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-primary">
                                 Ctrl + Enter
                             </CommandShortcut>
                         </div>
