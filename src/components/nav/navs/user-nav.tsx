@@ -7,7 +7,7 @@ import {
     hasPermissionFromAuth,
     useAuthStore,
 } from '@/modules/authentication/authgentication.store'
-import GeneratedReportsButton from '@/modules/generated-report/components/generated-reports/generated-reports-button'
+import GeneratedReportsListSheet from '@/modules/generated-report/components/generated-reports/generated-reports-list'
 import { NotificationNav } from '@/modules/notification/components/notification'
 import TransactionBatchNavButton from '@/modules/transaction-batch/components/batch-nav-button'
 import NavProfileMenu from '@/modules/user-profile/components/nav/nav-profile-menu'
@@ -96,7 +96,7 @@ const UserNav = ({
         },
         {
             important: false,
-            component: <GeneratedReportsButton />,
+            component: <GeneratedReportsListSheet />,
         },
         {
             important: false,

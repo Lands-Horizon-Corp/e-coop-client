@@ -76,6 +76,7 @@ function SheetContent({
                 )}
                 data-slot="sheet-content"
                 {...props}
+                forceMount={true}
             >
                 {children}
                 <SheetPrimitive.Close
