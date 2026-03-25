@@ -4,13 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
-import { cn } from '@/helpers/tw-utils'
-import {
-    IJournalVoucher,
-    deleteManyJournalVoucher,
-    journalVoucherBaseKey,
-    useGetPaginatedJournalVoucher,
-} from '@/modules/journal-voucher'
+import { cn } from '@/helpers'
 import {
     getCoreRowModel,
     getSortedRowModel,
@@ -32,19 +26,25 @@ import useDataTableState, {
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
-import JournalVoucherTableColumns, {
-    IJournalVoucherTableColumnProps,
-    journalVoucherGlobalSearchTargets,
+import {
+    IOtherFund,
+    deleteManyOtherFund,
+    otherFundBaseKey,
+    useGetPaginatedOtherFund,
+} from '../..'
+import OtherFundTableColumns, {
+    IOtherFundTableColumnProps,
+    otherFundGlobalSearchTargets,
 } from './columns'
-import JournalVoucherAction, {
-    JournalVoucherRowContext,
-    JournalVoucherTableActionManager,
+import OtherFundTableActionManager, {
+    OtherFundAction,
+    OtherFundRowContext,
 } from './row-action-context'
 
-export interface JournalVoucherTableProps
-    extends TableProps<IJournalVoucher>, IJournalVoucherTableColumnProps {
+export interface OtherFundTableProps
+    extends TableProps<IOtherFund>, IOtherFundTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IJournalVoucher>,
+        IDataTableToolbarProps<IOtherFund>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -52,10 +52,11 @@ export interface JournalVoucherTableProps
         | 'filterLogicProps'
         | 'deleteActionProps'
     >
+    persistKey?: string[]
 }
 
-const JournalVoucherTable = ({
-    persistKey = ['journal-voucher'],
+const OtherFundTable = ({
+    persistKey = ['other-fund'],
     className,
     toolbarProps,
     defaultFilter,
@@ -64,19 +65,16 @@ const JournalVoucherTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent = JournalVoucherAction,
-    RowContextComponent = JournalVoucherRowContext,
-}: JournalVoucherTableProps) => {
+    actionComponent = OtherFundAction,
+    RowContextComponent = OtherFundRowContext,
+}: OtherFundTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingStateBase64, tableSorting, setTableSorting } =
         useDataTableSorting()
 
     const columns = useMemo(
-        () =>
-            JournalVoucherTableColumns({
-                actionComponent,
-            }),
+        () => OtherFundTableColumns({ actionComponent }),
         [actionComponent]
     )
 
@@ -86,7 +84,7 @@ const JournalVoucherTable = ({
             persistKey,
         })
 
-    const tableState = useDataTableState<IJournalVoucher>({
+    const tableState = useDataTableState<IOtherFund>({
         key: finalKeys,
         defaultColumnVisibility: resolvedColumnVisibility,
         defaultColumnOrder: resolvedColumnOrder,
@@ -103,7 +101,7 @@ const JournalVoucherTable = ({
         isRefetching,
         data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
         refetch,
-    } = useGetPaginatedJournalVoucher({
+    } = useGetPaginatedOtherFund({
         query: {
             ...pagination,
             sort: sortingStateBase64,
@@ -114,6 +112,7 @@ const JournalVoucherTable = ({
     const handleRowSelectionChange =
         tableState.createHandleRowSelectionChange(data)
 
+    // 5. Initialize TanStack Table
     const table = useReactTable({
         columns,
         data: data,
@@ -144,7 +143,8 @@ const JournalVoucherTable = ({
         onRowSelectionChange: handleRowSelectionChange,
         defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
-    const exportfilter = qs.stringify(
+
+    const exportFilter = qs.stringify(
         {
             ...pagination,
             sort: sortingStateBase64,
@@ -152,6 +152,7 @@ const JournalVoucherTable = ({
         },
         { skipNull: true }
     )
+
     return (
         <FilterContext.Provider value={filterState}>
             <TableRowActionStoreProvider>
@@ -164,25 +165,22 @@ const JournalVoucherTable = ({
                 >
                     <DataTableToolbar
                         deleteActionProps={{
-                            disabled: true,
+                            disabled:
+                                table.getSelectedRowModel().rows.length === 0,
                             onDeleteSuccess: () =>
                                 queryClient.invalidateQueries({
-                                    queryKey: [
-                                        journalVoucherBaseKey,
-                                        'paginated',
-                                    ],
+                                    queryKey: [otherFundBaseKey, 'paginated'],
                                 }),
                             onDelete: (selectedData) =>
-                                deleteManyJournalVoucher({
-                                    ids: selectedData.map((data) => data.id),
+                                deleteManyOtherFund({
+                                    ids: selectedData.map((d) => d.id),
                                 }),
                         }}
                         exportActionProps={{
                             ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
-                            filters: exportfilter,
-                            model: 'JournalVoucher',
-                            url: 'api/v1/journal-voucher/search',
+                            filters: exportFilter,
+                            url: 'api/v1/other-fund/search',
                         }}
                         filterLogicProps={{
                             filterLogic: filterState.filterLogic,
@@ -190,7 +188,7 @@ const JournalVoucherTable = ({
                         }}
                         globalSearchProps={{
                             defaultMode: 'contains',
-                            targets: journalVoucherGlobalSearchTargets,
+                            targets: otherFundGlobalSearchTargets,
                         }}
                         refreshActionProps={{
                             onClick: () => refetch(),
@@ -215,11 +213,11 @@ const JournalVoucherTable = ({
                         table={table}
                     />
                     <DataTablePagination table={table} totalSize={totalSize} />
-                    <JournalVoucherTableActionManager />
+                    <OtherFundTableActionManager />
                 </div>
             </TableRowActionStoreProvider>
         </FilterContext.Provider>
     )
 }
 
-export default JournalVoucherTable
+export default OtherFundTable

@@ -216,6 +216,17 @@ export const generateSidebarGroups = (
                     }),
                     shortDescription: 'Manage cash adjustment entries',
                 },
+                {
+                    type: 'item',
+                    icon: WrenchIcon,
+                    title: 'Other Fund',
+                    url: `${baseUrl}/other-fund`,
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'OtherFund',
+                    }),
+                    shortDescription: 'Manage other fundi entries',
+                },
             ],
         },
         {

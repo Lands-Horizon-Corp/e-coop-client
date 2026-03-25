@@ -175,7 +175,7 @@ export const JournalVoucherCardActions = ({
                     </div>
                 )
             })}
-            <div className="w-full flex items-center space-x-1 justify-start flex-shrink-0">
+            <div className="w-full flex items-center space-x-1 justify-start shrink-0">
                 <JournalVoucherTagsManagerPopover
                     journalVoucherId={journalVoucher.id}
                     onSuccess={refetch}

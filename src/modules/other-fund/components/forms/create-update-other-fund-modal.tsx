@@ -15,11 +15,9 @@ import { CurrencyCombobox, currencyFormat } from '@/modules/currency'
 import {
     IJournalVoucher,
     IJournalVoucherRequest,
-    JournalVoucherSchema,
     journalVoucherBaseKey,
-    useCreateUpdateJournalVoucher,
 } from '@/modules/journal-voucher'
-import { JournalVoucherTagsManagerPopover } from '@/modules/journal-voucher-tag/components/journal-voucher-tag-management'
+import JournalVoucherStatusIndicator from '@/modules/journal-voucher/components/journal-voucher-status-indicator'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
@@ -50,31 +48,34 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-import JournalVoucherStatusIndicator from '../journal-voucher-status-indicator'
-import { JournalEntryTable } from './journal-entry-table'
+import { useCreateUpdateOtherFund } from '../../other-fund.service'
+import { IOtherFund, IOtherFundRequest } from '../../other-fund.types'
+import { OtherFundSchema } from '../../other-fund.validation'
+import { OtherFundEntryTable } from '../other-fund-entry-table'
+import { OtherFundTagsManagerPopover } from '../other-fund-tag-manager'
 
-type TJournalVoucherFormValues = z.infer<typeof JournalVoucherSchema>
+export type TOtherFundFormValues = z.infer<typeof OtherFundSchema>
 
-export interface IJournalVoucherCreateUpdateFormProps
+export interface IOtherFundCreateUpdateFormProps
     extends
         IClassProps,
         IForm<
-            Partial<IJournalVoucher>,
-            IJournalVoucherRequest,
+            Partial<IOtherFund>,
+            IOtherFundRequest,
             Error,
-            TJournalVoucherFormValues
+            TOtherFundFormValues
         > {
-    journalVoucherId?: TEntityId
+    otherFundId?: TEntityId
     mode?: 'create' | 'update' | 'readOnly'
 }
 
-const JournalVoucherCreateUpdateForm = ({
+const OtherFundCreateUpdateForm = ({
     className,
-    journalVoucherId,
+    otherFundId,
     defaultValues,
     mode = 'create',
     ...formProps
-}: IJournalVoucherCreateUpdateFormProps) => {
+}: IOtherFundCreateUpdateFormProps) => {
     const queryClient = useQueryClient()
 
     const popOverState = useModalState(false)
@@ -82,10 +83,8 @@ const JournalVoucherCreateUpdateForm = ({
 
     const { data } = useTransactionBatchStore()
 
-    const [journalId, setJournalVoucherId] = useState<TEntityId | undefined>(
-        journalVoucherId
-    )
-    const isEditMode = !!journalId
+    const [_, setOtherFundId] = useState<TEntityId | undefined>(otherFundId)
+    const isEditMode = !!otherFundId
 
     const [defaultMemberProfile, setDefaultMemberProfile] = useState<
         IMemberProfile | undefined
@@ -93,8 +92,8 @@ const JournalVoucherCreateUpdateForm = ({
 
     const { setSelectedMember } = useMemberPickerStore()
 
-    const form = useForm<TJournalVoucherFormValues>({
-        resolver: standardSchemaResolver(JournalVoucherSchema),
+    const form = useForm<TOtherFundFormValues>({
+        resolver: standardSchemaResolver(OtherFundSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
@@ -107,7 +106,7 @@ const JournalVoucherCreateUpdateForm = ({
 
     useEffect(() => {
         if (isEditMode) return
-        form.setValue('journal_voucher_entries', [
+        form.setValue('other_fund_entries', [
             {
                 account_id: '',
             },
@@ -115,18 +114,18 @@ const JournalVoucherCreateUpdateForm = ({
     }, [isEditMode, mode, form])
 
     const {
-        mutate: createUpdateJournalVoucher,
+        mutate: createUpdateOtherFund,
         isPending: isCreating,
         error: createError,
         reset: resetCreate,
-    } = useCreateUpdateJournalVoucher({
+    } = useCreateUpdateOtherFund({
         options: {
             ...withToastCallbacks({
-                textSuccess: 'Journal Voucher Created',
+                textSuccess: 'Other Fund Created',
                 onSuccess: (data) => {
                     form.reset(data)
                     formProps.onSuccess?.(data)
-                    setJournalVoucherId(data.id)
+                    setOtherFundId(data.id)
                 },
                 onError: formProps.onError,
             }),
@@ -134,7 +133,7 @@ const JournalVoucherCreateUpdateForm = ({
     })
 
     const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TJournalVoucherFormValues>({
+        useFormHelper<TOtherFundFormValues>({
             form,
             ...formProps,
             autoSave: false,
@@ -146,8 +145,8 @@ const JournalVoucherCreateUpdateForm = ({
             date: new Date(formData.date).toISOString(),
         }
 
-        createUpdateJournalVoucher({
-            journalVoucherId: isEditMode ? journalId : journalVoucherId,
+        createUpdateOtherFund({
+            otherFundId: isEditMode ? otherFundId : otherFundId,
             payload: payload,
         })
     }, handleFocusError)
@@ -267,9 +266,9 @@ const JournalVoucherCreateUpdateForm = ({
             >
                 <fieldset disabled={isPending || formProps.readOnly}>
                     <div className="absolute top-4 right-10 z-10 flex gap-2">
-                        {journalVoucherId && (
-                            <JournalVoucherTagsManagerPopover
-                                journalVoucherId={journalVoucherId}
+                        {otherFundId && (
+                            <OtherFundTagsManagerPopover
+                                otherFundId={otherFundId}
                                 readOnly={isPrinted}
                                 size="sm"
                             />
@@ -587,15 +586,15 @@ const JournalVoucherCreateUpdateForm = ({
                         <FormFieldWrapper
                             className="col-span-1 md:col-span-4 max-h-xs!"
                             control={form.control}
-                            name="journal_voucher_entries"
+                            name="other_fund_entries"
                             render={({ field }) => (
-                                <JournalEntryTable
+                                <OtherFundEntryTable
                                     className="col-span-1 md:col-span-4"
                                     currency={form.watch('currency')}
                                     defaultMemberProfile={defaultMemberProfile}
                                     form={form}
-                                    journalVoucherId={journalVoucherId ?? ''}
                                     mode={mode}
+                                    otherFundId={otherFundId ?? ''}
                                     ref={field.ref}
                                     transactionBatchId={data?.id}
                                 />
@@ -647,7 +646,7 @@ const JournalVoucherCreateUpdateForm = ({
                             <kbd className="text-xs">
                                 {isEditMode ? 'Update' : 'Create'}
                             </kbd>
-                            <CommandShortcut className="bg-secondary text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-primary">
+                            <CommandShortcut className="bg-secondary text-accent-foreground/50 text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm ">
                                 Ctrl + Enter
                             </CommandShortcut>
                         </div>
@@ -658,16 +657,16 @@ const JournalVoucherCreateUpdateForm = ({
     )
 }
 
-export const JournalVoucherCreateUpdateFormModal = ({
+export const OtherFundCreateUpdateFormModal = ({
     formProps,
     className,
     ...props
 }: IModalProps & {
-    formProps?: Omit<IJournalVoucherCreateUpdateFormProps, 'className'>
+    formProps?: Omit<IOtherFundCreateUpdateFormProps, 'className'>
 }) => {
-    const description = formProps?.journalVoucherId
-        ? 'Update the details for this journal voucher.'
-        : 'Fill in the details for a new journal voucher.'
+    const description = formProps?.otherFundId
+        ? 'Update the details for this other fund.'
+        : 'Fill in the details for a new other fund.'
 
     return (
         <Modal
@@ -675,8 +674,7 @@ export const JournalVoucherCreateUpdateFormModal = ({
             title={
                 <div>
                     <p className="font-medium">
-                        <BookIcon className="inline text-primary" /> Journal
-                        Voucher
+                        <BookIcon className="inline text-primary" /> Other Fund
                     </p>
                     <p className="text-xs text-muted-foreground">
                         {description}
@@ -685,7 +683,7 @@ export const JournalVoucherCreateUpdateFormModal = ({
             }
             {...props}
         >
-            <JournalVoucherCreateUpdateForm
+            <OtherFundCreateUpdateForm
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
@@ -696,4 +694,4 @@ export const JournalVoucherCreateUpdateFormModal = ({
     )
 }
 
-export default JournalVoucherCreateUpdateFormModal
+export default OtherFundCreateUpdateFormModal

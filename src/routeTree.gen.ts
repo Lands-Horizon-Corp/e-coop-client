@@ -70,6 +70,7 @@ import { Route as OrgOrgnameBranchBranchnameDevDocumentationRouteImport } from '
 import { Route as OrgOrgnameBranchBranchnametransactionsWithdrawRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/withdraw'
 import { Route as OrgOrgnameBranchBranchnametransactionsTransactionsRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/transactions'
 import { Route as OrgOrgnameBranchBranchnametransactionsPaymentRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/payment'
+import { Route as OrgOrgnameBranchBranchnametransactionsOtherFundRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/other-fund'
 import { Route as OrgOrgnameBranchBranchnametransactionsLoanPaymentRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/loan-payment'
 import { Route as OrgOrgnameBranchBranchnametransactionsLoanRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/loan'
 import { Route as OrgOrgnameBranchBranchnametransactionsJournalVoucherRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/journal-voucher'
@@ -460,6 +461,12 @@ const OrgOrgnameBranchBranchnametransactionsPaymentRoute =
   OrgOrgnameBranchBranchnametransactionsPaymentRouteImport.update({
     id: '/(transactions)/payment',
     path: '/payment',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnametransactionsOtherFundRoute =
+  OrgOrgnameBranchBranchnametransactionsOtherFundRouteImport.update({
+    id: '/(transactions)/other-fund',
+    path: '/other-fund',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
 const OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute =
@@ -898,6 +905,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/journal-voucher': typeof OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute
   '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnametransactionsLoanRoute
   '/org/$orgname/branch/$branchname/loan-payment': typeof OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute
+  '/org/$orgname/branch/$branchname/other-fund': typeof OrgOrgnameBranchBranchnametransactionsOtherFundRoute
   '/org/$orgname/branch/$branchname/payment': typeof OrgOrgnameBranchBranchnametransactionsPaymentRoute
   '/org/$orgname/branch/$branchname/transactions': typeof OrgOrgnameBranchBranchnametransactionsTransactionsRoute
   '/org/$orgname/branch/$branchname/withdraw': typeof OrgOrgnameBranchBranchnametransactionsWithdrawRoute
@@ -1008,6 +1016,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/journal-voucher': typeof OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute
   '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnametransactionsLoanRoute
   '/org/$orgname/branch/$branchname/loan-payment': typeof OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute
+  '/org/$orgname/branch/$branchname/other-fund': typeof OrgOrgnameBranchBranchnametransactionsOtherFundRoute
   '/org/$orgname/branch/$branchname/payment': typeof OrgOrgnameBranchBranchnametransactionsPaymentRoute
   '/org/$orgname/branch/$branchname/transactions': typeof OrgOrgnameBranchBranchnametransactionsTransactionsRoute
   '/org/$orgname/branch/$branchname/withdraw': typeof OrgOrgnameBranchBranchnametransactionsWithdrawRoute
@@ -1124,6 +1133,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(transactions)/journal-voucher': typeof OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute
   '/org/$orgname/branch/$branchname/(transactions)/loan': typeof OrgOrgnameBranchBranchnametransactionsLoanRoute
   '/org/$orgname/branch/$branchname/(transactions)/loan-payment': typeof OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute
+  '/org/$orgname/branch/$branchname/(transactions)/other-fund': typeof OrgOrgnameBranchBranchnametransactionsOtherFundRoute
   '/org/$orgname/branch/$branchname/(transactions)/payment': typeof OrgOrgnameBranchBranchnametransactionsPaymentRoute
   '/org/$orgname/branch/$branchname/(transactions)/transactions': typeof OrgOrgnameBranchBranchnametransactionsTransactionsRoute
   '/org/$orgname/branch/$branchname/(transactions)/withdraw': typeof OrgOrgnameBranchBranchnametransactionsWithdrawRoute
@@ -1240,6 +1250,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/journal-voucher'
     | '/org/$orgname/branch/$branchname/loan'
     | '/org/$orgname/branch/$branchname/loan-payment'
+    | '/org/$orgname/branch/$branchname/other-fund'
     | '/org/$orgname/branch/$branchname/payment'
     | '/org/$orgname/branch/$branchname/transactions'
     | '/org/$orgname/branch/$branchname/withdraw'
@@ -1350,6 +1361,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/journal-voucher'
     | '/org/$orgname/branch/$branchname/loan'
     | '/org/$orgname/branch/$branchname/loan-payment'
+    | '/org/$orgname/branch/$branchname/other-fund'
     | '/org/$orgname/branch/$branchname/payment'
     | '/org/$orgname/branch/$branchname/transactions'
     | '/org/$orgname/branch/$branchname/withdraw'
@@ -1465,6 +1477,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(transactions)/journal-voucher'
     | '/org/$orgname/branch/$branchname/(transactions)/loan'
     | '/org/$orgname/branch/$branchname/(transactions)/loan-payment'
+    | '/org/$orgname/branch/$branchname/(transactions)/other-fund'
     | '/org/$orgname/branch/$branchname/(transactions)/payment'
     | '/org/$orgname/branch/$branchname/(transactions)/transactions'
     | '/org/$orgname/branch/$branchname/(transactions)/withdraw'
@@ -1932,6 +1945,13 @@ declare module '@tanstack/react-router' {
       path: '/payment'
       fullPath: '/org/$orgname/branch/$branchname/payment'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnametransactionsPaymentRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(transactions)/other-fund': {
+      id: '/org/$orgname/branch/$branchname/(transactions)/other-fund'
+      path: '/other-fund'
+      fullPath: '/org/$orgname/branch/$branchname/other-fund'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnametransactionsOtherFundRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/(transactions)/loan-payment': {
@@ -2494,6 +2514,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute: typeof OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute
   OrgOrgnameBranchBranchnametransactionsLoanRoute: typeof OrgOrgnameBranchBranchnametransactionsLoanRoute
   OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute: typeof OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute
+  OrgOrgnameBranchBranchnametransactionsOtherFundRoute: typeof OrgOrgnameBranchBranchnametransactionsOtherFundRoute
   OrgOrgnameBranchBranchnametransactionsPaymentRoute: typeof OrgOrgnameBranchBranchnametransactionsPaymentRoute
   OrgOrgnameBranchBranchnametransactionsTransactionsRoute: typeof OrgOrgnameBranchBranchnametransactionsTransactionsRoute
   OrgOrgnameBranchBranchnametransactionsWithdrawRoute: typeof OrgOrgnameBranchBranchnametransactionsWithdrawRoute
@@ -2595,6 +2616,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnametransactionsLoanRoute,
     OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute:
       OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute,
+    OrgOrgnameBranchBranchnametransactionsOtherFundRoute:
+      OrgOrgnameBranchBranchnametransactionsOtherFundRoute,
     OrgOrgnameBranchBranchnametransactionsPaymentRoute:
       OrgOrgnameBranchBranchnametransactionsPaymentRoute,
     OrgOrgnameBranchBranchnametransactionsTransactionsRoute:

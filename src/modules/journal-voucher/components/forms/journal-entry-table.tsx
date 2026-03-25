@@ -370,7 +370,7 @@ export const JournalEntryTable = ({
                     >
                         Add <PlusIcon className="inline" />
                     </Button>
-                    <CommandShortcut className="bg-accent min-w-fit p-1 px-2 text-primary rounded-sm mr-1">
+                    <CommandShortcut className="bg-secondary min-w-fit p-1 px-2 text-primary rounded-sm mr-1">
                         Shift + I
                     </CommandShortcut>
                 </div>

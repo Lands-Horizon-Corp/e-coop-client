@@ -289,6 +289,36 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         supportedActions: ['Read', 'Update'] as TPermissionAction[],
     },
 
+    {
+        resource: 'ApprovalsOtherFund',
+        label: 'Approval Loan',
+        description: 'Allow read for Approval > other funds',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+    {
+        resource: 'ApprovalsOtherFundDraft',
+        label: 'Approval Loan Draft',
+        description: 'Allow read for Approval > other fund > Draft',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+    {
+        resource: 'ApprovalsOtherFundPrinted',
+        label: 'Approval Loan Print',
+        description: 'Allow read/action for Approval > other fund > Print',
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
+    },
+    {
+        resource: 'ApprovalsOtherFundApproved',
+        label: 'Approval Loan Approved',
+        description: 'Allow read/action for Approval > other fund > Approved',
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
+    },
+    {
+        resource: 'ApprovalsOtherFundReleased',
+        label: 'Approval Loan Release',
+        description: 'Allow read/action for Approval > Loan > Released',
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
+    },
     // FOR TRANSACTION/PAYMENT (DEPOSIT, WITHDRAW, PAYMENT)
     {
         resource: 'Transaction',
@@ -809,6 +839,16 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         resource: 'CheckWarehousing',
         label: 'Check Warehousing',
         description: 'Allow delete action for check warehousing',
+        supportedActions: [
+            'Create',
+            'OwnDelete',
+            'Delete',
+        ] as TPermissionAction[],
+    },
+    {
+        resource: 'OtherFund',
+        label: 'Other Fund',
+        description: 'Allow delete action for other funds',
         supportedActions: [
             'Create',
             'OwnDelete',
