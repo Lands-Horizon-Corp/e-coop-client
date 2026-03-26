@@ -1,16 +1,15 @@
-import { GeneratedReportTemplate } from '@/modules/generated-report'
+import {
+    GeneratedReportTemplate,
+    IBaseReportTemplateCheck,
+    IBaseReportTemplateData,
+} from '@/modules/generated-report'
 
-import LT_LRV_A from './templates/lt-lrv-a5.njk?raw'
-import LT_LRV_BANK_BOOK from './templates/lt-lrv-bank-book.njk?raw'
-import LT_LRV_STATEMENT from './templates/lt-lrv-statement.njk?raw'
+import LRV_COMPACT from './templates/lrv-1-compact.njk?raw'
+import LRV_LARGE from './templates/lrv-1-large.njk?raw'
+import LRV_NORMAL from './templates/lrv-1-normal.njk?raw'
 
-export interface ILoanReleaseVoucherTemplate {
-    // Header
-    header_title: string
-    header_address: string
-    tax_number: string
-    report_title: string
-
+export interface ILoanReleaseVoucherTemplate
+    extends IBaseReportTemplateData, IBaseReportTemplateCheck {
     // Info grid
     pay_to: string
     account_number: string
@@ -26,6 +25,7 @@ export interface ILoanReleaseVoucherTemplate {
     // Loan transactions
     loan_transaction_entries: Array<{
         account_title: string
+        description: string
         debit: number | string
         credit: number | string
         is_highlighted?: boolean
@@ -35,10 +35,6 @@ export interface ILoanReleaseVoucherTemplate {
     total_debit: number | string
     total_credit: number | string
     total_amount_in_words: string
-
-    // Check details
-    check_date: string
-    check_number: string
 
     // Signatures
     prepared_by: string
@@ -68,13 +64,29 @@ export const SHARED_LOAN_PREVIEW_DATA: ILoanReleaseVoucherTemplate = {
     loan_transaction_entries: [
         {
             account_title: 'Loans Receivable',
+            description: 'Loan can be recieved',
             debit: 50000,
             credit: '',
             is_highlighted: true,
         },
-        { account_title: 'Service Fee Income', debit: '', credit: 1500 },
-        { account_title: 'Insurance Fund', debit: '', credit: 500 },
-        { account_title: 'Share Capital', debit: '', credit: 2000 },
+        {
+            account_title: 'Service Fee Income',
+            description: 'Service fee',
+            debit: '',
+            credit: 1500,
+        },
+        {
+            account_title: 'Insurance Fund',
+            description: 'Insurance',
+            debit: '',
+            credit: 500,
+        },
+        {
+            account_title: 'Share Capital',
+            description: 'Capital',
+            debit: '',
+            credit: 2000,
+        },
     ],
 
     total_debit: 50000,
@@ -94,30 +106,30 @@ export const SHARED_LOAN_PREVIEW_DATA: ILoanReleaseVoucherTemplate = {
 export const LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES: GeneratedReportTemplate<ILoanReleaseVoucherTemplate>[] =
     [
         {
-            id: 'lt-lrv-a5',
-            template_name: 'Loan Voucher Release A5',
+            id: 'lrv-1-normal',
+            template_name: 'Loan Voucher Release Normal',
             model: 'LoanTransaction',
-            template: LT_LRV_A,
+            template: LRV_NORMAL,
             default_unit: 'in',
             width: '8.5in',
             height: '11in',
             preview_data: SHARED_LOAN_PREVIEW_DATA,
         },
         {
-            id: 'lt-lrv-bank-book',
-            template_name: 'Loan Voucher Release Bank Book',
+            id: 'lrv-1-compact',
+            template_name: 'Loan Voucher Release Compact',
             model: 'LoanTransaction',
-            template: LT_LRV_BANK_BOOK,
+            template: LRV_COMPACT,
             default_unit: 'mm',
             width: '125mm',
             height: '176mm',
             preview_data: SHARED_LOAN_PREVIEW_DATA,
         },
         {
-            id: 'lt-lrv-statement',
-            template_name: 'Loan Voucher Release Statement',
+            id: 'lrv-1-large',
+            template_name: 'Loan Voucher Release Large',
             model: 'LoanTransaction',
-            template: LT_LRV_STATEMENT,
+            template: LRV_LARGE,
             default_unit: 'in',
             width: '8.5in',
             height: '11in',

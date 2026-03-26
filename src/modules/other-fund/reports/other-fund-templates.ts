@@ -4,10 +4,9 @@ import {
     IBaseReportTemplateData,
 } from '@/modules/generated-report'
 
-import OF_A5 from './templates/of-a5.njk?raw'
-
-// import OF_BANKBOOK from './templates/of-bankbook.njk?raw'
-// import OF_STATEMENT from './templates/of-statement.njk?raw'
+import OFV_COMPACT from './templates/ofv-1-compact.njk?raw'
+import OFV_LARGE from './templates/ofv-1-large.njk?raw'
+import OFV_NORMAL from './templates/ofv-1-normal.njk?raw'
 
 export interface IOtherFundPrintTemplate
     extends IBaseReportTemplateData, IBaseReportTemplateCheck {
@@ -16,8 +15,8 @@ export interface IOtherFundPrintTemplate
     tax_number: string
     report_title: string
 
-    member_name: string
-    member_address?: string
+    name: string
+    address?: string
     particulars: string
 
     voucher_no: string
@@ -47,8 +46,8 @@ export const SHARED_OF_PREVIEW_DATA: IOtherFundPrintTemplate = {
     tax_number: '000-549-393-NV',
     report_title: 'OTHER FUND VOUCHER',
 
-    member_name: 'ABAAG, BENITA',
-    member_address: 'Blk 4, Lt 8, #412 Laloma QC',
+    name: 'ABAAG, BENITA',
+    address: 'Blk 4, Lt 8, #412 Laloma QC',
     particulars: 'GROCERY',
 
     voucher_no: '0000000194',
@@ -85,30 +84,30 @@ export const SHARED_OF_PREVIEW_DATA: IOtherFundPrintTemplate = {
 export const OTHER_FUND_PRINT_TEMPLATES: GeneratedReportTemplate<IOtherFundPrintTemplate>[] =
     [
         {
-            id: 'of-a5',
-            template_name: 'Other Fund Voucher A5',
+            id: 'ofv-normal',
+            template_name: 'Other Fund Voucher Normal',
             model: 'OtherFund',
-            template: OF_A5,
+            template: OFV_NORMAL,
             default_unit: 'in',
             width: '8.5in',
             height: '11in',
             preview_data: SHARED_OF_PREVIEW_DATA,
         },
         {
-            id: 'of-legal',
-            template_name: 'Other Fund Voucher Bankbook',
+            id: 'ofv-compact',
+            template_name: 'Other Fund Voucher Compact',
             model: 'OtherFund',
-            template: OF_A5,
+            template: OFV_COMPACT,
             default_unit: 'mm',
             width: '125mm',
             height: '176mm',
             preview_data: SHARED_OF_PREVIEW_DATA,
         },
         {
-            id: 'of-letter',
-            template_name: 'Other Fund Voucher Statement',
+            id: 'ofv-large',
+            template_name: 'Other Fund Voucher Large',
             model: 'OtherFund',
-            template: OF_A5,
+            template: OFV_LARGE,
             default_unit: 'in',
             width: '8.5in',
             height: '11in',

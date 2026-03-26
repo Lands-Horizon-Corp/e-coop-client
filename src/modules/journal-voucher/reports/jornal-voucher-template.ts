@@ -3,23 +3,19 @@ import {
     IBaseReportTemplateData,
 } from '@/modules/generated-report'
 
-import JV_A5 from './templates/jv-a5.njk?raw'
-import JV_BANKBOOK from './templates/jv-bankbook.njk?raw'
-import JV_STATEMENT from './templates/jv-statement.njk?raw'
+import JV_COMPACT from './templates/jv-1-compact.njk?raw'
+import JV_LARGE from './templates/jv-1-large.njk?raw'
+import JV_NORMAL from './templates/jv-1-normal.njk?raw'
 
 export interface IJournalVoucherPrintTemplate extends IBaseReportTemplateData {
-    header_title: string
-    header_address: string
-    tax_number: string
-    report_title: string
-
     name: string
     particulars: string
     voucher_no: string
     entry_date: string
 
-    account_entries: Array<{
+    journal_entries: Array<{
         account_title: string
+        description?: string
         debit: number | string
         credit: number | string
         is_highlighted?: boolean
@@ -28,15 +24,8 @@ export interface IJournalVoucherPrintTemplate extends IBaseReportTemplateData {
     total_debit: number | string
     total_credit: number | string
 
-    status: string
-    count: number
-
     prepared_by: string
     approved_by: string
-
-    user_id: string
-    report_date: string
-    time: string
 }
 
 export const SHARED_JV_PREVIEW_DATA: IJournalVoucherPrintTemplate = {
@@ -50,7 +39,7 @@ export const SHARED_JV_PREVIEW_DATA: IJournalVoucherPrintTemplate = {
     voucher_no: 'JV-2024-001',
     entry_date: '2024-01-15',
 
-    account_entries: [
+    journal_entries: [
         {
             account_title: 'Cash on Hand',
             debit: 5000,
@@ -65,44 +54,39 @@ export const SHARED_JV_PREVIEW_DATA: IJournalVoucherPrintTemplate = {
     total_debit: 5000,
     total_credit: 5200,
 
-    status: 'Approved',
-    count: 1,
+    print_count: 1,
 
     prepared_by: 'Ana Reyes',
     approved_by: 'Luis Gonzales',
-
-    user_id: 'USR-001',
-    report_date: '2024-01-15',
-    time: '10:30 AM',
 }
 
 export const JOURNAL_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<IJournalVoucherPrintTemplate>[] =
     [
         {
-            id: 'jvv-a5',
-            template_name: 'Journal Voucher A5',
+            id: 'jvv-1-normal',
+            template_name: 'Journal Voucher Normal',
             model: 'JournalVoucher',
-            template: JV_A5,
+            template: JV_NORMAL,
             default_unit: 'in',
             width: '8.5in',
             height: '11in',
             preview_data: SHARED_JV_PREVIEW_DATA,
         },
         {
-            id: 'jvv-legal',
-            template_name: 'Journal Voucher Legal',
+            id: 'jvv-1-compact',
+            template_name: 'Journal Voucher Compact',
             model: 'JournalVoucher',
-            template: JV_BANKBOOK,
+            template: JV_COMPACT,
             default_unit: 'mm',
             width: '125mm',
             height: '176mm',
             preview_data: SHARED_JV_PREVIEW_DATA,
         },
         {
-            id: 'jvv-letter',
-            template_name: 'Journal Voucher Letter',
+            id: 'jvv-1-large',
+            template_name: 'Journal Voucher Large',
             model: 'JournalVoucher',
-            template: JV_STATEMENT,
+            template: JV_LARGE,
             default_unit: 'in',
             width: '8.5in',
             height: '11in',

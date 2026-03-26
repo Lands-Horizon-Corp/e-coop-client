@@ -1,10 +1,15 @@
-import { GeneratedReportTemplate } from '@/modules/generated-report'
+import {
+    GeneratedReportTemplate,
+    IBaseReportTemplateCheck,
+    IBaseReportTemplateData,
+} from '@/modules/generated-report'
 
-import CCV_A5 from './templates/ccv-A5.njk?raw'
-import CCV_BANK_BOOK from './templates/ccv-bankbook.njk?raw'
-import CCV_STATEMENT from './templates/ccv-statement.njk?raw'
+import CCV_COMPACT from './templates/ccv-1-compact.njk?raw'
+import CCV_LARGE from './templates/ccv-1-large.njk?raw'
+import CCV_NORMAL from './templates/ccv-1-normal.njk?raw'
 
-export interface ICashCheckVoucherPrintTemplate {
+export interface ICashCheckVoucherPrintTemplate
+    extends IBaseReportTemplateData, IBaseReportTemplateCheck {
     header_title: string
     header_address: string
     tax_number: string
@@ -17,14 +22,12 @@ export interface ICashCheckVoucherPrintTemplate {
     entry_date: string
     date: string
 
-    account_entries: Array<{
+    cash_check_voucher_entries: Array<{
         account_title: string
+        description?: string
         debit: number | string
         credit: number | string
     }>
-
-    cash_on_hand_total_debit?: number | string
-    cash_on_hand_total_credit?: number | string
 
     total_debit: number | string
     total_credit: number | string
@@ -54,15 +57,12 @@ export const SHARED_CASH_CHECK_PRINT_PREVIEW_DATA: ICashCheckVoucherPrintTemplat
         entry_date: '2024-01-15',
         date: '2024-01-15',
 
-        account_entries: [
+        cash_check_voucher_entries: [
             { account_title: 'Loans Receivable', debit: 50000, credit: '' },
             { account_title: 'Service Fee Income', debit: '', credit: 1500 },
             { account_title: 'Insurance Fund', debit: '', credit: 500 },
             { account_title: 'Share Capital', debit: '', credit: 2000 },
         ],
-
-        cash_on_hand_total_debit: 50000,
-        cash_on_hand_total_credit: 46000,
 
         total_debit: 50000,
         total_credit: 50000,
@@ -84,7 +84,7 @@ export const CASH_CHECK_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<ICashCh
             id: 'ccv-a5',
             template_name: 'Cash Check Voucher A5',
             model: 'CashCheckVoucher',
-            template: CCV_A5,
+            template: CCV_NORMAL,
             default_unit: 'in',
             width: '8.5in',
             height: '11in',
@@ -94,7 +94,7 @@ export const CASH_CHECK_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<ICashCh
             id: 'ccv-bank-book',
             template_name: 'Cash Check Voucher Bank Book',
             model: 'CashCheckVoucher',
-            template: CCV_BANK_BOOK,
+            template: CCV_COMPACT,
             default_unit: 'mm',
             width: '125mm',
             height: '176mm',
@@ -104,7 +104,7 @@ export const CASH_CHECK_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<ICashCh
             id: 'ccv-statement',
             template_name: 'Cash Check Voucher Statement',
             model: 'CashCheckVoucher',
-            template: CCV_STATEMENT,
+            template: CCV_LARGE,
             default_unit: 'in',
             width: '8.5in',
             height: '11in',

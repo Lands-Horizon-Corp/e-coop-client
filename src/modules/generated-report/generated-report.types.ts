@@ -156,6 +156,6 @@ export interface IBaseReportTemplateData {
 }
 
 export interface IBaseReportTemplateCheck {
-    check_number?: number
-    check_date?: number
+    check_number?: string
+    check_date?: string
 }

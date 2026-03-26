@@ -20,8 +20,6 @@ export interface ILoanReleaseVoucher {
         debit: number
         credit: number
     }>
-    cash_on_hand_total_debit: number
-    cash_on_hand_total_credit: number
 
     total_debit: number
     total_credit: number
