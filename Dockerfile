@@ -1,7 +1,6 @@
 # ==========================================
 # Stage 1: Build the Application
 # ==========================================
-# Use the exact Node version you requested
 FROM node:22.18.0-alpine AS builder
 
 # Install the latest version of Bun globally
@@ -19,25 +18,29 @@ RUN bun install --frozen-lockfile
 # Copy the rest of your source code
 COPY . .
 
-# Build the Vite/React project (Outputs to the /dist folder)
-RUN bun run build
+# --- NEW: Create the .env.production file from Environment Variables ---
+# This takes all available build-time environment variables and 
+# writes them into the file Bun is looking for.
+RUN printenv > .env.production
+
+# Build using your specific Bun command
+RUN bun build --env-file=.env.production ./index.ts --outdir ./dist
 
 # ==========================================
 # Stage 2: Serve the Application with Nginx
 # ==========================================
-# Use the lightweight Alpine version of Nginx
 FROM nginx:alpine
 
 # Remove the default Nginx configuration
 RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy your custom SPA Nginx configuration
+# Copy your custom SPA Nginx configuration (make sure nginx.conf is in your root)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy the compiled /dist folder from the builder stage to Nginx's public folder
+# Copy the compiled /dist folder from the builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Expose port 80 (Railway will automatically detect this and route traffic here)
+# Expose port 80
 EXPOSE 80
 
 # Start Nginx
