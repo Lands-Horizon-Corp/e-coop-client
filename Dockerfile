@@ -11,7 +11,7 @@ RUN npm install -g bun
 WORKDIR /app
 
 # Copy package files first to leverage Docker layer caching
-COPY package.json bun.lockb* ./
+COPY package.json bun.lock* ./
 
 # Install dependencies using Bun
 RUN bun install --frozen-lockfile
