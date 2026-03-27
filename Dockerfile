@@ -9,7 +9,7 @@ RUN npm install -g bun
 # Set the working directory
 WORKDIR /app
 
-# Copy package files first to leverage Docker layer caching
+# Copy package files first
 COPY package.json bun.lock* ./
 
 # Install dependencies using Bun
@@ -18,13 +18,14 @@ RUN bun install --frozen-lockfile
 # Copy the rest of your source code
 COPY . .
 
-# --- NEW: Create the .env.production file from Environment Variables ---
-# This takes all available build-time environment variables and 
-# writes them into the file Bun is looking for.
+# --- NEW: Environment Injection ---
+# Vite looks for variables prefixed with VITE_ 
+# This captures your Railway/system variables into the .env file
 RUN printenv > .env.production
 
-# Build using your specific Bun command
-RUN bun build --env-file=.env.production ./index.ts --outdir ./dist
+# Build the Vite project using the script in package.json
+# (This usually runs "vite build" which outputs to /dist)
+RUN bun run build
 
 # ==========================================
 # Stage 2: Serve the Application with Nginx
@@ -34,7 +35,7 @@ FROM nginx:alpine
 # Remove the default Nginx configuration
 RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy your custom SPA Nginx configuration (make sure nginx.conf is in your root)
+# Copy your custom SPA Nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy the compiled /dist folder from the builder stage
