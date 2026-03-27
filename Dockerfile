@@ -13,8 +13,7 @@ RUN bun install --frozen-lockfile
 
 COPY . .
 
-# 👉 THE FIX: Dump all VITE_ environment variables into a .env file BEFORE building
-RUN printenv | grep VITE_ > .env
+RUN printenv | grep '^VITE_' > .env || touch .env
 
 # Build the Vite/React project (Outputs to the /dist folder)
 RUN bun run build
