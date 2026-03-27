@@ -19,6 +19,7 @@ export const useSubmitHotkey = ({
 }: UseSubmitHotkeyOptions) => {
     const submitLockRef = useRef(false)
     const lastSubmitRef = useRef<number | null>(null)
+    const pendingRef = useRef(isPending)
 
     useHotkeys(
         keys,
@@ -27,7 +28,6 @@ export const useSubmitHotkey = ({
 
             if (
                 disabled ||
-                isPending ||
                 submitLockRef.current ||
                 (lastSubmitRef.current !== null &&
                     now - lastSubmitRef.current < throttleMs)
@@ -41,14 +41,22 @@ export const useSubmitHotkey = ({
             lastSubmitRef.current = now
 
             onSubmit()
+
+            setTimeout(() => {
+                if (!pendingRef.current) {
+                    submitLockRef.current = false
+                }
+            }, 100)
         },
         {
             enableOnFormTags: true,
         },
-        [disabled, isPending, throttleMs, onSubmit]
+        [disabled, throttleMs, onSubmit]
     )
 
     useEffect(() => {
+        pendingRef.current = isPending
+
         if (!isPending) {
             submitLockRef.current = false
         }

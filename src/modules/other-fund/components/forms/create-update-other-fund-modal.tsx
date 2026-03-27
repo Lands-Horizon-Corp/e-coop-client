@@ -45,6 +45,7 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 import { useModalState } from '@/hooks/use-modal-state'
+import { useSubmitHotkey } from '@/hooks/use-submit-trottle'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -175,17 +176,11 @@ const OtherFundCreateUpdateForm = ({
         handleClearMember()
     })
 
-    useHotkeys(
-        'ctrl + enter',
-        (e) => {
-            e.preventDefault()
-            if (mode !== 'readOnly') {
-                onSubmit()
-            }
-        },
-        { enableOnFormTags: true },
-        []
-    )
+    useSubmitHotkey({
+        onSubmit: onSubmit,
+        isPending,
+        disabled: mode === 'readOnly',
+    })
 
     const isPrinted = !!defaultValues?.printed_date
 
