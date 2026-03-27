@@ -11,8 +11,6 @@ RUN bun install --frozen-lockfile
 
 COPY . .
 
-# Environment Injection
-RUN printenv | grep VITE_ > .env.production
 
 # Build the project (This generates your .output/ and /dist)
 RUN bun run build
