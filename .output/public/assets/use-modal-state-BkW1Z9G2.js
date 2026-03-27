@@ -1,0 +1,1 @@
+import{a as o}from"./rolldown-runtime-zyAuZXZm.js";import{sg as e}from"./react-vendor-Dwbdpj6a.js";var r=o(e());const t=(o=!1)=>{const[e,t]=(0,r.useState)(o);return{open:e,onOpenChange:t,openModal:()=>t(!0),close:()=>t(!1),toggle:()=>t(o=>!o)}};export{t};

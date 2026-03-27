@@ -1,0 +1,74 @@
+# Robots.txt for e-coop-suite | Empowering Cooperatives
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+
+# Allow important pages for SEO
+Allow: /home
+Allow: /about
+Allow: /services
+Allow: /contact
+Allow: /features
+Allow: /pricing
+Allow: /blog
+Allow: /news
+
+# Block sensitive areas (if they exist)
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Disallow: /dashboard/
+Disallow: /user/
+Disallow: /member/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /register/
+Disallow: /auth/
+Disallow: /assets/private/
+Disallow: /temp/
+Disallow: /*.json$
+Disallow: /*.log$
+
+# Allow CSS, JS, and image files for better rendering in search results
+Allow: /assets/
+Allow: *.css
+Allow: *.js
+Allow: *.png
+Allow: *.jpg
+Allow: *.jpeg
+Allow: *.gif
+Allow: *.webp
+Allow: *.svg
+Allow: *.ico
+Allow: *.woff
+Allow: *.woff2
+Allow: *.ttf
+
+# Block duplicate content or query parameters
+Disallow: /*?
+Disallow: /*&
+Disallow: /*utm_*
+Disallow: /*ref=
+Disallow: /*source=
+
+# Special directives for specific bots
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+# Sitemap location
+Sitemap: https://ecoop-suite.com/sitemap.xml
+
+# Additional information
+# Host: https://ecoop-suite.com

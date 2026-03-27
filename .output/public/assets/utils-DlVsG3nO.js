@@ -1,0 +1,1 @@
+import{et as e,nt as s,tt as t}from"./vendor-CITjkupM.js";const r=(r,o)=>{const a=s(o,r),n=t(o,r)-60*a;return{hours:a,minutes:n,seconds:e(o,r)-(3600*a+60*n)}},o=e=>e.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().replace(" ","_");export{o as n,r as t};

@@ -1,0 +1,1 @@
+import{a as o}from"./rolldown-runtime-zyAuZXZm.js";import{sg as r}from"./react-vendor-Dwbdpj6a.js";import{V as e}from"./vendor-CITjkupM.js";var n=o(r());const t=({onEnterView:o,onExitView:r,scrollParent:t,once:s=!1,amount:a="some"}={})=>{const m=(0,n.useRef)(null),i=e(m,{once:s,amount:a,root:t});return(0,n.useEffect)(()=>{i?o?.():r?.()},[i,o,r]),{ref:m,isInView:i}};export{t};

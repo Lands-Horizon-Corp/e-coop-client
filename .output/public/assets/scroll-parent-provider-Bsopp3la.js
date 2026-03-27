@@ -1,0 +1,1 @@
+import{a as r}from"./rolldown-runtime-zyAuZXZm.js";import{sg as t}from"./react-vendor-Dwbdpj6a.js";var o=r(t());const e=(0,o.createContext)(null),n=()=>{const r=(0,o.useContext)(e);if(!r)throw new Error("useScrollContainer must be used within ScrollContext.Provider");return r};export{n,e as t};

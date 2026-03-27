@@ -1,0 +1,1 @@
+import{_o as a}from"./react-vendor-Dwbdpj6a.js";const t=a(a=>({data:null,hasNoTransactionBatch:!1,setData:t=>{a(a=>null!==t?{data:{...a.data,...t},hasNoTransactionBatch:!0}:{data:null,hasNoTransactionBatch:!1})},reset:t=>{a({data:null,hasNoTransactionBatch:!1,...t})}}));export{t};

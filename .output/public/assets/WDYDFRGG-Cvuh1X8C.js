@@ -1,0 +1,1 @@
+import"./react-vendor-Dwbdpj6a.js";import{B as r}from"./vendor-CITjkupM.js";export{r as default};

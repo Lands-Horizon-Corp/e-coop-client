@@ -3,46 +3,45 @@
 # ==========================================
 FROM node:22.18.0-alpine AS builder
 
-# Install the latest version of Bun globally
 RUN npm install -g bun
-
-# Set the working directory
 WORKDIR /app
 
-# Copy package files first
 COPY package.json bun.lock* ./
-
-# Install dependencies using Bun
 RUN bun install --frozen-lockfile
 
-# Copy the rest of your source code
 COPY . .
 
-# --- NEW: Environment Injection ---
-# Vite looks for variables prefixed with VITE_ 
-# This captures your Railway/system variables into the .env file
-RUN printenv > .env.production
+# Environment Injection
+RUN printenv | grep VITE_ > .env.production
 
-# Build the Vite project using the script in package.json
-# (This usually runs "vite build" which outputs to /dist)
+# Build the project (This generates your .output/ and /dist)
 RUN bun run build
 
 # ==========================================
-# Stage 2: Serve the Application with Nginx
+# Stage 2: Runtime (Bun + Nginx)
 # ==========================================
-FROM nginx:alpine
+FROM node:22.18.0-alpine
 
-# Remove the default Nginx configuration
-RUN rm /etc/nginx/conf.d/default.conf
+# Install Bun and Nginx
+RUN npm install -g bun && apk add --no-cache nginx
 
-# Copy your custom SPA Nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /app
 
-# Copy the compiled /dist folder from the builder stage
+# Copy built files and dependencies needed for 'bun run start'
+COPY --from=builder /app/.output ./.output
 COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
 
-# Expose port 80
+# Setup Nginx configuration
+# In Alpine, the default config path is usually /etc/nginx/http.d/
+RUN mkdir -p /run/nginx
+COPY nginx.conf /etc/nginx/http.d/default.conf
+
+# Expose Nginx's external port
 EXPOSE 80
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# The "Magic" Command:
+# 1. Starts 'bun run start' (defaulting to port 3000) in the background (&)
+# 2. Starts Nginx in the foreground to keep the container alive
+CMD ["sh", "-c", "bun run start & nginx -g 'daemon off;'"]

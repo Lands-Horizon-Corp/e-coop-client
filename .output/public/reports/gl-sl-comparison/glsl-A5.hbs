@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GL vs SL Comparison Report - A5</title>
+<style>
+    @page {
+        margin: 0;
+        size: A5;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html, body {
+        width: 148mm;
+        height: 210mm;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: #f9fafb;
+        padding: 0.3in;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .glsl-container {
+        /* Smaller font sizes for A5 */
+        --fs-xs: 7px;
+        --fs-sm: 8px;
+        --fs-base: 9px;
+        --fs-lg: 11px;
+        --fs-xl: 13px;
+        --fs-2xl: 14px;
+        --primary: #008000;
+
+        width: 148mm;
+        height: 210mm;
+        padding: 0.3in;
+        background: white;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        color: #111827;
+        font-size: var(--fs-base);
+        line-height: 1.4;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+    }
+
+    /* Header */
+    .glsl-header {
+        text-align: center;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .glsl-header-title {
+        font-size: var(--fs-xl);
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.2rem;
+        letter-spacing: -0.025em;
+        line-height: 1.2;
+    }
+
+    .glsl-header-address {
+        font-size: var(--fs-sm);
+        color: #6b7280;
+        margin: 0.15rem 0;
+        line-height: 1.3;
+    }
+
+    .glsl-header-tin {
+        font-size: var(--fs-xs);
+        color: #9ca3af;
+        margin-top: 0.1rem;
+    }
+
+    .glsl-report-title {
+        font-size: var(--fs-lg);
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-top: 0.3rem;
+        letter-spacing: 0.03em;
+    }
+
+    /* Period Info */
+    .glsl-period-info {
+        text-align: center;
+        font-size: var(--fs-sm);
+        color: #6b7280;
+        margin-bottom: 0.6rem;
+        padding: 0.3rem;
+    }
+
+    /* Table */
+    .glsl-table-header {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 50px;
+        gap: 0.3rem;
+        padding: 0.3rem 0.5rem;
+        font-size: var(--fs-xs);
+        font-weight: 700;
+        background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+        color: #374151;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        border-bottom: 1.5px solid #e5e7eb;
+    }
+
+    .glsl-table-header > div {
+        display: flex;
+        align-items: center;
+    }
+
+    .glsl-table-header > div:not(:first-child) {
+        justify-content: flex-end;
+    }
+
+    .glsl-entry-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 50px;
+        gap: 0.3rem;
+        padding: 0.35rem 0.5rem;
+        font-size: var(--fs-sm);
+        border-bottom: 0.5px solid #f3f4f6;
+    }
+
+    .glsl-entry-row:hover {
+        background: #f9fafb;
+    }
+
+    .glsl-account-title {
+        color: #1f2937;
+    }
+
+    .glsl-amount {
+        text-align: right;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+        font-variant-numeric: tabular-nums;
+        color: #1f2937;
+    }
+
+    .glsl-variance {
+        text-align: right;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+        font-variant-numeric: tabular-nums;
+        font-weight: 600;
+        font-size: var(--fs-xs);
+    }
+
+    .glsl-variance.positive {
+        color: #dc2626;
+    }
+
+    .glsl-variance.negative {
+        color: #059669;
+    }
+
+    .glsl-variance.zero {
+        color: #6b7280;
+    }
+
+    /* Summary Note */
+    .glsl-summary {
+        margin-top: 0.8rem;
+        padding: 0.4rem;
+        background: #fffbeb;
+        border-left: 2px solid #f59e0b;
+        font-size: var(--fs-xs);
+        color: #92400e;
+        line-height: 1.3;
+    }
+
+    .glsl-summary-title {
+        font-weight: 700;
+        margin-bottom: 0.2rem;
+    }
+
+    /* Signatures */
+    .glsl-signature-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        margin-top: 0.8rem;
+        padding: 0.4rem;
+        border-radius: 0.25rem;
+    }
+
+    .glsl-signature-block {
+        text-align: center;
+    }
+
+    .glsl-signature-label {
+        font-size: var(--fs-xs);
+        color: #6b7280;
+        margin-bottom: 0.3rem;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        font-weight: 600;
+    }
+
+    .glsl-signature-line {
+        border-bottom: 0.5px solid #424e6167;
+        padding: 0.3rem 0;
+        min-height: 0.6rem;
+        font-weight: 600;
+        font-size: var(--fs-xs);
+        margin-top: 0.3rem;
+    }
+
+    .glsl-footer {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0.2rem;
+        font-size: var(--fs-xs);
+        color: #6b7280;
+        border-top: 0.5px solid #e5e7eb;
+        padding-top: 0.2rem;
+        margin-top: auto;
+        width: 100%;
+    }
+
+    .glsl-footer-left {
+        text-align: left;
+    }
+
+    .glsl-footer-center {
+        text-align: center;
+    }
+
+    .glsl-footer-right {
+        text-align: right;
+    }
+
+    /* Print optimization */
+    @media print {
+        html, body {
+            width: 148mm;
+            height: 210mm;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: white;
+            padding: 0;
+        }
+
+        .glsl-container {
+            padding: 0.3in;
+            box-shadow: none;
+        }
+
+        * {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="glsl-container">
+        <header class="glsl-header">
+            <h1 class="glsl-header-title">{{header_title}}</h1>
+            <p class="glsl-header-address">{{header_address}}</p>
+            <p class="glsl-header-tin">TIN: {{tax_number}}</p>
+            <h2 class="glsl-report-title">{{report_title}}</h2>
+        </header>
+
+        <div class="glsl-period-info">
+            As of: {{as_of_date}}
+        </div>
+
+        <div class="glsl-table-header">
+            <div>Account Title</div>
+            <div>GL</div>
+            <div>SL</div>
+            <div>Var</div>
+        </div>
+
+        {{#each account_entries}}
+        <div class="glsl-entry-row">
+            <div class="glsl-account-title">{{account_title}}</div>
+            <div class="glsl-amount">{{gl_amount}}</div>
+            <div class="glsl-amount">{{sl_amount}}</div>
+            <div class="glsl-variance {{#if (equals variance 0)}}zero{{else}}{{#if variance}}{{#if (equals variance variance)}}{{#if variance}}positive{{/if}}{{/if}}{{/if}}{{/if}}">
+                {{#if (equals variance 0)}}
+                    -
+                {{else}}
+                    {{variance}}
+                {{/if}}
+            </div>
+        </div>
+        {{/each}}
+
+        <div class="glsl-summary">
+            <div class="glsl-summary-title">Note:</div>
+            <div>Variance = GL - SL. Positive: GL higher. Negative: SL higher.</div>
+        </div>
+
+        <div class="glsl-signature-grid">
+            <div class="glsl-signature-block">
+                <div class="glsl-signature-line">{{prepared_by}}</div>
+                <p class="glsl-signature-label">Prepared by:</p>
+            </div>
+            <div class="glsl-signature-block">
+                <div class="glsl-signature-line">{{check_by}}</div>
+                <p class="glsl-signature-label">Checked by:</p>
+            </div>
+            <div class="glsl-signature-block">
+                <div class="glsl-signature-line">{{approved_by}}</div>
+                <p class="glsl-signature-label">Approved by:</p>
+            </div>
+        </div>
+
+        <div class="glsl-footer">
+            <div class="glsl-footer-left">User: {{user_id}}</div>
+            <div class="glsl-footer-center">{{report_date}} {{time}}</div>
+            <div class="glsl-footer-right">Page {{page_number}}</div>
+        </div>
+    </div>
+</body>
+</html>

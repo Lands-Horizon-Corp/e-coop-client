@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trial Balance Bankbook</title>
+<style>
+    @page {
+        margin: 0;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html, body {
+        width: 125mm;
+        height: 176mm;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: #f9fafb;
+        padding: 8mm;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .tb-container {
+        /* Fixed font sizes for Bankbook print */
+        --fs-xs: 6px;
+        --fs-sm: 7px;
+        --fs-base: 8px;
+        --fs-lg: 9px;
+        --fs-xl: 11px;
+        --fs-2xl: 13px;
+
+        width: 125mm;
+        height: 176mm;
+        padding: 8mm;
+        background: white;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        color: #111827;
+        font-size: var(--fs-base);
+        line-height: 1.3;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+    }
+
+    /* Header */
+    .tb-header {
+        text-align: center;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.3rem;
+    }
+
+    .tb-header-title {
+        font-size: var(--fs-xl);
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.1rem;
+        letter-spacing: -0.025em;
+        line-height: 1.2;
+    }
+
+    .tb-header-address {
+        font-size: var(--fs-sm);
+        color: #6b7280;
+        margin: 0.1rem 0;
+        line-height: 1.25;
+    }
+
+    .tb-header-tin {
+        font-size: var(--fs-xs);
+        color: #9ca3af;
+        margin-top: 0.05rem;
+    }
+
+    .tb-report-title {
+        font-size: var(--fs-lg);
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-top: 0.25rem;
+        color: #2563eb;
+        letter-spacing: 0.05em;
+    }
+
+    /* Period Info */
+    .tb-period-info {
+        text-align: center;
+        font-size: var(--fs-sm);
+        color: #6b7280;
+        margin-bottom: 0.4rem;
+        padding: 0.25rem;
+        background: #f9fafb;
+        border-radius: 0.2rem;
+        font-weight: 600;
+    }
+
+    /* Table */
+    .tb-table-wrapper {
+        flex: 1;
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 0.4rem;
+        border-radius: 0.2rem;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e5e7eb;
+    }
+
+    .tb-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        font-size: var(--fs-sm);
+    }
+
+    .tb-table thead {
+        background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .tb-table th {
+        text-transform: uppercase;
+        font-size: var(--fs-xs);
+        font-weight: 700;
+        color: #374151;
+        padding: 0.3rem 0.3rem;
+        text-align: left;
+        border-bottom: 2px solid #e5e7eb;
+        letter-spacing: 0.025em;
+    }
+
+    .tb-table th.tb-col-code {
+        width: 15%;
+    }
+
+    .tb-table th.tb-col-title {
+        width: 45%;
+    }
+
+    .tb-table th.tb-col-debit,
+    .tb-table th.tb-col-credit {
+        width: 20%;
+        text-align: right;
+    }
+
+    .tb-table td {
+        font-size: inherit;
+        padding: 0.25rem 0.3rem;
+        border-bottom: 1px solid #f3f4f6;
+        line-height: 1.3;
+    }
+
+    .tb-table td.tb-col-code {
+        text-align: left;
+        color: #6b7280;
+        font-size: var(--fs-xs);
+    }
+
+    .tb-table td.tb-col-title {
+        text-align: left;
+        color: #111827;
+    }
+
+    .tb-table td.tb-col-debit,
+    .tb-table td.tb-col-credit {
+        text-align: right;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+        font-variant-numeric: tabular-nums;
+        color: #111827;
+    }
+
+    .tb-totals-row {
+        background: #f3f4f6;
+        font-weight: 700;
+        color: #111827;
+        font-size: var(--fs-sm);
+        border-top: 2px solid #6b7280;
+    }
+
+    .tb-totals-row td {
+        padding: 0.3rem;
+    }
+
+    /* Signatures */
+    .tb-signature-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.4rem;
+        margin-top: 0.75rem;
+        padding: 0.3rem;
+        border-radius: 0.2rem;
+    }
+
+    .tb-signature-block {
+        text-align: center;
+    }
+
+    .tb-signature-label {
+        font-size: var(--fs-xs);
+        color: #6b7280;
+        margin-bottom: 0.25rem;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        font-weight: 600;
+    }
+
+    .tb-signature-line {
+        border-bottom: 0.5px solid #424e6167;
+        padding: 0.25rem 0;
+        min-height: 0.6rem;
+        font-weight: 600;
+        font-size: var(--fs-sm);
+        margin-top: 0.25rem;
+    }
+
+    /* Footer */
+    .tb-footer {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0.25rem;
+        font-size: var(--fs-xs);
+        color: #6b7280;
+        border-top: 1px solid #e5e7eb;
+        padding-top: 0.3rem;
+        margin-top: auto;
+    }
+
+    .tb-footer-left {
+        text-align: left;
+    }
+
+    .tb-footer-center {
+        text-align: center;
+    }
+
+    .tb-footer-right {
+        text-align: right;
+    }
+
+    /* Print optimization */
+    @media print {
+        html, body {
+            width: 125mm;
+            height: 176mm;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: white;
+            padding: 0;
+        }
+
+        .tb-container {
+            padding: 8mm;
+            box-shadow: none;
+        }
+
+        .tb-table-wrapper {
+            box-shadow: none;
+        }
+
+        * {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="tb-container">
+        <header class="tb-header">
+            <h1 class="tb-header-title">{{header_title}}</h1>
+            <p class="tb-header-address">{{header_address}}</p>
+            <p class="tb-header-tin">TIN: {{tax_number}}</p>
+            <h2 class="tb-report-title">{{report_title}}</h2>
+        </header>
+
+        <div class="tb-period-info">
+            For the Period: {{date_from}} to {{date_to}}
+        </div>
+
+        <div class="tb-table-wrapper">
+            <table class="tb-table">
+                <thead>
+                    <tr>
+                        <th class="tb-col-code">Account Code</th>
+                        <th class="tb-col-title">Account Title</th>
+                        <th class="tb-col-debit">Debit</th>
+                        <th class="tb-col-credit">Credit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each account_entries}}
+                    <tr>
+                        <td class="tb-col-code">{{account_code}}</td>
+                        <td class="tb-col-title">{{account_title}}</td>
+                        <td class="tb-col-debit">{{debit}}</td>
+                        <td class="tb-col-credit">{{credit}}</td>
+                    </tr>
+                    {{/each}}
+                    <tr class="tb-totals-row">
+                        <td class="tb-col-code"></td>
+                        <td class="tb-col-title">TOTAL</td>
+                        <td class="tb-col-debit">{{total_debit}}</td>
+                        <td class="tb-col-credit">{{total_credit}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tb-signature-grid">
+            <div class="tb-signature-block">
+                <p class="tb-signature-label">Prepared by:</p>
+                <div class="tb-signature-line">{{prepared_by}}</div>
+            </div>
+            <div class="tb-signature-block">
+                <p class="tb-signature-label">Certified by:</p>
+                <div class="tb-signature-line">{{certified_by}}</div>
+            </div>
+        </div>
+
+        <div class="tb-footer">
+            <div class="tb-footer-left">User: {{user_id}}</div>
+            <div class="tb-footer-center">{{report_date}}</div>
+            <div class="tb-footer-right">{{time}}</div>
+        </div>
+    </div>
+</body>
+</html>

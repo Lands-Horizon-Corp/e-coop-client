@@ -12,6 +12,7 @@ import createSitemap from 'vite-plugin-sitemap';
 import { VitePWA } from 'vite-plugin-pwa';
 import fs from 'node:fs';
 import path from 'node:path';
+import { nitro } from "nitro/vite"; 
 
 import { createRequire } from 'node:module';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
@@ -46,6 +47,7 @@ viteStaticCopy({
    }),
     UnheadVite(),
     tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    nitro({ preset: "bun" }), 
     react(),
     tsconfigPaths(),
     tailwindcss(),

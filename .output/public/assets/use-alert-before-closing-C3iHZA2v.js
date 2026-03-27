@@ -1,0 +1,1 @@
+import{a as e}from"./rolldown-runtime-zyAuZXZm.js";import{sg as r}from"./react-vendor-Dwbdpj6a.js";var n=e(r());function o(e=!0){(0,n.useEffect)(()=>{if(!e)return;const r=e=>{e.preventDefault()};return window.addEventListener("beforeunload",r),()=>{window.removeEventListener("beforeunload",r)}},[e])}export{o as t};
