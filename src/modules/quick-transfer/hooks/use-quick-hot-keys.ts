@@ -49,7 +49,7 @@ export const useQuickTransferHotKeys = ({
 
     // CTRL + ENTER — Submit
     useHotkeys(
-        'ctrl + Enter',
+        'Enter',
         (e) => {
             e.preventDefault()
             if (!selectedMember) {

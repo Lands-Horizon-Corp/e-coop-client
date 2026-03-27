@@ -87,7 +87,7 @@ const PaymentWithTransactionForm = ({
     } = useTransactionContext()
 
     const { onOpenReverseRequestAction } = modalTransactionReverseState
-    const { onOpen } = usePaymentOnSuccessStore()
+    const { onOpen, open } = usePaymentOnSuccessStore()
     const { data: currentTransactionBatch, hasNoTransactionBatch } =
         useTransactionBatchStore()
 
@@ -148,16 +148,13 @@ const PaymentWithTransactionForm = ({
                     mode: 'payment',
                 })
                 othersAccordionState.onOpenChange(false)
-                transactionForm.reset(
-                    {
-                        general_ledger_id: generalLedger.id,
-                        reference_number: generalLedger.reference_number,
-                        general_ledger: generalLedger,
-                    },
-                    {
-                        keepDirtyValues: false,
-                    }
+
+                transactionForm.setValue('general_ledger', generalLedger)
+                transactionForm.setValue(
+                    'reference_number',
+                    generalLedger.reference_number
                 )
+                transactionForm.setValue('general_ledger_id', generalLedger.id)
                 form.setFocus('amount')
             },
         },
@@ -238,18 +235,27 @@ const PaymentWithTransactionForm = ({
     const isDisabled = (field: Path<TPaymentWithTransactionFormValues>) =>
         readOnly || disabledFields?.includes(field) || isPending || false
 
-    const isFormIsDirty = form.formState.isDirty
-
     useHotkeys(
-        'control+Enter',
+        'Enter',
         (e) => {
             e.preventDefault()
-            if (readOnly || isPending || !isFormIsDirty) return
             handleSubmit()
         },
         {
             enableOnFormTags: true,
-        }
+            preventDefault: true,
+            enabled:
+                !open &&
+                !accountPicker.open &&
+                !loanTransactionState.open &&
+                !accountPayment.open,
+        },
+        [
+            open,
+            accountPicker.open,
+            loanTransactionState.open,
+            accountPayment.open,
+        ]
     )
 
     useHotkeys(

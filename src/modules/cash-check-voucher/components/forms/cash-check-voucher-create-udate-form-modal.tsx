@@ -53,6 +53,7 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 import { useModalState } from '@/hooks/use-modal-state'
+import { useSubmitHotkey } from '@/hooks/use-submit-trottle'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -172,17 +173,12 @@ const CashCheckVoucherCreateUpdateForm = ({
         modalState.onOpenChange(true)
     })
 
-    useHotkeys(
-        'ctrl+enter',
-        (e) => {
-            e.preventDefault()
-            if (mode !== 'readOnly') {
-                onSubmit()
-            }
-        },
-        { enableOnFormTags: true },
-        [mode, onSubmit]
-    )
+    useSubmitHotkey({
+        onSubmit: onSubmit,
+        isPending,
+        disabled: mode === 'readOnly',
+    })
+
     useHotkeys(
         'alt+1',
         (e) => {
@@ -684,7 +680,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                             <kbd className="text-xs">
                                 {isEditMode ? 'Update' : 'Create'}
                             </kbd>
-                            <CommandShortcut className="bg-accent text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-primary">
+                            <CommandShortcut className=" text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-secondary">
                                 Ctrl + Enter
                             </CommandShortcut>
                         </div>

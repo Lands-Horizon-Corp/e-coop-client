@@ -357,7 +357,6 @@ export const CashCheckJournalEntryTable = ({
     return (
         <div className={cn('', className)}>
             <div className="w-full flex justify-end items-center">
-                {/* <h1 className="text-lg font-semibold">Cash Check Entries</h1> */}
                 <div className="flex py-2 items-center space-x-2">
                     <Button
                         aria-label="Add new cash check entry"
@@ -372,7 +371,7 @@ export const CashCheckJournalEntryTable = ({
                     >
                         Add <PlusIcon className="inline" />
                     </Button>
-                    <CommandShortcut className="bg-accent min-w-fit p-1 px-2 text-primary rounded-sm mr-1">
+                    <CommandShortcut className="bg-accent min-w-fit p-1 px-2 text-secondary rounded-sm mr-1">
                         Shift + I
                     </CommandShortcut>
                 </div>

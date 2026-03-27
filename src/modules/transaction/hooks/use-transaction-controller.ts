@@ -181,7 +181,6 @@ export const useTransactionController = ({
         history: useModalState(),
     }
 
-    //      2Return API
     return {
         ...modals,
         ...transactionReverse,

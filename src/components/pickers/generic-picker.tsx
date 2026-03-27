@@ -73,6 +73,11 @@ const GenericPicker = <T extends { id: TEntityId }>({
         >
             <Command
                 className={cn('bg-none', commandClassName)}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        e.stopPropagation()
+                    }
+                }}
                 shouldFilter={false}
             >
                 {customSearchComponent ? (
@@ -91,7 +96,14 @@ const GenericPicker = <T extends { id: TEntityId }>({
                         {otherSearchInputChild}
                     </div>
                 )}
-                <CommandList className="ecoop-scroll max-h-[300px] min-h-[400px] px-1">
+                <CommandList
+                    className="ecoop-scroll max-h-[300px] min-h-[400px] px-1"
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.stopPropagation()
+                        }
+                    }}
+                >
                     <CommandEmpty className="text-sm text-foreground/50">
                         {isLoading ? (
                             <LoadingSpinner className="inline" />
@@ -106,6 +118,11 @@ const GenericPicker = <T extends { id: TEntityId }>({
                                 <CommandItem
                                     className="cursor-pointer rounded-lg"
                                     key={item.id}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.stopPropagation()
+                                        }
+                                    }}
                                     onSelect={() => {
                                         onSelect?.(item)
                                         setModalState(false)

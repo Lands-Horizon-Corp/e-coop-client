@@ -146,6 +146,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             },
             {
                 enableOnFormTags: true,
+                enabled: allowShortcutHotKey,
             },
             [value, disabled, isFetching, allowShortcutHotKey, open]
         )
