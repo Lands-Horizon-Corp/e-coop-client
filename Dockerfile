@@ -13,7 +13,7 @@ COPY . .
 
 
 # Build the project (This generates your .output/ and /dist)
-RUN bun run build
+RUN bun --bun vite build
 
 # ==========================================
 # Stage 2: Runtime (Bun + Nginx)
