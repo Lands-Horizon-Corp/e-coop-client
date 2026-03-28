@@ -37,7 +37,7 @@ const pwaAssetManifest = () => ({
 
 export default defineConfig({
   plugins: [
-viteStaticCopy({
+  viteStaticCopy({
      targets: [
        {
          src: cMapsDir,
@@ -51,7 +51,7 @@ viteStaticCopy({
     react(),
     tsconfigPaths(),
     tailwindcss(),
-    visualizer({
+    !visualizer({
       filename: "bundle-analysis.html",
       template: "treemap",
       open: true,
