@@ -11,8 +11,7 @@ RUN bun install --frozen-lockfile
 
 COPY . .
 
-
-# Build the project (This generates your .output/ and /dist)
+# Build the project (This generates .output/public based on your vite.config.ts)
 RUN bun --bun vite build
 
 # ==========================================
@@ -25,21 +24,23 @@ RUN npm install -g bun && apk add --no-cache nginx
 
 WORKDIR /app
 
-# Copy built files and dependencies needed for 'bun run start'
+# 1. Copy the entire Nitro output (Contains the server and the public files)
 COPY --from=builder /app/.output ./.output
-COPY --from=builder /app/dist /usr/share/nginx/html
+
+# 2. FIX: Copy from .output/public instead of /app/dist
+COPY --from=builder /app/.output/public /usr/share/nginx/html
+
+# 3. Copy other necessary files
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
 
 # Setup Nginx configuration
-# In Alpine, the default config path is usually /etc/nginx/http.d/
 RUN mkdir -p /run/nginx
+# Note: Ensure nginx.conf is in the same directory as your Dockerfile
 COPY nginx.conf /etc/nginx/http.d/default.conf
 
 # Expose Nginx's external port
 EXPOSE 80
 
-# The "Magic" Command:
-# 1. Starts 'bun run start' (defaulting to port 3000) in the background (&)
-# 2. Starts Nginx in the foreground to keep the container alive
+# Start 'bun run start' (Nitro server) and Nginx
 CMD ["sh", "-c", "bun run start & nginx -g 'daemon off;'"]
