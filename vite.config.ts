@@ -88,12 +88,8 @@ export default defineConfig({
       }
     }),
     pwaAssetManifest(),
-    
-    // THE FIX: Move compression to the end and refine the target
+  
     compression({
-      // Only compress bundled assets (js, css) and hashed assets in the assets folder
-      // This prevents the plugin from looking for unhashed static SVGs in the public folder
-      // that haven't been copied to .output/public yet.
       include: [/\.(js|css|html)$/i, /assets\/.*\.svg$/i], 
       exclude: [/\.(map)$/i, 'manifest.json', 'pwa-assets.json'],
       deleteOriginalAssets: false,

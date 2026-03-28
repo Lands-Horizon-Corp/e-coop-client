@@ -12,7 +12,7 @@ RUN bun install --frozen-lockfile
 COPY . .
 
 # Build the project
-RUN bun --bun vite build
+RUN printenv > .env && bun run build
 
 # ==========================================
 # Stage 2: Runtime (Bun only)
@@ -29,6 +29,7 @@ COPY --from=builder /app/.output ./.output
 
 # Expose the application port
 EXPOSE 3000
+EXPOSE 8080
 
 # Start the Nitro server using Bun
-CMD ["bun", ".output/server/index.mjs"]
+CMD ["bun", "run", "start"]
