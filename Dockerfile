@@ -11,7 +11,7 @@ RUN bun install --frozen-lockfile
 
 COPY . .
 
-# Build the project (This generates .output/public based on your vite.config.ts)
+# Build the project (This generates .output/ based on your vite.config.ts)
 RUN bun --bun vite build
 
 # ==========================================
@@ -24,23 +24,29 @@ RUN npm install -g bun && apk add --no-cache nginx
 
 WORKDIR /app
 
-# 1. Copy the entire Nitro output (Contains the server and the public files)
+# Set the port for Nitro/Bun to match your Nginx proxy_pass (3000)
+ENV PORT=3000
+
+# 1. Copy the Nitro server output
 COPY --from=builder /app/.output ./.output
 
-# 2. FIX: Copy from .output/public instead of /app/dist
+# 2. Copy the static files for Nginx to serve directly
 COPY --from=builder /app/.output/public /usr/share/nginx/html
 
-# 3. Copy other necessary files
+# 3. Copy dependencies and package info
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
 
-# Setup Nginx configuration
+# 4. FIX: Overwrite the MAIN nginx.conf
+# Your config has 'worker_processes' and 'http' blocks, so it MUST 
+# replace the root config, not be placed in http.d/
 RUN mkdir -p /run/nginx
-# Note: Ensure nginx.conf is in the same directory as your Dockerfile
-COPY nginx.conf /etc/nginx/http.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expose Nginx's external port
 EXPOSE 80
 
-# Start 'bun run start' (Nitro server) and Nginx
+# The CMD:
+# 1. Starts 'bun run start' (Nitro) in the background
+# 2. Starts Nginx in the foreground
 CMD ["sh", "-c", "bun run start & nginx -g 'daemon off;'"]
