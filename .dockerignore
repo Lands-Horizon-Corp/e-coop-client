@@ -1,4 +1,7 @@
+# .dockerignore
 node_modules
-dist
 .git
+.output
+.nuxt
+dist
 .env
