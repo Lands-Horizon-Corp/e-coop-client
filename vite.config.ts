@@ -76,7 +76,9 @@ export default defineConfig({
       process: true,
     }),
     createSitemap({
-      hostname: 'https://e-coop-client-development.up.railway.app'
+      hostname: 'e-coop-client.site',
+      outDir: '.output/public',
+      robots: [{ userAgent: '*', allow: '/' }] 
     }),
     pwaAssetManifest(),
     VitePWA({
