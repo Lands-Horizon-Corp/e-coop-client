@@ -1,7 +1,8 @@
-# .dockerignore
 node_modules
 .git
-.output
-.nuxt
+.gitignore
 dist
-.env
+.output
+*.log
+docker-compose.yml
+Dockerfile

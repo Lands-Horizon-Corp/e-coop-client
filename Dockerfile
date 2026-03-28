@@ -1,49 +1,49 @@
 # ==========================================
-# Stage 1: Build the Application
+# Stage 1: Build
 # ==========================================
-FROM node:22-bookworm-slim AS builder
+FROM oven/bun:1.1-slim AS builder
 
-# Install Bun
-RUN npm install -g bun
 WORKDIR /app
 
-# Copy dependencies first for caching
+# 1. Copy lockfiles first to leverage Docker caching
 COPY package.json bun.lock* ./
 RUN bun install --frozen-lockfile
 
-# Copy the rest of the code (Make sure .dockerignore is set!)
+# 2. Copy the rest of the source
 COPY . .
 
-# Build the project
+# 3. Run the build (Creates the .output folder)
 RUN bun run build
 
 # ==========================================
-# Stage 2: Runtime (Bun + Nginx)
+# Stage 2: Runtime
 # ==========================================
-FROM node:22-bookworm-slim
+FROM oven/bun:1.1-slim
 
-# Install Bun and Nginx on Debian
-RUN npm install -g bun && \
-    apt-get update && \
-    apt-get install -y nginx && \
+# Install Nginx
+RUN apt-get update && apt-get install -y nginx && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copy built files and dependencies needed for 'bun run start'
+# 4. Copy the Server build (for Bun)
 COPY --from=builder /app/.output ./.output
-COPY --from=builder /app/dist /usr/share/nginx/html
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/node_modules ./node_modules
 
-# Setup Nginx configuration
+# 5. Copy the Static build (for Nginx)
+# Nitro usually places static assets in .output/public
+COPY --from=builder /app/.output/public /usr/share/nginx/html
+
+# 6. Copy package info
+COPY --from=builder /app/package.json ./package.json
+
+# 7. Nginx Setup
 RUN mkdir -p /run/nginx
-# FIX: Because your config includes the `http {}` block, 
-# it MUST replace the master nginx.conf, not sit in conf.d/
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose Nginx's external port
+# 8. Set permissions so Nginx can read the files
+RUN chown -R www-data:www-data /usr/share/nginx/html
+
 EXPOSE 80
 
-# Starts 'bun run start' and Nginx
+# Start Bun in the background and Nginx in the foreground
 CMD ["sh", "-c", "bun run start & nginx -g 'daemon off;'"]
