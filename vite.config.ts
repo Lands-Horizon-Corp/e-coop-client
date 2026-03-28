@@ -75,7 +75,7 @@ export default defineConfig({
       buffer: true,
       process: true,
     }),
-    createSitemap({
+    !createSitemap({
       hostname: 'e-coop-client.site',
       outDir: '.output/public',
       robots: [{ userAgent: '*', allow: '/' }] 
