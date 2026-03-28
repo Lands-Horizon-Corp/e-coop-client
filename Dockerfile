@@ -1,49 +1,45 @@
 # ==========================================
-# Stage 1: Build
+# Stage 1: Build the Application
 # ==========================================
-FROM oven/bun:1.1-slim AS builder
+FROM node:22.18.0-alpine AS builder
 
+RUN npm install -g bun
 WORKDIR /app
 
-# 1. Copy lockfiles first to leverage Docker caching
 COPY package.json bun.lock* ./
-RUN bun install
+RUN bun install --frozen-lockfile
 
-# 2. Copy the rest of the source
 COPY . .
 
-# 3. Run the build (Creates the .output folder)
+
+# Build the project (This generates your .output/ and /dist)
 RUN bun run build
 
 # ==========================================
-# Stage 2: Runtime
+# Stage 2: Runtime (Bun + Nginx)
 # ==========================================
-FROM oven/bun:1.1-slim
+FROM node:22.18.0-alpine
 
-# Install Nginx
-RUN apt-get update && apt-get install -y nginx && \
-    rm -rf /var/lib/apt/lists/*
+# Install Bun and Nginx
+RUN npm install -g bun && apk add --no-cache nginx
 
 WORKDIR /app
 
-# 4. Copy the Server build (for Bun)
+# Copy built files and dependencies needed for 'bun run start'
 COPY --from=builder /app/.output ./.output
-
-# 5. Copy the Static build (for Nginx)
-# Nitro usually places static assets in .output/public
-COPY --from=builder /app/.output/public /usr/share/nginx/html
-
-# 6. Copy package info
+COPY --from=builder /app/dist /usr/share/nginx/html
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
 
-# 7. Nginx Setup
+# Setup Nginx configuration
+# In Alpine, the default config path is usually /etc/nginx/http.d/
 RUN mkdir -p /run/nginx
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/http.d/default.conf
 
-# 8. Set permissions so Nginx can read the files
-RUN chown -R www-data:www-data /usr/share/nginx/html
-
+# Expose Nginx's external port
 EXPOSE 80
 
-# Start Bun in the background and Nginx in the foreground
+# The "Magic" Command:
+# 1. Starts 'bun run start' (defaulting to port 3000) in the background (&)
+# 2. Starts Nginx in the foreground to keep the container alive
 CMD ["sh", "-c", "bun run start & nginx -g 'daemon off;'"]
