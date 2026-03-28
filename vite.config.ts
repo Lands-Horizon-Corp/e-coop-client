@@ -20,7 +20,6 @@ const require = createRequire(import.meta.url);
 const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
 const cMapsDir = normalizePath(path.join(pdfjsDistPath, 'cmaps'));
 
-// Custom plugin to create an asset manifest for the PWA
 const pwaAssetManifest = () => ({
     name: 'pwa-asset-manifest',
     apply: 'build' as const,
@@ -37,14 +36,14 @@ const pwaAssetManifest = () => ({
 
 export default defineConfig({
   plugins: [
-    // 1. Core Framework & Routing
     tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    nitro({ 
+        preset: "bun",
+    }), 
     react(),
     tsconfigPaths(),
     tailwindcss(),
     UnheadVite(),
-
-    // 2. Static Assets & Polyfills
     viteStaticCopy({
       targets: [{ src: cMapsDir, dest: '' }],
     }),
@@ -52,14 +51,11 @@ export default defineConfig({
       buffer: true,
       process: true,
     }),
-
-    // 3. Nitro - Handles the SSR/Deployment output
-    nitro({ 
-      preset: "bun",
-      output: { dir: '.output', publicDir: '.output/public' } 
-    }), 
-
-    // 4. PWA - Generates manifest and service worker
+    createSitemap({
+      hostname: 'https://e-coop-client.site',
+      outDir: '.output/public',
+      robots: [{ userAgent: '*', allow: '/' }] 
+    }),
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
@@ -71,76 +67,47 @@ export default defineConfig({
           {
             urlPattern: /\.(?:js|css)$/i,
             handler: 'CacheFirst',
-            options: {
-              cacheName: 'static-chunks',
-              expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 30 }
-            }
+            options: { cacheName: 'static-chunks' }
           },
           {
             urlPattern: /\.(?:png|jpg|jpeg|svg|webp|mp4|woff2)$/i,
             handler: 'CacheFirst',
-            options: {
-              cacheName: 'media-assets',
-              expiration: { maxEntries: 150, maxAgeSeconds: 60 * 60 * 24 * 60 }
-            }
-          },
-          {
-            urlPattern: ({ url }) => !url.pathname.includes('.'),
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'pages-cache',
-            }
+            options: { cacheName: 'media-assets' }
           }
         ]
       },
       manifest: {
-        name: 'e-coop-suite | Empowering Cooperatives',
+        name: 'e-coop-suite',
         short_name: 'e-coop-suite',
-        description: 'Secure digital banking platform for Philippine cooperatives.',
         theme_color: '#1f2937',
         display: 'standalone',
-        orientation: 'portrait',
-        scope: '/',
-        start_url: '/',
-        categories: ['finance', 'business', 'productivity'],
-        lang: 'en',
         icons: [
-          { src: '/e-coop-logo-1.webp', sizes: '192x192', type: 'image/webp', purpose: 'any' },
-          { src: '/e-coop-logo-1.webp', sizes: '512x512', type: 'image/webp', purpose: 'any' },
-          { src: '/e-coop-logo-1.webp', sizes: '192x192', type: 'image/webp', purpose: 'maskable' },
-          { src: '/e-coop-logo-1.webp', sizes: '512x512', type: 'image/webp', purpose: 'maskable' }
+          { src: '/e-coop-logo-1.webp', sizes: '192x192', type: 'image/webp' },
+          { src: '/e-coop-logo-1.webp', sizes: '512x512', type: 'image/webp' }
         ],
-      },
-      devOptions: { enabled: false }
-    }),
-
-    // 5. Post-build Utilities
-    createSitemap({
-      hostname: 'https://e-coop-client.site',
-      outDir: '.output/public',
-      robots: [{ userAgent: '*', allow: '/' }] 
+      }
     }),
     pwaAssetManifest(),
-
-    // 6. Finalization (Place Compression LAST to avoid ENOENT errors)
+    
+    // THE FIX: Move compression to the end and refine the target
     compression({
-      include: /\.(js|css|html|svg)$/i, // Removed generic .json to avoid manifest race condition
+      // Only compress bundled assets (js, css) and hashed assets in the assets folder
+      // This prevents the plugin from looking for unhashed static SVGs in the public folder
+      // that haven't been copied to .output/public yet.
+      include: [/\.(js|css|html)$/i, /assets\/.*\.svg$/i], 
       exclude: [/\.(map)$/i, 'manifest.json', 'pwa-assets.json'],
       deleteOriginalAssets: false,
     }),
 
-    // 7. Analysis (Optional)
     visualizer({
       filename: "bundle-analysis.html",
       template: "treemap",
       gzipSize: true,
-      brotliSize: true,
     }) as PluginOption,
-
     {
       name: 'legal-notice',
       renderChunk(code) {
-        return `/** * © 2026 Lands Horizon Corp. All Rights Reserved. */\n${code}`;
+        return `/** © 2026 Lands Horizon Corp. */\n${code}`;
       }
     },
   ],
@@ -159,15 +126,14 @@ export default defineConfig({
       plugins: [rollupNodePolyFill()],
       output: {
         manualChunks(id) {
-          if (id.includes('react') || id.includes('react-dom')) return 'react-vendor';
+          if (id.includes('react')) return 'react-vendor';
           if (id.includes('@tanstack')) return 'tanstack-vendor';
-          if (id.includes('lucide-react') || id.includes('@radix-ui')) return 'ui-vendor';
           if (id.includes('node_modules')) return 'vendor';
         }
       }
     }
   },
   server : {
-    allowedHosts : ['e-coop-client.site']
+    allowedHosts : ['e-coop-client-development.up.railway.app']
   }
 });
