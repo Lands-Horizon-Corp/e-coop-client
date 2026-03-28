@@ -42,6 +42,10 @@ export default defineConfig({
          src: cMapsDir,
          dest: '',
        },
+       { 
+          src: normalizePath(path.join(pdfjsDistPath, 'build/pdf.worker.min.js')), 
+          dest: 'assets' 
+        },
      ],
    }),
     UnheadVite(),
@@ -171,7 +175,7 @@ export default defineConfig({
     outDir: '.output/public',
     emptyOutDir: true,
     sourcemap: false,
-    minify: "terser",
+    minify: "esbuild",
     terserOptions: {
       compress: {
         drop_console: true,
