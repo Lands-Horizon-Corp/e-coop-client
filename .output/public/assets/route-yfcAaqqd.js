@@ -1,1 +1,0 @@
-import{a as r}from"./rolldown-runtime-zyAuZXZm.js";import{Bh as o,xh as s}from"./react-vendor-Dwbdpj6a.js";var a=r(o());function n(){return(0,a.jsx)("div",{className:"w-full",children:(0,a.jsx)(s,{})})}export{n as component};

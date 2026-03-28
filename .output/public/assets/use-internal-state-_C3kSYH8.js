@@ -1,1 +1,0 @@
-import{a as o}from"./rolldown-runtime-zyAuZXZm.js";import{sg as t}from"./react-vendor-Dwbdpj6a.js";var r=o(t());function n(o,t,n){const s=void 0!==t,[a,e]=(0,r.useState)(o),c=s?t:a;return[c,(0,r.useCallback)(o=>{const t="function"==typeof o?o(c):o;s?n?.(t):e(t)},[s,c,n])]}export{n as t};

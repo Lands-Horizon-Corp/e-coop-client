@@ -1,1 +1,0 @@
-import{a as r}from"./rolldown-runtime-zyAuZXZm.js";import{Bh as s}from"./react-vendor-Dwbdpj6a.js";import{Ar as a,Nr as o}from"./index-DAuZpUsd.js";var e=r(s()),t=({className:r,content:s})=>(0,e.jsx)("div",{className:o("",r),dangerouslySetInnerHTML:{__html:a(s)}});export{t};

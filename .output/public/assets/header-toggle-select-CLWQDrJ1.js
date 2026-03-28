@@ -1,1 +1,0 @@
-import{a as e}from"./rolldown-runtime-zyAuZXZm.js";import{Bh as t}from"./react-vendor-Dwbdpj6a.js";import{t as a}from"./checkbox-Tg4LTqkc.js";var o=e(t()),l=({table:e})=>(0,o.jsx)(a,{"aria-label":"Select all",checked:e.getIsAllPageRowsSelected()||e.getIsSomePageRowsSelected()&&"indeterminate",onCheckedChange:t=>e.toggleAllPageRowsSelected(!!t)});export{l as t};

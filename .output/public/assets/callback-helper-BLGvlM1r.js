@@ -1,1 +1,0 @@
-import{wt as o}from"./vendor-CITjkupM.js";const s=({textSuccess:s="Success",textError:r="Failed",onSuccess:c,onError:t}={})=>({onSuccess:r=>{const t="function"==typeof s?s(r):s;o.success(t),c?.(r)},onError:s=>{const c="function"==typeof r?r(s):r;o.error(c),t?.(s)}});export{s as t};

@@ -1,1 +1,0 @@
-import{a as r}from"./rolldown-runtime-zyAuZXZm.js";import{Bh as o,Dh as a}from"./react-vendor-Dwbdpj6a.js";var n=r(o());function t(){return(0,n.jsx)(a,{to:"/org/$orgname/branch/$branchname/dashboard"})}export{t as component};

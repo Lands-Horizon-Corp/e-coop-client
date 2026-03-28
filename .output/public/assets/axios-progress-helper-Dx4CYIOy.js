@@ -1,1 +1,0 @@
-const t=(t,o=Date.now())=>{if(!t.total)return;const a=Math.round(100*t.loaded/t.total),e=(Date.now()-o)/1e3,r=t.loaded/e,d=t.total-t.loaded,n=r>0?d/r:0,l=Math.floor(n/60),s=Math.round(n%60);return{progress:a,etaFormatted:`${l}:${s<10?"0":""}${s}`}};export{t};

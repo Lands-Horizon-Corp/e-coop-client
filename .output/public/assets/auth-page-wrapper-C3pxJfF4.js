@@ -1,1 +1,0 @@
-import{a as r}from"./rolldown-runtime-zyAuZXZm.js";import{Bh as s}from"./react-vendor-Dwbdpj6a.js";import{Nr as e}from"./index-DAuZpUsd.js";var a=r(s(),1),m=({className:r,children:s})=>(0,a.jsx)("div",{className:e("flex w-full justify-center p-6 sm:rounded-2xl sm:backdrop-blur-md",r),children:s});export{m as t};

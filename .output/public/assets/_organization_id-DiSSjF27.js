@@ -1,1 +1,0 @@
-import{a as o}from"./rolldown-runtime-zyAuZXZm.js";import{Bh as r}from"./react-vendor-Dwbdpj6a.js";var n=o(r());function e(){return(0,n.jsx)("div",{children:'Hello "/(landing)/explore/$organization_id"!'})}export{e as component};

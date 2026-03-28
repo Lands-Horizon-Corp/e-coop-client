@@ -1,1 +1,0 @@
-import{a}from"./rolldown-runtime-zyAuZXZm.js";import{Bh as r}from"./react-vendor-Dwbdpj6a.js";import{Nr as s}from"./index-DAuZpUsd.js";var e=a(r());function o({className:a,...r}){return(0,e.jsx)("div",{className:s("bg-accent animate-pulse rounded-md",a),"data-slot":"skeleton",...r})}export{o as t};

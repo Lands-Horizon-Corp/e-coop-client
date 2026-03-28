@@ -1,2 +1,0 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/not-found-Dp3fGO36.js","assets/index-DAuZpUsd.js","assets/react-vendor-Dwbdpj6a.js","assets/rolldown-runtime-zyAuZXZm.js","assets/react-vendor-DMBmhxoY.css","assets/vendor-CITjkupM.js","assets/index-BAxwyPbr.css"])))=>i.map(i=>d[i]);
-import{Sh as o,_m as n}from"./react-vendor-Dwbdpj6a.js";var r=o(()=>n(()=>import("./not-found-Dp3fGO36.js"),__vite__mapDeps([0,1,2,3,4,5,6])));export{r as notFoundComponent};

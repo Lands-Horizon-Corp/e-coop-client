@@ -1,1 +1,0 @@
-const t=["account type","alert","calculation","community","cooperative","digital","governance","insurance","loan","membership","priority","reserves","security","special","status","transaction type","cash check voucher tag","journal voucher tag","adjustment tag","account tag","loan transaction tag"];export{t};
