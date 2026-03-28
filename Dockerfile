@@ -32,4 +32,4 @@ EXPOSE 3000
 EXPOSE 8080
 
 # Start the Nitro server using Bun
-CMD ["bun", "run", "start"]
+CMD ["bun", ".output/server/index.mjs"]
