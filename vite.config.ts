@@ -24,9 +24,8 @@ const cMapsDir = normalizePath(path.join(pdfjsDistPath, 'cmaps'));
 const pwaAssetManifest = () => ({
     name: 'pwa-asset-manifest',
     closeBundle() {
-        const distDir = path.resolve(__dirname, 'dist')
+        const distDir = path.resolve(__dirname, '.output/public') 
         if (!fs.existsSync(distDir)) return
-
         const files = fs.readdirSync(distDir, { recursive: true })
             .filter((file) => /\.(js|css|html|ico|png|svg|jpg|jpeg|webp|mp4|woff2)$/.test(file as string))
             .map(file => `/${(file as string).replace(/\\/g, '/')}`)
@@ -68,7 +67,10 @@ export default defineConfig({
           */\n${code}`;
       }
     },
-    compression(),
+    compression({
+      include: /\.(js|css|html|svg|json)$/i,
+      deleteOriginalAssets: false,
+    }),
     NodeGlobalsPolyfillPlugin({
       buffer: true,
       process: true,
@@ -81,6 +83,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
       workbox: {
+        globDirectory: '.output/public', 
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp,mp4,woff2}'],
         maximumFileSizeToCacheInBytes: 50 * 1024 * 1024,
         runtimeCaching:  [
@@ -163,6 +166,8 @@ export default defineConfig({
     },
   },
   build: {
+    outDir: '.output/public',
+    emptyOutDir: true,
     sourcemap: false,
     minify: "terser",
     terserOptions: {
