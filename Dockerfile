@@ -7,7 +7,7 @@ WORKDIR /app
 
 # 1. Copy lockfiles first to leverage Docker caching
 COPY package.json bun.lock* ./
-RUN bun install --frozen-lockfile
+RUN bun install
 
 # 2. Copy the rest of the source
 COPY . .
