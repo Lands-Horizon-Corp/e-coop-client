@@ -42,10 +42,6 @@ export default defineConfig({
          src: cMapsDir,
          dest: '',
        },
-       { 
-          src: normalizePath(path.join(pdfjsDistPath, 'build/pdf.worker.min.js')), 
-          dest: 'assets' 
-        },
      ],
    }),
     UnheadVite(),
