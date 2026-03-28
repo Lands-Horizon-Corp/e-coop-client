@@ -24,10 +24,6 @@ RUN npm install -g bun
 
 WORKDIR /app
 
-# Set the port the application will listen on
-ENV PORT=3000
-ENV NODE_ENV=production
-
 # Copy the Nitro server output
 COPY --from=builder /app/.output ./.output
 
