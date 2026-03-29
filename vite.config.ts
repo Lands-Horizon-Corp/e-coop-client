@@ -19,6 +19,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 const require = createRequire(import.meta.url);
 const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
 const cMapsDir = normalizePath(path.join(pdfjsDistPath, 'cmaps'));
+const pdfWorkerPath = normalizePath(path.join(pdfjsDistPath, 'build', 'pdf.worker.min.mjs'));
 
 const pwaAssetManifest = () => ({
     name: 'pwa-asset-manifest',
@@ -35,6 +36,7 @@ const pwaAssetManifest = () => ({
 })
 
 export default defineConfig({
+  base: '/',
   plugins: [
     tanstackRouter({ target: 'react', autoCodeSplitting: true }),
     nitro({ 
@@ -45,7 +47,10 @@ export default defineConfig({
     tailwindcss(),
     UnheadVite(),
     viteStaticCopy({
-      targets: [{ src: cMapsDir, dest: '' }],
+      targets: [
+        { src: cMapsDir, dest: 'cmaps' }, // It's usually safer to put cmaps in a subfolder
+        { src: pdfWorkerPath, dest: '' }  // This drops the worker right into your root output
+      ],
     }),
     NodeGlobalsPolyfillPlugin({
       buffer: true,
