@@ -73,6 +73,10 @@ export default defineConfig({
       workbox: {
         globDirectory: '.output/public', 
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp,mp4,woff2}'],
+        navigateFallback: '/index.html',
+        additionalManifestEntries: [
+          { url: 'index.html', revision: `${Date.now()}` }
+        ],
         maximumFileSizeToCacheInBytes: 50 * 1024 * 1024,
         runtimeCaching:  [
           {
