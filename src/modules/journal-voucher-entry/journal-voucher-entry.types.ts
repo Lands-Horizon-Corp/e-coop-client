@@ -10,10 +10,10 @@ import { TJournalVoucherEntrySchema } from './journal-voucher-entry.validation'
 
 export interface IJournalVoucherEntry extends IBaseEntityMeta {
     loan_transaction_id?: TEntityId
-    loan_transaction: ILoanTransaction
+    loan_transaction?: ILoanTransaction
 
     account_id: TEntityId
-    account: IAccount
+    account?: IAccount
 
     member_profile_id?: TEntityId
     member_profile?: IMemberProfile
@@ -21,7 +21,7 @@ export interface IJournalVoucherEntry extends IBaseEntityMeta {
     employee_user_id?: TEntityId
     employee_user?: IUser
 
-    journal_voucher_id: TEntityId
+    journal_voucher_id?: TEntityId
     journal_voucher?: IJournalVoucher
 
     description?: string

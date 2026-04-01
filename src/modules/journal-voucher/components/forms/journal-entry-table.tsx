@@ -367,8 +367,6 @@ export const JournalEntryTable = ({
         }
     )
 
-    console.log('field', fields, 'watch entries', watchedEntries)
-
     return (
         <div className={cn('', className)}>
             <div className="w-full flex justify-end">

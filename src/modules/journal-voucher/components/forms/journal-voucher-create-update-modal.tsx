@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
@@ -84,14 +84,19 @@ const JournalVoucherCreateUpdateForm = ({
 
     const { data } = useTransactionBatchStore()
 
-    const [journalId, setJournalVoucherId] = useState<TEntityId | undefined>(
-        journalVoucherId
-    )
-    const isEditMode = !!journalId
-
     const [defaultMemberProfile, setDefaultMemberProfile] = useState<
         IMemberProfile | undefined
     >(defaultValues?.member_profile)
+
+    const [journalMode, setJournalVoucherMode] = useState<
+        'create' | 'update' | 'readOnly'
+    >(mode)
+
+    const isEditMode = journalMode === 'update'
+
+    const [journalVoucher, setJournalVoucher] = useState<
+        Partial<IJournalVoucher> | undefined
+    >(defaultValues)
 
     const { setSelectedMember } = useMemberPickerStore()
 
@@ -101,22 +106,11 @@ const JournalVoucherCreateUpdateForm = ({
         mode: 'onSubmit',
         defaultValues: {
             ...defaultValues,
-            description: '',
-            name: '',
             date: toInputDateString(
                 defaultValues?.date || getTimeMachineValue()
             ),
         },
     })
-
-    useEffect(() => {
-        if (isEditMode) return
-        form.setValue('journal_voucher_entries', [
-            {
-                account_id: '',
-            },
-        ])
-    }, [isEditMode, mode, form])
 
     const {
         mutate: createUpdateJournalVoucher,
@@ -130,12 +124,44 @@ const JournalVoucherCreateUpdateForm = ({
                 onSuccess: (data) => {
                     form.reset(data)
                     formProps.onSuccess?.(data)
-                    setJournalVoucherId(data.id)
+                    setJournalVoucher(data)
+                    setJournalVoucherMode('update')
                 },
                 onError: formProps.onError,
             }),
         },
     })
+
+    // const hasInitialized = useRef(false)
+
+    // const getCreateDefaults = (): TJournalVoucherFormValues => ({
+    //     name: '',
+    //     date: toInputDateString(getTimeMachineValue()),
+    //     description: '',
+    //     currency: currency,
+    //     currency_id: currency.id ?? '',
+    //     journal_voucher_entries: [
+    //         {
+    //             account_id: '',
+    //         },
+    //     ],
+    //     journal_voucher_entries_deleted: [],
+    // })
+
+    // useEffect(() => {
+    //     if (mode === 'update' && defaultValues && !hasInitialized.current) {
+    //         form.reset({
+    //             ...defaultValues,
+    //             date: toInputDateString(new Date(defaultValues.date ?? '')),
+    //         })
+    //         hasInitialized.current = true
+    //     }
+
+    //     if (mode === 'create' && !hasInitialized.current) {
+    //         form.reset(getCreateDefaults())
+    //         hasInitialized.current = true
+    //     }
+    // }, [mode, defaultValues])
 
     const { formRef, handleFocusError, isDisabled } =
         useFormHelper<TJournalVoucherFormValues>({
@@ -151,7 +177,9 @@ const JournalVoucherCreateUpdateForm = ({
         }
 
         createUpdateJournalVoucher({
-            journalVoucherId: isEditMode ? journalId : journalVoucherId,
+            journalVoucherId: isEditMode
+                ? journalVoucher?.id
+                : journalVoucherId,
             payload: payload,
         })
     }, handleFocusError)
@@ -190,7 +218,7 @@ const JournalVoucherCreateUpdateForm = ({
     const isPrinted = !!defaultValues?.printed_date
 
     useHotkeys(
-        'alt + 1',
+        'alt + 0',
         (e) => {
             e.preventDefault()
             form.setFocus('name')
@@ -198,9 +226,8 @@ const JournalVoucherCreateUpdateForm = ({
         { enableOnFormTags: true },
         [form]
     )
-
     useHotkeys(
-        'alt + 2',
+        'alt + 1',
         (e) => {
             e.preventDefault()
             form.setFocus('date')
@@ -208,9 +235,8 @@ const JournalVoucherCreateUpdateForm = ({
         { enableOnFormTags: true },
         [form]
     )
-
     useHotkeys(
-        'alt + 3',
+        'alt + 2',
         (e) => {
             e.preventDefault()
             form.setFocus('description')
@@ -218,9 +244,8 @@ const JournalVoucherCreateUpdateForm = ({
         { enableOnFormTags: true },
         [form]
     )
-
     useHotkeys(
-        'alt + 4',
+        'alt + 3',
         (e) => {
             e.preventDefault()
             companyState.onOpenChange(!companyState.open)
@@ -229,7 +254,7 @@ const JournalVoucherCreateUpdateForm = ({
         [companyState]
     )
     useHotkeys(
-        'alt + 5',
+        'alt + 4',
         (e) => {
             e.preventDefault()
             form.setFocus('date')
@@ -246,7 +271,6 @@ const JournalVoucherCreateUpdateForm = ({
         { enableOnFormTags: true },
         [form]
     )
-
     useHotkeys(
         'alt + semicolon',
         (e) => {
@@ -266,49 +290,76 @@ const JournalVoucherCreateUpdateForm = ({
         name: 'journal_voucher_entries',
         control: form.control,
     })
+    const getCreateDefaults = (): TJournalVoucherFormValues => ({
+        name: '',
+        date: toInputDateString(getTimeMachineValue()),
+        description: '',
+        currency: currency,
+        currency_id: currency.id ?? '',
+        journal_voucher_entries: [
+            {
+                account_id: '',
+            },
+        ],
+        journal_voucher_entries_deleted: [],
+    })
 
     const handleReset = () => {
         if (isEditMode) {
-            form.reset({
-                ...defaultValues,
-                date: defaultValues?.date
-                    ? new Date(defaultValues.date).toISOString()
-                    : undefined,
-            })
+            form.reset({ ...journalVoucher })
         } else {
             const newRow: IJournalVoucherEntryRequest = {
-                debit: '' as unknown as number,
-                credit: '' as unknown as number,
+                debit: 0,
+                credit: 0,
                 member_profile_id: defaultMemberProfile?.id,
                 member_profile: defaultMemberProfile,
                 account_id: '' as TEntityId,
                 transaction_batch_id: undefined,
             }
-            const values = {
+
+            const entries = defaultValues?.journal_voucher_entries ?? [newRow]
+            const resetValues = {
+                ...getCreateDefaults(),
                 ...defaultValues,
-                journal_voucher_entries:
-                    defaultValues?.journal_voucher_entries ?? [newRow],
+                journal_voucher_entries: entries,
             }
 
-            form.reset(values)
-            replace(values.journal_voucher_entries)
+            form.reset(resetValues)
+            replace([...resetValues.journal_voucher_entries])
         }
+
         resetCreate()
         setSelectedMember(null)
+
         queryClient.invalidateQueries({
             queryKey: [journalVoucherBaseKey, 'paginated'],
         })
     }
 
+    const initialValues = useMemo(() => {
+        if (mode === 'update' && defaultValues) {
+            return {
+                ...defaultValues,
+                date: toInputDateString(new Date(defaultValues.date ?? '')),
+            }
+        }
+
+        return getCreateDefaults()
+    }, [mode, defaultValues?.id])
+
+    useEffect(() => {
+        form.reset(initialValues)
+    }, [initialValues])
+
     return (
         <Form {...form}>
             <form
-                className={cn('w-full! flex flex-col space-y-4', className)}
+                className={cn('w-full! flex flex-col space-y-5', className)}
                 onSubmit={onSubmit}
                 ref={formRef}
             >
                 <fieldset disabled={isPending || formProps.readOnly}>
-                    <div className="absolute top-4 right-10 z-10 flex gap-2">
+                    <div className="absolute top-5 right-10 z-10 flex gap-2">
                         {journalVoucherId && (
                             <JournalVoucherTagsManagerPopover
                                 journalVoucherId={journalVoucherId}
@@ -326,25 +377,25 @@ const JournalVoucherCreateUpdateForm = ({
                             </div>
                         )}
                     </div>
-                    <div className="gap-2 w-full flex flex-col">
-                        <div className="col-span-2 inline-flex gap-2 w-full">
-                            <div className="flex col-span-2 space-x-2 w-full ">
+                    <div className="gap-3 w-full flex flex-col">
+                        <div className="col-span-3 inline-flex gap-2 w-full">
+                            <div className="flex col-span-3 space-x-2 w-full ">
                                 <Popover {...popOverState}>
                                     <PopoverTrigger asChild>
-                                        <div className="flex flex-0 flex-col space-y-1 w-fit!">
+                                        <div className="flex flex-1 flex-col space-y-1 w-fit!">
                                             <Kbd className="block">alt + ;</Kbd>
                                             <Button
-                                                className="px-1"
+                                                className="px-2"
                                                 onClick={(e) => {
                                                     e.preventDefault()
                                                     popOverState.onOpenChange(
                                                         !popOverState.open
                                                     )
                                                 }}
-                                                tabIndex={-1}
+                                                tabIndex={-2}
                                                 variant="secondary"
                                             >
-                                                <GearIcon className="size-4" />
+                                                <GearIcon className="size-5" />
                                                 More Options
                                             </Button>
                                         </div>
@@ -373,7 +424,7 @@ const JournalVoucherCreateUpdateForm = ({
                                                     )}
                                                     mainTriggerProps={
                                                         {
-                                                            // tabIndex: -1,
+                                                            // tabIndex: -2,
                                                         }
                                                     }
                                                     onChange={(
@@ -421,7 +472,7 @@ const JournalVoucherCreateUpdateForm = ({
                                                             )}
                                                             mainTriggerProps={
                                                                 {
-                                                                    // tabIndex: -1,
+                                                                    // tabIndex: -2,
                                                                 }
                                                             }
                                                             onSelect={(
@@ -477,7 +528,7 @@ const JournalVoucherCreateUpdateForm = ({
                                                     )}
                                                     id={field.name}
                                                     placeholder="Enter reference"
-                                                    // tabIndex={-1}
+                                                    // tabIndex={-2}
                                                 />
                                             )}
                                         />{' '}
@@ -503,7 +554,7 @@ const JournalVoucherCreateUpdateForm = ({
                                                     )}
                                                     mainTriggerProps={
                                                         {
-                                                            // tabIndex: -1,
+                                                            // tabIndex: -2,
                                                         }
                                                     }
                                                     onChange={(currency) => {
@@ -530,7 +581,7 @@ const JournalVoucherCreateUpdateForm = ({
                                             Name{' '}
                                             <span>
                                                 <KbdGroup>
-                                                    <Kbd>Alt + 1</Kbd>
+                                                    <Kbd>Alt + 0</Kbd>
                                                 </KbdGroup>
                                             </span>
                                         </Label>
@@ -540,8 +591,8 @@ const JournalVoucherCreateUpdateForm = ({
                                         return (
                                             <div className="relative w-full">
                                                 <Input
-                                                    className="text-md! pr-12 font-semibold"
-                                                    // tabIndex={-1}
+                                                    className="text-md! pr-13 font-semibold"
+                                                    // tabIndex={-2}
                                                     {...field}
                                                     id={field.name}
                                                     onChange={(item) => {
@@ -574,13 +625,13 @@ const JournalVoucherCreateUpdateForm = ({
                                     className="relative max-w-xs"
                                     control={form.control}
                                     description="mm/dd/yyyy"
-                                    descriptionClassName="absolute top-0 right-0"
+                                    descriptionClassName="absolute top-1 right-0"
                                     label={
                                         <Label className="text-xs font-medium text-muted-foreground">
                                             Date{' '}
                                             <span>
                                                 <KbdGroup>
-                                                    <Kbd>Alt + 2</Kbd>
+                                                    <Kbd>Alt + 1</Kbd>
                                                 </KbdGroup>
                                             </span>
                                         </Label>
@@ -588,7 +639,7 @@ const JournalVoucherCreateUpdateForm = ({
                                     name="date"
                                     render={({ field }) => (
                                         <InputDate
-                                            // tabIndex={-1}
+                                            // tabIndex={-2}
                                             {...field}
                                             value={field.value ?? ''}
                                         />
@@ -598,14 +649,14 @@ const JournalVoucherCreateUpdateForm = ({
                         </div>
 
                         <FormFieldWrapper
-                            className="col-span-2"
+                            className="col-span-3"
                             control={form.control}
                             label={
                                 <Label className="text-xs font-medium text-muted-foreground">
                                     Particulars/Description{' '}
                                     <span>
                                         <KbdGroup>
-                                            <Kbd>Alt + 3</Kbd>
+                                            <Kbd>Alt + 2</Kbd>
                                         </KbdGroup>
                                     </span>
                                 </Label>
@@ -616,7 +667,7 @@ const JournalVoucherCreateUpdateForm = ({
                                     <div className="relative w-full">
                                         <Textarea
                                             {...field}
-                                            className="text-md! w-full pr-12 font-semibold"
+                                            className="text-md! w-full pr-13 font-semibold"
                                             value={field.value || ''}
                                         />
                                     </div>
@@ -625,7 +676,7 @@ const JournalVoucherCreateUpdateForm = ({
                         />
                     </div>
                     <JournalEntryTable
-                        className="col-span-1 md:col-span-4"
+                        className="col-span-2 md:col-span-4"
                         currency={currency}
                         defaultMemberProfile={defaultMemberProfile}
                         form={form}
@@ -634,17 +685,17 @@ const JournalVoucherCreateUpdateForm = ({
                         transactionBatchId={data?.id}
                     />
                 </fieldset>
-                <div className="w-full flex justify-end gap-4">
-                    <div className="max-w-[130px] flex-col flex justify-end">
-                        <p className="text-primary bg-background border text-left rounded-md pl-8 pr-10 py-1 text-lg font-bold">
+                <div className="w-full flex justify-end gap-5">
+                    <div className="max-w-fit flex-col flex justify-end">
+                        <p className="text-primary bg-background border text-left rounded-md pl-9 pr-10 py-1 text-lg font-bold">
                             {currencyFormat(form.watch('total_debit') || 0, {
                                 currency: form.watch('currency'),
                                 showSymbol: !!form.watch('currency'),
                             })}
                         </p>
                     </div>
-                    <div className="max-w-[130px]">
-                        <p className="text-primary bg-background border text-left rounded-md pl-8 pr-10 py-1 text-lg font-bold">
+                    <div className="max-w-fit">
+                        <p className="text-primary bg-background border text-left rounded-md pl-9 pr-10 py-1 text-lg font-bold">
                             {currencyFormat(form.watch('total_credit') || 0, {
                                 currency: form.watch('currency'),
                                 showSymbol: !!form.watch('currency'),
@@ -661,12 +712,12 @@ const JournalVoucherCreateUpdateForm = ({
                     onReset={handleReset}
                     readOnly={formProps.readOnly}
                     submitText={
-                        <div className="inline-flex items-center gap-2">
+                        <div className="inline-flex items-center gap-3">
                             <kbd className="text-xs">
                                 {isEditMode ? 'Update' : 'Create'}
                             </kbd>
-                            <CommandShortcut className="bg-secondary text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-primary">
-                                Ctrl + Enter
+                            <CommandShortcut className="bg-secondary text-xs min-w-fit size-fit px-3 py-0.5 rounded-sm text-primary">
+                                Enter
                             </CommandShortcut>
                         </div>
                     }
@@ -689,7 +740,7 @@ export const JournalVoucherCreateUpdateFormModal = ({
 
     return (
         <Modal
-            className={cn('min-w-2xl! max-w-5xl!', className)}
+            className={cn('min-w-3xl! max-w-5xl!', className)}
             title={
                 <div>
                     <p className="font-medium">
