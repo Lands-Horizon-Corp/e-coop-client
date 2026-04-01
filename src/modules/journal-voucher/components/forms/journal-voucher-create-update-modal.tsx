@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -19,6 +19,7 @@ import {
     journalVoucherBaseKey,
     useCreateUpdateJournalVoucher,
 } from '@/modules/journal-voucher'
+import { IJournalVoucherEntryRequest } from '@/modules/journal-voucher-entry'
 import { JournalVoucherTagsManagerPopover } from '@/modules/journal-voucher-tag/components/journal-voucher-tag-management'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
@@ -100,6 +101,8 @@ const JournalVoucherCreateUpdateForm = ({
         mode: 'onSubmit',
         defaultValues: {
             ...defaultValues,
+            description: '',
+            name: '',
             date: toInputDateString(
                 defaultValues?.date || getTimeMachineValue()
             ),
@@ -158,7 +161,8 @@ const JournalVoucherCreateUpdateForm = ({
 
     const error =
         serverRequestErrExtractor({ error: rawError }) ||
-        form.formState.errors?.root?.message
+        form.formState.errors?.root?.message ||
+        form.formState.errors.journal_voucher_entries?.message
 
     const handleSetMemberProfile = useCallback(
         (memberProfile: IMemberProfile | undefined) => {
@@ -252,6 +256,49 @@ const JournalVoucherCreateUpdateForm = ({
         { enableOnFormTags: true },
         [popOverState]
     )
+
+    const currency = useWatch({
+        control: form.control,
+        name: 'currency',
+    })
+
+    const { replace } = useFieldArray({
+        name: 'journal_voucher_entries',
+        control: form.control,
+    })
+
+    const handleReset = () => {
+        if (isEditMode) {
+            form.reset({
+                ...defaultValues,
+                date: defaultValues?.date
+                    ? new Date(defaultValues.date).toISOString()
+                    : undefined,
+            })
+        } else {
+            const newRow: IJournalVoucherEntryRequest = {
+                debit: '' as unknown as number,
+                credit: '' as unknown as number,
+                member_profile_id: defaultMemberProfile?.id,
+                member_profile: defaultMemberProfile,
+                account_id: '' as TEntityId,
+                transaction_batch_id: undefined,
+            }
+            const values = {
+                ...defaultValues,
+                journal_voucher_entries:
+                    defaultValues?.journal_voucher_entries ?? [newRow],
+            }
+
+            form.reset(values)
+            replace(values.journal_voucher_entries)
+        }
+        resetCreate()
+        setSelectedMember(null)
+        queryClient.invalidateQueries({
+            queryKey: [journalVoucherBaseKey, 'paginated'],
+        })
+    }
 
     return (
         <Form {...form}>
@@ -568,35 +615,24 @@ const JournalVoucherCreateUpdateForm = ({
                                 return (
                                     <div className="relative w-full">
                                         <Textarea
-                                            className="text-md! pr-12 font-semibold"
-                                            // tabIndex={-1}
                                             {...field}
+                                            className="text-md! w-full pr-12 font-semibold"
+                                            value={field.value || ''}
                                         />
                                     </div>
                                 )
                             }}
                         />
                     </div>
-
-                    <>
-                        <FormFieldWrapper
-                            className="col-span-1 md:col-span-4 max-h-xs!"
-                            control={form.control}
-                            name="journal_voucher_entries"
-                            render={({ field }) => (
-                                <JournalEntryTable
-                                    className="col-span-1 md:col-span-4"
-                                    currency={form.watch('currency')}
-                                    defaultMemberProfile={defaultMemberProfile}
-                                    form={form}
-                                    journalVoucherId={journalVoucherId ?? ''}
-                                    mode={mode}
-                                    ref={field.ref}
-                                    transactionBatchId={data?.id}
-                                />
-                            )}
-                        />
-                    </>
+                    <JournalEntryTable
+                        className="col-span-1 md:col-span-4"
+                        currency={currency}
+                        defaultMemberProfile={defaultMemberProfile}
+                        form={form}
+                        journalVoucherId={journalVoucherId ?? ''}
+                        mode={mode}
+                        transactionBatchId={data?.id}
+                    />
                 </fieldset>
                 <div className="w-full flex justify-end gap-4">
                     <div className="max-w-[130px] flex-col flex justify-end">
@@ -617,25 +653,12 @@ const JournalVoucherCreateUpdateForm = ({
                     </div>
                 </div>
                 <FormFooterResetSubmit
+                    disableReset={
+                        isEditMode ? !form.formState.isDirty : undefined
+                    }
                     error={error}
                     isLoading={isPending}
-                    onReset={() => {
-                        if (isEditMode) {
-                            form.reset({
-                                ...defaultValues,
-                                date: defaultValues?.date
-                                    ? new Date(defaultValues.date).toISOString()
-                                    : undefined,
-                            })
-                        } else {
-                            form.reset()
-                        }
-                        resetCreate()
-                        setSelectedMember(null)
-                        queryClient.invalidateQueries({
-                            queryKey: [journalVoucherBaseKey, 'paginated'],
-                        })
-                    }}
+                    onReset={handleReset}
                     readOnly={formProps.readOnly}
                     submitText={
                         <div className="inline-flex items-center gap-2">

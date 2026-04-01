@@ -1,6 +1,6 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
-import { UseFormReturn, useFieldArray } from 'react-hook-form'
+import { UseFormReturn, useFieldArray, useWatch } from 'react-hook-form'
 
 import { cn } from '@/helpers'
 import { IAccount, TAccountType } from '@/modules/account'
@@ -260,7 +260,7 @@ type JournalEntryTableProps = {
     TableClassName?: string
     transactionBatchId?: TEntityId
     mode: 'readOnly' | 'update' | 'create'
-    ref: React.Ref<HTMLDivElement>
+    // ref: React.Ref<HTMLDivElement>
     form: UseFormReturn<TJournalVoucherSchema>
 }
 
@@ -284,8 +284,11 @@ export const JournalEntryTable = ({
     const isUpdateMode = mode === 'update'
     const isReadOnlyMode = mode === 'readOnly'
 
-    const watchedJournalEntries = form.watch('journal_voucher_entries')
-    const { append: addEntry, remove: removeEntry } = useFieldArray({
+    const {
+        fields,
+        append: addEntry,
+        remove: removeEntry,
+    } = useFieldArray({
         name: 'journal_voucher_entries',
         control: form.control,
     })
@@ -293,6 +296,11 @@ export const JournalEntryTable = ({
     const { append: addRemoveId } = useFieldArray({
         name: 'journal_voucher_entries_deleted',
         control: form.control,
+    })
+
+    const watchedEntries = useWatch({
+        control: form.control,
+        name: 'journal_voucher_entries',
     })
 
     const handleDeleteRow = useCallback(
@@ -328,8 +336,15 @@ export const JournalEntryTable = ({
         addEntry(newRow)
     }, [addEntry, defaultMemberProfile, isReadOnlyMode, transactionBatchId])
 
+    const tableData = useMemo(() => {
+        return fields.map((field, index) => ({
+            ...field,
+            ...watchedEntries?.[index],
+        }))
+    }, [fields, watchedEntries])
+
     const table = useReactTable<IJournalVoucherEntryRequest>({
-        data: watchedJournalEntries || [],
+        data: tableData,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
         meta: {
@@ -351,6 +366,8 @@ export const JournalEntryTable = ({
             enabled: !isReadOnlyMode,
         }
     )
+
+    console.log('field', fields, 'watch entries', watchedEntries)
 
     return (
         <div className={cn('', className)}>
