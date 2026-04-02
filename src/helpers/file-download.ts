@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export const getFileNameFromUrl = (url: string): string => {
     try {
         const cleanUrl = url.split('?')[0]
@@ -91,11 +93,15 @@ export const downloadFileService = async ({
     }
 
     try {
-        const response = await fetch(url, { credentials: 'include' })
-        if (!response.ok)
-            throw new Error(`Fetch failed: ${response.statusText}`)
+        // const response = await fetch(url, { credentials: 'include' })
+        const response = await axios.get(url, {
+            responseType: 'blob',
+        })
 
-        const blob = await response.blob()
+        // if (!response.status )
+        //     throw new Error(`Fetch failed: ${response.statusText}`)
+
+        const blob = new Blob([response.data])
         const blobUrl = window.URL.createObjectURL(blob)
 
         triggerBrowserDownload(blobUrl, fileName)
