@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { IS_STAGING } from '@/constants'
+// import { IS_STAGING } from '@/constants'
 import { cn } from '@/helpers'
 import { getFileNameFromUrl } from '@/helpers/file-download'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -24,14 +24,14 @@ import {
 } from './pdf-components'
 
 // worker
-if (!IS_STAGING) {
-    pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@5.4.296/build/pdf.worker.min.mjs`
-} else {
-    pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-        'pdfjs-dist/build/pdf.worker.min.js',
-        import.meta.url
-    ).toString()
-}
+// if (!IS_STAGING) {
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@5.4.296/build/pdf.worker.min.mjs`
+// } else {
+//     pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+//         'pdfjs-dist/build/pdf.worker.min.js',
+//         import.meta.url
+//     ).toString()
+// }
 
 export interface PdfViewerProps
     extends IClassProps, PdfHeaderProps, PdfFooterProps {
