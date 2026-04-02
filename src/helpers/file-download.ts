@@ -81,7 +81,7 @@ interface DownloadOptions {
 export const downloadFileService = async ({
     url,
     fallbackName,
-    mode = 'native',
+    mode = 'fetch',
 }: DownloadOptions): Promise<void> => {
     const fileName = fallbackName || getFileNameFromUrl(url)
 
