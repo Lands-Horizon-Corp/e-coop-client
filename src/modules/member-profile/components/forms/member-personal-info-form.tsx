@@ -110,6 +110,8 @@ const MemberPersonalInfoForm = ({
 
     const handleSubmit = useCallback(
         (formData: TMemberProfilePersonalInfoFormValues) => {
+            console.log('submitting', formData)
+
             mutate(
                 {
                     memberId: memberProfileId,
@@ -529,12 +531,12 @@ const MemberAddressesSection = ({
 
     const { append, remove } = useFieldArray({
         control,
-        name: 'member_address',
+        name: 'member_addresses',
     })
 
     const { append: removeMemberAddress } = useFieldArray({
         control,
-        name: 'member_address_deleted_id',
+        name: 'member_addresses_deleted_id',
     })
 
     const addresses = watch('member_addresses') ?? []

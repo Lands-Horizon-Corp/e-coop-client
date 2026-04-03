@@ -169,7 +169,7 @@ export const MemberProfilePersonalInfoSchema = z.object({
     signature_media: z.any(), // JUST FOR SHOWING MEDIA IMAGE IN FORM
 
     member_addresses: z.array(MemberAddressSchema).nullable().optional(),
-    member_address_deleted_id: z.array(entityIdSchema).nullable().optional(),
+    member_addresses_deleted_id: z.array(entityIdSchema).nullable().optional(),
 })
 
 export type TMemberProfilePersonalInfoSchema = z.infer<
