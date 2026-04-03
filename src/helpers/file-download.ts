@@ -48,24 +48,33 @@ export const fetchFileBlob = async (
     return { blob, fileName }
 }
 
+const isSafeUrl = (url: string) => {
+    return url.startsWith('blob:') || url.startsWith('https:')
+}
+
 export const triggerBrowserDownload = (
     url: string,
     fileName?: string
 ): void => {
     const a = document.createElement('a')
-    a.href = url
 
-    a.download = fileName || ''
+    if (isSafeUrl(url)) {
+        a.href = url
 
-    a.target = '_blank'
-    a.rel = 'noopener noreferrer'
+        a.download = fileName || ''
 
-    document.body.appendChild(a)
-    a.click()
+        a.target = '_blank'
+        a.rel = 'noopener noreferrer'
 
-    setTimeout(() => {
-        a.remove()
-    }, 100)
+        document.body.appendChild(a)
+        a.click()
+
+        setTimeout(() => {
+            a.remove()
+        }, 100)
+    } else {
+        throw new Error(`Failed Download: Download URL is suspicous ${url}`)
+    }
 }
 
 type DownloadMode = 'fetch' | 'native'
@@ -102,7 +111,7 @@ export const downloadFileService = async ({
 
         setTimeout(() => window.URL.revokeObjectURL(blobUrl), 1000)
     } catch (error) {
-        console.error('Download via fetch failed:', error)
+        console.error('Download Failed', error)
         throw error
     }
 }
