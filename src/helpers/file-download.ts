@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 export const getFileNameFromUrl = (url: string): string => {
     try {
         const cleanUrl = url.split('?')[0]
@@ -50,24 +48,33 @@ export const fetchFileBlob = async (
     return { blob, fileName }
 }
 
+const isSafeUrl = (url: string) => {
+    return url.startsWith('blob:') || url.startsWith('https:')
+}
+
 export const triggerBrowserDownload = (
     url: string,
     fileName?: string
 ): void => {
     const a = document.createElement('a')
-    a.href = url
 
-    a.download = fileName || ''
+    if (isSafeUrl(url)) {
+        a.href = url
 
-    a.target = '_blank'
-    a.rel = 'noopener noreferrer'
+        a.download = fileName || ''
 
-    document.body.appendChild(a)
-    a.click()
+        a.target = '_blank'
+        a.rel = 'noopener noreferrer'
 
-    setTimeout(() => {
-        a.remove()
-    }, 100)
+        document.body.appendChild(a)
+        a.click()
+
+        setTimeout(() => {
+            a.remove()
+        }, 100)
+    } else {
+        throw new Error(`Failed Download: Download URL is suspicous ${url}`)
+    }
 }
 
 type DownloadMode = 'fetch' | 'native'
@@ -83,7 +90,7 @@ interface DownloadOptions {
 export const downloadFileService = async ({
     url,
     fallbackName,
-    mode = 'fetch',
+    mode = 'native',
 }: DownloadOptions): Promise<void> => {
     const fileName = fallbackName || getFileNameFromUrl(url)
 
@@ -93,22 +100,18 @@ export const downloadFileService = async ({
     }
 
     try {
-        // const response = await fetch(url, { credentials: 'include' })
-        const response = await axios.get(url, {
-            responseType: 'blob',
-        })
+        const response = await fetch(url, { credentials: 'include' })
+        if (!response.ok)
+            throw new Error(`Fetch failed: ${response.statusText}`)
 
-        // if (!response.status )
-        //     throw new Error(`Fetch failed: ${response.statusText}`)
-
-        const blob = new Blob([response.data])
+        const blob = await response.blob()
         const blobUrl = window.URL.createObjectURL(blob)
 
         triggerBrowserDownload(blobUrl, fileName)
 
         setTimeout(() => window.URL.revokeObjectURL(blobUrl), 1000)
     } catch (error) {
-        console.error('Download via fetch failed:', error)
+        console.error('Download Failed', error)
         throw error
     }
 }
