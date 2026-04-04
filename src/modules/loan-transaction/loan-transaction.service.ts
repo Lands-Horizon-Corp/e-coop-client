@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import qs from 'query-string'
 
 import { Logger } from '@/helpers/loggers'
 import {
@@ -13,6 +14,7 @@ import {
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import { IComakerMemberProfile } from '../comaker-member-profile'
+import { IGeneratedReport, generatedReportBaseKey } from '../generated-report'
 import { ILoanGuide } from '../loan-guide'
 // import { IAmortizationSchedule } from '../amortization'
 import type {
@@ -29,6 +31,7 @@ import type {
     ILoanTransactionSuggestedRequest,
     ILoanTransactionSummary,
     TLoanMode,
+    TLoanTransactionReprintSchema,
 } from '../loan-transaction'
 
 const {
@@ -77,14 +80,21 @@ export const updateLoanTransactionSignature = async ({
 export const printLoanTransaction = async ({
     loanTransactionId,
     payload,
+    commit = true,
 }: {
     loanTransactionId: TEntityId
     payload: ILoanTransactionPrintRequest
+    commit?: boolean
 }) => {
+    const url = qs.stringifyUrl({
+        url: `${loanTransactionAPIRoute}/${loanTransactionId}/print`,
+        query: { commit },
+    })
+
     const response = await API.put<
         ILoanTransactionPrintRequest,
-        ILoanTransaction
-    >(`${loanTransactionAPIRoute}/${loanTransactionId}/print`, payload)
+        IGeneratedReport
+    >(url, payload)
     return response.data
 }
 
@@ -258,30 +268,48 @@ export const useUpdateLoanTransactionSignature = createMutationFactory<
 
 // PRINT
 export const usePrintLoanTransaction = createMutationFactory<
-    ILoanTransaction,
+    IGeneratedReport,
     Error,
-    { loanTransactionId: TEntityId; payload: ILoanTransactionPrintRequest }
+    {
+        loanTransactionId: TEntityId
+        payload: ILoanTransactionPrintRequest
+        commit?: boolean
+    }
 >({
     mutationFn: (data) => printLoanTransaction(data),
-    defaultInvalidates: [['auth', 'context']],
+    defaultInvalidates: [
+        ['auth', 'context'],
+        [generatedReportBaseKey, 'inprogress', 'all'],
+    ],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(loanTransactionBaseKey, args),
 })
 
 // RE-PRINT
 export const useReprintLoanTransaction = createMutationFactory<
-    ILoanTransaction,
+    IGeneratedReport,
     Error,
-    { loanTransactionId: TEntityId }
+    {
+        loanTransactionId: TEntityId
+        payload: TLoanTransactionReprintSchema
+        commit?: boolean
+    }
 >({
-    mutationFn: async (data) => {
-        const response = await API.put<void, ILoanTransaction>(
-            `${loanTransactionAPIRoute}/${data.loanTransactionId}/print-only`
-        )
+    mutationFn: async ({ loanTransactionId, payload, commit = true }) => {
+        const url = qs.stringifyUrl({
+            url: `${loanTransactionAPIRoute}/${loanTransactionId}/print-only`,
+            query: { commit },
+        })
+
+        const response = await API.put<
+            TLoanTransactionReprintSchema,
+            IGeneratedReport
+        >(url, payload)
         return response.data
     },
     invalidationFn: (args) =>
         updateMutationInvalidationFn(loanTransactionBaseKey, args),
+    defaultInvalidates: [[generatedReportBaseKey, 'inprogress', 'all']],
 })
 
 // UNDO PRINT

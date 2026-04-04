@@ -46,7 +46,7 @@ export const FinesFormSection = ({
                             name="interest_computation_month_end"
                             render={({ field }) => (
                                 <GradientBackground gradientOnly>
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                         <Switch
                                             aria-describedby={`${field.name}-description`}
                                             checked={field.value}
@@ -75,7 +75,7 @@ export const FinesFormSection = ({
                             name="fines_computation_by_next_amortization"
                             render={({ field }) => (
                                 <GradientBackground gradientOnly>
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                         <Switch
                                             aria-describedby={`${field.name}-description`}
                                             checked={field.value}
@@ -104,7 +104,7 @@ export const FinesFormSection = ({
                             name="computation_fines_lumpsum"
                             render={({ field }) => (
                                 <GradientBackground gradientOnly>
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                         <Switch
                                             aria-describedby={`${field.name}-description`}
                                             checked={field.value}
@@ -132,7 +132,7 @@ export const FinesFormSection = ({
                             name="fines_computation_daily_by_amortization"
                             render={({ field }) => (
                                 <GradientBackground gradientOnly>
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                         <Switch
                                             aria-describedby={`${field.name}-description`}
                                             checked={field.value}
@@ -161,7 +161,7 @@ export const FinesFormSection = ({
                             name="fines_computation_rest_by_rate"
                             render={({ field }) => (
                                 <GradientBackground gradientOnly>
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                         <Switch
                                             aria-describedby={`${field.name}-description`}
                                             checked={field.value}
@@ -190,7 +190,7 @@ export const FinesFormSection = ({
                             name="compute_fines_after_maturity"
                             render={({ field }) => (
                                 <GradientBackground gradientOnly>
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                         <Switch
                                             aria-describedby={`${field.name}-description`}
                                             checked={field.value}
@@ -219,7 +219,7 @@ export const FinesFormSection = ({
                         name="no_grace_period_daily"
                         render={({ field }) => (
                             <GradientBackground gradientOnly>
-                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                     <Switch
                                         aria-describedby={`${field.name}-description`}
                                         checked={field.value}
@@ -270,7 +270,7 @@ export const FinesFormSection = ({
                                             gradientOnly
                                             key={type}
                                         >
-                                            <div className="shadow-xs relative flex w-full h-full items-center gap-2 rounded-2xl border border-input p-3 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                            <div className="shadow-xs relative flex w-full h-full items-center gap-2 rounded-2xl border border-input p-3 outline-none duration-200 ease-out has-checked:border-prim-2has-[:checked]:bg-primary/40">
                                                 <RadioGroupItem
                                                     className="order-1 after:absolute after:inset-0"
                                                     id={`lumpsum-type-${type}`}
@@ -327,7 +327,7 @@ export const FinesFormSection = ({
                                                 gradientOnly
                                                 key={type}
                                             >
-                                                <div className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-3 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                                <div className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-3 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                                     <RadioGroupItem
                                                         className="order-1 after:absolute after:inset-0"
                                                         id={`int-fines-dim-${type}`}
@@ -369,7 +369,7 @@ export const FinesFormSection = ({
                                                 gradientOnly
                                                 key={type}
                                             >
-                                                <div className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-3 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                                <div className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-3 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                                     <RadioGroupItem
                                                         className="order-1 after:absolute after:inset-0"
                                                         id={`int-fines-dim-str-yearly-${type}`}

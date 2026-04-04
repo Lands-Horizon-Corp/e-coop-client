@@ -70,6 +70,7 @@ import { Route as OrgOrgnameBranchBranchnameDevDocumentationRouteImport } from '
 import { Route as OrgOrgnameBranchBranchnametransactionsWithdrawRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/withdraw'
 import { Route as OrgOrgnameBranchBranchnametransactionsTransactionsRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/transactions'
 import { Route as OrgOrgnameBranchBranchnametransactionsPaymentRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/payment'
+import { Route as OrgOrgnameBranchBranchnametransactionsOtherFundRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/other-fund'
 import { Route as OrgOrgnameBranchBranchnametransactionsLoanPaymentRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/loan-payment'
 import { Route as OrgOrgnameBranchBranchnametransactionsLoanRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/loan'
 import { Route as OrgOrgnameBranchBranchnametransactionsJournalVoucherRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/journal-voucher'
@@ -79,6 +80,13 @@ import { Route as OrgOrgnameBranchBranchnametransactionsCashCheckJournalVoucherR
 import { Route as OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/adjustment-entry'
 import { Route as OrgOrgnameBranchBranchnamemembersViewMembersRouteImport } from './routes/org/$orgname/branch.$branchname/(members)/view-members'
 import { Route as OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRouteImport } from './routes/org/$orgname/branch.$branchname/(members)/member-accounting-ledger'
+import { Route as OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory-maintenance)/inventory-warehouse'
+import { Route as OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory-maintenance)/inventory-tag'
+import { Route as OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory-maintenance)/inventory-supplier'
+import { Route as OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory-maintenance)/inventory-hazard'
+import { Route as OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory-maintenance)/inventory-category'
+import { Route as OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory-maintenance)/inventory-brand'
+import { Route as OrgOrgnameBranchBranchnameinventoryInventoryRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory)/inventory'
 import { Route as OrgOrgnameBranchBranchnameemployeesViewEmployeesRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/view-employees'
 import { Route as OrgOrgnameBranchBranchnameemployeesTimesheetsRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/timesheets'
 import { Route as OrgOrgnameBranchBranchnameemployeesPermissionTemplateRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/permission-template'
@@ -91,6 +99,7 @@ import { Route as OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRouteI
 import { Route as OrgOrgnameBranchBranchnameblotterCashCountRouteImport } from './routes/org/$orgname/branch.$branchname/(blotter)/cash-count'
 import { Route as OrgOrgnameBranchBranchnameapprovalsApprovalsRouteImport } from './routes/org/$orgname/branch.$branchname/(approvals)/approvals'
 import { Route as OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRouteImport } from './routes/org/$orgname/branch.$branchname/(accounting)/financial-statement-definition'
+import { Route as OrgOrgnameBranchBranchnameaccountingCheckWarehousingRouteImport } from './routes/org/$orgname/branch.$branchname/(accounting)/check-warehousing'
 import { Route as OrgOrgnameBranchBranchnameaccountingAccountsRouteImport } from './routes/org/$orgname/branch.$branchname/(accounting)/accounts'
 import { Route as OrgOrgnameBranchBranchnameschemesSchemesIndexRouteImport } from './routes/org/$orgname/branch.$branchname/(schemes)/schemes/index'
 import { Route as OrgOrgnameBranchBranchnameMaintenanceLoansLoanStatusRouteImport } from './routes/org/$orgname/branch.$branchname/maintenance/loans/loan-status'
@@ -454,6 +463,12 @@ const OrgOrgnameBranchBranchnametransactionsPaymentRoute =
     path: '/payment',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnametransactionsOtherFundRoute =
+  OrgOrgnameBranchBranchnametransactionsOtherFundRouteImport.update({
+    id: '/(transactions)/other-fund',
+    path: '/other-fund',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
 const OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute =
   OrgOrgnameBranchBranchnametransactionsLoanPaymentRouteImport.update({
     id: '/(transactions)/loan-payment',
@@ -510,6 +525,58 @@ const OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute =
   OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRouteImport.update({
     id: '/(members)/member-accounting-ledger',
     path: '/member-accounting-ledger',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute =
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRouteImport.update(
+    {
+      id: '/(inventory-maintenance)/inventory-warehouse',
+      path: '/inventory-warehouse',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute =
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRouteImport.update({
+    id: '/(inventory-maintenance)/inventory-tag',
+    path: '/inventory-tag',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute =
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRouteImport.update(
+    {
+      id: '/(inventory-maintenance)/inventory-supplier',
+      path: '/inventory-supplier',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute =
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRouteImport.update(
+    {
+      id: '/(inventory-maintenance)/inventory-hazard',
+      path: '/inventory-hazard',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute =
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRouteImport.update(
+    {
+      id: '/(inventory-maintenance)/inventory-category',
+      path: '/inventory-category',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute =
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRouteImport.update(
+    {
+      id: '/(inventory-maintenance)/inventory-brand',
+      path: '/inventory-brand',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameinventoryInventoryRoute =
+  OrgOrgnameBranchBranchnameinventoryInventoryRouteImport.update({
+    id: '/(inventory)/inventory',
+    path: '/inventory',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
 const OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute =
@@ -586,6 +653,12 @@ const OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute =
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
+const OrgOrgnameBranchBranchnameaccountingCheckWarehousingRoute =
+  OrgOrgnameBranchBranchnameaccountingCheckWarehousingRouteImport.update({
+    id: '/(accounting)/check-warehousing',
+    path: '/check-warehousing',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
 const OrgOrgnameBranchBranchnameaccountingAccountsRoute =
   OrgOrgnameBranchBranchnameaccountingAccountsRouteImport.update({
     id: '/(accounting)/accounts',
@@ -803,6 +876,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/accounts': typeof OrgOrgnameBranchBranchnameaccountingAccountsRoute
+  '/org/$orgname/branch/$branchname/check-warehousing': typeof OrgOrgnameBranchBranchnameaccountingCheckWarehousingRoute
   '/org/$orgname/branch/$branchname/financial-statement-definition': typeof OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute
   '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameapprovalsApprovalsRoute
   '/org/$orgname/branch/$branchname/cash-count': typeof OrgOrgnameBranchBranchnameblotterCashCountRoute
@@ -815,6 +889,13 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
   '/org/$orgname/branch/$branchname/view-employees': typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  '/org/$orgname/branch/$branchname/inventory': typeof OrgOrgnameBranchBranchnameinventoryInventoryRoute
+  '/org/$orgname/branch/$branchname/inventory-brand': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute
+  '/org/$orgname/branch/$branchname/inventory-category': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute
+  '/org/$orgname/branch/$branchname/inventory-hazard': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute
+  '/org/$orgname/branch/$branchname/inventory-supplier': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute
+  '/org/$orgname/branch/$branchname/inventory-tag': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute
+  '/org/$orgname/branch/$branchname/inventory-warehouse': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute
   '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/adjustment-entry': typeof OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute
@@ -824,6 +905,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/journal-voucher': typeof OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute
   '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnametransactionsLoanRoute
   '/org/$orgname/branch/$branchname/loan-payment': typeof OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute
+  '/org/$orgname/branch/$branchname/other-fund': typeof OrgOrgnameBranchBranchnametransactionsOtherFundRoute
   '/org/$orgname/branch/$branchname/payment': typeof OrgOrgnameBranchBranchnametransactionsPaymentRoute
   '/org/$orgname/branch/$branchname/transactions': typeof OrgOrgnameBranchBranchnametransactionsTransactionsRoute
   '/org/$orgname/branch/$branchname/withdraw': typeof OrgOrgnameBranchBranchnametransactionsWithdrawRoute
@@ -905,6 +987,7 @@ export interface FileRoutesByTo {
   '/onboarding/organization': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/accounts': typeof OrgOrgnameBranchBranchnameaccountingAccountsRoute
+  '/org/$orgname/branch/$branchname/check-warehousing': typeof OrgOrgnameBranchBranchnameaccountingCheckWarehousingRoute
   '/org/$orgname/branch/$branchname/financial-statement-definition': typeof OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute
   '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameapprovalsApprovalsRoute
   '/org/$orgname/branch/$branchname/cash-count': typeof OrgOrgnameBranchBranchnameblotterCashCountRoute
@@ -917,6 +1000,13 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
   '/org/$orgname/branch/$branchname/view-employees': typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  '/org/$orgname/branch/$branchname/inventory': typeof OrgOrgnameBranchBranchnameinventoryInventoryRoute
+  '/org/$orgname/branch/$branchname/inventory-brand': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute
+  '/org/$orgname/branch/$branchname/inventory-category': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute
+  '/org/$orgname/branch/$branchname/inventory-hazard': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute
+  '/org/$orgname/branch/$branchname/inventory-supplier': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute
+  '/org/$orgname/branch/$branchname/inventory-tag': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute
+  '/org/$orgname/branch/$branchname/inventory-warehouse': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute
   '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/adjustment-entry': typeof OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute
@@ -926,6 +1016,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/journal-voucher': typeof OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute
   '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnametransactionsLoanRoute
   '/org/$orgname/branch/$branchname/loan-payment': typeof OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute
+  '/org/$orgname/branch/$branchname/other-fund': typeof OrgOrgnameBranchBranchnametransactionsOtherFundRoute
   '/org/$orgname/branch/$branchname/payment': typeof OrgOrgnameBranchBranchnametransactionsPaymentRoute
   '/org/$orgname/branch/$branchname/transactions': typeof OrgOrgnameBranchBranchnametransactionsTransactionsRoute
   '/org/$orgname/branch/$branchname/withdraw': typeof OrgOrgnameBranchBranchnametransactionsWithdrawRoute
@@ -1013,6 +1104,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/(accounting)/accounts': typeof OrgOrgnameBranchBranchnameaccountingAccountsRoute
+  '/org/$orgname/branch/$branchname/(accounting)/check-warehousing': typeof OrgOrgnameBranchBranchnameaccountingCheckWarehousingRoute
   '/org/$orgname/branch/$branchname/(accounting)/financial-statement-definition': typeof OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute
   '/org/$orgname/branch/$branchname/(approvals)/approvals': typeof OrgOrgnameBranchBranchnameapprovalsApprovalsRoute
   '/org/$orgname/branch/$branchname/(blotter)/cash-count': typeof OrgOrgnameBranchBranchnameblotterCashCountRoute
@@ -1025,6 +1117,13 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(employees)/permission-template': typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/(employees)/timesheets': typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
   '/org/$orgname/branch/$branchname/(employees)/view-employees': typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  '/org/$orgname/branch/$branchname/(inventory)/inventory': typeof OrgOrgnameBranchBranchnameinventoryInventoryRoute
+  '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-brand': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute
+  '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-category': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute
+  '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-hazard': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute
+  '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-supplier': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute
+  '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-tag': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute
+  '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-warehouse': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute
   '/org/$orgname/branch/$branchname/(members)/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/(members)/view-members': typeof OrgOrgnameBranchBranchnamemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/(transactions)/adjustment-entry': typeof OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute
@@ -1034,6 +1133,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(transactions)/journal-voucher': typeof OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute
   '/org/$orgname/branch/$branchname/(transactions)/loan': typeof OrgOrgnameBranchBranchnametransactionsLoanRoute
   '/org/$orgname/branch/$branchname/(transactions)/loan-payment': typeof OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute
+  '/org/$orgname/branch/$branchname/(transactions)/other-fund': typeof OrgOrgnameBranchBranchnametransactionsOtherFundRoute
   '/org/$orgname/branch/$branchname/(transactions)/payment': typeof OrgOrgnameBranchBranchnametransactionsPaymentRoute
   '/org/$orgname/branch/$branchname/(transactions)/transactions': typeof OrgOrgnameBranchBranchnametransactionsTransactionsRoute
   '/org/$orgname/branch/$branchname/(transactions)/withdraw': typeof OrgOrgnameBranchBranchnametransactionsWithdrawRoute
@@ -1121,6 +1221,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/'
     | '/org/$orgname/branch/$branchname/accounts'
+    | '/org/$orgname/branch/$branchname/check-warehousing'
     | '/org/$orgname/branch/$branchname/financial-statement-definition'
     | '/org/$orgname/branch/$branchname/approvals'
     | '/org/$orgname/branch/$branchname/cash-count'
@@ -1133,6 +1234,13 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/permission-template'
     | '/org/$orgname/branch/$branchname/timesheets'
     | '/org/$orgname/branch/$branchname/view-employees'
+    | '/org/$orgname/branch/$branchname/inventory'
+    | '/org/$orgname/branch/$branchname/inventory-brand'
+    | '/org/$orgname/branch/$branchname/inventory-category'
+    | '/org/$orgname/branch/$branchname/inventory-hazard'
+    | '/org/$orgname/branch/$branchname/inventory-supplier'
+    | '/org/$orgname/branch/$branchname/inventory-tag'
+    | '/org/$orgname/branch/$branchname/inventory-warehouse'
     | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/adjustment-entry'
@@ -1142,6 +1250,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/journal-voucher'
     | '/org/$orgname/branch/$branchname/loan'
     | '/org/$orgname/branch/$branchname/loan-payment'
+    | '/org/$orgname/branch/$branchname/other-fund'
     | '/org/$orgname/branch/$branchname/payment'
     | '/org/$orgname/branch/$branchname/transactions'
     | '/org/$orgname/branch/$branchname/withdraw'
@@ -1223,6 +1332,7 @@ export interface FileRouteTypes {
     | '/onboarding/organization'
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/accounts'
+    | '/org/$orgname/branch/$branchname/check-warehousing'
     | '/org/$orgname/branch/$branchname/financial-statement-definition'
     | '/org/$orgname/branch/$branchname/approvals'
     | '/org/$orgname/branch/$branchname/cash-count'
@@ -1235,6 +1345,13 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/permission-template'
     | '/org/$orgname/branch/$branchname/timesheets'
     | '/org/$orgname/branch/$branchname/view-employees'
+    | '/org/$orgname/branch/$branchname/inventory'
+    | '/org/$orgname/branch/$branchname/inventory-brand'
+    | '/org/$orgname/branch/$branchname/inventory-category'
+    | '/org/$orgname/branch/$branchname/inventory-hazard'
+    | '/org/$orgname/branch/$branchname/inventory-supplier'
+    | '/org/$orgname/branch/$branchname/inventory-tag'
+    | '/org/$orgname/branch/$branchname/inventory-warehouse'
     | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/adjustment-entry'
@@ -1244,6 +1361,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/journal-voucher'
     | '/org/$orgname/branch/$branchname/loan'
     | '/org/$orgname/branch/$branchname/loan-payment'
+    | '/org/$orgname/branch/$branchname/other-fund'
     | '/org/$orgname/branch/$branchname/payment'
     | '/org/$orgname/branch/$branchname/transactions'
     | '/org/$orgname/branch/$branchname/withdraw'
@@ -1330,6 +1448,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/'
     | '/org/$orgname/branch/$branchname/(accounting)/accounts'
+    | '/org/$orgname/branch/$branchname/(accounting)/check-warehousing'
     | '/org/$orgname/branch/$branchname/(accounting)/financial-statement-definition'
     | '/org/$orgname/branch/$branchname/(approvals)/approvals'
     | '/org/$orgname/branch/$branchname/(blotter)/cash-count'
@@ -1342,6 +1461,13 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(employees)/permission-template'
     | '/org/$orgname/branch/$branchname/(employees)/timesheets'
     | '/org/$orgname/branch/$branchname/(employees)/view-employees'
+    | '/org/$orgname/branch/$branchname/(inventory)/inventory'
+    | '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-brand'
+    | '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-category'
+    | '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-hazard'
+    | '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-supplier'
+    | '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-tag'
+    | '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-warehouse'
     | '/org/$orgname/branch/$branchname/(members)/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/(members)/view-members'
     | '/org/$orgname/branch/$branchname/(transactions)/adjustment-entry'
@@ -1351,6 +1477,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(transactions)/journal-voucher'
     | '/org/$orgname/branch/$branchname/(transactions)/loan'
     | '/org/$orgname/branch/$branchname/(transactions)/loan-payment'
+    | '/org/$orgname/branch/$branchname/(transactions)/other-fund'
     | '/org/$orgname/branch/$branchname/(transactions)/payment'
     | '/org/$orgname/branch/$branchname/(transactions)/transactions'
     | '/org/$orgname/branch/$branchname/(transactions)/withdraw'
@@ -1820,6 +1947,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnametransactionsPaymentRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/(transactions)/other-fund': {
+      id: '/org/$orgname/branch/$branchname/(transactions)/other-fund'
+      path: '/other-fund'
+      fullPath: '/org/$orgname/branch/$branchname/other-fund'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnametransactionsOtherFundRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(transactions)/loan-payment': {
       id: '/org/$orgname/branch/$branchname/(transactions)/loan-payment'
       path: '/loan-payment'
@@ -1881,6 +2015,55 @@ declare module '@tanstack/react-router' {
       path: '/member-accounting-ledger'
       fullPath: '/org/$orgname/branch/$branchname/member-accounting-ledger'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-warehouse': {
+      id: '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-warehouse'
+      path: '/inventory-warehouse'
+      fullPath: '/org/$orgname/branch/$branchname/inventory-warehouse'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-tag': {
+      id: '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-tag'
+      path: '/inventory-tag'
+      fullPath: '/org/$orgname/branch/$branchname/inventory-tag'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-supplier': {
+      id: '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-supplier'
+      path: '/inventory-supplier'
+      fullPath: '/org/$orgname/branch/$branchname/inventory-supplier'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-hazard': {
+      id: '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-hazard'
+      path: '/inventory-hazard'
+      fullPath: '/org/$orgname/branch/$branchname/inventory-hazard'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-category': {
+      id: '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-category'
+      path: '/inventory-category'
+      fullPath: '/org/$orgname/branch/$branchname/inventory-category'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-brand': {
+      id: '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-brand'
+      path: '/inventory-brand'
+      fullPath: '/org/$orgname/branch/$branchname/inventory-brand'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(inventory)/inventory': {
+      id: '/org/$orgname/branch/$branchname/(inventory)/inventory'
+      path: '/inventory'
+      fullPath: '/org/$orgname/branch/$branchname/inventory'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryInventoryRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/(employees)/view-employees': {
@@ -1965,6 +2148,13 @@ declare module '@tanstack/react-router' {
       path: '/financial-statement-definition'
       fullPath: '/org/$orgname/branch/$branchname/financial-statement-definition'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(accounting)/check-warehousing': {
+      id: '/org/$orgname/branch/$branchname/(accounting)/check-warehousing'
+      path: '/check-warehousing'
+      fullPath: '/org/$orgname/branch/$branchname/check-warehousing'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameaccountingCheckWarehousingRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/(accounting)/accounts': {
@@ -2295,6 +2485,7 @@ const OnboardingRouteRouteWithChildren = OnboardingRouteRoute._addFileChildren(
 interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameIndexRoute: typeof OrgOrgnameBranchBranchnameIndexRoute
   OrgOrgnameBranchBranchnameaccountingAccountsRoute: typeof OrgOrgnameBranchBranchnameaccountingAccountsRoute
+  OrgOrgnameBranchBranchnameaccountingCheckWarehousingRoute: typeof OrgOrgnameBranchBranchnameaccountingCheckWarehousingRoute
   OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute: typeof OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute
   OrgOrgnameBranchBranchnameapprovalsApprovalsRoute: typeof OrgOrgnameBranchBranchnameapprovalsApprovalsRoute
   OrgOrgnameBranchBranchnameblotterCashCountRoute: typeof OrgOrgnameBranchBranchnameblotterCashCountRoute
@@ -2307,6 +2498,13 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute: typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
   OrgOrgnameBranchBranchnameemployeesTimesheetsRoute: typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
   OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute: typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  OrgOrgnameBranchBranchnameinventoryInventoryRoute: typeof OrgOrgnameBranchBranchnameinventoryInventoryRoute
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute
   OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute: typeof OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute
   OrgOrgnameBranchBranchnamemembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemembersViewMembersRoute
   OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute: typeof OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute
@@ -2316,6 +2514,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute: typeof OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute
   OrgOrgnameBranchBranchnametransactionsLoanRoute: typeof OrgOrgnameBranchBranchnametransactionsLoanRoute
   OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute: typeof OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute
+  OrgOrgnameBranchBranchnametransactionsOtherFundRoute: typeof OrgOrgnameBranchBranchnametransactionsOtherFundRoute
   OrgOrgnameBranchBranchnametransactionsPaymentRoute: typeof OrgOrgnameBranchBranchnametransactionsPaymentRoute
   OrgOrgnameBranchBranchnametransactionsTransactionsRoute: typeof OrgOrgnameBranchBranchnametransactionsTransactionsRoute
   OrgOrgnameBranchBranchnametransactionsWithdrawRoute: typeof OrgOrgnameBranchBranchnametransactionsWithdrawRoute
@@ -2359,6 +2558,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
     OrgOrgnameBranchBranchnameIndexRoute: OrgOrgnameBranchBranchnameIndexRoute,
     OrgOrgnameBranchBranchnameaccountingAccountsRoute:
       OrgOrgnameBranchBranchnameaccountingAccountsRoute,
+    OrgOrgnameBranchBranchnameaccountingCheckWarehousingRoute:
+      OrgOrgnameBranchBranchnameaccountingCheckWarehousingRoute,
     OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute:
       OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute,
     OrgOrgnameBranchBranchnameapprovalsApprovalsRoute:
@@ -2383,6 +2584,20 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameemployeesTimesheetsRoute,
     OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute:
       OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute,
+    OrgOrgnameBranchBranchnameinventoryInventoryRoute:
+      OrgOrgnameBranchBranchnameinventoryInventoryRoute,
+    OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute:
+      OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute,
+    OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute:
+      OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute,
+    OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute:
+      OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute,
+    OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute:
+      OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute,
+    OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute:
+      OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute,
+    OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute:
+      OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute,
     OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute:
       OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute,
     OrgOrgnameBranchBranchnamemembersViewMembersRoute:
@@ -2401,6 +2616,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnametransactionsLoanRoute,
     OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute:
       OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute,
+    OrgOrgnameBranchBranchnametransactionsOtherFundRoute:
+      OrgOrgnameBranchBranchnametransactionsOtherFundRoute,
     OrgOrgnameBranchBranchnametransactionsPaymentRoute:
       OrgOrgnameBranchBranchnametransactionsPaymentRoute,
     OrgOrgnameBranchBranchnametransactionsTransactionsRoute:

@@ -38,7 +38,8 @@ const TransactionBatchDisbursementTransaction = ({
     })
 
     useSubscribe<IDisbursementTransaction>(
-        `disbursement-transaction.transaction-batch.${transactionBatchId}.create`,
+        'disbursement-transaction',
+        `transaction-batch.${transactionBatchId}.create`,
         () => {
             queryClient.invalidateQueries({
                 queryKey: ['disbursement-transaction', 'paginated'],
@@ -47,7 +48,8 @@ const TransactionBatchDisbursementTransaction = ({
     )
 
     useSubscribe<IDisbursementTransaction>(
-        `disbursement-transaction.transaction-batch.${transactionBatchId}.update`,
+        'disbursement-transaction',
+        `transaction-batch.${transactionBatchId}.update`,
         () => {
             queryClient.invalidateQueries({
                 queryKey: ['disbursement-transaction', 'paginated'],

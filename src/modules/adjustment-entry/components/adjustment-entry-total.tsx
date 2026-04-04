@@ -59,13 +59,13 @@ export const AdjustmentEntryTotal = ({
     return (
         <div
             className={cn(
-                'flex justify-end bg-gradient-to-tr from-card/20 to-primary/10 rounded-2xl relative px-4 py-1 border gap-x-8',
+                'flex justify-end overflow-x-auto max-w-full w-full ecoop-scroll bg-linear-to-tr from-card/20 to-primary/10 rounded-2xl relative px-4 py-1 border gap-x-8',
                 !data?.is_balanced && 'to-rose-600/10 border-rose-400',
                 className
             )}
         >
             <Button
-                className="absolute rounded-full size-fit top-2 right-2"
+                className="absolute rounded-full over size-fit top-2 right-2"
                 disabled={isPending}
                 onClick={() => refetch()}
                 size="icon"

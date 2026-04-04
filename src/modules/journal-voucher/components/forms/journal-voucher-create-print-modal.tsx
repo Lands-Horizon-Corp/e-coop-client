@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 
-import { useForm } from 'react-hook-form'
+import { UseFormReturn, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -8,7 +8,11 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import {
-    IJournalVoucher,
+    IGeneratedReport,
+    TWithReportConfigSchema,
+} from '@/modules/generated-report'
+import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
+import {
     JournalVoucherPrintSchema,
     TJournalVoucherPrintSchema,
     TORJournalVoucherSettings,
@@ -39,7 +43,7 @@ export interface IJournalVoucherPrintFormProps
         IClassProps,
         IForm<
             Partial<TJournalVoucherPrintSchema>,
-            IJournalVoucher,
+            IGeneratedReport,
             Error,
             TJournalVoucherPrintSchema
         > {
@@ -76,11 +80,17 @@ const JournalVoucherPrintForm = ({
             ...formProps,
         })
 
-    const onSubmit = form.handleSubmit(async (payload) => {
+    const onSubmit = form.handleSubmit(async ({ report_config, ...rest }) => {
         toast.promise(
             printMutation.mutateAsync({
                 journalVoucherId,
-                payload,
+                payload: {
+                    ...rest,
+                    report_config: {
+                        ...report_config,
+                        filters: { journal_voucher_id: journalVoucherId },
+                    },
+                },
             }),
             {
                 loading: 'Printing Journal Voucher...',
@@ -192,6 +202,12 @@ const JournalVoucherPrintForm = ({
                                 </Label>
                             </div>
                         )}
+                    />
+                    <PrintSettingsSection
+                        form={
+                            form as unknown as UseFormReturn<TWithReportConfigSchema>
+                        }
+                        registryKey={'journal_voucher_print_template'}
                     />
                 </fieldset>
                 <FormFooterResetSubmit

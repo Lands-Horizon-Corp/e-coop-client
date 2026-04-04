@@ -199,7 +199,7 @@ export function JournalVoucherTagsManager({
             <div className="flex gap-1.5 flex-wrap ">
                 {!readOnly && (
                     <Button
-                        className="border-dashed rounded !size-fit py-1 !px-1 text-xs"
+                        className="border-dashed rounded size-fit! py-1 px-1! text-xs"
                         onClick={() => tagPickerModal.onOpenChange(true)}
                         type="button"
                         variant="outline"
@@ -259,7 +259,7 @@ export const JournalVoucherTagsManagerPopover = ({
                 ) : (
                     <Button
                         className={cn(
-                            'size-fit !p-0 border-accent rounded-full !py-0.5 !px-1.5',
+                            'size-fit p-0! border-accent rounded-full py-0.5! px-1.5!',
                             className
                         )}
                         size="sm"

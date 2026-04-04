@@ -30,9 +30,9 @@ import { IUser } from '../user'
 import { IUserOrganizationSettings } from '../user-organization'
 import {
     LoanEditTransactionSchema,
-    LoanTransactionPrintSchema,
     LoanTransactionSchema,
     TLoanTransactionAdjustmentSchema,
+    TLoanTransactionPrintSchema,
     TLoanTransactionSignatureSchema,
     TLoanTransactionSuggestedSchema,
 } from './loan-transaction.validation'
@@ -280,7 +280,7 @@ export type ILoanTransactionSignatureRequest = TLoanTransactionSignatureSchema
 
 // Loan Transaction Print Request
 
-export type ILoanTransactionPrintRequest = LoanTransactionPrintSchema
+export type ILoanTransactionPrintRequest = TLoanTransactionPrintSchema
 
 // for suggested amortization
 export type ILoanTransactionSuggested = { terms: number }

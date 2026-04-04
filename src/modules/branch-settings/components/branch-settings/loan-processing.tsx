@@ -60,7 +60,7 @@ const LoanProcessing = ({ branchId }: Props) => {
             </div>
             <ProcessingProgress
                 onProgressChange={setProcessingState}
-                subscriptionKey={`loan.process.branch.${resolvedBranchId}`}
+                subscriptionKey={`process.branch.${resolvedBranchId}`}
             />
             <AnimatePresence mode="wait">
                 <motion.p
@@ -103,6 +103,7 @@ const ProcessingProgress = ({
     >(undefined)
 
     useSubscribe<LoanProcessingEventResponse | undefined>(
+        'loan',
         subscriptionKey || 'null',
         (data) => {
             setData(data)

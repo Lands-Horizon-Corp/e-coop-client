@@ -1,6 +1,152 @@
-export const PAPER_SIZE_UNIT = ['mm', 'in', 'pt'] as const
+import { TPaperSizeUnit } from './generated-report.types'
 
-export type TPaperSizeUnit = (typeof PAPER_SIZE_UNIT)[number]
+export const ACCOUNT_MODEL_NAMES = [
+    'AccountHistory',
+    'Account',
+    'AccountCategory',
+    'AccountClassification',
+    'AccountTag',
+    'AdjustmentEntry',
+    'AdjustmentTag',
+    'AutomaticLoanDeduction',
+    'Bank',
+    'BatchFunding',
+    'BillAndCoins',
+    'branch',
+    'branchSetting',
+    'BrowseExcludeIncludeAccounts',
+    'CancelledCashCheckVoucher',
+    'CashCheckVoucher',
+    'CashCheckVoucherEntry',
+    'CashCheckVoucherTag',
+    'CashCount',
+    'Category',
+    'ChargesRateByRangeOrMinimumAmount',
+    'ChargesRateByTerm',
+    'ChargesRateScheme',
+    'ChargesRateSchemeAccount',
+    'ChargesRateSchemeModeOfPayment',
+    'CheckRemittance',
+    'Collateral',
+    'CollectorsMemberAccountEntry',
+    'ComakerCollateral',
+    'ComakerMemberProfile',
+    'Company',
+    'ComputationSheet',
+    'ContactUs',
+    'Currency',
+    'Disbursement',
+    'DisbursementTransaction',
+    'Feedback',
+    'FinancialStatementGrouping',
+    'FinancialStatementDefinition',
+    'FinesMaturity',
+    'Footstep',
+    'Funds',
+    'GeneralAccountGroupingNetSurplusNegative',
+    'GeneralLedgerTag',
+    'GeneralLedger',
+    'GeneralLedgerAccountsGrouping',
+    'GeneralLedgerDefinition',
+    'GeneratedReport',
+    'GroceryComputationSheet',
+    'GroceryComputationSheetMonthly',
+    'Holiday',
+    'Area',
+    'IncludeNegativeAccount',
+    'InterestMaturity',
+    'InterestRateByTerm',
+    'InterestRateByTermsHeader',
+    'InterestRatePercentage',
+    'InterestRateScheme',
+    'InvitationCode',
+    'JournalVoucher',
+    'JournalVoucherEntry',
+    'JournalVoucherTag',
+    'LoanClearanceAnalysis',
+    'LoanClearanceAnalysisInstitution',
+    'LoanComakerMember',
+    'LoanGuaranteedFund',
+    'LoanGuaranteedFundPerMonth',
+    'LoanLedger',
+    'LoanPurpose',
+    'LoanStatus',
+    'LoanTag',
+    'LoanTermsAndConditionAmountReceipt',
+    'LoanTermsAndConditionSuggestedPayment',
+    'LoanTransaction',
+    'LoanTransactionEntry',
+    'Media',
+    'MemberAccountingLedger',
+    'MemberAddress',
+    'MemberAsset',
+    'MemberBankCard',
+    'MemberCenter',
+    'MemberCenterHistory',
+    'MemberClassification',
+    'MemberClassificationHistory',
+    'MemberClassificationInterestRate',
+    'MemberCloseRemark',
+    'MemberContactReference',
+    'MemberDamayanExtensionEntry',
+    'MemberDeductionEntry',
+    'MemberDepartment',
+    'MemberDepartmentHistory',
+    'MemberEducationalAttainment',
+    'MemberExpense',
+    'MemberGender',
+    'MemberGenderHistory',
+    'MemberGovernmentBenefit',
+    'MemberGroup',
+    'MemberGroupHistory',
+    'MemberIncome',
+    'MemberJointAccount',
+    'MemberMutualFundHistory',
+    'MemberOccupation',
+    'MemberOccupationHistory',
+    'MemberOtherInformationEntry',
+    'MemberProfile',
+    'MemberProfileMedia',
+    'MemberRelativeAccount',
+    'MemberType',
+    'MemberTypeHistory',
+    'BrowseReference',
+    'BrowseReferenceByAmount',
+    'BrowseReferenceInterestRateByUltimaMembershipDate',
+    'BrowseReferenceInterestRateByUltimaMembershipDatePerYear',
+    'MemberVerification',
+    'QRMemberProfile',
+    'QRInvitationCode',
+    'QRUser',
+    'Core',
+    'Notification',
+    'OnlineRemittance',
+    'Organization',
+    'OrganizationCategory',
+    'OrganizationDailyUsage',
+    'OrganizationMedia',
+    'OtherFund',
+    'PaymentType',
+    'PermissionTemplate',
+    'PostDatedCheck',
+    'SubscriptionPlan',
+    'TagTemplate',
+    'TimeDepositComputation',
+    'TimeDepositComputationPreMature',
+    'TimeDepositType',
+    'Timesheet',
+    'Transaction',
+    'TransactionBatch',
+    'TransactionTag',
+    'UnbalancedAccount',
+    'User',
+    'UserOrganization',
+    'UserRating',
+    'VoucherPayTo',
+    'none',
+] as const
+
+export const PAPER_SIZE_UNIT = ['in', 'cm', 'mm', 'pt', 'px'] as const
 
 export interface PaperSize {
     name: string
@@ -10,39 +156,7 @@ export interface PaperSize {
     orientation?: 'portrait' | 'landscape'
 }
 
-type GENERAL_PAPER_SIZE =
-    | 'RECEIPT_58MM'
-    | 'RECEIPT_80MM'
-    | 'LETTER'
-    | 'LEGAL'
-    | 'FOLIO'
-    | 'CHECK'
-    | 'PASSBOOK'
-    | 'DEPOSIT_SLIP'
-    | 'WITHDRAWAL_SLIP'
-    | 'STATEMENT'
-    | 'CHECKBOOK'
-    | 'BANKBOOK'
-
-type B_SERIES_SIZES =
-    // | 'B0'
-    // | 'B1'
-    // | 'B2'
-    // | 'B3'
-    // | 'B4'
-    'B5' | 'B6' | 'B7' | 'B8' | 'B9' | 'B10'
-type A_SERIES_SIZES = 'A0' | 'A1' | 'A2' | 'A3' | 'A4' | 'A5' | 'A6'
-// | 'A7'
-// | 'A8'
-// | 'A9'
-// | 'A10'
-
-export type TPaperSizeName =
-    | GENERAL_PAPER_SIZE
-    | A_SERIES_SIZES
-    | B_SERIES_SIZES
-
-export const PAPER_SIZES: Record<TPaperSizeName, PaperSize> = {
+export const PAPER_SIZES: Record<string, PaperSize> = {
     // Receipt Sizes
     RECEIPT_58MM: { name: '58mm Receipt', width: 58, height: 200, unit: 'mm' },
     RECEIPT_80MM: { name: '80mm Receipt', width: 80, height: 200, unit: 'mm' },
@@ -70,10 +184,10 @@ export const PAPER_SIZES: Record<TPaperSizeName, PaperSize> = {
     A5: { name: 'A5', width: 148, height: 210, unit: 'mm' },
     A6: { name: 'A6', width: 105, height: 148, unit: 'mm' },
     //this sizes are rarely used
-    // A7: { name: 'A7', width: 74, height: 105, unit: 'mm' },
-    // A8: { name: 'A8', width: 52, height: 74, unit: 'mm' },
-    // A9: { name: 'A9', width: 37, height: 52, unit: 'mm' },
-    // A10: { name: 'A10', width: 26, height: 37, unit: 'mm' },
+    A7: { name: 'A7', width: 74, height: 105, unit: 'mm' },
+    A8: { name: 'A8', width: 52, height: 74, unit: 'mm' },
+    A9: { name: 'A9', width: 37, height: 52, unit: 'mm' },
+    A10: { name: 'A10', width: 26, height: 37, unit: 'mm' },
 
     // B Series (ISO 216 Standard)
     // B0: { name: 'B0', width: 1000, height: 1414, unit: 'mm' },
@@ -93,6 +207,34 @@ export const PAPER_SIZES: Record<TPaperSizeName, PaperSize> = {
     LEGAL: { name: 'Legal', width: 8.5, height: 14, unit: 'in' },
     FOLIO: { name: 'Folio', width: 8.5, height: 13, unit: 'in' },
 }
+
+export const PAPER_SIZE_GROUPS = {
+    Receipt: ['RECEIPT_58MM', 'RECEIPT_80MM'],
+    Banking: [
+        'CHECK',
+        'PASSBOOK',
+        'DEPOSIT_SLIP',
+        'WITHDRAWAL_SLIP',
+        'STATEMENT',
+        'CHECKBOOK',
+        'BANKBOOK',
+    ],
+    'A Series': [
+        'A0',
+        'A1',
+        'A2',
+        'A3',
+        'A4',
+        'A5',
+        'A6',
+        'A7',
+        'A8',
+        'A9',
+        'A10',
+    ],
+    'B Series': ['B5', 'B6', 'B7', 'B8', 'B9', 'B10'],
+    'North American': ['LETTER', 'LEGAL', 'FOLIO'],
+} as const
 
 // 🧭 Helper Function to Get Orientation
 export function getPaperSize(

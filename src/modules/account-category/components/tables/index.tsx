@@ -152,9 +152,9 @@ const AccountCategoryTable = ({
         defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
 
-    useSubscribe(`account_category.update.branch.${branch_id}`, refetch)
-    useSubscribe(`account_category.delete.branch.${branch_id}`, refetch)
-    useSubscribe(`account_category.create.branch.${branch_id}`, refetch)
+    useSubscribe('account_category', `update.branch.${branch_id}`, refetch)
+    useSubscribe('account_category', `delete.branch.${branch_id}`, refetch)
+    useSubscribe('account_category', `create.branch.${branch_id}`, refetch)
 
     const filter = qs.stringify(
         {

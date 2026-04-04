@@ -14,6 +14,7 @@ import {
     DialogDescription,
     type DialogExtraProps,
     DialogTitle,
+    DialogTrigger,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 
@@ -25,6 +26,7 @@ export interface IModalClassNames extends DialogExtraProps, IClassProps {
 export interface IModalProps
     extends IBaseProps, DialogPrimitive.DialogProps, IModalClassNames {
     title?: string | ReactNode
+    trigger?: ReactNode
     description?: string | ReactNode
     footer?: React.ReactNode
     hideOnSuccess?: boolean
@@ -33,6 +35,7 @@ export interface IModalProps
 const Modal = ({
     title,
     footer,
+    trigger,
     children,
     className,
     description,
@@ -46,6 +49,7 @@ const Modal = ({
 }: IModalProps) => {
     return (
         <Dialog {...other}>
+            {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
             <DialogContent
                 className={cn(
                     'shadow-2 ecoop-scroll max-h-[95vh] max-w-xl overflow-y-auto rounded-2xl! border font-inter',

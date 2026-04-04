@@ -99,7 +99,7 @@ const AdjustmentEntryPage = () => {
                             onChange={(currency) => setCurrency(currency)}
                             value={currency?.id}
                         />
-                        <Separator className="!h-8" orientation="vertical" />
+                        <Separator className="h-8!" orientation="vertical" />
                         <div className="w-fit flex items-center gap-x-2">
                             <EmployeePicker
                                 onSelect={(employee) =>

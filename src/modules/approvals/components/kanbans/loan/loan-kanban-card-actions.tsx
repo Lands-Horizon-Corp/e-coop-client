@@ -1,12 +1,13 @@
 import { toast } from 'sonner'
 
+import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import {
     hasPermissionFromAuth,
     useAuthStore,
 } from '@/modules/authentication/authgentication.store'
-import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
-import { useGenerateReport } from '@/modules/generated-report/components/generate-report-hooks/use-report-generate'
+import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
+// import { useGenerateReport } from '@/modules/generated-report/components/generate-report-hooks/use-report-generate'
 import {
     ILoanTransaction,
     TORLoanVoucherSettings,
@@ -17,11 +18,12 @@ import { LoanTransactionCreateUpdateFormModal } from '@/modules/loan-transaction
 import LoanApproveReleaseDisplayModal from '@/modules/loan-transaction/components/loan-approve-release-display-modal'
 import LoanTransactionOtherAction from '@/modules/loan-transaction/components/loan-other-actions'
 import { LoanTagsManagerPopover } from '@/modules/loan-transaction/components/loan-tag-manager'
+import { LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES } from '@/modules/loan-transaction/reports/loan-transaction-templates'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import useGeneratedReportConfigStore from '@/store/generated-report-config-store'
+
+// import useGeneratedReportConfigStore from '@/store/generated-report-config-store'
 
 import { EyeIcon, PencilFillIcon } from '@/components/icons'
-import { LoanVoucherReleaseTemplates } from '@/components/templates/template-loan-voucher-release'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -63,7 +65,7 @@ const useCardKanbanActions = ({
     const releaseModal = useModalState()
     const openViewModal = useModalState()
     const undoApproveModal = useModalState()
-    const generateReport = useModalState()
+    // const generateReport = useModalState()
     const { onOpen } = useConfirmModalStore()
 
     const unprintMutation = useUndoPrintLoanTransaction({
@@ -126,7 +128,7 @@ const useCardKanbanActions = ({
         undoApproveModal,
         handleUndoApprove,
         handleUnprint,
-        generateReport,
+        // generateReport,
     }
 }
 
@@ -147,18 +149,18 @@ export const LoanTransactionCardActions = ({
         undoApproveModal,
         handleUndoApprove,
         handleUnprint,
-        handleOpenPrintModal,
-        generateReport,
+        // handleOpenPrintModal,
+        // generateReport,
     } = useCardKanbanActions({ loanTransaction, refetch })
 
     const isReleased = !!loanTransaction.released_date
 
-    const { clear } = useGeneratedReportConfigStore()
-    const createGeneratedReport = useGenerateReport({
-        onSuccess: () => {
-            clear()
-        },
-    })
+    // const { clear } = useGeneratedReportConfigStore()
+    // const createGeneratedReport = useGenerateReport({
+    //     onSuccess: () => {
+    //         clear()
+    //     },
+    // })
 
     const {
         currentAuth: { user_organization },
@@ -182,7 +184,7 @@ export const LoanTransactionCardActions = ({
                     readOnly: true,
                 }}
             />
-            <PrintReportFormModal
+            {/* <PrintReportFormModal
                 {...generateReport}
                 formProps={{
                     defaultValues: {
@@ -201,17 +203,28 @@ export const LoanTransactionCardActions = ({
                     templateOptions: LoanVoucherReleaseTemplates,
                 }}
                 title="Generate to Print"
-            />
+            /> */}
             <LoanTransactionPrintFormModal
                 {...printModal}
                 className=""
                 formProps={{
                     orSettings: resolvedOrSettings,
-                    defaultValues: { ...loanTransaction },
+                    defaultValues: {
+                        ...loanTransaction,
+                        report_config: {
+                            name: `loan_release_${toReadableDate(loanTransaction.created_at, 'MMddyy_mmss')}.pdf`,
+                            ...LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES[0],
+                            filters: {},
+                            module: 'LoanTransaction',
+                        },
+                    },
                     loanTransactionId: loanTransaction.id,
-                    onSuccess: () => {
+                    onSuccess: (data) => {
+                        useReportViewerStore.getState().open({
+                            reportId: data.id,
+                        })
                         printModal.onOpenChange(false)
-                        createGeneratedReport?.handleGenerateReport()
+                        // createGeneratedReport?.handleGenerateReport()
                         refetch?.()
                     },
                 }}
@@ -240,7 +253,7 @@ export const LoanTransactionCardActions = ({
                     </div>
                 )
             })}
-            <div className="w-full flex items-center space-x-1 justify-start flex-shrink-0">
+            <div className="w-full flex items-center space-x-1 justify-start shrink-0">
                 <LoanTagsManagerPopover
                     disabled={
                         !hasPermissionFromAuth({
@@ -277,7 +290,7 @@ export const LoanTransactionCardActions = ({
                                 loanTransaction={loanTransaction}
                                 onApprove={handleApproveModal}
                                 onPrint={() => {
-                                    generateReport.onOpenChange(true)
+                                    printModal.onOpenChange(true)
                                 }}
                                 onPrintUndo={handleUnprint}
                                 onRelease={handleReleaseModal}

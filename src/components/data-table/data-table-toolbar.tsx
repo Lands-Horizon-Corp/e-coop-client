@@ -60,7 +60,7 @@ const DataTableToolbar = <TData,>({
     otherActionLeft,
 }: IDataTableToolbarProps<TData>) => {
     useHotkeys(
-        'shift + Enter',
+        'ctrl+Enter',
         (e) => {
             e.preventDefault()
             if (createActionProps && !hideCreateButton) {

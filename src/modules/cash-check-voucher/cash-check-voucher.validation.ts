@@ -4,10 +4,11 @@ import { EntityIdSchema, descriptionTransformerSanitizer } from '@/validation'
 import { entityIdSchema } from '@/validation'
 
 import { CashCheckVoucherEntrySchema } from '../cash-check-voucher-entry'
+import { WithReportConfigSchema } from '../generated-report'
 
 export const CashCheckVoucherSchema = z.object({
     id: z.string().optional(),
-    name: z.string().optional(),
+    name: z.string().min(1, 'Name is Required'),
 
     cash_voucher_number: z.string().optional(),
 
@@ -178,13 +179,21 @@ export const CashCheckSignatureSchema = z.object({
     paid_by_position: z.coerce.string().optional(),
 })
 
-export const CashCheckVoucherPrintSchema = z.object({
-    cash_voucher_number: z.string().min(1, 'Voucher number is required'),
-    or_auto_generated: z.boolean().default(false).optional(),
-})
+export const CashCheckVoucherPrintSchema = z
+    .object({
+        cash_voucher_number: z.string().min(1, 'Voucher number is required'),
+        or_auto_generated: z.boolean().default(false).optional(),
+    })
+    .and(WithReportConfigSchema)
 
 export type TCashCheckVoucherPrintSchema = z.infer<
     typeof CashCheckVoucherPrintSchema
+>
+
+export const CashCheckVoucherReprintSchema = WithReportConfigSchema
+
+export type TCashCheckVoucherReprintSchema = z.infer<
+    typeof CashCheckVoucherReprintSchema
 >
 
 export type TCashCheckVoucherSchema = z.infer<typeof CashCheckVoucherSchema>

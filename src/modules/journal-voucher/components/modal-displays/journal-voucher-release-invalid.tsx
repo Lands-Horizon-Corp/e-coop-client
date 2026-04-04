@@ -9,7 +9,7 @@ import {
 
 export const JournalVoucherReleaseNoTransactionBatchDisplay = () => {
     return (
-        <Empty className="!p-0">
+        <Empty className="p-0!">
             <EmptyHeader className="p-0">
                 <EmptyMedia className="text-warning" variant="icon">
                     <WarningFillIcon />
@@ -27,7 +27,7 @@ export const JournalVoucherReleaseNoTransactionBatchDisplay = () => {
 
 export const JournalVoucherReleaseCurrencyMismatchDisplay = () => {
     return (
-        <Empty className="!p-0">
+        <Empty className="p-0!">
             <EmptyHeader className="p-0">
                 <EmptyMedia className="text-warning" variant="icon">
                     <DollarIcon />

@@ -12,13 +12,23 @@ import createSitemap from 'vite-plugin-sitemap';
 import { VitePWA } from 'vite-plugin-pwa';
 import fs from 'node:fs';
 import path from 'node:path';
+import { nitro } from "nitro/vite"; 
+// import { createRequire } from 'node:module';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
+
+// const require = createRequire(import.meta.url);
+// const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
+// const cMapsDir = normalizePath(path.join(pdfjsDistPath, 'cmaps'));
+// const pdfWorkerPath = normalizePath(
+//   path.join(pdfjsDistPath, 'build', 'pdf.worker.min.mjs')
+// )
 
 const pwaAssetManifest = () => ({
     name: 'pwa-asset-manifest',
+    apply: 'build' as const,
     closeBundle() {
-        const distDir = path.resolve(__dirname, 'dist')
+        const distDir = path.resolve(__dirname, '.output/public') 
         if (!fs.existsSync(distDir)) return
-
         const files = fs.readdirSync(distDir, { recursive: true })
             .filter((file) => /\.(js|css|html|ico|png|svg|jpg|jpeg|webp|mp4|woff2)$/.test(file as string))
             .map(file => `/${(file as string).replace(/\\/g, '/')}`)
@@ -28,113 +38,89 @@ const pwaAssetManifest = () => ({
 })
 
 export default defineConfig({
+  base: '/',
   plugins: [
-    UnheadVite(),
     tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    nitro({ 
+        preset: "bun",
+    }), 
     react(),
     tsconfigPaths(),
     tailwindcss(),
-    visualizer({
-      filename: "bundle-analysis.html",
-      template: "treemap",
-      open: true,
-      gzipSize: true,
-      brotliSize: true,
-    }) as PluginOption,
-    {
-    name: 'legal-notice',
-      renderChunk(code) {
-        return `/** * © 2026 Lands Horizon Corp. All Rights Reserved.
-          * Unauthorized copying, modification, or distribution 
-          * of this software is strictly prohibited.
-          * Proprietary to e-coop-suite.
-          */\n${code}`;
-      }
-    },
-    compression(),
+    UnheadVite(),
+    viteStaticCopy({
+      targets: [
+        // { src: cMapsDir, dest: 'cmaps' },
+        // { 
+        //   src: pdfWorkerPath, 
+        //   dest: '', 
+        //   rename: 'pdf.worker.min.js'
+        // },
+      ],
+    }),
     NodeGlobalsPolyfillPlugin({
       buffer: true,
       process: true,
     }),
     createSitemap({
-      hostname: 'https://e-coop-client-development.up.railway.app'
+      hostname: 'https://e-coop-client.site',
+      outDir: '.output/public',
+      robots: [{ userAgent: '*', allow: '/' }] 
     }),
-    pwaAssetManifest(),
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
       workbox: {
+        globDirectory: '.output/public', 
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp,mp4,woff2}'],
+        navigateFallback: '/index.html',
+        additionalManifestEntries: [
+          { url: 'index.html', revision: `${Date.now()}` }
+        ],
         maximumFileSizeToCacheInBytes: 50 * 1024 * 1024,
         runtimeCaching:  [
           {
             urlPattern: /\.(?:js|css)$/i,
             handler: 'CacheFirst',
-            options: {
-              cacheName: 'static-chunks',
-              expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 30 }
-            }
+            options: { cacheName: 'static-chunks' }
           },
           {
             urlPattern: /\.(?:png|jpg|jpeg|svg|webp|mp4|woff2)$/i,
             handler: 'CacheFirst',
-            options: {
-              cacheName: 'media-assets',
-              expiration: { maxEntries: 150, maxAgeSeconds: 60 * 60 * 24 * 60 }
-            }
-          },
-          {
-            urlPattern: ({ url }) => !url.pathname.includes('.'),
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'pages-cache',
-            }
+            options: { cacheName: 'media-assets' }
           }
         ]
       },
       manifest: {
-        name: 'e-coop-suite | Empowering Cooperatives',
+        name: 'e-coop-suite',
         short_name: 'e-coop-suite',
-        description: 'Secure digital banking platform for Philippine cooperatives. Complete coop management solution with online banking, member portal, and analytics.',
         theme_color: '#1f2937',
         display: 'standalone',
-        orientation: 'portrait',
-        scope: '/',
-        start_url: '/',
-        categories: ['finance', 'business', 'productivity'],
-        lang: 'en',
         icons: [
-                {
-                  src: '/e-coop-logo-1.webp',
-                  sizes: '192x192',
-                  type: 'image/webp',
-                  purpose: 'any'
-                },
-                {
-                  src: '/e-coop-logo-1.webp',
-                  sizes: '512x512',
-                  type: 'image/webp',
-                  purpose: 'any'
-                },
-                {
-                  src: '/e-coop-logo-1.webp',
-                  sizes: '192x192',
-                  type: 'image/webp',
-                  purpose: 'maskable'
-                },
-                {
-                  src: '/e-coop-logo-1.webp',
-                  sizes: '512x512',
-                   type: 'image/webp',
-                  purpose: 'maskable'
-                }
+          { src: '/e-coop-logo-1.webp', sizes: '192x192', type: 'image/webp' },
+          { src: '/e-coop-logo-1.webp', sizes: '512x512', type: 'image/webp' }
         ],
-      },
-      devOptions: { 
-        enabled: false,
-        type: 'module',
-     }
+      }
     }),
+    pwaAssetManifest(),
+  
+    compression({
+      include: [/\.(js|css|html)$/i, /assets\/.*\.svg$/i], 
+      exclude: [/\.(map)$/i, 'manifest.json', 'pwa-assets.json'],
+      deleteOriginalAssets: false,
+    }),
+
+    visualizer({
+      filename: "bundle-analysis.html",
+      template: "treemap",
+      gzipSize: true,
+    }) as PluginOption,
+    {
+      name: 'legal-notice',
+      renderChunk(code) {
+        return `/** © 2026 Lands Horizon Corp. */\n${code}`;
+      }
+    },
   ],
   resolve: {
     alias: {
@@ -143,49 +129,17 @@ export default defineConfig({
     },
   },
   build: {
+    outDir: '.output/public',
+    emptyOutDir: true,
     sourcemap: false,
-    minify: "terser",
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-        passes: 3,
-      },
-      mangle: {
-        toplevel: true,
-      },
-      format: {
-        comments: false,
-      },
-    },
+    minify: "esbuild",
     rollupOptions: {
       plugins: [rollupNodePolyFill()],
       output: {
         manualChunks(id) {
-          // Split React into its own chun
-          if (id.includes('react') || id.includes('react-dom')) {
-            return 'react-vendor';
-          }
-
-          // Split React Query into its own chunk
-          if (id.includes('@tanstack/react-query')) {
-            return 'query-vendor';
-          }
-
-          // Split Router into its own chunk
-          if (id.includes('@tanstack/router')) {
-            return 'router-vendor';
-          }
-
-          // Split UI libraries
-          if (id.includes('lucide-react') || id.includes('@radix-ui')) {
-            return 'ui-vendor';
-          }
-
-          // Split other large libraries
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
+          if (id.includes('react')) return 'react-vendor';
+          if (id.includes('@tanstack')) return 'tanstack-vendor';
+          if (id.includes('node_modules')) return 'vendor';
         }
       }
     }

@@ -27,12 +27,14 @@ type IJournalVoucherTableActionComponentProp = {
     onApprove?: () => void
     onRelease?: () => void
     onRefetch?: () => void
+    onReprint?: () => void
 }
 
 const JournalVoucherOtherAction = ({
     row,
     type = 'default',
     onPrint,
+    onReprint,
     onApprove,
     onRelease,
     onRefetch,
@@ -105,12 +107,14 @@ const JournalVoucherOtherAction = ({
         onRelease?.()
     }
 
+    const handleReprintAction = () => {
+        onReprint?.()
+    }
+
     const menuActions = [
         {
             label: isPrinted ? 'print-undo' : 'Print',
-            icon: (
-                <PrinterIcon className="mr-2 h-4 w-4 text-muted-foreground" />
-            ),
+            icon: <PrinterIcon className="mr-2 size-4 text-muted-foreground" />,
             onSelect: handlePrintAction,
             isVisible:
                 !isPrinted &&
@@ -120,8 +124,19 @@ const JournalVoucherOtherAction = ({
                 }),
         },
         {
+            label: 'Reprint',
+            icon: <PrinterIcon className="mr-2 size-4 text-muted-foreground" />,
+            onSelect: handleReprintAction,
+            isVisible:
+                isPrinted &&
+                hasPermissionFromAuth({
+                    action: ['Update'],
+                    resourceType: 'ApprovalsJVPrinted',
+                }),
+        },
+        {
             label: 'Undo Print',
-            icon: <Undo2Icon className="mr-2 h-4 w-4 text-muted-foreground" />,
+            icon: <Undo2Icon className="mr-2 size-4 text-muted-foreground" />,
             onSelect: handleMutatePrintAction('print-undo'),
             isVisible:
                 isPrinted &&
@@ -134,7 +149,7 @@ const JournalVoucherOtherAction = ({
         {
             label: 'Approve',
             icon: (
-                <CheckCircle2Icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                <CheckCircle2Icon className="mr-2 size-4 text-muted-foreground" />
             ),
             onSelect: handleApproveAction,
             isVisible:
@@ -146,9 +161,7 @@ const JournalVoucherOtherAction = ({
         },
         {
             label: 'Undo Approve',
-            icon: (
-                <XCircleIcon className="mr-2 h-4 w-4 text-muted-foreground" />
-            ),
+            icon: <XCircleIcon className="mr-2 size-4 text-muted-foreground" />,
             onSelect: handleJournalAction('approve-undo'),
             isVisible:
                 isApproved &&
@@ -161,7 +174,7 @@ const JournalVoucherOtherAction = ({
         {
             label: 'Release',
             icon: (
-                <SendHorizonalIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+                <SendHorizonalIcon className="mr-2 size-4 text-muted-foreground" />
             ),
             onSelect: handleReleaseAction,
             isVisible:

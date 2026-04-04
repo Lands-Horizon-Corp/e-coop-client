@@ -128,8 +128,6 @@ export const useCreateTransactionPaymentByMode = createMutationFactory<
         }
     },
     invalidationFn: ({ queryClient, variables }) => {
-        console.log(variables)
-
         queryClient.invalidateQueries({
             queryKey: [
                 'general-ledger',

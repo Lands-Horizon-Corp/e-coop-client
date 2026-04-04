@@ -32,7 +32,8 @@ const ComputationSheetSchemeDeductionEntries = forwardRef<
     const queryClient = useQueryClient()
 
     useSubscribe(
-        `automatic_loan_deduction.create.branch.${autContext.data?.user_organization?.branch_id}`,
+        'automatic_loan_deduction',
+        `create.branch.${autContext.data?.user_organization?.branch_id}`,
         () => {
             queryClient.invalidateQueries({
                 queryKey: [
@@ -45,7 +46,7 @@ const ComputationSheetSchemeDeductionEntries = forwardRef<
         }
     )
 
-    useSubscribe(`computation_sheet.update.${computationSheetId}`, () => {
+    useSubscribe('computation_sheet', `update.${computationSheetId}`, () => {
         queryClient.invalidateQueries({
             queryKey: [
                 automaticLoanDeductionBaseKey,
@@ -56,7 +57,7 @@ const ComputationSheetSchemeDeductionEntries = forwardRef<
         })
     })
 
-    useSubscribe(`computation_sheet.delete.${computationSheetId}`, () => {
+    useSubscribe('computation_sheet', `delete.${computationSheetId}`, () => {
         queryClient.invalidateQueries({
             queryKey: [
                 automaticLoanDeductionBaseKey,

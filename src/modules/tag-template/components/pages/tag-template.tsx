@@ -23,19 +23,19 @@ const TagTemplatePage = () => {
         },
     } = useAuthUserWithOrgBranch()
 
-    useSubscribe(`tag_template.created.branch.${branch_id}`, () =>
+    useSubscribe('tag_template', `create.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['tag-template', 'paginated'],
         })
     )
 
-    useSubscribe(`tag_template.updated.branch.${branch_id}`, () =>
+    useSubscribe('tag_template', `update.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['tag-template', 'paginated'],
         })
     )
 
-    useSubscribe(`tag_template.deleted.branch.${branch_id}`, () =>
+    useSubscribe('tag_template', `delete.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['tag-template', 'paginated'],
         })

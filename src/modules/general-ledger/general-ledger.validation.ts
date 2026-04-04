@@ -23,3 +23,10 @@ export const generalLedgerSchema = z.object({
     balance: z.number().optional(),
 })
 export type TGeneralLedgerRequest = z.infer<typeof generalLedgerSchema>
+
+export const ChangeORSchema = z.object({
+    or_from: z.string().min(1, 'OR From is required'),
+    or_to: z.string().min(1, 'OR To is required'),
+})
+
+export type TChangeORValues = z.infer<typeof ChangeORSchema>

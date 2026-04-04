@@ -31,6 +31,7 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useSubmitHotkey } from '@/hooks/use-submit-trottle'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -167,6 +168,12 @@ const AdjustmentEntryCreateUpdateForm = ({
         },
         [orSettings, form]
     )
+
+    useSubmitHotkey({
+        onSubmit: onSubmit,
+        isPending,
+        disabled: !form.getValues('member_profile_id'),
+    })
 
     useHotkeys(
         'alt + E',

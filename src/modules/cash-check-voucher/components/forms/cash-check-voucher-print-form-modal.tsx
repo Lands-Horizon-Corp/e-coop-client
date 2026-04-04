@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 
-import { useForm } from 'react-hook-form'
+import { UseFormReturn, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -9,11 +9,15 @@ import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import {
     CashCheckVoucherPrintSchema,
-    ICashCheckVoucher,
     TCashCheckVoucherPrintSchema,
     TORCashCheckSettings,
     usePrintCashCheckVoucherTransaction,
 } from '@/modules/cash-check-voucher'
+import {
+    IGeneratedReport,
+    TWithReportConfigSchema,
+} from '@/modules/generated-report'
+import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -39,7 +43,7 @@ export interface ICashCheckVoucherPrintFormProps
         IClassProps,
         IForm<
             Partial<TCashCheckVoucherPrintSchema>,
-            ICashCheckVoucher,
+            IGeneratedReport,
             Error,
             TCashCheckVoucherPrintSchema
         > {
@@ -76,11 +80,19 @@ const CashCheckVoucherPrintForm = ({
             ...formProps,
         })
 
-    const onSubmit = form.handleSubmit(async (payload) => {
+    const onSubmit = form.handleSubmit(async ({ report_config, ...rest }) => {
         toast.promise(
             printMutation.mutateAsync({
                 cashCheckVoucherId,
-                payload,
+                payload: {
+                    ...rest,
+                    report_config: {
+                        ...report_config,
+                        filters: {
+                            cash_check_voucher_id: cashCheckVoucherId,
+                        },
+                    },
+                },
             }),
             {
                 loading: 'Printing Cash/Check Voucher...',
@@ -192,6 +204,13 @@ const CashCheckVoucherPrintForm = ({
                                 </Label>
                             </div>
                         )}
+                    />
+
+                    <PrintSettingsSection
+                        form={
+                            form as unknown as UseFormReturn<TWithReportConfigSchema>
+                        }
+                        registryKey={'cash_check_print_voucher'}
                     />
                 </fieldset>
 

@@ -7,13 +7,14 @@ import {
     hasPermissionFromAuth,
     useAuthStore,
 } from '@/modules/authentication/authgentication.store'
-import GeneratedReportsButton from '@/modules/generated-report/components/generated-reports/generated-reports-button'
+import GeneratedReportsListSheet from '@/modules/generated-report/components/generated-reports/generated-reports-list'
 import { NotificationNav } from '@/modules/notification/components/notification'
 import TransactionBatchNavButton from '@/modules/transaction-batch/components/batch-nav-button'
 import NavProfileMenu from '@/modules/user-profile/components/nav/nav-profile-menu'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
+import Clock from '@/components/clock'
 import { BadgeCheckFillIcon } from '@/components/icons'
 import LiveToggle from '@/components/live-toggle'
 import NavThemeToggle from '@/components/nav/nav-components/nav-theme-toggle'
@@ -51,7 +52,7 @@ const UserNav = ({
             keydown: true,
         }
     )
-    // Secondary nav items (collapsible)
+
     const SECONDARY_NAV_ITEMS = [
         {
             important: false,
@@ -96,7 +97,7 @@ const UserNav = ({
         },
         {
             important: false,
-            component: <GeneratedReportsButton />,
+            component: <GeneratedReportsListSheet />,
         },
         {
             important: false,
@@ -130,6 +131,8 @@ const UserNav = ({
                     homeUrl={homeUrl}
                 />
             </NavContainer>
+
+            <Clock />
 
             <NavContainer className="pointer-events-auto">
                 <div className="flex items-center">

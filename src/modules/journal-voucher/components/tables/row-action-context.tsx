@@ -1,10 +1,14 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { toReadableDate } from '@/helpers/date-utils'
 import {
     hasPermissionFromAuth,
     useAuthStore,
 } from '@/modules/authentication/authgentication.store'
+import { TReportConfigSchema } from '@/modules/generated-report'
+import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
+import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -17,17 +21,20 @@ import {
     TORJournalVoucherSettings,
     useDeleteJournalVoucherById,
 } from '../..'
+import { JOURNAL_VOUCHER_PRINT_TEMPLATES } from '../../reports/jornal-voucher-template'
 import JournalVoucherApproveReleaseDisplayModal, {
     TJournalVoucherApproveReleaseDisplayMode,
 } from '../forms/journal-voucher-approve-release-modal'
 import JournalVoucherPrintFormModal from '../forms/journal-voucher-create-print-modal'
 import { JournalVoucherCreateUpdateFormModal } from '../forms/journal-voucher-create-update-modal'
+import { JournalVoucherReprintFormModal } from '../forms/journal-voucher-reprint-form'
 import { IJournalVoucherTableActionComponentProp } from './columns'
 import JournalVoucherOtherAction from './journal-voucher-other-action'
 
 export type JournalVoucherActionType =
     | 'edit'
     | 'print'
+    | 'reprint'
     | 'approve-release'
     | 'delete'
 
@@ -89,7 +96,13 @@ const useJournalVoucherActions = ({
             extra: { onDeleteSuccess },
         })
     }
-
+    const handleReprintModal = () => {
+        open('reprint', {
+            id: journalVoucher.id,
+            defaultValues: journalVoucher,
+            extra: { onDeleteSuccess },
+        })
+    }
     const handleApproveModal = () => {
         open('approve-release', {
             id: journalVoucher.id,
@@ -112,6 +125,7 @@ const useJournalVoucherActions = ({
         handleEdit,
         handleDelete,
         handleOpenPrintModal,
+        handleReprintModal,
         handleApproveModal,
         handleReleaseModal,
     }
@@ -178,6 +192,7 @@ export const JournalVoucherRowContext = ({
         handleApproveModal,
         handleReleaseModal,
         handleOpenPrintModal,
+        handleReprintModal,
     } = useJournalVoucherActions({ row, onDeleteSuccess })
 
     return (
@@ -197,6 +212,7 @@ export const JournalVoucherRowContext = ({
                         onApprove={handleApproveModal}
                         onPrint={handleOpenPrintModal}
                         onRelease={handleReleaseModal}
+                        onReprint={handleReprintModal}
                         row={row}
                         type="context"
                     />
@@ -253,9 +269,51 @@ export const JournalVoucherTableActionManager = () => {
             {state.action === 'print' && (
                 <JournalVoucherPrintFormModal
                     formProps={{
-                        defaultValues: journalVoucher,
+                        defaultValues: {
+                            ...journalVoucher,
+                            report_config: {
+                                ...getTemplateAt(
+                                    JOURNAL_VOUCHER_PRINT_TEMPLATES,
+                                    0
+                                ),
+                                name: `journal_voucher_${toReadableDate(journalVoucher.created_at, 'MMddyy_mmss')}.pdf`,
+                                module: 'JournalVoucher',
+                            } as TReportConfigSchema,
+                        },
                         journalVoucherId: journalVoucher.id,
                         orSettings: resolvedOrSettings,
+                        onSuccess: (data) => {
+                            useReportViewerStore.getState().open({
+                                reportId: data.id,
+                            })
+                        },
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
+            {state.action === 'reprint' && state.defaultValues && (
+                <JournalVoucherReprintFormModal
+                    formProps={{
+                        defaultValues: {
+                            report_config: {
+                                ...getTemplateAt(
+                                    JOURNAL_VOUCHER_PRINT_TEMPLATES,
+                                    0
+                                ),
+                                name: `journal_voucher_${toReadableDate(
+                                    state.defaultValues.created_at,
+                                    'MMddyy_mmss'
+                                )}.pdf`,
+                                module: 'JournalVoucher',
+                            } as TReportConfigSchema,
+                        },
+                        journalVoucherId: state.defaultValues.id,
+                        onSuccess(data) {
+                            useReportViewerStore.getState().open({
+                                reportId: data.id,
+                            })
+                        },
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

@@ -39,12 +39,14 @@ type AccountContentFormProps = {
     form: UseFormReturn<TAccountFormValues>
     isDisabled: (fieldName: Path<TAccountFormValues>) => boolean
     isLoading?: boolean
+    readOnly?: boolean
 }
 
 const AccountContentForm = ({
     form,
     isDisabled,
     isLoading,
+    readOnly,
 }: AccountContentFormProps) => {
     // const isCompassionFundEnabled = form.watch('compassion_fund')
 
@@ -58,7 +60,7 @@ const AccountContentForm = ({
                 render={({ field }) => (
                     <RadioGroup
                         className="flex flex-wrap gap-x-2"
-                        disabled={isDisabled(field.name)}
+                        disabled={!readOnly && isDisabled(field.name)}
                         onValueChange={(value: TAccountType) => {
                             field.onChange(value)
 

@@ -35,7 +35,7 @@ const Dashboard = () => {
     })
     const getNewMember = useGetPendingMemberProfiles({})
 
-    useSubscribe(`user_organization.status.branch.₱{branch_id}`, refetch)
+    useSubscribe('user_organization', `status.branch.₱{branch_id}`, refetch)
 
     // const totalMembers = getMemberDashboardSummary?.total_members ?? 0
     // const totalMale = getMemberDashboardSummary?.total_male_members ?? 0

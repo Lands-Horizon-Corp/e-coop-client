@@ -14,13 +14,15 @@ import {
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
+import { IGeneratedReport, generatedReportBaseKey } from '../generated-report'
 import type {
     IJournalVoucher,
     IJournalVoucherPaginated,
-    IJournalVoucherPrintRequest,
     IJournalVoucherRequest,
     TJournalActionMode,
     TJournalVoucherMode,
+    TJournalVoucherPrintSchema,
+    TJournalVoucherReprintSchema,
     TPrintMode,
 } from '../journal-voucher'
 
@@ -66,7 +68,6 @@ export const {
 
 export const useGetAllJournalVoucher = ({
     mode,
-
     query,
     options,
 }: {
@@ -188,24 +189,71 @@ export const useJournalVoucherActions = createMutationFactory<
 })
 
 // PRINT JOURNAL VOUCHER
-const printJournalVoucher = async (data: {
+const printJournalVoucher = async ({
+    journalVoucherId,
+    payload,
+    commit = true,
+}: {
     journalVoucherId: TEntityId
-    payload: IJournalVoucherPrintRequest
+    payload: TJournalVoucherPrintSchema
+    commit?: boolean
 }) => {
+    const url = qs.stringifyUrl({
+        url: `${journalVoucherAPIRoute}/${journalVoucherId}/print`,
+        query: { commit },
+    })
+
     const response = await API.put<
-        IJournalVoucherPrintRequest,
-        IJournalVoucher
-    >(`${journalVoucherAPIRoute}/${data.journalVoucherId}/print`, data.payload)
+        TJournalVoucherPrintSchema,
+        IGeneratedReport
+    >(url, payload)
     return response.data
 }
 
 export const usePrintJournalVoucherTransaction = createMutationFactory<
-    IJournalVoucher,
+    IGeneratedReport,
     Error,
-    { journalVoucherId: TEntityId; payload: IJournalVoucherPrintRequest }
+    {
+        journalVoucherId: TEntityId
+        payload: TJournalVoucherPrintSchema
+        commit?: boolean
+    }
 >({
     mutationFn: (data) => printJournalVoucher(data),
-    defaultInvalidates: [['auth', 'context']],
+
+    defaultInvalidates: [
+        ['auth', 'context'],
+        [generatedReportBaseKey, 'inprogress', 'all'],
+    ],
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(journalVoucherBaseKey, args),
+})
+
+//REPRINT
+export const useReprintJournalVoucherTransaction = createMutationFactory<
+    IGeneratedReport,
+    Error,
+    {
+        journalVoucherId: TEntityId
+        payload: TJournalVoucherReprintSchema
+        commit?: boolean
+    }
+>({
+    mutationFn: async ({ journalVoucherId, payload, commit = true }) => {
+        const url = qs.stringifyUrl({
+            url: `${journalVoucherAPIRoute}/${journalVoucherId}/print-only`,
+            query: { commit },
+        })
+
+        const response = await API.put<
+            TJournalVoucherReprintSchema,
+            IGeneratedReport
+        >(url, payload)
+
+        return response.data
+    },
+
+    defaultInvalidates: [[generatedReportBaseKey, 'inprogress', 'all']],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(journalVoucherBaseKey, args),
 })

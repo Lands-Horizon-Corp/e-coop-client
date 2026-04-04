@@ -24,9 +24,14 @@ const generatedReportStatusVariants = cva(
                 unknown:
                     'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200 dark:bg-gray-800/50 dark:text-gray-400 dark:border-gray-700 dark:hover:bg-gray-800/70',
             },
+            size: {
+                base: '',
+                sm: 'text-xs px-2 py-0.5 h-5',
+            },
         },
         defaultVariants: {
             variant: 'unknown',
+            size: 'base',
         },
     }
 )
@@ -37,7 +42,7 @@ interface Props
 }
 
 const GeneratedReportStatusBadge = forwardRef<HTMLDivElement, Props>(
-    ({ status, className }, ref) => {
+    ({ status, size, className }, ref) => {
         type BadgeVariant = VariantProps<
             typeof generatedReportStatusVariants
         >['variant']
@@ -56,7 +61,7 @@ const GeneratedReportStatusBadge = forwardRef<HTMLDivElement, Props>(
         return (
             <div
                 className={cn(
-                    generatedReportStatusVariants({ variant }),
+                    generatedReportStatusVariants({ variant, size }),
                     className
                 )}
                 ref={ref}

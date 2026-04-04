@@ -25,6 +25,7 @@ type ICashCheckVoucherTableActionComponentProp = {
     row: Row<ICashCheckVoucher> | ICashCheckVoucher
     type?: 'default' | 'context'
     onPrint?: () => void
+    onReprint?: () => void
     onApprove?: () => void
     onRelease?: () => void
     onRefetch?: () => void
@@ -36,6 +37,7 @@ const CashCheckVoucherOtherAction = ({
     row,
     type = 'default',
     onPrint,
+    onReprint,
     onApprove,
     onRelease,
     onRefetch,
@@ -112,6 +114,10 @@ const CashCheckVoucherOtherAction = ({
         onRelease?.()
     }
 
+    const handleReprintAction = () => {
+        onReprint?.()
+    }
+
     const menuActions = [
         {
             label: 'Print Voucher',
@@ -121,6 +127,19 @@ const CashCheckVoucherOtherAction = ({
             onSelect: handlePrintAction,
             isVisible:
                 !isPrinted &&
+                hasPermissionFromAuth({
+                    action: 'Update',
+                    resourceType: 'ApprovalsCashVoucherPrinted',
+                }),
+        },
+        {
+            label: 'Reprint Voucher',
+            icon: (
+                <PrinterIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+            ),
+            onSelect: handleReprintAction,
+            isVisible:
+                isPrinted &&
                 hasPermissionFromAuth({
                     action: 'Update',
                     resourceType: 'ApprovalsCashVoucherPrinted',

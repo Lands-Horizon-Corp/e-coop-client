@@ -21,9 +21,6 @@ export interface ICashCheckDisburment {
         credit: number
     }>
 
-    cash_on_hand_total_credit: number
-    cash_on_hand_total_debit: number
-
     total_credit: number
     total_debit: number
 

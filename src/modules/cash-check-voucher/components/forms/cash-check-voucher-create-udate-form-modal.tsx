@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
@@ -19,6 +19,7 @@ import {
     cashCheckVoucherBaseKey,
     useCreateUpdateCashCheckVoucher,
 } from '@/modules/cash-check-voucher'
+import { ICashCheckVoucherEntryRequest } from '@/modules/cash-check-voucher-entry'
 import { CashCheckVoucherTagsManagerPopover } from '@/modules/cash-check-voucher-tag/components/cash-check-voucher-tag-manager'
 import CompanyCombobox from '@/modules/company/components/company-combobox'
 import { CurrencyCombobox, currencyFormat } from '@/modules/currency'
@@ -35,7 +36,6 @@ import {
     HashIcon,
     MoneyCheck2Icon,
     WandSparkleIcon,
-    XIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -54,6 +54,7 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 import { useModalState } from '@/hooks/use-modal-state'
+import { useSubmitHotkey } from '@/hooks/use-submit-trottle'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -94,11 +95,11 @@ const CashCheckVoucherCreateUpdateForm = ({
     const [defaultMember, setDefaultMember] = useState<
         IMemberProfile | undefined
     >(defaultValues?.member_profile)
+    const [cashCheckVoucher, setCashCheckVoucher] = useState<
+        Partial<ICashCheckVoucher> | undefined
+    >(defaultValues)
 
-    const [editCashCheckVoucherId, setEditCashCheckVoucherId] =
-        useState<TEntityId>(cashCheckVoucherId ?? '')
-
-    const isUpdate = !!editCashCheckVoucherId
+    const isEditMode = !!cashCheckVoucher?.id
 
     const { setSelectedMember } = useMemberPickerStore()
 
@@ -126,7 +127,8 @@ const CashCheckVoucherCreateUpdateForm = ({
                 textSuccess: 'Cash Check Voucher Created',
                 onSuccess: (data) => {
                     formProps.onSuccess?.(data)
-                    setEditCashCheckVoucherId(data.id)
+                    form.reset(data)
+                    setCashCheckVoucher(data)
                 },
                 onError: formProps.onError,
             }),
@@ -154,7 +156,7 @@ const CashCheckVoucherCreateUpdateForm = ({
         }
 
         createUpdateCashCheckVoucher({
-            id: editCashCheckVoucherId,
+            id: cashCheckVoucher?.id,
             payload: {
                 ...payload,
             },
@@ -165,24 +167,19 @@ const CashCheckVoucherCreateUpdateForm = ({
     const rawError = createError
     const error =
         serverRequestErrExtractor({ error: rawError }) ||
-        form.formState.errors?.root?.message
+        form.formState.errors?.root?.message ||
+        form.formState.errors.cash_check_voucher_entries?.message
 
     useHotkeys('Enter', (e) => {
         e.preventDefault()
         modalState.onOpenChange(true)
     })
 
-    useHotkeys(
-        'ctrl+enter',
-        (e) => {
-            e.preventDefault()
-            if (mode !== 'readOnly') {
-                onSubmit()
-            }
-        },
-        { enableOnFormTags: true },
-        [mode, onSubmit]
-    )
+    useSubmitHotkey({
+        onSubmit: onSubmit,
+        isPending,
+        disabled: mode === 'readOnly',
+    })
 
     useHotkeys(
         'alt+1',
@@ -194,7 +191,7 @@ const CashCheckVoucherCreateUpdateForm = ({
         [form]
     )
     useHotkeys(
-        'alt+2',
+        'alt+3',
         (e) => {
             e.preventDefault()
             form.setFocus('pay_to')
@@ -203,7 +200,7 @@ const CashCheckVoucherCreateUpdateForm = ({
         [form]
     )
     useHotkeys(
-        'alt+3',
+        'alt+4',
         (e) => {
             e.preventDefault()
             form.setFocus('print_count')
@@ -212,7 +209,7 @@ const CashCheckVoucherCreateUpdateForm = ({
         [form]
     )
     useHotkeys(
-        'alt+4',
+        'alt+2',
         (e) => {
             e.preventDefault()
             form.setFocus('description')
@@ -231,6 +228,15 @@ const CashCheckVoucherCreateUpdateForm = ({
         [form]
     )
 
+    useHotkeys(
+        'alt + comma',
+        (e) => {
+            e.preventDefault()
+            form.setFocus('cash_voucher_number')
+        },
+        { enableOnFormTags: true },
+        [form]
+    )
     const handleGenerateVoucherNumber = () => {
         if (!orSettings)
             return toast.warning('OR Generate Failed - could not load settings')
@@ -264,7 +270,7 @@ const CashCheckVoucherCreateUpdateForm = ({
         [popOverState]
     )
     useEffect(() => {
-        if (isUpdate) return
+        if (isEditMode) return
         form.setValue('cash_check_voucher_entries', [
             {
                 account_id: '',
@@ -272,7 +278,48 @@ const CashCheckVoucherCreateUpdateForm = ({
                 credit: 0,
             },
         ])
-    }, [cashCheckVoucherId, isUpdate, form])
+    }, [cashCheckVoucherId, isEditMode, form])
+
+    const { replace } = useFieldArray({
+        name: 'cash_check_voucher_entries',
+        control: form.control,
+    })
+
+    const currency = useWatch({
+        name: 'currency',
+        control: form.control,
+    })
+
+    const handleReset = () => {
+        if (isEditMode) {
+            form.reset({
+                ...cashCheckVoucher,
+            })
+        } else {
+            const newRow: ICashCheckVoucherEntryRequest = {
+                debit: 0,
+                credit: 0,
+                account_id: '' as TEntityId,
+                member_profile_id: defaultMember?.id,
+                member_profile: defaultMember,
+            }
+            const values = {
+                ...defaultValues,
+                cash_check_voucher_entries:
+                    defaultValues?.cash_check_voucher_entries ?? [newRow],
+            }
+
+            form.reset(values)
+            replace(values.cash_check_voucher_entries)
+        }
+        resetCreate()
+        setSelectedMember(null)
+        queryClient.invalidateQueries({
+            queryKey: [cashCheckVoucherBaseKey, 'paginated'],
+        })
+    }
+
+    console.log('render')
 
     return (
         <Form {...form}>
@@ -296,20 +343,6 @@ const CashCheckVoucherCreateUpdateForm = ({
                             className="max-w-max"
                         />
                     )}
-                    <div className=" bg-muted p-1 rounded-sm -top-1 right-0 z-10 flex items-center">
-                        <Button
-                            className="size-fit px-2 py-0.5 mr-1 text-xs"
-                            size="sm"
-                            tabIndex={-1}
-                            type="button"
-                            variant={'ghost'}
-                        >
-                            Submit{' '}
-                        </Button>
-                        <CommandShortcut className="bg-accent text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-primary">
-                            Ctrl + Enter
-                        </CommandShortcut>
-                    </div>
                 </div>
                 <fieldset
                     className="grid grid-cols-1 md:grid-cols-2 gap-2"
@@ -324,21 +357,97 @@ const CashCheckVoucherCreateUpdateForm = ({
                                         <Kbd className="block">alt + ;</Kbd>
                                         <Button
                                             className="px-1"
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                popOverState.onOpenChange(
+                                                    !popOverState.open
+                                                )
+                                            }}
+                                            tabIndex={-1}
                                             variant="secondary"
                                         >
                                             <GearIcon className="size-4" />
+                                            More Options
                                         </Button>
                                     </div>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-full">
+                                    {/* ================= PAY TOO ================= */}
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        label={
+                                            <Label className="text-xs font-medium text-muted-foreground">
+                                                Pay To{' '}
+                                                <KbdGroup>
+                                                    <Kbd>Alt + 3</Kbd>
+                                                </KbdGroup>
+                                            </Label>
+                                        }
+                                        name="pay_to"
+                                        render={({ field }) => (
+                                            <Input
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                id={field.name}
+                                                placeholder="Enter payee"
+                                                // tabIndex={-1}
+                                            />
+                                        )}
+                                    />
+                                    {/* ================= COMPANY ================= */}
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        label={
+                                            <Label className="text-xs font-medium text-muted-foreground">
+                                                Company{' '}
+                                                <KbdGroup>
+                                                    <Kbd>Alt + 4</Kbd>
+                                                </KbdGroup>
+                                            </Label>
+                                        }
+                                        name="company_id"
+                                        render={({ field }) => (
+                                            <CompanyCombobox
+                                                {...field}
+                                                allowShortcutHotKey
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                // mainTriggerProps={{
+                                                //     tabIndex: -1,
+                                                // }}
+                                                onChange={(selectedCompany) => {
+                                                    field.onChange(
+                                                        selectedCompany.id
+                                                    )
+                                                    form.setValue(
+                                                        'name',
+                                                        selectedCompany.name
+                                                    )
+                                                    form.setValue(
+                                                        'member_profile_id',
+                                                        undefined
+                                                    )
+                                                    form.setValue(
+                                                        'member_profile',
+                                                        undefined
+                                                    )
+                                                }}
+                                                placeholder="Select a company"
+                                                shortcutHotKey="alt + 4"
+                                                value={field.value}
+                                            />
+                                        )}
+                                    />{' '}
                                     {/* ================= MEMBER ================= */}
                                     <FormFieldWrapper
                                         className="col-span-2"
                                         control={form.control}
                                         label={
                                             <Label className="text-xs font-medium text-muted-foreground">
-                                                Member Profile{' '}
-                                                <Kbd>Alt + M</Kbd>
+                                                Member <Kbd>Alt + M</Kbd>
                                             </Label>
                                         }
                                         name="member_profile_id"
@@ -373,55 +482,10 @@ const CashCheckVoucherCreateUpdateForm = ({
                                                     )
                                                 }}
                                                 placeholder="Relative Member Profile"
-                                                shortcutHotKey="alt + 7"
+                                                shortcutHotKey="alt + m"
                                                 value={form.getValues(
                                                     'member_profile'
                                                 )}
-                                            />
-                                        )}
-                                    />
-                                    {/* ================= COMPANY ================= */}
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        label={
-                                            <Label className="text-xs font-medium text-muted-foreground">
-                                                Company{' '}
-                                                <KbdGroup>
-                                                    <Kbd>Alt + 3</Kbd>
-                                                </KbdGroup>
-                                            </Label>
-                                        }
-                                        name="company_id"
-                                        render={({ field }) => (
-                                            <CompanyCombobox
-                                                {...field}
-                                                allowShortcutHotKey
-                                                disabled={isDisabled(
-                                                    field.name
-                                                )}
-                                                mainTriggerProps={{
-                                                    tabIndex: -1,
-                                                }}
-                                                onChange={(selectedCompany) => {
-                                                    field.onChange(
-                                                        selectedCompany.id
-                                                    )
-                                                    form.setValue(
-                                                        'name',
-                                                        selectedCompany.name
-                                                    )
-                                                    form.setValue(
-                                                        'member_profile_id',
-                                                        undefined
-                                                    )
-                                                    form.setValue(
-                                                        'member_profile',
-                                                        undefined
-                                                    )
-                                                }}
-                                                placeholder="Select a company"
-                                                shortcutHotKey="alt + 3"
-                                                value={field.value}
                                             />
                                         )}
                                     />
@@ -431,7 +495,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                                         label={
                                             <span className="flex items-center justify-between pb-2">
                                                 <span className="inline-flex gap-x-1 items-center">
-                                                    Reference Number{' '}
+                                                    Reference Number
                                                     <HashIcon className="inline text-muted-foreground" />
                                                 </span>
                                                 <button
@@ -443,7 +507,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                                                     type="button"
                                                 >
                                                     <span className="text-xs font-medium text-muted-foreground mr-2">
-                                                        <Kbd>Alt + 4</Kbd>
+                                                        <Kbd>Alt + ,</Kbd>
                                                     </span>
                                                     {form.watch(
                                                         'cash_voucher_number'
@@ -461,7 +525,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
-                                                tabIndex={-1}
+                                                // tabIndex={-1}
                                             />
                                         )}
                                     />
@@ -472,7 +536,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                                             <Label className="text-xs font-medium text-muted-foreground">
                                                 Currency *{' '}
                                                 <KbdGroup>
-                                                    <Kbd>Alt + E</Kbd>
+                                                    <Kbd>Alt + .</Kbd>
                                                 </KbdGroup>
                                             </Label>
                                         }
@@ -484,9 +548,9 @@ const CashCheckVoucherCreateUpdateForm = ({
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
-                                                mainTriggerProps={{
-                                                    tabIndex: -1,
-                                                }}
+                                                // mainTriggerProps={{
+                                                //     tabIndex: -1,
+                                                // }}
                                                 onChange={(currency) => {
                                                     field.onChange(currency?.id)
                                                     form.setValue(
@@ -494,8 +558,39 @@ const CashCheckVoucherCreateUpdateForm = ({
                                                         currency
                                                     )
                                                 }}
-                                                shortcutHotKey="alt + e"
+                                                shortcutHotKey="alt + period"
                                                 value={field.value}
+                                            />
+                                        )}
+                                    />
+                                    {/* ================= PRINT COUNT ================= */}
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        label={
+                                            <Label className="text-xs font-medium text-muted-foreground">
+                                                Print Count{' '}
+                                                <KbdGroup>
+                                                    <Kbd>Alt + /</Kbd>
+                                                </KbdGroup>
+                                            </Label>
+                                        }
+                                        name="print_count"
+                                        render={({ field }) => (
+                                            <Input
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                id={field.name}
+                                                onChange={(e) =>
+                                                    field.onChange(
+                                                        Number(e.target.value)
+                                                    )
+                                                }
+                                                placeholder="Enter print count"
+                                                // tabIndex={-1}
+                                                type="number"
+                                                value={field.value ?? 0}
                                             />
                                         )}
                                     />
@@ -518,83 +613,32 @@ const CashCheckVoucherCreateUpdateForm = ({
                                 <div className="relative w-full">
                                     <Input
                                         className="text-md! font-semibold pr-10"
-                                        tabIndex={-1}
+                                        // tabIndex={-1}
                                         {...field}
                                         id={field.name}
+                                        onChange={(item) => {
+                                            if (item.target.value === '') {
+                                                form.setValue(
+                                                    'company_id',
+                                                    undefined
+                                                )
+                                                form.setValue(
+                                                    'member_profile',
+                                                    undefined
+                                                )
+                                                form.setValue(
+                                                    'member_profile_id',
+                                                    undefined
+                                                )
+                                            }
+                                            field.onChange(item)
+                                        }}
                                         value={field.value || ''}
                                     />
-                                    <Button
-                                        className="absolute m-auto top-0 bottom-0 right-1 hover:bg-primary/20!"
-                                        onClick={(e) => {
-                                            e.preventDefault()
-                                            form.reset({
-                                                company_id: undefined,
-                                                member_profile: undefined,
-                                                member_profile_id: undefined,
-                                                name: '',
-                                            })
-                                        }}
-                                        size="sm"
-                                        tabIndex={-1}
-                                        variant="ghost"
-                                    >
-                                        <XIcon />
-                                    </Button>
                                 </div>
                             )}
                         />
                     </div>
-
-                    {/* ================= PAY TO ================= */}
-                    <FormFieldWrapper
-                        control={form.control}
-                        label={
-                            <Label className="text-xs font-medium text-muted-foreground">
-                                Pay To{' '}
-                                <KbdGroup>
-                                    <Kbd>Alt + 2</Kbd>
-                                </KbdGroup>
-                            </Label>
-                        }
-                        name="pay_to"
-                        render={({ field }) => (
-                            <Input
-                                {...field}
-                                disabled={isDisabled(field.name)}
-                                id={field.name}
-                                placeholder="Enter payee"
-                                tabIndex={-1}
-                            />
-                        )}
-                    />
-
-                    {/* ================= PRINT COUNT ================= */}
-                    <FormFieldWrapper
-                        control={form.control}
-                        label={
-                            <Label className="text-xs font-medium text-muted-foreground">
-                                Print Count{' '}
-                                <KbdGroup>
-                                    <Kbd>Alt + 3</Kbd>
-                                </KbdGroup>
-                            </Label>
-                        }
-                        name="print_count"
-                        render={({ field }) => (
-                            <Input
-                                {...field}
-                                disabled={isDisabled(field.name)}
-                                id={field.name}
-                                onChange={(e) =>
-                                    field.onChange(Number(e.target.value))
-                                }
-                                placeholder="Enter print count"
-                                tabIndex={-1}
-                                type="number"
-                                value={field.value ?? 0}
-                            />
-                        )}
-                    />
 
                     {/* ================= DESCRIPTION ================= */}
                     <FormFieldWrapper
@@ -604,7 +648,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                             <Label className="text-xs font-medium text-muted-foreground">
                                 Particulars{' '}
                                 <KbdGroup>
-                                    <Kbd>Alt + 4</Kbd>
+                                    <Kbd>Alt + 2</Kbd>
                                 </KbdGroup>
                             </Label>
                         }
@@ -616,31 +660,22 @@ const CashCheckVoucherCreateUpdateForm = ({
                                 disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Particulars"
-                                tabIndex={-1}
+                                value={field.value || ''}
                             />
                         )}
                     />
                     {/* ================= ENTRIES ================= */}
-                    <FormFieldWrapper
-                        className="col-span-1 md:col-span-2 max-h-xs!"
-                        control={form.control}
-                        label="Journal Entries"
-                        name="cash_check_voucher_entries"
-                        render={({ field }) => (
-                            <CashCheckJournalEntryTable
-                                cashCheckCurrency={form.watch('currency')}
-                                cashCheckVoucherId={cashCheckVoucherId ?? ''}
-                                className="col-span-1 md:col-span-2"
-                                defaultMemberProfile={defaultMember}
-                                form={form}
-                                mode={mode}
-                                ref={field.ref}
-                            />
-                        )}
+                    <CashCheckJournalEntryTable
+                        cashCheckCurrency={currency}
+                        cashCheckVoucherId={cashCheckVoucherId ?? ''}
+                        className="col-span-1 md:col-span-2"
+                        defaultMemberProfile={defaultMember}
+                        form={form}
+                        mode={mode}
                     />
                 </fieldset>
                 <div className="w-full flex justify-end gap-4">
-                    <div className="max-w-[130px] flex-col flex justify-end">
+                    <div className="max-w-fit flex-col flex justify-end">
                         <p className="text-primary bg-background border py-1 text-left rounded-md pl-8 pr-10 text-lg font-bold">
                             {currencyFormat(form.watch('total_debit'), {
                                 currency: form.watch('currency'),
@@ -648,7 +683,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                             })}
                         </p>
                     </div>
-                    <div className="max-w-[130px]">
+                    <div className="max-w-fit">
                         <p className="text-primary bg-background border py-1 text-left rounded-md pl-8 pr-10 text-lg font-bold">
                             {currencyFormat(form.watch('total_credit'), {
                                 currency: form.watch('currency'),
@@ -660,22 +695,18 @@ const CashCheckVoucherCreateUpdateForm = ({
                 <FormFooterResetSubmit
                     error={error}
                     isLoading={isPending}
-                    onReset={() => {
-                        if (isUpdate) {
-                            form.reset({
-                                ...defaultValues,
-                            })
-                        } else {
-                            form.reset()
-                        }
-                        resetCreate()
-                        setSelectedMember(null)
-                        queryClient.invalidateQueries({
-                            queryKey: [cashCheckVoucherBaseKey, 'paginated'],
-                        })
-                    }}
+                    onReset={handleReset}
                     readOnly={formProps.readOnly}
-                    submitText={isUpdate ? 'Update' : 'Create'}
+                    submitText={
+                        <div className="inline-flex items-center gap-2">
+                            <kbd className="text-xs">
+                                {isEditMode ? 'Update' : 'Create'}
+                            </kbd>
+                            <CommandShortcut className=" text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-secondary">
+                                Enter
+                            </CommandShortcut>
+                        </div>
+                    }
                 />
             </form>
         </Form>

@@ -11,6 +11,7 @@ import BankCombobox from '@/modules/bank/components/bank-combobox'
 import { CurrencyInput } from '@/modules/currency'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import { LoanGuideModal } from '@/modules/loan-guide/components/loan-guide'
+import { ILoanTransaction } from '@/modules/loan-transaction'
 import LoanTransactionCombobox from '@/modules/loan-transaction/components/loan-combobox'
 import { IMedia } from '@/modules/media'
 import { useGetAllPaymentType } from '@/modules/payment-type'
@@ -86,16 +87,19 @@ const PaymentWithTransactionForm = ({
     } = useTransactionContext()
 
     const { onOpenReverseRequestAction } = modalTransactionReverseState
+    const { onOpen, open } = usePaymentOnSuccessStore()
+    const { data: currentTransactionBatch, hasNoTransactionBatch } =
+        useTransactionBatchStore()
 
     const [focusTypePayment, _] = useState<TPaymentMode>('payment')
 
-    const { data: currentTransactionBatch } = useTransactionBatchStore()
+    const loanPaymentGuideModal = useModalState()
+    const othersAccordionState = useModalState()
+    const loanTransactionState = useModalState()
 
     const memberProfileId = transactionForm.getValues('member_profile_id')
     const memberJointId = transactionForm.getValues('member_join_id')
     const selectedAccountFromTable = transactionForm.getValues('account_id')
-    const loanPaymentGuideModal = useModalState()
-    const othersAccordionState = useModalState()
 
     const form = useForm<TPaymentWithTransactionFormValues>({
         resolver: standardSchemaResolver(PaymentWithTransactionSchema),
@@ -129,8 +133,6 @@ const PaymentWithTransactionForm = ({
         })
     }
 
-    const { onOpen } = usePaymentOnSuccessStore()
-
     const {
         mutate: creatTransactionDeposit,
         isPending,
@@ -146,16 +148,13 @@ const PaymentWithTransactionForm = ({
                     mode: 'payment',
                 })
                 othersAccordionState.onOpenChange(false)
-                transactionForm.reset(
-                    {
-                        general_ledger_id: generalLedger.id,
-                        reference_number: generalLedger.reference_number,
-                        general_ledger: generalLedger,
-                    },
-                    {
-                        keepDirtyValues: false,
-                    }
+
+                transactionForm.setValue('general_ledger', generalLedger)
+                transactionForm.setValue(
+                    'reference_number',
+                    generalLedger.reference_number
                 )
+                transactionForm.setValue('general_ledger_id', generalLedger.id)
                 form.setFocus('amount')
             },
         },
@@ -236,18 +235,27 @@ const PaymentWithTransactionForm = ({
     const isDisabled = (field: Path<TPaymentWithTransactionFormValues>) =>
         readOnly || disabledFields?.includes(field) || isPending || false
 
-    const isFormIsDirty = form.formState.isDirty
-
     useHotkeys(
-        'control+Enter',
+        'Enter',
         (e) => {
             e.preventDefault()
-            if (readOnly || isPending || !isFormIsDirty) return
             handleSubmit()
         },
         {
             enableOnFormTags: true,
-        }
+            preventDefault: true,
+            enabled:
+                !open &&
+                !accountPicker.open &&
+                !loanTransactionState.open &&
+                !accountPayment.open,
+        },
+        [
+            open,
+            accountPicker.open,
+            loanTransactionState.open,
+            accountPayment.open,
+        ]
     )
 
     useHotkeys(
@@ -262,15 +270,6 @@ const PaymentWithTransactionForm = ({
     )
 
     useHotkeys(
-        'Alt + 3',
-        (e) => {
-            form.setFocus('amount')
-            e.preventDefault()
-        },
-        { enableOnFormTags: true, keydown: true }
-    )
-
-    useHotkeys(
         'Alt + 2',
         (e) => {
             e.preventDefault()
@@ -281,8 +280,27 @@ const PaymentWithTransactionForm = ({
         [accountPicker.open, accountPayment.open]
     )
 
+    useHotkeys(
+        'Alt + 3',
+        (e) => {
+            e.preventDefault()
+            form.setFocus('amount')
+        },
+        { enableOnFormTags: true, keydown: true },
+        [form]
+    )
+
+    useHotkeys(
+        'Alt + 4',
+        (e) => {
+            e.preventDefault()
+            loanTransactionState.onOpenChange(!loanTransactionState.open)
+        },
+        { enableOnFormTags: true, keydown: true },
+        [loanTransactionState]
+    )
+
     const errorMessage = serverRequestErrExtractor({ error })
-    const { hasNoTransactionBatch } = useTransactionBatchStore()
 
     useEffect(() => {
         if (memberProfileId || selectedAccountFromTable) {
@@ -296,8 +314,6 @@ const PaymentWithTransactionForm = ({
         selectedAccountFromTable,
         history.open,
     ])
-
-    if (!memberProfileId) return
 
     return (
         <Card
@@ -504,6 +520,18 @@ const PaymentWithTransactionForm = ({
                                                         shouldDirty: true,
                                                     }
                                                 )
+                                                if (
+                                                    [
+                                                        'Loan',
+                                                        'SVF-Ledger',
+                                                        'Interest',
+                                                        'Fines',
+                                                    ].includes(account.type)
+                                                ) {
+                                                    loanTransactionState.onOpenChange(
+                                                        true
+                                                    )
+                                                }
                                             }}
                                             placeholder="Select an account"
                                             value={form.watch('account')}
@@ -526,7 +554,7 @@ const PaymentWithTransactionForm = ({
                                                     <KbdGroup>
                                                         <Kbd>Alt</Kbd>
                                                         <span>+</span>
-                                                        <Kbd>1</Kbd>
+                                                        <Kbd>3</Kbd>
                                                     </KbdGroup>
                                                 </span>
                                             </Label>
@@ -567,32 +595,98 @@ const PaymentWithTransactionForm = ({
                                     'Fines',
                                 ] as TAccountType[]
                             ).includes(form.watch('account')?.type) && (
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    label="Loan"
-                                    labelClassName="text-xs font-medium text-muted-foreground"
-                                    name="loan_transaction_id"
-                                    render={({ field }) => (
-                                        <LoanTransactionCombobox
-                                            {...field}
-                                            disabled={isDisabled(
-                                                'loan_transaction_id'
-                                            )}
-                                            loanAccountId={form.watch(
-                                                'account_id'
-                                            )}
-                                            memberProfileId={memberProfileId}
-                                            mode="member-profile-loan-account"
-                                            onChange={(selectedLoanAccount) => {
-                                                field.onChange(
-                                                    selectedLoanAccount?.id
-                                                )
+                                <>
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        label={
+                                            <KbdGroup>
+                                                <Kbd>Alt</Kbd>
+                                                <span>+</span>
+                                                <Kbd>4</Kbd>
+                                            </KbdGroup>
+                                        }
+                                        labelClassName="text-xs font-medium text-muted-foreground"
+                                        name="loan_transaction_id"
+                                        render={({ field }) => (
+                                            <LoanTransactionCombobox
+                                                modalState={{
+                                                    ...loanTransactionState,
+                                                }}
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    'loan_transaction_id'
+                                                )}
+                                                loanAccountId={form.watch(
+                                                    'account_id'
+                                                )}
+                                                memberProfileId={
+                                                    memberProfileId
+                                                }
+                                                mode="member-profile-loan-account"
+                                                onChange={(
+                                                    selectedLoanAccount?: ILoanTransaction
+                                                ) => {
+                                                    field.onChange(
+                                                        selectedLoanAccount?.id
+                                                    )
+                                                    const balance =
+                                                        selectedLoanAccount?.balance
+                                                    if (balance) {
+                                                        form.setValue(
+                                                            'amount',
+                                                            balance
+                                                        )
+                                                    }
+                                                }}
+                                                placeholder="Select loan type"
+                                                value={field.value ?? undefined}
+                                            />
+                                        )}
+                                    />
+                                    <div className="flex w-fit h-full justify-end items-end">
+                                        {form.watch('loan_transaction_id') && (
+                                            <>
+                                                <div
+                                                    className="absolute"
+                                                    onClick={(e) =>
+                                                        e.stopPropagation()
+                                                    }
+                                                >
+                                                    {/* <LoanPaymentScheduleModal
+                                            {...loanPaymentScheduleModal}
+                                            loanPaymentProps={{
+                                                accountDefaultId:
+                                                    form.watch('account_id'),
+                                                loanTransactionId: form.watch(
+                                                    'loan_transaction_id'
+                                                ) as TEntityId,
                                             }}
-                                            placeholder="Select loan type"
-                                            value={field.value ?? undefined}
-                                        />
-                                    )}
-                                />
+                                        /> */}
+                                                    <LoanGuideModal
+                                                        {...loanPaymentGuideModal}
+                                                        loanTransactionId={
+                                                            form.watch(
+                                                                'loan_transaction_id'
+                                                            )!
+                                                        }
+                                                    />
+                                                </div>
+                                                <Button
+                                                    className="text-xs px-2 w-fit ml-2 mr-auto"
+                                                    onClick={() =>
+                                                        loanPaymentGuideModal.onOpenChange(
+                                                            true
+                                                        )
+                                                    }
+                                                    type="button"
+                                                >
+                                                    <CalendarNumberIcon /> Loan
+                                                    Payment Schedule
+                                                </Button>
+                                            </>
+                                        )}
+                                    </div>
+                                </>
                             )}
 
                             <FormErrorMessage errorMessage={errorMessage} />
@@ -683,48 +777,6 @@ const PaymentWithTransactionForm = ({
                                 />
                             </CollapsibleContent>
                         </Collapsible>
-                        <div className="flex items-center w-fit mb-2 justify-end">
-                            {form.watch('loan_transaction_id') && (
-                                <>
-                                    <div
-                                        className="absolute"
-                                        onClick={(e) => e.stopPropagation()}
-                                    >
-                                        {/* <LoanPaymentScheduleModal
-                                            {...loanPaymentScheduleModal}
-                                            loanPaymentProps={{
-                                                accountDefaultId:
-                                                    form.watch('account_id'),
-                                                loanTransactionId: form.watch(
-                                                    'loan_transaction_id'
-                                                ) as TEntityId,
-                                            }}
-                                        /> */}
-                                        <LoanGuideModal
-                                            {...loanPaymentGuideModal}
-                                            loanTransactionId={
-                                                form.watch(
-                                                    'loan_transaction_id'
-                                                )!
-                                            }
-                                        />
-                                    </div>
-                                    <Button
-                                        className="text-xs px-2 w-fit ml-2 mr-auto"
-                                        onClick={() =>
-                                            loanPaymentGuideModal.onOpenChange(
-                                                true
-                                            )
-                                        }
-                                        size="sm"
-                                        type="button"
-                                    >
-                                        <CalendarNumberIcon /> Loan Payment
-                                        Schedule
-                                    </Button>
-                                </>
-                            )}
-                        </div>
                     </form>
                 </Form>
             </CardContent>

@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
+import { getFileCategory, getFileInfo } from '@/modules/media'
 import { FileItemProps } from '@/modules/media/components/media-uploader'
 import {
     IMemberProfileArchive,
@@ -16,11 +17,13 @@ import {
 import { UpdateMemberProfileArchiveFormModal } from '@/modules/member-profile-archive/components/form/update-member-profile-archive-form'
 import { MemberProfileArchiveUploadFormModal } from '@/modules/member-profile-archive/components/form/updatemember-profile-archive-upload-form'
 import MemberArchiveItem from '@/modules/member-profile-archive/components/member-archive-item'
+import PdfViewerModal from '@/modules/pdf/components/pdf-viewer/pdf-viewer-modal'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
 import { stringNormalizer } from '@/modules/timesheet/components/worktimer/utils'
 
 import {
     CompressedFileFillIcon,
+    EyeIcon,
     FolderFillIcon,
     MagnifyingGlassIcon,
     PencilFillIcon,
@@ -370,6 +373,15 @@ const MemberArchiveFileItem = ({
 }: MemberArchiveFileItemProps) => {
     const deleteMutation = useDeleteMemberProfileArchiveById()
     const editMemberArchive = useModalState()
+    const viewMemberArchiveModal = useModalState()
+
+    const media = memberArchive.media
+    const { fullFileName, fileType } = media
+        ? getFileInfo(media)
+        : { fullFileName: '', fileType: '' }
+
+    const category = media ? getFileCategory(fullFileName, fileType) : 'unknown'
+    const isPdf = category === 'pdf'
 
     const handleDelete = () => {
         toast.promise(deleteMutation.mutateAsync(id), {
@@ -390,6 +402,14 @@ const MemberArchiveFileItem = ({
                     defaultValues: memberArchive,
                 }}
             />
+            {isPdf && (
+                <PdfViewerModal
+                    {...viewMemberArchiveModal}
+                    pdfViewerProps={{
+                        file: media?.download_url,
+                    }}
+                />
+            )}
             <MemberArchiveItem
                 {...props}
                 memberArchive={memberArchive}
@@ -403,24 +423,51 @@ const MemberArchiveFileItem = ({
                         : undefined
                 }
                 otherAction={
-                    <ActionTooltip side="bottom" tooltipContent="Edit archive">
-                        <Button
-                            className="size-fit rounded-md p-1 hover:text-destructive-foreground"
-                            disabled={
-                                !hasPermissionFromAuth({
-                                    action: ['OwnUpdate', 'Update'],
-                                    resourceType: 'MemberProfileFileArchives',
-                                    resource: memberArchive,
-                                })
-                            }
-                            hoverVariant="destructive"
-                            onClick={() => editMemberArchive.onOpenChange(true)}
-                            size="icon"
-                            variant="secondary"
+                    <>
+                        <ActionTooltip
+                            side="bottom"
+                            tooltipContent="Edit archive"
                         >
-                            <PencilFillIcon className="size-4 cursor-pointer" />
-                        </Button>
-                    </ActionTooltip>
+                            <Button
+                                className="size-fit rounded-md p-1 hover:text-destructive-foreground"
+                                disabled={
+                                    !hasPermissionFromAuth({
+                                        action: ['OwnUpdate', 'Update'],
+                                        resourceType:
+                                            'MemberProfileFileArchives',
+                                        resource: memberArchive,
+                                    })
+                                }
+                                hoverVariant="destructive"
+                                onClick={() =>
+                                    editMemberArchive.onOpenChange(true)
+                                }
+                                size="icon"
+                                variant="secondary"
+                            >
+                                <PencilFillIcon className="size-4 cursor-pointer" />
+                            </Button>
+                        </ActionTooltip>
+                        {isPdf && (
+                            <ActionTooltip
+                                side="bottom"
+                                tooltipContent="View PDF"
+                            >
+                                <Button
+                                    className="size-fit rounded-md p-1"
+                                    onClick={() =>
+                                        viewMemberArchiveModal.onOpenChange(
+                                            true
+                                        )
+                                    }
+                                    size="icon"
+                                    variant="secondary"
+                                >
+                                    <EyeIcon className="size-4 cursor-pointer" />
+                                </Button>
+                            </ActionTooltip>
+                        )}
+                    </>
                 }
             />
         </>

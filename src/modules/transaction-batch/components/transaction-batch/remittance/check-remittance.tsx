@@ -42,7 +42,8 @@ const BatchCheckRemitance = ({
     const { data = [], refetch } = useCurrentBatchCheckRemittances()
 
     useSubscribe<ICheckRemittance>(
-        `check-remittance.transaction-batch.${transactionBatchId}.create`,
+        'check-remittance',
+        `transaction-batch.${transactionBatchId}.create`,
         (newData) => {
             queryClient.setQueryData<ICheckRemittance[]>(
                 ['check-remittance', 'transaction-batch', 'current'],
@@ -55,7 +56,8 @@ const BatchCheckRemitance = ({
     )
 
     useSubscribe<ICheckRemittance>(
-        `check-remittance.transaction-batch.${transactionBatchId}.update`,
+        'check-remittance',
+        `transaction-batch.${transactionBatchId}.update`,
         (newData) => {
             queryClient.setQueryData<ICheckRemittance[]>(
                 ['check-remittance', 'transaction-batch', 'current'],
@@ -80,7 +82,8 @@ const BatchCheckRemitance = ({
     )
 
     useSubscribe<ICheckRemittance>(
-        `check-remittance.transaction-batch.${transactionBatchId}.delete`,
+        'check-remittance',
+        `transaction-batch.${transactionBatchId}.delete`,
         (deletedData) => {
             queryClient.setQueryData<ICheckRemittance[]>(
                 ['check-remittance', 'transaction-batch', 'current'],

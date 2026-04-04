@@ -62,7 +62,7 @@ const PermissionMatrix = forwardRef<
         count: filteredResources.length,
         getScrollElement: () => parentRef.current,
         estimateSize: () => ROW_HEIGHT,
-        overscan: 5,
+        overscan: 2,
     })
 
     const handleBodyScroll = useCallback(() => {

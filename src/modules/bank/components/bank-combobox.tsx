@@ -91,7 +91,7 @@ const BankCombobox = ({
                             <div className="flex items-center gap-2 min-w-0">
                                 <PreviewMediaWrapper media={selectedBank.media}>
                                     <ImageDisplay
-                                        className="size-4 rounded-full border bg-muted object-cover flex-shrink-0"
+                                        className="size-4 rounded-full border bg-muted object-cover shrink-0"
                                         src={selectedBank.media?.download_url}
                                     />
                                 </PreviewMediaWrapper>
@@ -104,7 +104,7 @@ const BankCombobox = ({
                                 {placeholder}
                             </span>
                         )}
-                        <ChevronDownIcon className="opacity-50 flex-shrink-0" />
+                        <ChevronDownIcon className="opacity-50 shrink-0" />
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
@@ -152,7 +152,7 @@ const BankCombobox = ({
                                                     media={option.media}
                                                 >
                                                     <ImageDisplay
-                                                        className="h-5 w-5 rounded-full border bg-muted object-cover flex-shrink-0"
+                                                        className="h-5 w-5 rounded-full border bg-muted object-cover shrink-0"
                                                         src={
                                                             option.media
                                                                 ?.download_url
@@ -165,7 +165,7 @@ const BankCombobox = ({
                                             </div>
                                             <CheckIcon
                                                 className={cn(
-                                                    'ml-auto flex-shrink-0',
+                                                    'ml-auto shrink-0',
                                                     value === option.id
                                                         ? 'opacity-100'
                                                         : 'opacity-0'

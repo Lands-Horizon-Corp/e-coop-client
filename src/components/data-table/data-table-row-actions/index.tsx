@@ -46,7 +46,6 @@ const RowActionsGroup = <TData,>({
     otherActions,
 }: Props<TData>) => {
     if (!onDelete && !onView && !onEdit && !otherActions) return null
-
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>

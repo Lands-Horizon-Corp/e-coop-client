@@ -1,42 +1,136 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useLiveMonitoringStore } from '@/store/live-monitoring-store'
-import {
-    type IPusherConnectOpts,
-    usePusherStore,
-} from '@/store/nats-pubsub-store'
+import { usePusherStore } from '@/store/nats-pubsub-store'
 
-export const usePusherConnect = (opts?: IPusherConnectOpts) => {
-    const connect = usePusherStore((state) => state.connect)
-
+export const usePusherConnect = (): void => {
+    const initPusher = usePusherStore((state) => state.initPusher)
     useEffect(() => {
-        connect(opts)
-    }, [opts, connect])
+        initPusher()
+    }, [initPusher])
+}
+
+export interface TSubscribeOptions {
+    delay?: number
+    maxQueueSize?: number
+    debounceTime?: number
 }
 
 export const useSubscribe = <T = unknown>(
-    subject: string,
-    onReceive?: (data: T) => void
+    channelName: string,
+    eventName: string | null | undefined,
+    onReceive: (data: T) => void,
+    options: TSubscribeOptions = {}
 ) => {
-    const connection = usePusherStore((state) => state.channel)
+    const pusher = usePusherStore((state) => state.pusher)
     const isLiveEnabled = useLiveMonitoringStore((state) => state.isLiveEnabled)
 
+    const [status, setStatus] = useState({ isSyncing: false, pendingCount: 0 })
+
+    const onReceiveRef = useRef(onReceive)
+    onReceiveRef.current = onReceive
+
+    const { delay = 1000, maxQueueSize = 10, debounceTime = 300 } = options
+
     useEffect(() => {
-        if (
-            !connection ||
-            !isLiveEnabled ||
-            subject.includes('undefined') ||
-            subject.includes('null') ||
-            subject === undefined ||
-            subject === null
-        ) {
+        let isActive = true
+        const queue: T[] = []
+        let isProcessing = false
+        let timer: NodeJS.Timeout | null = null
+        let latestData: T | null = null
+
+        if (!pusher || !isLiveEnabled || !channelName || !eventName) return
+        if (channelName.includes('undefined') || channelName.includes('null'))
             return
+
+        const syncStatus = () => {
+            if (isActive) {
+                setStatus({
+                    isSyncing: isProcessing,
+                    pendingCount: queue.length,
+                })
+            }
         }
 
-        connection.bind(subject, (data: T) => {
-            onReceive?.(data)
-        })
+        const processQueue = async () => {
+            if (isProcessing || queue.length === 0) return
 
-        return () => {}
-    }, [connection, subject, onReceive, isLiveEnabled])
+            isProcessing = true
+            syncStatus()
+
+            try {
+                while (queue.length > 0 && isActive) {
+                    const nextData = queue.shift()
+                    syncStatus()
+
+                    if (nextData !== undefined) {
+                        // Call the latest callback via Ref
+                        onReceiveRef.current(nextData)
+
+                        // Artificial delay between processing items
+                        await new Promise((res) => setTimeout(res, delay))
+                    }
+                }
+            } finally {
+                isProcessing = false
+                syncStatus()
+            }
+        }
+
+        const handleDataPush = (data: T) => {
+            if (!isActive) return
+            queue.push(data)
+
+            // Enforce max queue size (drop oldest)
+            if (queue.length > maxQueueSize) {
+                queue.shift()
+            }
+
+            processQueue()
+        }
+
+        // 2. Pusher Subscription
+        const channel = pusher.subscribe(channelName)
+
+        const handleEvent = (incoming: { success?: boolean; data: T }) => {
+            if (!isActive) return
+
+            // Normalize incoming data structure
+            const data = incoming?.success !== undefined ? incoming.data : null
+            latestData = data
+
+            // Debounce logic: wait for silence before adding to processing queue
+            if (timer) clearTimeout(timer)
+
+            timer = setTimeout(() => {
+                if (isActive && latestData !== null) {
+                    handleDataPush(latestData)
+                    latestData = null
+                }
+            }, debounceTime)
+        }
+
+        channel.bind(eventName, handleEvent)
+
+        // 3. Cleanup
+        return () => {
+            isActive = false
+            if (timer) clearTimeout(timer)
+            if (eventName) {
+                channel.unbind(eventName, handleEvent)
+            }
+            // Reset status for the next ID/subscription
+            setStatus({ isSyncing: false, pendingCount: 0 })
+        }
+    }, [
+        pusher,
+        channelName,
+        eventName,
+        isLiveEnabled,
+        delay,
+        maxQueueSize,
+        debounceTime,
+    ])
+
+    return { ...status, isLive: isLiveEnabled }
 }

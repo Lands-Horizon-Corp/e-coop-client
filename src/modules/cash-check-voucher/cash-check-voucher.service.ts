@@ -22,7 +22,9 @@ import type {
     TCashCheckVoucherMode,
     TCashCheckVoucherPrintMode,
     TCashCheckVoucherPrintRequest,
+    TCashCheckVoucherReprintSchema,
 } from '../cash-check-voucher'
+import { IGeneratedReport, generatedReportBaseKey } from '../generated-report'
 import { getPaginatedJournalVoucher } from '../journal-voucher'
 
 const {
@@ -193,27 +195,69 @@ export const useCashCheckVoucherActions = createMutationFactory<
 })
 
 // PRINT CASH CHECK VOUCHER
-const printCashCheckVoucher = async (data: {
+const printCashCheckVoucher = async ({
+    payload,
+    cashCheckVoucherId,
+    commit = true,
+}: {
     cashCheckVoucherId: TEntityId
     payload: TCashCheckVoucherPrintRequest
+    commit?: boolean
 }) => {
+    const url = qs.stringifyUrl({
+        url: `${cashCheckVoucherAPIRoute}/${cashCheckVoucherId}/print`,
+        query: { commit },
+    })
     const response = await API.put<
         TCashCheckVoucherPrintRequest,
-        ICashCheckVoucher
-    >(
-        `${cashCheckVoucherAPIRoute}/${data.cashCheckVoucherId}/print`,
-        data.payload
-    )
+        IGeneratedReport
+    >(url, payload)
     return response.data
 }
 
 export const usePrintCashCheckVoucherTransaction = createMutationFactory<
-    ICashCheckVoucher,
+    IGeneratedReport,
     Error,
-    { cashCheckVoucherId: TEntityId; payload: TCashCheckVoucherPrintRequest }
+    {
+        cashCheckVoucherId: TEntityId
+        payload: TCashCheckVoucherPrintRequest
+        commit?: boolean
+    }
 >({
     mutationFn: (data) => printCashCheckVoucher(data),
-    defaultInvalidates: [['auth', 'context']],
+    defaultInvalidates: [
+        ['auth', 'context'],
+        [generatedReportBaseKey, 'inprogress', 'all'],
+    ],
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(cashCheckVoucherBaseKey, args),
+})
+
+// REPRINT
+export const useReprintCashCheckVoucherTransaction = createMutationFactory<
+    IGeneratedReport,
+    Error,
+    {
+        cashCheckVoucherId: TEntityId
+        payload: TCashCheckVoucherReprintSchema
+        commit?: boolean
+    }
+>({
+    mutationFn: async ({ cashCheckVoucherId, payload, commit = true }) => {
+        const url = qs.stringifyUrl({
+            url: `${cashCheckVoucherAPIRoute}/${cashCheckVoucherId}/print-only`,
+            query: { commit },
+        })
+        const response = await API.put<
+            TCashCheckVoucherReprintSchema,
+            IGeneratedReport
+        >(url, payload)
+        return response.data
+    },
+    defaultInvalidates: [
+        ['auth', 'context'],
+        [generatedReportBaseKey, 'inprogress', 'all'],
+    ],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(cashCheckVoucherBaseKey, args),
 })

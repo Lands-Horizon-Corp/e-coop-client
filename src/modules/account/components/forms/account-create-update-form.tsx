@@ -42,6 +42,7 @@ export interface IAccountCreateUpdateFormProps
         IForm<Partial<IAccountRequest>, IAccount, string, TAccountFormValues> {
     accountId?: TEntityId
     onEditSuccess?: (account: IAccount) => void
+    accounts?: IAccount[]
 }
 
 const AccountCreateUpdateForm = ({
@@ -49,6 +50,7 @@ const AccountCreateUpdateForm = ({
     accountId,
     autoSave = false,
     onEditSuccess,
+    accounts,
     ...formProps
 }: IAccountCreateUpdateFormProps) => {
     const { currentAuth } = useAuthUserWithOrgBranch()
@@ -98,9 +100,9 @@ const AccountCreateUpdateForm = ({
 
     const onSubmit = form.handleSubmit((data: TAccountFormValues) => {
         const request = {
+            ...data,
             branch_id: branchId,
             organization_id: organizationId,
-            ...data,
         }
         if (accountId) {
             toast.promise(
@@ -169,12 +171,17 @@ const AccountCreateUpdateForm = ({
 
                 <FormErrorMessage errorMessage={error} />
                 <AccountHeaderForm
+                    accounts={accounts}
                     form={form}
                     isDisabled={isDisabled}
                     isReadOnly={formProps.readOnly}
                 />
                 <div className="flex gap-x-2">
-                    <AccountContentForm form={form} isDisabled={isDisabled} />
+                    <AccountContentForm
+                        form={form}
+                        isDisabled={isDisabled}
+                        readOnly={formProps.readOnly}
+                    />
                     <LoanConnectAccountSection
                         className="my-2 w-xs shrink-0 max-w-xs"
                         form={form}

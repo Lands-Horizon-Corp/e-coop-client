@@ -162,6 +162,81 @@ export const useCurrentBatchCashCounts = ({
 }
 
 // Custom hook for fetching the current transaction batch
+export type TUnclosedTransactionBatchMode = 'me' | 'branch' | 'employee'
+
+export const buildUnclosedTBEndpoint = ({
+    mode = 'me',
+    userOrganizationId,
+}: {
+    mode?: TUnclosedTransactionBatchMode
+    userOrganizationId?: TEntityId
+}) => {
+    switch (mode) {
+        case 'me':
+            return `${transactionBatchAPIRoute}/unclosed/me`
+        case 'branch':
+            return `${transactionBatchAPIRoute}/unclosed/branch`
+        case 'employee':
+            if (!userOrganizationId)
+                throw new Error(
+                    'userOrganizationId is required for employee mode'
+                )
+            return `${transactionBatchAPIRoute}/unclosed/employee/${userOrganizationId}`
+        default:
+            throw new Error(
+                `Unsupported unclosed transaction batch mode: ${mode}`
+            )
+    }
+}
+
+export const useUnclosedTransactionBatches = ({
+    mode = 'me',
+    userOrganizationId,
+    options,
+}: {
+    mode?: TUnclosedTransactionBatchMode
+    userOrganizationId?: TEntityId
+    options?: HookQueryOptions<ITransactionBatch[], Error>
+} = {}) => {
+    return useQuery<ITransactionBatch[], Error>({
+        ...options,
+        queryKey: [
+            'transaction-batch',
+            'unclosed',
+            mode,
+            userOrganizationId,
+        ].filter(Boolean),
+        queryFn: async () => {
+            const url = buildUnclosedTBEndpoint({ mode, userOrganizationId })
+            const response = await getAllTransactionBatches({ url })
+            return response
+        },
+    })
+}
+
+// for batch switching
+export const useTransactionBatchSwitch = createMutationFactory<
+    TTransactionBatchFullorMin,
+    Error,
+    TEntityId
+>({
+    mutationFn: async (id) => {
+        const response = await API.post<void, TTransactionBatchFullorMin>(
+            `${transactionBatchAPIRoute}/${id}/switch`
+        )
+
+        return response.data
+    },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn('transaction-batch', args),
+    defaultInvalidates: [
+        ['transaction-batch', 'current'],
+        ['transaction-batch', 'unclosed'],
+        ['transaction-batch', 'view-requests'],
+    ],
+})
+
+// Custom hook for fetching the current transaction batch
 export const useCurrentTransactionBatch = ({
     options,
 }: {
@@ -261,6 +336,7 @@ export const useTransactionBatchEndCurrentBatch = createMutationFactory<
         updateMutationInvalidationFn('transaction-batch', args),
     defaultInvalidates: [
         [transactionBatchQueryKey, 'current'],
+        [transactionBatchQueryKey, 'unclosed'],
         [transactionBatchQueryKey, 'end-approvals'],
         [transactionBatchQueryKey, 'view-requests'],
     ],

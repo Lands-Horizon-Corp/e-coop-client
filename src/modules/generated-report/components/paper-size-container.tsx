@@ -2,11 +2,8 @@ import { cn } from '@/helpers/tw-utils'
 
 import { IClassProps } from '@/types'
 
-import {
-    PAPER_SIZES,
-    TPaperSizeUnit,
-    getPaperSize,
-} from '../generated-reports.constants'
+import { TPaperSizeUnit } from '../generated-report.types'
+import { PAPER_SIZES, getPaperSize } from '../generated-reports.constants'
 
 interface IPaperSizeContainerProps extends IClassProps {
     size?: keyof typeof PAPER_SIZES

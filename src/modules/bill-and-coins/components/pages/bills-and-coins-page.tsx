@@ -27,19 +27,19 @@ export default function BillsAndCoinsPage() {
         },
     } = useAuthUserWithOrgBranch()
 
-    useSubscribe(`bills_and_coins.created.branch.${branch_id}`, () =>
+    useSubscribe('bill_and_coins', `create.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['bills-and-coins', 'paginated'],
         })
-    )
+    })
 
-    useSubscribe(`bills_and_coins.updated.branch.${branch_id}`, () =>
+    useSubscribe('bill_and_coins', `update.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['bills-and-coins', 'paginated'],
         })
-    )
+    })
 
-    useSubscribe(`bills_and_coins.deleted.branch.${branch_id}`, () =>
+    useSubscribe('bill_and_coins', `delete.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['bills-and-coins', 'paginated'],
         })

@@ -1,0 +1,159 @@
+import { useEffect, useState } from 'react'
+
+import { sortBy } from '@/helpers/common-helper'
+import { IAccount } from '@/modules/account'
+import {
+    DndContext,
+    DragEndEvent,
+    KeyboardSensor,
+    PointerSensor,
+    closestCorners,
+    useSensor,
+    useSensors,
+} from '@dnd-kit/core'
+import {
+    arrayMove,
+    sortableKeyboardCoordinates,
+    useSortable,
+} from '@dnd-kit/sortable'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
+import { DragHandleIcon } from '@/components/icons'
+
+import { TEntityId, UpdateAccountOrder } from '@/types'
+
+import { useGeneralLedgerDefinitionContext } from '../ context/general-ledger-context-provider'
+import GLFSAccountActions from './actions/gl-account-actions'
+
+type AccountItemProps = {
+    id: string
+    title: string
+    handleDeleteAccount: (accountId: TEntityId) => void
+    account: IAccount
+}
+
+export const GeneralLedgerAccountItem = ({
+    id,
+    title,
+    handleDeleteAccount,
+    account,
+}: AccountItemProps) => {
+    const { attributes, listeners, setNodeRef, transform, transition } =
+        useSortable({ id })
+
+    const style = {
+        transition,
+        transform: transform ? CSS.Transform.toString(transform) : undefined,
+    }
+    return (
+        <div
+            className="flex items-center  p-2 border-b bg-sidebar rounded-sm"
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+        >
+            <div {...listeners} className="cursor-grab mr-2">
+                <DragHandleIcon size={16} />
+            </div>
+            <div className="w-full flex items-center justify-between">
+                {title}
+                <GLFSAccountActions
+                    handleDeleteAccount={handleDeleteAccount}
+                    node={account}
+                />
+            </div>
+        </div>
+    )
+}
+type GlAccountListProps = {
+    accounts: IAccount[]
+    generalLedgerId: TEntityId
+}
+
+export default function GLFSAccountsCardList({
+    accounts,
+    generalLedgerId,
+}: GlAccountListProps) {
+    const [account, setAccount] = useState<IAccount[]>([])
+
+    useEffect(() => {
+        setAccount([...accounts].sort(sortBy('index')))
+    }, [accounts])
+
+    const { queries, setChangedAccounts, updateAccounts } =
+        useGeneralLedgerDefinitionContext()
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    )
+
+    const handleRemoveAcount = (accountId: TEntityId) => {
+        setAccount((prev) => prev.filter((acc) => acc.id !== accountId))
+        queries.removeAccountFromGLQuery.mutate({
+            mode: 'general-ledger',
+            id: accountId,
+        })
+    }
+
+    const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event
+
+        if (!over || active.id === over.id) return
+
+        const originalPos = account.findIndex((a) => a.id === active.id)
+        const newPos = account.findIndex((a) => a.id === over.id)
+
+        const updatedAccounts = arrayMove(account, originalPos, newPos)
+
+        const finalAccounts = updatedAccounts.map((item, i) => ({
+            ...item,
+            index: i,
+        }))
+
+        const changed: UpdateAccountOrder[] = finalAccounts
+            .filter(
+                (item, i) =>
+                    item.id !== account[i]?.id ||
+                    item.index !== account[i]?.index
+            )
+            .map((item) => ({
+                account_id: item.id,
+                index: item.index,
+            }))
+
+        setAccount(finalAccounts)
+        updateAccounts(generalLedgerId, finalAccounts)
+        setChangedAccounts?.(changed)
+    }
+
+    return (
+        <div className="pl-4 pt-2">
+            <DndContext
+                collisionDetection={closestCorners}
+                onDragEnd={handleDragEnd}
+                sensors={sensors}
+            >
+                <SortableContext
+                    items={account}
+                    strategy={verticalListSortingStrategy}
+                >
+                    <div className="flex flex-col gap-2">
+                        {account.map((accountItem) => (
+                            <GeneralLedgerAccountItem
+                                account={accountItem}
+                                handleDeleteAccount={handleRemoveAcount}
+                                id={accountItem.id}
+                                key={accountItem.id}
+                                title={`${accountItem.name}`}
+                            />
+                        ))}
+                    </div>
+                </SortableContext>
+            </DndContext>
+        </div>
+    )
+}

@@ -24,19 +24,19 @@ const MemberTypePage = () => {
     } = useAuthUserWithOrgBranch()
     const queryClient = useQueryClient()
 
-    useSubscribe(`member_type.created.branch.${branch_id}`, () => {
+    useSubscribe('member_type', `create.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-type', 'paginated'],
         })
     })
 
-    useSubscribe(`member_type.updated.branch.${branch_id}`, () => {
+    useSubscribe('member_type', `update.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-type', 'paginated'],
         })
     })
 
-    useSubscribe(`member_type.deleted.branch.${branch_id}`, () => {
+    useSubscribe('member_type', `delete.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-type', 'paginated'],
         })

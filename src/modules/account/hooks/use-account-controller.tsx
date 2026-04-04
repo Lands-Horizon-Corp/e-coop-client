@@ -21,15 +21,13 @@ export const useAccountController = () => {
     })
 
     useEffect(() => {
-        if (!getAllAccounts || !getAllAccounts.data) return
-        if (getAllAccounts.data) {
-            setAccounts(getAllAccounts.data)
-        }
-    }, [getAllAccounts, setAccounts])
+        if (!getAllAccounts?.data) return
+        setAccounts(getAllAccounts.data)
+    }, [getAllAccounts.data])
 
     const modals = {
         createModal: useModalState(false),
-        openEdit: useModalState(false),
+        edit: useModalState(false),
     }
 
     return {

@@ -1,0 +1,154 @@
+import { useEffect } from 'react'
+
+import { toast } from 'sonner'
+
+import { cn } from '@/helpers'
+import { useUpdateIndex } from '@/modules/general-ledger-definition'
+import {
+    DndContext,
+    PointerSensor,
+    closestCorners,
+    useSensor,
+    useSensors,
+} from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+
+import { CollapseIcon, PlusIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip'
+
+import { useGeneralLedgerDefinitionContext } from '../ context/general-ledger-context-provider'
+import GLToolsBar from './actions-button'
+import GeneralLedgerDefinitionHeaderSearch from './general-ledger-definition-header-search'
+import GeneralLedgerDefinitionNode from './gl-definition-node'
+import { buildPayload } from './gl-utils'
+
+const GeneralLedgerDefinitionTreeViewer = () => {
+    const {
+        queries,
+        modals,
+        setChangedGeneralLedgerItems,
+        moveGeneralLedgerNode,
+        setGeneralLedgerDefinitions,
+        generalLedgerDefinitions,
+        resetExpansion,
+        expandedNodeIds,
+    } = useGeneralLedgerDefinitionContext()
+
+    const { refetch, data: GeneralLedgerDefinitions } =
+        queries.generalLedgerDefinitionQuery
+
+    const { mutate: updateIndex } = useUpdateIndex({
+        options: {
+            onSuccess: () => {
+                refetch?.()
+                setChangedGeneralLedgerItems([])
+                toast.success(
+                    'General Ledger Definition Accounts Grouping Index Updated'
+                )
+            },
+        },
+    })
+
+    const topLevelSensors = useSensors(useSensor(PointerSensor))
+
+    useEffect(() => {
+        if (!GeneralLedgerDefinitions) return
+        setGeneralLedgerDefinitions(GeneralLedgerDefinitions)
+    }, [GeneralLedgerDefinitions, setGeneralLedgerDefinitions])
+
+    useEffect(() => {
+        if (generalLedgerDefinitions) {
+            updateIndex(buildPayload(generalLedgerDefinitions))
+        }
+    }, [generalLedgerDefinitions, updateIndex])
+    return (
+        <div className="w-full p-5 flex flex-col gap-2 flex-2 h-screen overflow-y-auto ecoop-scroll bg-card rounded-2xl">
+            <GLToolsBar />
+            <GeneralLedgerDefinitionHeaderSearch />
+            <div className="w-full">
+                <div
+                    className={cn(
+                        'w-full flex justify-start',
+                        expandedNodeIds.size === 0 ? 'hidden' : ''
+                    )}
+                >
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <Button
+                                className="rounded-xl text-xs"
+                                onClick={() => {
+                                    resetExpansion()
+                                }}
+                                size={'sm'}
+                                variant={'outline'}
+                            >
+                                collapse
+                                <CollapseIcon />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Collapse All</TooltipContent>
+                    </Tooltip>
+                </div>
+                <DndContext
+                    collisionDetection={closestCorners}
+                    onDragEnd={(event) =>
+                        moveGeneralLedgerNode(
+                            [],
+                            event.active.id,
+                            event.over?.id || ''
+                        )
+                    }
+                    sensors={topLevelSensors}
+                >
+                    <SortableContext
+                        items={generalLedgerDefinitions?.map(
+                            (ledger) => ledger.id
+                        )}
+                        strategy={verticalListSortingStrategy}
+                    >
+                        {GeneralLedgerDefinitions ? (
+                            <>
+                                {generalLedgerDefinitions?.map((node) => {
+                                    return (
+                                        <GeneralLedgerDefinitionNode
+                                            depth={0}
+                                            key={node.id}
+                                            node={node}
+                                            onDragEndNested={
+                                                moveGeneralLedgerNode
+                                            }
+                                            parentPath={[]}
+                                            refetch={refetch}
+                                        />
+                                    )
+                                })}
+                            </>
+                        ) : (
+                            <div className="flex flex-col gap-y-5 items-center justify-center h-64">
+                                <p>No Financial Statement Definitions found.</p>
+                                <Button
+                                    className="ml-4 z-10"
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        modals.glForm.onOpenChange(true)
+                                    }}
+                                    variant="outline"
+                                >
+                                    <PlusIcon className="mr-2" size={15} />
+                                    Add General Ledger Definition
+                                </Button>
+                            </div>
+                        )}
+                    </SortableContext>
+                </DndContext>
+            </div>
+        </div>
+    )
+}
+
+export default GeneralLedgerDefinitionTreeViewer

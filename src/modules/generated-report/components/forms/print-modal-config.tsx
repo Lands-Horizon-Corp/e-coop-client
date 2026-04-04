@@ -34,12 +34,12 @@ import { IClassProps, IForm, TEntityId } from '@/types'
 import {
     IGeneratedReport,
     IGeneratedReportRequest,
+    TPaperSizeUnit,
     TemplateOptions,
 } from '../../generated-report.types'
 import { GeneratedReportSchema } from '../../generated-report.validation'
 import {
     PAPER_SIZE_UNIT,
-    TPaperSizeUnit,
     getPaperSize,
 } from '../../generated-reports.constants'
 import PaperSizeSelector, { TPaperSizeName } from './paper-size-selector'

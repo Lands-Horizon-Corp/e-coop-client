@@ -4,152 +4,11 @@ import { IGeneratedReportsDownloadUsers } from '../generated-reports-download-us
 import { IMedia } from '../media'
 import { IUser } from '../user'
 import { TPaperSizeName } from './components/forms/paper-size-selector'
-import { TPaperSizeUnit } from './generated-reports.constants'
-
-export const ACCOUNT_MODEL_NAMES = [
-    'AccountHistory',
-    'Account',
-    'AccountCategory',
-    'AccountClassification',
-    'AccountTag',
-    'AdjustmentEntry',
-    'AdjustmentTag',
-    'AutomaticLoanDeduction',
-    'Bank',
-    'BatchFunding',
-    'BillAndCoins',
-    'branch',
-    'branchSetting',
-    'BrowseExcludeIncludeAccounts',
-    'CancelledCashCheckVoucher',
-    'CashCheckVoucher',
-    'CashCheckVoucherEntry',
-    'CashCheckVoucherTag',
-    'CashCount',
-    'Category',
-    'ChargesRateByRangeOrMinimumAmount',
-    'ChargesRateByTerm',
-    'ChargesRateScheme',
-    'ChargesRateSchemeAccount',
-    'ChargesRateSchemeModeOfPayment',
-    'CheckRemittance',
-    'Collateral',
-    'CollectorsMemberAccountEntry',
-    'ComakerCollateral',
-    'ComakerMemberProfile',
-    'Company',
-    'ComputationSheet',
-    'ContactUs',
-    'Currency',
-    'Disbursement',
-    'DisbursementTransaction',
-    'Feedback',
-    'FinancialStatementGrouping',
-    'FinancialStatementDefinition',
-    'FinesMaturity',
-    'Footstep',
-    'Funds',
-    'GeneralAccountGroupingNetSurplusNegative',
-    'GeneralLedgerTag',
-    'GeneralLedger',
-    'GeneralLedgerAccountsGrouping',
-    'GeneralLedgerDefinition',
-    'GeneratedReport',
-    'GroceryComputationSheet',
-    'GroceryComputationSheetMonthly',
-    'Holiday',
-    'Area',
-    'IncludeNegativeAccount',
-    'InterestMaturity',
-    'InterestRateByTerm',
-    'InterestRateByTermsHeader',
-    'InterestRatePercentage',
-    'InterestRateScheme',
-    'InvitationCode',
-    'JournalVoucher',
-    'JournalVoucherEntry',
-    'JournalVoucherTag',
-    'LoanClearanceAnalysis',
-    'LoanClearanceAnalysisInstitution',
-    'LoanComakerMember',
-    'LoanGuaranteedFund',
-    'LoanGuaranteedFundPerMonth',
-    'LoanLedger',
-    'LoanPurpose',
-    'LoanStatus',
-    'LoanTag',
-    'LoanTermsAndConditionAmountReceipt',
-    'LoanTermsAndConditionSuggestedPayment',
-    'LoanTransaction',
-    'LoanTransactionEntry',
-    'Media',
-    'MemberAccountingLedger',
-    'MemberAddress',
-    'MemberAsset',
-    'MemberBankCard',
-    'MemberCenter',
-    'MemberCenterHistory',
-    'MemberClassification',
-    'MemberClassificationHistory',
-    'MemberClassificationInterestRate',
-    'MemberCloseRemark',
-    'MemberContactReference',
-    'MemberDamayanExtensionEntry',
-    'MemberDeductionEntry',
-    'MemberDepartment',
-    'MemberDepartmentHistory',
-    'MemberEducationalAttainment',
-    'MemberExpense',
-    'MemberGender',
-    'MemberGenderHistory',
-    'MemberGovernmentBenefit',
-    'MemberGroup',
-    'MemberGroupHistory',
-    'MemberIncome',
-    'MemberJointAccount',
-    'MemberMutualFundHistory',
-    'MemberOccupation',
-    'MemberOccupationHistory',
-    'MemberOtherInformationEntry',
-    'MemberProfile',
-    'MemberProfileMedia',
-    'MemberRelativeAccount',
-    'MemberType',
-    'MemberTypeHistory',
-    'BrowseReference',
-    'BrowseReferenceByAmount',
-    'BrowseReferenceInterestRateByUltimaMembershipDate',
-    'BrowseReferenceInterestRateByUltimaMembershipDatePerYear',
-    'MemberVerification',
-    'QRMemberProfile',
-    'QRInvitationCode',
-    'QRUser',
-    'Core',
-    'Notification',
-    'OnlineRemittance',
-    'Organization',
-    'OrganizationCategory',
-    'OrganizationDailyUsage',
-    'OrganizationMedia',
-    'PaymentType',
-    'PermissionTemplate',
-    'PostDatedCheck',
-    'SubscriptionPlan',
-    'TagTemplate',
-    'TimeDepositComputation',
-    'TimeDepositComputationPreMature',
-    'TimeDepositType',
-    'Timesheet',
-    'Transaction',
-    'TransactionBatch',
-    'TransactionTag',
-    'UnbalancedAccount',
-    'User',
-    'UserOrganization',
-    'UserRating',
-    'VoucherPayTo',
-    'none',
-] as const
+import {
+    ACCOUNT_MODEL_NAMES,
+    PAPER_SIZES,
+    PAPER_SIZE_UNIT,
+} from './generated-reports.constants'
 
 export type TModelName = (typeof ACCOUNT_MODEL_NAMES)[number]
 
@@ -172,7 +31,9 @@ export type TGeneratedReportType = (typeof GENERATE_REPORT_TYPE)[number]
 export type TGeneratedReportStatus =
     | 'pending'
     | 'in_progress'
-    | 'complete'
+    | 'formatting'
+    | 'uploading'
+    | 'completed'
     | 'failed'
 
 export interface IGeneratedReport extends IBaseEntityMeta {
@@ -182,8 +43,9 @@ export interface IGeneratedReport extends IBaseEntityMeta {
     media: IMedia
     name: string
     description: string
-    status: TGeneratedReportStatus
 
+    status: TGeneratedReportStatus
+    progress: number
     system_message: string
 
     filter_search: string
@@ -194,7 +56,17 @@ export interface IGeneratedReport extends IBaseEntityMeta {
     paper_size?: string
     template?: string
 
+    has_password?: boolean
+
     download_users: IGeneratedReportsDownloadUsers[]
+
+    width: number
+    height: number
+    unit: TPaperSizeUnit
+
+    expiration_days?: number
+
+    landscape: boolean
 }
 
 export interface IGeneratedReportRequest {
@@ -235,4 +107,55 @@ export type TemplateOptions = {
     description?: string
 
     defaultSize: TPaperSizeName
+}
+
+// for template & preview
+
+export type TPaperSizeUnit = (typeof PAPER_SIZE_UNIT)[number]
+
+export interface GeneratedReportTemplate<T = unknown> {
+    id: string
+    template_name: string
+
+    template: string
+
+    // niremove ko dahil contradicting to sa input and changeable unit.
+    // example max-width dito is 14in, pag binago ko unit to mm, 14mm lang allowable which is too small
+    // kaya remove nalang
+
+    // max_width: number
+    // max_height: number
+    // min_width: number
+    // min_height: number
+
+    default_unit: TPaperSizeUnit
+    model: TModelName
+
+    width: string // combined ng value sa default sizing unit 18in
+    height: string // combined ng value sa default sizing unit 14in
+
+    page_size?: (typeof PAPER_SIZES)[number]
+
+    preview_data: T
+
+    lock_organization_id?: TEntityId[]
+    lock_branch_id?: TEntityId[]
+}
+
+export type GeneratedReportTemplateCollection = GeneratedReportTemplate[]
+
+// COMMON REPORT TEMPLATE INJECTABLE DATA
+
+export interface IBaseReportTemplateData {
+    header_title: string
+    header_address: string
+    tax_number: string
+    report_title: string
+
+    print_count?: number
+}
+
+export interface IBaseReportTemplateCheck {
+    check_number?: string
+    check_date?: string
 }

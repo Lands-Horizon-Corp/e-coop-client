@@ -1,6 +1,9 @@
+import { toReadableDate } from '@/helpers/date-utils'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
-import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
-import { useGenerateReport } from '@/modules/generated-report/components/generate-report-hooks/use-report-generate'
+import { TReportConfigSchema } from '@/modules/generated-report'
+// import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
+import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
+import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import {
     IJournalVoucher,
     TORJournalVoucherSettings,
@@ -12,10 +15,10 @@ import JournalVoucherApproveReleaseDisplayModal, {
 import JournalVoucherPrintFormModal from '@/modules/journal-voucher/components/forms/journal-voucher-create-print-modal'
 import JournalVoucherCreateUpdateFormModal from '@/modules/journal-voucher/components/forms/journal-voucher-create-update-modal'
 import JournalVoucherOtherAction from '@/modules/journal-voucher/components/tables/journal-voucher-other-action'
-import useGeneratedReportConfigStore from '@/store/generated-report-config-store'
+import { JOURNAL_VOUCHER_PRINT_TEMPLATES } from '@/modules/journal-voucher/reports/jornal-voucher-template'
 
 import { EyeIcon, PencilFillIcon } from '@/components/icons'
-import { JournalVoucherTemplates } from '@/components/templates/template-journal-entry'
+// import { JournalVoucherTemplates } from '@/components/templates/template-journal-entry'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -88,18 +91,9 @@ export const JournalVoucherCardActions = ({
         handleReleaseModal,
         handleOpenViewModal,
         journalVoucherModalState,
-        generateReport,
     } = useJournalVoucherActions({ journalVoucher, refetch })
 
     const isReleased = !!journalVoucher.released_date
-
-    const { clear } = useGeneratedReportConfigStore()
-
-    const createGeneratedReport = useGenerateReport({
-        onSuccess: () => {
-            clear()
-        },
-    })
 
     const {
         currentAuth: { user_organization },
@@ -126,17 +120,29 @@ export const JournalVoucherCardActions = ({
             <JournalVoucherPrintFormModal
                 {...printModal}
                 formProps={{
-                    defaultValues: { ...journalVoucher },
+                    defaultValues: {
+                        ...journalVoucher,
+                        report_config: {
+                            ...getTemplateAt(
+                                JOURNAL_VOUCHER_PRINT_TEMPLATES,
+                                0
+                            ),
+                            name: `journal_voucher_${toReadableDate(journalVoucher.created_at, 'MMddyy_mmss')}.pdf`,
+                            module: 'JournalVoucher',
+                        } as TReportConfigSchema,
+                    },
                     orSettings: resolvedOrSettings,
                     journalVoucherId: journalVoucher.id,
-                    onSuccess: () => {
+                    onSuccess: (data) => {
                         refetch?.()
-                        createGeneratedReport?.handleGenerateReport()
+                        useReportViewerStore.getState().open({
+                            reportId: data.id,
+                        })
                         printModal.onOpenChange(false)
                     },
                 }}
             />
-            <PrintReportFormModal
+            {/* <PrintReportFormModal
                 {...generateReport}
                 formProps={{
                     defaultValues: {
@@ -156,7 +162,7 @@ export const JournalVoucherCardActions = ({
                     templateOptions: JournalVoucherTemplates,
                 }}
                 title="Generate to Print"
-            />
+            /> */}
             {['approve', 'undo-approve', 'release'].map((mode) => {
                 const modalState =
                     mode === 'approve' ? approveModal : releaseModal
@@ -175,7 +181,7 @@ export const JournalVoucherCardActions = ({
                     </div>
                 )
             })}
-            <div className="w-full flex items-center space-x-1 justify-start flex-shrink-0">
+            <div className="w-full flex items-center space-x-1 justify-start shrink-0">
                 <JournalVoucherTagsManagerPopover
                     journalVoucherId={journalVoucher.id}
                     onSuccess={refetch}
@@ -200,7 +206,7 @@ export const JournalVoucherCardActions = ({
                             <JournalVoucherOtherAction
                                 onApprove={handleApproveModal}
                                 onPrint={() => {
-                                    generateReport.onOpenChange(true)
+                                    handleOpenPrintModal()
                                 }}
                                 onRefetch={refetch}
                                 onRelease={handleReleaseModal}

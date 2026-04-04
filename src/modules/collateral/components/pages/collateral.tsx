@@ -20,19 +20,19 @@ const CollateralPage = () => {
         },
     } = useAuthUserWithOrgBranch()
 
-    useSubscribe(`collateral.created.branch.${branch_id}`, () =>
+    useSubscribe('collateral', `create.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['collateral', 'paginated'],
         })
     )
 
-    useSubscribe(`collateral.updated.branch.${branch_id}`, () =>
+    useSubscribe('collateral', `update.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['collateral', 'paginated'],
         })
     )
 
-    useSubscribe(`collateral.deleted.branch.${branch_id}`, () =>
+    useSubscribe('collateral', `delete.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['collateral', 'paginated'],
         })

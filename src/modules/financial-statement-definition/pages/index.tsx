@@ -1,318 +1,317 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from '@radix-ui/react-accordion'
+// import {
+//     Accordion,
+//     AccordionContent,
+//     AccordionItem,
+//     AccordionTrigger,
+// } from '@radix-ui/react-accordion'
 
-import { payment_bg } from '@/assets/transactions'
-import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
-import { IFinancialStatementAccountGrouping } from '@/modules/financial-statement-account-grouping'
-import { useGetAll } from '@/modules/financial-statement-account-grouping'
-import { FinancialStatementAccountGroupingUpdateModal } from '@/modules/financial-statement-account-grouping'
-import PermissionGuard from '@/modules/permission/components/permission-guard'
-import { useFinancialStatementAccountsGroupingStore } from '@/store/financial-statement-accounts-grouping-store'
+// import { payment_bg } from '@/assets/transactions'
+// import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
+// import { IFinancialStatementAccountGrouping } from '@/modules/financial-statement-account-grouping'
+// import { useGetAll } from '@/modules/financial-statement-account-grouping'
+// import { FinancialStatementAccountGroupingUpdateModal } from '@/modules/financial-statement-account-grouping'
+// import PermissionGuard from '@/modules/permission/components/permission-guard'
+// import { useFinancialStatementAccountsGroupingStore } from '@/store/financial-statement-accounts-grouping-store'
 
-import PageContainer from '@/components/containers/page-container'
-import {
-    EditPencilIcon,
-    SettingsIcon,
-    SigiBookIcon,
-    ViewIcon,
-} from '@/components/icons'
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuShortcut,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+// import PageContainer from '@/components/containers/page-container'
+// import {
+//     EditPencilIcon,
+//     SettingsIcon,
+//     SigiBookIcon,
+//     ViewIcon,
+// } from '@/components/icons'
+// import {
+//     DropdownMenu,
+//     DropdownMenuContent,
+//     DropdownMenuItem,
+//     DropdownMenuShortcut,
+//     DropdownMenuTrigger,
+// } from '@/components/ui/dropdown-menu'
 
-import { useShortcut } from '@/hooks/use-shorcuts'
+// import { useShortcut } from '@/hooks/use-shorcuts'
 
-import { FINANCIAL_STATEMENT_TYPE } from '../financial-statement-definition.constants'
-import { FinancialStatementDefinitionTreeViewer } from './components'
-import FinancialStatementSkeleton from './components/financial-statement-skeleton'
+// import { FINANCIAL_STATEMENT_TYPE } from '../financial-statement-definition.constants'
+// import FinancialStatementSkeleton from './components/financial-statement-skeleton'
 
-const FinancialStatementDefinition = () => {
-    const [
-        onOpenEditFinancialStatementGrouping,
-        setOnOpenEditFinancialStatementGrouping,
-    ] = useState(false)
-    const [
-        viewOnlyFinancialStatementGrouping,
-        setViewOnlyFinancialStatementGrouping,
-    ] = useState(false)
-    const [financialStatementGrouping, setFinancialStatementGrouping] =
-        useState<IFinancialStatementAccountGrouping | null>(null)
+// const FinancialStatementDefinition = () => {
+//     const [
+//         onOpenEditFinancialStatementGrouping,
+//         setOnOpenEditFinancialStatementGrouping,
+//     ] = useState(false)
+//     const [
+//         viewOnlyFinancialStatementGrouping,
+//         setViewOnlyFinancialStatementGrouping,
+//     ] = useState(false)
+//     const [financialStatementGrouping, setFinancialStatementGrouping] =
+//         useState<IFinancialStatementAccountGrouping | null>(null)
 
-    const {
-        data: financialStatementGropings,
-        refetch: refetchGeneralLedgerAccountsGrouping,
-        isRefetching: isRefetchingGeneralLedgerAccountsGrouping,
-        isLoading: isLoadingGeneralLedgerAccountsGrouping,
-    } = useGetAll()
+//     const {
+//         data: financialStatementGropings,
+//         refetch: refetchGeneralLedgerAccountsGrouping,
+//         isRefetching: isRefetchingGeneralLedgerAccountsGrouping,
+//         isLoading: isLoadingGeneralLedgerAccountsGrouping,
+//     } = useGetAll()
 
-    const {
-        setFinancialStatmentAccountsGroupingId,
-        setFinancialStatementType,
-    } = useFinancialStatementAccountsGroupingStore()
+//     const {
+//         setFinancialStatmentAccountsGroupingId,
+//         setFinancialStatementType,
+//     } = useFinancialStatementAccountsGroupingStore()
 
-    const refetch = () => {
-        refetchGeneralLedgerAccountsGrouping()
-    }
+//     const refetch = () => {
+//         refetchGeneralLedgerAccountsGrouping()
+//     }
 
-    const hasFinancialGropings =
-        financialStatementGropings && financialStatementGropings.length > 0
+//     const hasFinancialGropings =
+//         financialStatementGropings && financialStatementGropings.length > 0
 
-    const handleAccountTrigger = (
-        grouping: IFinancialStatementAccountGrouping
-    ) => {
-        setFinancialStatmentAccountsGroupingId(grouping.id)
+//     const handleAccountTrigger = (
+//         grouping: IFinancialStatementAccountGrouping
+//     ) => {
+//         setFinancialStatmentAccountsGroupingId(grouping.id)
 
-        const GeneralLedgerTypeArray = FINANCIAL_STATEMENT_TYPE
-        const matchedType = GeneralLedgerTypeArray.find(
-            (type) => type === grouping.name
-        )
-        setFinancialStatementType?.(matchedType ?? null)
-    }
-    const handleEditFinancialStatementGrouping = (
-        grouping: IFinancialStatementAccountGrouping,
-        viewOnly: boolean = false
-    ) => {
-        setFinancialStatementGrouping(grouping)
-        setViewOnlyFinancialStatementGrouping(viewOnly)
-        setOnOpenEditFinancialStatementGrouping(true)
-    }
+//         const GeneralLedgerTypeArray = FINANCIAL_STATEMENT_TYPE
+//         const matchedType = GeneralLedgerTypeArray.find(
+//             (type) => type === grouping.name
+//         )
+//         setFinancialStatementType?.(matchedType ?? null)
+//     }
+//     const handleEditFinancialStatementGrouping = (
+//         grouping: IFinancialStatementAccountGrouping,
+//         viewOnly: boolean = false
+//     ) => {
+//         setFinancialStatementGrouping(grouping)
+//         setViewOnlyFinancialStatementGrouping(viewOnly)
+//         setOnOpenEditFinancialStatementGrouping(true)
+//     }
 
-    const handleViewFinancialStatementGrouping = (
-        grouping: IFinancialStatementAccountGrouping,
-        viewOnly: boolean = true
-    ) => {
-        setFinancialStatementGrouping(grouping)
-        setViewOnlyFinancialStatementGrouping(viewOnly)
-        setOnOpenEditFinancialStatementGrouping(true)
-    }
+//     const handleViewFinancialStatementGrouping = (
+//         grouping: IFinancialStatementAccountGrouping,
+//         viewOnly: boolean = true
+//     ) => {
+//         setFinancialStatementGrouping(grouping)
+//         setViewOnlyFinancialStatementGrouping(viewOnly)
+//         setOnOpenEditFinancialStatementGrouping(true)
+//     }
 
-    useShortcut(
-        'e',
-        (event) => {
-            event?.preventDefault()
-            handleEditFinancialStatementGrouping(
-                financialStatementGrouping as IFinancialStatementAccountGrouping,
-                false
-            )
-        },
-        { disableTextInputs: true }
-    )
+//     useShortcut(
+//         'e',
+//         (event) => {
+//             event?.preventDefault()
+//             handleEditFinancialStatementGrouping(
+//                 financialStatementGrouping as IFinancialStatementAccountGrouping,
+//                 false
+//             )
+//         },
+//         { disableTextInputs: true }
+//     )
 
-    useShortcut(
-        'v',
-        (event) => {
-            event?.preventDefault()
-            handleViewFinancialStatementGrouping(
-                financialStatementGrouping as IFinancialStatementAccountGrouping
-            )
-        },
-        { disableTextInputs: true }
-    )
+//     useShortcut(
+//         'v',
+//         (event) => {
+//             event?.preventDefault()
+//             handleViewFinancialStatementGrouping(
+//                 financialStatementGrouping as IFinancialStatementAccountGrouping
+//             )
+//         },
+//         { disableTextInputs: true }
+//     )
 
-    return (
-        <>
-            {financialStatementGrouping && (
-                <FinancialStatementAccountGroupingUpdateModal
-                    description={
-                        viewOnlyFinancialStatementGrouping
-                            ? `${financialStatementGrouping.description}`
-                            : 'Edit the financial statement grouping details.'
-                    }
-                    formProps={{
-                        defaultValues: financialStatementGrouping,
-                        groupingId: financialStatementGrouping.id,
-                        onSuccess: () => {
-                            setOnOpenEditFinancialStatementGrouping(false)
-                            refetch()
-                        },
-                        readOnly: viewOnlyFinancialStatementGrouping,
-                    }}
-                    onOpenChange={setOnOpenEditFinancialStatementGrouping}
-                    open={onOpenEditFinancialStatementGrouping}
-                    title={
-                        <p>
-                            {viewOnlyFinancialStatementGrouping
-                                ? ''
-                                : 'Edit  Financial Statement Grouping'}{' '}
-                            <span className="font-bold italic">
-                                {' '}
-                                {viewOnlyFinancialStatementGrouping
-                                    ? financialStatementGrouping.name
-                                    : ''}
-                            </span>
-                            <span className="text-xs text-secondary-foreground/80">
-                                {viewOnlyFinancialStatementGrouping
-                                    ? ' (View Only)'
-                                    : ''}
-                            </span>
-                        </p>
-                    }
-                />
-            )}
+//     return (
+//         <>
+//             {financialStatementGrouping && (
+//                 <FinancialStatementAccountGroupingUpdateModal
+//                     description={
+//                         viewOnlyFinancialStatementGrouping
+//                             ? `${financialStatementGrouping.description}`
+//                             : 'Edit the financial statement grouping details.'
+//                     }
+//                     formProps={{
+//                         defaultValues: financialStatementGrouping,
+//                         groupingId: financialStatementGrouping.id,
+//                         onSuccess: () => {
+//                             setOnOpenEditFinancialStatementGrouping(false)
+//                             refetch()
+//                         },
+//                         readOnly: viewOnlyFinancialStatementGrouping,
+//                     }}
+//                     onOpenChange={setOnOpenEditFinancialStatementGrouping}
+//                     open={onOpenEditFinancialStatementGrouping}
+//                     title={
+//                         <p>
+//                             {viewOnlyFinancialStatementGrouping
+//                                 ? ''
+//                                 : 'Edit  Financial Statement Grouping'}{' '}
+//                             <span className="font-bold italic">
+//                                 {' '}
+//                                 {viewOnlyFinancialStatementGrouping
+//                                     ? financialStatementGrouping.name
+//                                     : ''}
+//                             </span>
+//                             <span className="text-xs text-secondary-foreground/80">
+//                                 {viewOnlyFinancialStatementGrouping
+//                                     ? ' (View Only)'
+//                                     : ''}
+//                             </span>
+//                         </p>
+//                     }
+//                 />
+//             )}
 
-            <div className="my-5 w-full flex items-center gap-2 ">
-                <h1 className="font-extrabold text-2xl my-5 relative text-start flex items-center justify-start gap-4 ">
-                    <span className="relative before:content-[''] before:size-5 before:bg-primary before:blur-lg before:rounded-full before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2">
-                        <SigiBookIcon className="relative size-7" />
-                    </span>
-                    Financial Statement Definition
-                </h1>
-            </div>
+//             <div className="my-5 w-full flex items-center gap-2 ">
+//                 <h1 className="font-extrabold text-2xl my-5 relative text-start flex items-center justify-start gap-4 ">
+//                     <span className="relative before:content-[''] before:size-5 before:bg-primary before:blur-lg before:rounded-full before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2">
+//                         <SigiBookIcon className="relative size-7" />
+//                     </span>
+//                     Financial Statement Definition
+//                 </h1>
+//             </div>
 
-            <span
-                className="absolute left-1/2 top-[30%] size-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full"
-                style={{
-                    backgroundImage: `url(${payment_bg})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    opacity: 0.02,
-                }}
-            />
-            {!hasFinancialGropings &&
-                !isLoadingGeneralLedgerAccountsGrouping && (
-                    <p className="text-center italic text-sm text-secondary-foreground/80 w-full p-25">
-                        No Financial Statement Definition found.
-                    </p>
-                )}
+//             <span
+//                 className="absolute left-1/2 top-[30%] size-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full"
+//                 style={{
+//                     backgroundImage: `url(${payment_bg})`,
+//                     backgroundSize: 'cover',
+//                     backgroundPosition: 'center',
+//                     backgroundRepeat: 'no-repeat',
+//                     opacity: 0.02,
+//                 }}
+//             />
+//             {!hasFinancialGropings &&
+//                 !isLoadingGeneralLedgerAccountsGrouping && (
+//                     <p className="text-center italic text-sm text-secondary-foreground/80 w-full p-25">
+//                         No Financial Statement Definition found.
+//                     </p>
+//                 )}
 
-            {isLoadingGeneralLedgerAccountsGrouping ? (
-                <div className="flex flex-col gap-2 mb-5 w-full">
-                    {Array.from({ length: 4 }).map((_, index) => (
-                        <FinancialStatementSkeleton key={index} />
-                    ))}
-                </div>
-            ) : (
-                <Accordion
-                    className="w-full space-y-2"
-                    collapsible
-                    defaultValue="item-1"
-                    type="single"
-                >
-                    {financialStatementGropings?.map((grouping) => (
-                        <AccordionItem
-                            className="w-full shadow-md bg-sidebar/50 p-5 rounded-xl"
-                            key={grouping.id}
-                            value={grouping.id}
-                        >
-                            <AccordionTrigger
-                                className="w-full hover:no-underline  text-left /80"
-                                onClick={() => handleAccountTrigger(grouping)}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <span className="cursor-pointer">
-                                                <SettingsIcon
-                                                    className="hover: cursor-pointer"
-                                                    size={30}
-                                                />
-                                            </span>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent>
-                                            <DropdownMenuItem
-                                                className="flex items-center gap-2"
-                                                disabled={
-                                                    !hasPermissionFromAuth({
-                                                        action: [
-                                                            'Update',
-                                                            'OwnUpdate',
-                                                        ],
-                                                        resourceType:
-                                                            'FSDefinition',
-                                                        conditionLogic: 'some',
-                                                        resource: grouping,
-                                                    })
-                                                }
-                                                onClick={(e) => {
-                                                    e.preventDefault()
-                                                    handleEditFinancialStatementGrouping(
-                                                        grouping
-                                                    )
-                                                }}
-                                            >
-                                                <EditPencilIcon />
-                                                Edit
-                                                <DropdownMenuShortcut>
-                                                    e
-                                                </DropdownMenuShortcut>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem
-                                                className="flex items-center gap-2"
-                                                disabled={
-                                                    !hasPermissionFromAuth({
-                                                        action: 'Read',
-                                                        resourceType:
-                                                            'FSDefinition',
-                                                        resource: grouping,
-                                                    })
-                                                }
-                                                onClick={(e) => {
-                                                    e.preventDefault()
-                                                    handleViewFinancialStatementGrouping(
-                                                        grouping,
-                                                        true
-                                                    )
-                                                }}
-                                            >
-                                                <ViewIcon />
-                                                View
-                                                <DropdownMenuShortcut>
-                                                    v
-                                                </DropdownMenuShortcut>
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+//             {isLoadingGeneralLedgerAccountsGrouping ? (
+//                 <div className="flex flex-col gap-2 mb-5 w-full">
+//                     {Array.from({ length: 4 }).map((_, index) => (
+//                         <FinancialStatementSkeleton key={index} />
+//                     ))}
+//                 </div>
+//             ) : (
+//                 <Accordion
+//                     className="w-full space-y-2"
+//                     collapsible
+//                     defaultValue="item-1"
+//                     type="single"
+//                 >
+//                     {financialStatementGropings?.map((grouping) => (
+//                         <AccordionItem
+//                             className="w-full shadow-md bg-sidebar/50 p-5 rounded-xl"
+//                             key={grouping.id}
+//                             value={grouping.id}
+//                         >
+//                             <AccordionTrigger
+//                                 className="w-full hover:no-underline  text-left /80"
+//                                 onClick={() => handleAccountTrigger(grouping)}
+//                             >
+//                                 <div className="flex items-center gap-2">
+//                                     <DropdownMenu>
+//                                         <DropdownMenuTrigger asChild>
+//                                             <span className="cursor-pointer">
+//                                                 <SettingsIcon
+//                                                     className="hover: cursor-pointer"
+//                                                     size={30}
+//                                                 />
+//                                             </span>
+//                                         </DropdownMenuTrigger>
+//                                         <DropdownMenuContent>
+//                                             <DropdownMenuItem
+//                                                 className="flex items-center gap-2"
+//                                                 disabled={
+//                                                     !hasPermissionFromAuth({
+//                                                         action: [
+//                                                             'Update',
+//                                                             'OwnUpdate',
+//                                                         ],
+//                                                         resourceType:
+//                                                             'FSDefinition',
+//                                                         conditionLogic: 'some',
+//                                                         resource: grouping,
+//                                                     })
+//                                                 }
+//                                                 onClick={(e) => {
+//                                                     e.preventDefault()
+//                                                     handleEditFinancialStatementGrouping(
+//                                                         grouping
+//                                                     )
+//                                                 }}
+//                                             >
+//                                                 <EditPencilIcon />
+//                                                 Edit
+//                                                 <DropdownMenuShortcut>
+//                                                     e
+//                                                 </DropdownMenuShortcut>
+//                                             </DropdownMenuItem>
+//                                             <DropdownMenuItem
+//                                                 className="flex items-center gap-2"
+//                                                 disabled={
+//                                                     !hasPermissionFromAuth({
+//                                                         action: 'Read',
+//                                                         resourceType:
+//                                                             'FSDefinition',
+//                                                         resource: grouping,
+//                                                     })
+//                                                 }
+//                                                 onClick={(e) => {
+//                                                     e.preventDefault()
+//                                                     handleViewFinancialStatementGrouping(
+//                                                         grouping,
+//                                                         true
+//                                                     )
+//                                                 }}
+//                                             >
+//                                                 <ViewIcon />
+//                                                 View
+//                                                 <DropdownMenuShortcut>
+//                                                     v
+//                                                 </DropdownMenuShortcut>
+//                                             </DropdownMenuItem>
+//                                         </DropdownMenuContent>
+//                                     </DropdownMenu>
 
-                                    <div className="flex flex-col">
-                                        <h1 className="font-bold text-2xl">
-                                            {grouping.name}
-                                        </h1>
-                                        <p className="text-sm">
-                                            {grouping.description}
-                                        </p>
-                                    </div>
-                                </div>
-                            </AccordionTrigger>
-                            <AccordionContent className="w-full">
-                                {hasFinancialGropings && (
-                                    <FinancialStatementDefinitionTreeViewer
-                                        isRefetchingGeneralLedgerAccountsGrouping={
-                                            isRefetchingGeneralLedgerAccountsGrouping
-                                        }
-                                        refetch={refetch}
-                                        treeData={
-                                            grouping.financial_statement_definition_entries
-                                        }
-                                    />
-                                )}
-                            </AccordionContent>
-                        </AccordionItem>
-                    ))}
-                </Accordion>
-            )}
-        </>
-    )
-}
+//                                     <div className="flex flex-col">
+//                                         <h1 className="font-bold text-2xl">
+//                                             {grouping.name}
+//                                         </h1>
+//                                         <p className="text-sm">
+//                                             {grouping.description}
+//                                         </p>
+//                                     </div>
+//                                 </div>
+//                             </AccordionTrigger>
+//                             <AccordionContent className="w-full">
+//                                 {hasFinancialGropings && (
+//                                     <FinancialStatementDefinitionTreeViewer
+//                                         isRefetchingGeneralLedgerAccountsGrouping={
+//                                             isRefetchingGeneralLedgerAccountsGrouping
+//                                         }
+//                                         refetch={refetch}
+//                                         treeData={
+//                                             grouping.financial_statement_definition_entries
+//                                         }
+//                                     />
+//                                 )}
+//                             </AccordionContent>
+//                         </AccordionItem>
+//                     ))}
+//                 </Accordion>
+//             )}
+//         </>
+//     )
+// }
 
-const FinancialStatementDefinitionPage = () => {
-    return (
-        <PageContainer className="w-full relative min-h-[100vh] p-5 ">
-            <PermissionGuard action="Read" resourceType="FSDefinition">
-                <FinancialStatementDefinition />
-            </PermissionGuard>
-        </PageContainer>
-    )
-}
+// const FinancialStatementDefinitionPage = () => {
+//     return (
+//         <PageContainer className="w-full relative min-h-[100vh] p-5 ">
+//             <PermissionGuard action="Read" resourceType="FSDefinition">
+//                 <FinancialStatementDefinition />
+//             </PermissionGuard>
+//         </PageContainer>
+//     )
+// }
 
-export default FinancialStatementDefinitionPage
+// export default FinancialStatementDefinitionPage

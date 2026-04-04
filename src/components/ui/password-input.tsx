@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+import { cn } from '@/helpers'
+
 import {
     InputGroup,
     InputGroupAddon,
@@ -24,7 +26,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
         const VisibilityIcon = visible ? EyeIcon : EyeOffIcon
 
         return (
-            <InputGroup className={className}>
+            <InputGroup className={cn('', className)}>
                 <InputGroupInput
                     ref={ref}
                     {...props}

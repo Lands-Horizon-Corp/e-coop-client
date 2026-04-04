@@ -22,19 +22,19 @@ function RouteComponent() {
     } = useAuthUser()
     const queryClient = useQueryClient()
 
-    useSubscribe(`footstep.create.user.${user.id}`, () => {
+    useSubscribe('footstep', `create.user.${user.id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['footstep', 'paginated', 'me-branch'],
         })
     })
 
-    useSubscribe(`footstep.update.user.${user.id}`, () => {
+    useSubscribe('footstep', `update.user.${user.id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['footstep', 'paginated', 'me-branch'],
         })
     })
 
-    useSubscribe(`footstep.delete.user.${user.id}`, () => {
+    useSubscribe('footstep', `delete.user.${user.id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['footstep', 'paginated', 'me-branch'],
         })

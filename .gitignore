@@ -5,7 +5,9 @@
 
 # Dist
 node_modules
+output
 dist/
+.output
 
 # Profile
 .rspack-profile-*/
@@ -70,3 +72,5 @@ pnpm-lock.yaml
 *playground.txt
 
 *goggins*
+
+./output

@@ -11,7 +11,7 @@ import {
     updateMutationInvalidationFn,
 } from '@/providers/repositories/mutation-factory'
 
-import { TEntityId } from '@/types'
+import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import type {
     IGeneratedReport,
@@ -90,6 +90,7 @@ export const useCreateGeneratedReport = createMutationFactory<
     mutationFn: (data) => createGeneratedReport(data),
     invalidationFn: (args) =>
         createMutationInvalidateFn(generatedReportBaseKey, args),
+    defaultInvalidates: [[generatedReportBaseKey, 'inprogress', 'all']],
 })
 
 export const useGenerateReportMarkAsFavorite = createMutationFactory<
@@ -106,6 +107,7 @@ export const useGenerateReportMarkAsFavorite = createMutationFactory<
     },
     invalidationFn: (args) =>
         updateMutationInvalidationFn(generatedReportBaseKey, args),
+    defaultInvalidates: [[generatedReportBaseKey, 'inprogress', 'all']],
 })
 
 export const useDownloadReportByReportId = createMutationFactory<
@@ -122,6 +124,7 @@ export const useDownloadReportByReportId = createMutationFactory<
     },
     invalidationFn: (args) =>
         createMutationInvalidateFn(generatedReportBaseKey, args),
+    defaultInvalidates: [[generatedReportBaseKey, 'inprogress', 'all']],
 })
 
 export const useGetGeneratedReportAvailableModels = ({
@@ -184,6 +187,26 @@ export const useGetFilteredPaginatedGeneratedReport = ({
             })
         },
         ...options,
+    })
+}
+
+export const useGetMyInProgressReports = ({
+    query,
+    options,
+}: {
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<IGeneratedReport[], Error>
+} = {}) => {
+    return useQuery<IGeneratedReport[], Error>({
+        ...options,
+        queryKey: [generatedReportBaseKey, 'inprogress', 'all', query].filter(
+            Boolean
+        ),
+        queryFn: async () =>
+            getAllGeneratedReport({
+                query,
+                url: `${generatedReportAPIRoute}/unfinished/`,
+            }),
     })
 }
 

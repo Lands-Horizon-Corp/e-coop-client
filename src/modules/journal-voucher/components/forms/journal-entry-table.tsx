@@ -1,6 +1,6 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
-import { UseFormReturn, useFieldArray } from 'react-hook-form'
+import { UseFormReturn, useFieldArray, useWatch } from 'react-hook-form'
 
 import { cn } from '@/helpers'
 import { IAccount, TAccountType } from '@/modules/account'
@@ -21,7 +21,6 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { PlusIcon, TrashIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
-import { Kbd } from '@/components/ui/kbd'
 import {
     Table,
     TableBody,
@@ -167,10 +166,12 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
                             `journal_voucher_entries.${rowIndex}.debit`,
                             numValue
                         )
-                        form.setValue(
-                            `journal_voucher_entries.${rowIndex}.credit`,
-                            0
-                        )
+                        if (numValue > 0) {
+                            form.setValue(
+                                `journal_voucher_entries.${rowIndex}.credit`,
+                                0
+                            )
+                        }
                     }}
                     value={props.row.original.debit}
                 />
@@ -191,19 +192,34 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
                 <CurrencyInput
                     className="text-left w-full! min-w-0!"
                     currency={props.row.original.account?.currency}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Tab') {
+                            if (
+                                rowIndex ===
+                                form.watch('journal_voucher_entries').length - 1
+                            ) {
+                                e.preventDefault()
+                                meta.handleAddRow()
+                            }
+                        }
+                    }}
                     onValueChange={(newValue) => {
                         const numValue =
                             typeof newValue === 'string'
                                 ? parseFloat(newValue) || 0
                                 : (newValue ?? 0)
+
                         form.setValue(
                             `journal_voucher_entries.${rowIndex}.credit`,
                             numValue
                         )
-                        form.setValue(
-                            `journal_voucher_entries.${rowIndex}.debit`,
-                            0
-                        )
+
+                        if (numValue > 0) {
+                            form.setValue(
+                                `journal_voucher_entries.${rowIndex}.debit`,
+                                0
+                            )
+                        }
                     }}
                     value={props.row.original.credit}
                 />
@@ -244,7 +260,7 @@ type JournalEntryTableProps = {
     TableClassName?: string
     transactionBatchId?: TEntityId
     mode: 'readOnly' | 'update' | 'create'
-    ref: React.Ref<HTMLDivElement>
+    // ref: React.Ref<HTMLDivElement>
     form: UseFormReturn<TJournalVoucherSchema>
 }
 
@@ -252,6 +268,8 @@ type JournalEntryTableMeta = {
     handleDeleteRow: (index: number) => void
     defaultCurrency?: ICurrency
     form: UseFormReturn<TJournalVoucherSchema>
+    handleFocus: (fieldName: string | null) => void
+    handleAddRow: () => void
 }
 
 export const JournalEntryTable = ({
@@ -266,8 +284,11 @@ export const JournalEntryTable = ({
     const isUpdateMode = mode === 'update'
     const isReadOnlyMode = mode === 'readOnly'
 
-    const watchedJournalEntries = form.watch('journal_voucher_entries')
-    const { append: addEntry, remove: removeEntry } = useFieldArray({
+    const {
+        fields,
+        append: addEntry,
+        remove: removeEntry,
+    } = useFieldArray({
         name: 'journal_voucher_entries',
         control: form.control,
     })
@@ -275,6 +296,11 @@ export const JournalEntryTable = ({
     const { append: addRemoveId } = useFieldArray({
         name: 'journal_voucher_entries_deleted',
         control: form.control,
+    })
+
+    const watchedEntries = useWatch({
+        control: form.control,
+        name: 'journal_voucher_entries',
     })
 
     const handleDeleteRow = useCallback(
@@ -295,34 +321,37 @@ export const JournalEntryTable = ({
         [isReadOnlyMode, form, isUpdateMode, removeEntry, addRemoveId]
     )
 
-    const handleAddRow = useCallback(
-        (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-            e.preventDefault()
+    const handleAddRow = useCallback(() => {
+        if (isReadOnlyMode) return
 
-            if (isReadOnlyMode) return
+        const newRow: IJournalVoucherEntryRequest = {
+            debit: '' as unknown as number,
+            credit: '' as unknown as number,
+            member_profile_id: defaultMemberProfile?.id,
+            member_profile: defaultMemberProfile,
+            account_id: '' as TEntityId,
+            transaction_batch_id: transactionBatchId ?? undefined,
+        }
 
-            const newRow: IJournalVoucherEntryRequest = {
-                debit: '' as unknown as number,
-                credit: '' as unknown as number,
-                member_profile_id: defaultMemberProfile?.id,
-                member_profile: defaultMemberProfile,
-                account_id: '' as TEntityId,
-                transaction_batch_id: transactionBatchId ?? undefined,
-            }
+        addEntry(newRow)
+    }, [addEntry, defaultMemberProfile, isReadOnlyMode, transactionBatchId])
 
-            addEntry(newRow)
-        },
-        [addEntry, defaultMemberProfile, isReadOnlyMode, transactionBatchId]
-    )
+    const tableData = useMemo(() => {
+        return fields.map((field, index) => ({
+            ...field,
+            ...watchedEntries?.[index],
+        }))
+    }, [fields, watchedEntries])
 
     const table = useReactTable<IJournalVoucherEntryRequest>({
-        data: watchedJournalEntries || [],
+        data: tableData,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
         meta: {
             defaultCurrency: currency,
             handleDeleteRow,
             form,
+            handleAddRow,
         } as JournalEntryTableMeta,
     })
 
@@ -331,9 +360,7 @@ export const JournalEntryTable = ({
         (e) => {
             e.preventDefault()
             if (isReadOnlyMode) return
-            handleAddRow(
-                e as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>
-            )
+            handleAddRow()
         },
         {
             enabled: !isReadOnlyMode,
@@ -342,24 +369,23 @@ export const JournalEntryTable = ({
 
     return (
         <div className={cn('', className)}>
-            <div className="w-full flex justify-between">
-                <h1 className="text-lg font-semibold">
-                    Journal Entries
-                    <Kbd className="ml-1">Tab</Kbd>
-                </h1>
+            <div className="w-full flex justify-end">
                 <div className="flex py-2 items-center space-x-2">
                     <Button
                         aria-label="Add new journal entry"
                         className="size-fit px-2 py-0.5 text-xs"
                         disabled={isReadOnlyMode}
-                        onClick={handleAddRow}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            handleAddRow()
+                        }}
                         size="sm"
                         tabIndex={-1}
                         type="button"
                     >
                         Add <PlusIcon className="inline" />
                     </Button>
-                    <CommandShortcut className="bg-accent min-w-fit p-1 px-2 text-primary rounded-sm mr-1">
+                    <CommandShortcut className="bg-secondary min-w-fit p-1 px-2 text-primary rounded-sm mr-1">
                         Shift + I
                     </CommandShortcut>
                 </div>
@@ -388,7 +414,6 @@ export const JournalEntryTable = ({
                                     colSpan={header.colSpan}
                                     key={header.id}
                                     style={{ width: header.getSize() }}
-                                    tabIndex={-1}
                                 >
                                     {!header.isPlaceholder &&
                                         flexRender(

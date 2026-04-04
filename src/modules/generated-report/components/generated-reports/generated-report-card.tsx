@@ -10,13 +10,13 @@ import {
     toReadableDateTime,
 } from '@/helpers/date-utils'
 import { IMedia, downloadMedia, formatBytes } from '@/modules/media'
+import MediaResourceFileIcon from '@/modules/media/components/media-resource-file-icon'
 import { DownloadIcon, StarIcon, TrashIcon } from 'lucide-react'
 
 import {
     DotsVerticalIcon,
-    EmptyIcon,
-    ExcelFileFillIcon,
-    PDFFileFillIcon,
+    EyeIcon,
+    FileQuestionIcon,
     PencilFillIcon,
     ReportsIcon,
 } from '@/components/icons'
@@ -45,12 +45,17 @@ import {
     useDownloadReportByReportId,
     useGenerateReportMarkAsFavorite,
 } from '../../generated-report.service'
-import { IGeneratedReport } from '../../generated-report.types'
+import {
+    IGeneratedReport,
+    TGeneratedReportStatus,
+} from '../../generated-report.types'
 import {
     DELAY_DOWNLOAD_TIME_DURATION,
     DELAY_DOWNLOAD_TIME_INTERVAL,
 } from '../../generated-reports.constants'
 import GeneratedReportCreateFormModal from '../forms/generate-report-create-update-modal'
+import { ReportViewerModal } from '../generated-report-view/generated-report-view'
+import GeneratedReportStatusBadge from './generated-report-status'
 
 type TGeneratedReportCardProps = {
     report: IGeneratedReport
@@ -59,15 +64,16 @@ type TGeneratedReportCardProps = {
 }
 
 export const GeneratedReportCard = ({
-    report,
+    report: focusedReport,
     isFavorite,
     refetch,
 }: TGeneratedReportCardProps) => {
     const invalidate = useQueryClient()
     const openUpdateReport = useModalState()
     const [mediaProgess, setMediaProgress] = useState(0)
+    const [report, setReport] = useState(focusedReport)
 
-    const { mutate: updateReport } = useGenerateReportMarkAsFavorite({
+    const { mutate: markAsFavoriteMutation } = useGenerateReportMarkAsFavorite({
         options: {
             onSuccess: (report) => {
                 toast.success(`mark ${report.name} as favorite.`)
@@ -83,6 +89,7 @@ export const GeneratedReportCard = ({
         cooldownDuration: DELAY_DOWNLOAD_TIME_DURATION,
         counterInterval: DELAY_DOWNLOAD_TIME_INTERVAL,
     })
+
     const { mutate: downloadReport, isPending } = useDownloadReportByReportId({
         options: {
             onSuccess: (media) => {
@@ -119,12 +126,7 @@ export const GeneratedReportCard = ({
         downloadReport(report.id)
     }, [downloadReport, report.id])
 
-    useSubscribe<IGeneratedReport>(
-        `generated_report.update.${report.id}`,
-        () => {}
-    )
-
-    useSubscribe<IMedia>(`media.update.${report.media_id}`, (media) => {
+    useSubscribe<IMedia>('media', `update.${report.media_id}`, (media) => {
         if (media.progress) {
             setMediaProgress(media.progress)
         }
@@ -143,24 +145,15 @@ export const GeneratedReportCard = ({
     return (
         <div
             className={cn(
-                'relative items-center bg-secondary justify-between gap-2 p-3 pt-4 mt-1 rounded-lg transition-transform hover:translate-y-[-2px] mb-2 shadow-sm',
+                'relative group items-center bg-secondary/80 justify-between border border-muted-foreground/30 gap-2 p-3 pt-4 mt-1 rounded-lg shadow-sm',
                 isExcel &&
-                    'border-l-2 border-l-green-500 bg-gradient-to-tl dark:from-green-500/20 to-background',
+                    'border-l-green-500 bg-gradient-to-tl dark:from-green-500/20 to-background',
                 isPdf &&
-                    'border-l-2 border-red-500 bg-gradient-to-tl dark:from-red-500/20 to-background',
-                hasNoMedia &&
-                    'border-l-2 border-muted bg-gradient-to-tl dark:from-muted/20 to-background'
+                    'border-red-500 bg-gradient-to-tl dark:from-red-500/20 to-background',
+                report.status === 'failed' &&
+                    'bg-gradient-to-tl border-destructive/40 border from-50% dark:popover/80 to-destructive/20'
             )}
         >
-            {!hasNoMedia && (
-                <Badge
-                    className="font-normal border-primary py-[.5px] left-4 -top-2 absolute"
-                    variant={'outline'}
-                >
-                    <ReportsIcon className="mr-1" />
-                    {report.model}
-                </Badge>
-            )}
             <GeneratedReportCreateFormModal
                 description="Update your generated report."
                 formProps={{
@@ -184,175 +177,197 @@ export const GeneratedReportCard = ({
                 title="Update Generated Report"
                 {...openUpdateReport}
             />
-            <div
-                className={cn(
-                    'flex items-center gap-2.5 min-w-0 w-full',
-                    hasNoMedia && 'opacity-50'
-                )}
-            >
-                {hasNoMedia ? (
+            <div className={cn('flex items-start gap-1 min-w-0 w-full')}>
+                {!report.media ? (
                     <div className="relative">
-                        <ImageDisplay
-                            className="size-8 border dark:border-white border-black "
-                            fallback={
-                                report.created_by?.full_name?.charAt(0) ??
-                                undefined
-                            }
-                            src={
-                                report.created_by?.media?.download_url ??
-                                undefined
-                            }
-                        />
-                        <EmptyIcon className="text-muted bg-white rounded-full absolute -bottom-1 right-0" />
+                        <FileQuestionIcon className="size-8 text-muted-foreground" />
                     </div>
                 ) : (
                     <div className="relative">
-                        <ImageDisplay
-                            className={cn(
-                                'size-8 border',
-                                isExcel && 'border-green-500',
-                                isPdf && 'border-red-500'
-                            )}
-                            fallback={
-                                report.created_by?.full_name?.charAt(0) ??
-                                undefined
-                            }
-                            src={
-                                report.created_by?.media?.download_url ??
-                                undefined
-                            }
+                        <MediaResourceFileIcon
+                            iconClassName="size-8"
+                            media={report.media}
                         />
-                        {isExcel && (
-                            <ExcelFileFillIcon className="text-white bg-green-500 rounded-full p-0.5 absolute -bottom-1 right-0" />
-                        )}
-                        {isPdf && (
-                            <PDFFileFillIcon className="text-red-500 bg-primary/80 rounded-full absolute -bottom-1 right-0" />
-                        )}
                     </div>
                 )}
                 <div className="min-w-0 grow">
-                    <div className="font-medium text-sm items-center truncate">
-                        <span>{report.name}</span>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <StarIcon
-                                    className={cn(
-                                        'inline-block -translate-y-1 ml-2 size-4 text-primary',
-                                        report.is_favorite ? '' : 'opacity-0'
-                                    )}
-                                />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                {isFavorite
-                                    ? 'Marked as Favorite'
-                                    : 'Mark as Favorite'}
-                            </TooltipContent>
-                        </Tooltip>
-                    </div>
-                    <div className="text-xs text-muted-foreground flex flex-col truncate">
-                        <p className="">
-                            {report.media?.file_size && (
-                                <>
-                                    {formatBytes(report.media?.file_size)} •{' '}
-                                    {''}
-                                </>
+                    <div className="min-w-0 flex justify-between w-full">
+                        <div className="font-medium text-sm items-center truncate">
+                            <span>{report.name}</span>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <StarIcon
+                                        className={cn(
+                                            'inline-block -translate-y-1 ml-2 size-4 text-primary',
+                                            report.is_favorite
+                                                ? ''
+                                                : 'opacity-20'
+                                        )}
+                                        onClick={() => {
+                                            markAsFavoriteMutation(report.id)
+                                        }}
+                                    />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    {isFavorite
+                                        ? 'Marked as Favorite'
+                                        : 'Mark as Favorite'}
+                                </TooltipContent>
+                            </Tooltip>
+                        </div>
+                        <div
+                            className={cn(
+                                'flex items-center group-hover:opacity-100 duration-300 opacity-0 flex-col'
                             )}
-                            {toReadableDate(report.created_at)} •{' '}
-                            {dateAgo(report.created_at)}
-                        </p>
-
-                        <span>generated by {report.created_by?.full_name}</span>
+                        >
+                            <div className="flex space-x-1">
+                                <ReportViewerModal
+                                    reportViewerProps={{
+                                        reportId: report.id,
+                                        defaultReport: report,
+                                    }}
+                                    trigger={
+                                        <Button
+                                            className="cursor-pointer"
+                                            size="icon-sm"
+                                            variant="outline"
+                                        >
+                                            <EyeIcon />
+                                        </Button>
+                                    }
+                                />
+                                <Button
+                                    className="relative text-xs overflow-hidden cursor-pointer justify-center"
+                                    disabled={
+                                        isDownloading ||
+                                        isPending ||
+                                        report?.status === 'failed' ||
+                                        cooldownCount > 0
+                                    }
+                                    onClick={handleDownloadClick}
+                                    size="icon-sm"
+                                    title={
+                                        isDownloading
+                                            ? `Processing: ${mediaProgess}%`
+                                            : ''
+                                    }
+                                    variant={
+                                        cooldownCount > 0 ? 'ghost' : 'outline'
+                                    }
+                                >
+                                    {cooldownCount > 0 ? (
+                                        `${cooldownCount}s`
+                                    ) : (
+                                        <>
+                                            <DownloadIcon
+                                                className={cn(
+                                                    '',
+                                                    isDownloading &&
+                                                        'animate-bounce'
+                                                )}
+                                            />
+                                        </>
+                                    )}
+                                </Button>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            className="cursor-pointer"
+                                            size="icon-sm"
+                                            variant="outline"
+                                        >
+                                            <DotsVerticalIcon className=" size-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        {!isFavorite && (
+                                            <DropdownMenuItem
+                                                disabled={hasNoMedia}
+                                                onClick={() => {
+                                                    markAsFavoriteMutation(
+                                                        report.id
+                                                    )
+                                                }}
+                                            >
+                                                <StarIcon className="mr-2 size-4" />
+                                                Mark as Favorite
+                                            </DropdownMenuItem>
+                                        )}
+                                        <DropdownMenuItem
+                                            onClick={() => {
+                                                openUpdateReport.onOpenChange(
+                                                    true
+                                                )
+                                            }}
+                                        >
+                                            <PencilFillIcon className="mr-2 size-4" />
+                                            Edit
+                                        </DropdownMenuItem>
+                                        {hasNoMedia && (
+                                            <DropdownMenuItem
+                                                className="bg-destructive focus:bg-destructive/80 hover:bg-destructive/80 focus:text-primary"
+                                                onClick={() => {
+                                                    deleteReport(report.id)
+                                                }}
+                                            >
+                                                <TrashIcon className="mr-2 size-4" />
+                                                Delete
+                                            </DropdownMenuItem>
+                                        )}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+                        </div>
                     </div>
-                    {!isExcel && !isPdf && (
-                        <p className="text-xs bg-destructive/50 p-0.5 rounded-sm">
-                            {report.system_message}
+                    <div className="flex items-center justify-between">
+                        <div className="text-xs text-muted-foreground flex flex-col truncate">
+                            <p className="">
+                                {report.media?.file_size && (
+                                    <>
+                                        {formatBytes(report.media?.file_size)}{' '}
+                                        ·{' '}
+                                    </>
+                                )}
+                                {toReadableDate(report.created_at)} ·{' '}
+                                {dateAgo(report.created_at)}
+                            </p>
+                            <span>By {report.created_by?.full_name}</span>
+                        </div>
+                        <GeneratedReportStatusBadge
+                            size={'sm'}
+                            status={report.status}
+                        />
+                    </div>
+                    {report.expiration_days && (
+                        <p className={`text-xs mt-1 text-muted-foreground`}>
+                            {report.expiration_days} Day before expires
                         </p>
                     )}
-                </div>
-                <div className="flex items-center translate-y-2 flex-col min-h-full ">
-                    <div className="inline-flex ">
-                        <Button
-                            className="relative text-xs overflow-hidden hover:!bg-primary/30 cursor-pointer justify-center"
-                            disabled={
-                                isDownloading ||
-                                isPending ||
-                                hasNoMedia ||
-                                cooldownCount > 0
-                            }
-                            onClick={handleDownloadClick}
-                            size="sm"
-                            title={
-                                isDownloading
-                                    ? `Processing: ${mediaProgess}%`
-                                    : ''
-                            }
-                            variant={cooldownCount > 0 ? 'ghost' : 'outline'}
+                    {report.model && (
+                        <Badge
+                            className="font-normal py-[.5px]"
+                            variant={'outline'}
                         >
-                            {cooldownCount > 0 ? (
-                                `Please wait ${cooldownCount}s`
-                            ) : (
-                                <>
-                                    <DownloadIcon
-                                        className={cn(
-                                            'size-4',
-                                            isDownloading && 'animate-bounce'
-                                        )}
-                                    />
-                                </>
-                            )}
-                        </Button>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger className=" cursor-pointer p-1 rounded-full">
-                                <DotsVerticalIcon className=" size-4" />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                {!isFavorite && (
-                                    <DropdownMenuItem
-                                        disabled={hasNoMedia}
-                                        onClick={() => {
-                                            updateReport(report.id)
-                                        }}
-                                    >
-                                        <StarIcon className="mr-2 size-4" />
-                                        Mark as Favorite
-                                    </DropdownMenuItem>
-                                )}
-                                <DropdownMenuItem
-                                    onClick={() => {
-                                        openUpdateReport.onOpenChange(true)
-                                    }}
-                                >
-                                    <PencilFillIcon className="mr-2 size-4" />
-                                    Edit
-                                </DropdownMenuItem>
-                                {hasNoMedia && (
-                                    <DropdownMenuItem
-                                        className="bg-destructive focus:bg-destructive/80 hover:bg-destructive/80 focus:text-primary"
-                                        onClick={() => {
-                                            deleteReport(report.id)
-                                        }}
-                                    >
-                                        <TrashIcon className="mr-2 size-4" />
-                                        Delete
-                                    </DropdownMenuItem>
-                                )}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
+                            <ReportsIcon className="mr-1" />
+                            {report.model}
+                        </Badge>
+                    )}
                 </div>
             </div>
-            <div className="flex justify-end pt-1">
+            <div className="flex justify-end px-4 pt-1">
                 <div
                     className={cn(
-                        'flex text-xs w-fit justify-end -space-x-2 bottom-2.5 right-4.5',
-                        hasNoMedia && 'opacity-50'
+                        'flex text-xs w-fit justify-end -space-x-2 bottom-2.5 right-4.5'
                     )}
                 >
                     {downloadUsers.map((item, index) => {
                         const src = item.user?.media?.download_url
                         if (index > 5) return null
                         return (
-                            <Tooltip delayDuration={400}>
+                            <Tooltip
+                                delayDuration={400}
+                                key={item.user.id ?? index}
+                            >
                                 <TooltipTrigger>
                                     <ImageDisplay
                                         className={`size-4 hover:scale-105 border rounded-full relative`}
@@ -439,17 +454,58 @@ export const GeneratedReportCard = ({
                     </DropdownMenu>
                 </div>
             </div>
-            {hasNoMedia && (
-                <p className="absolute text-xs bottom-0 left-0 right-0 bg-destructive/30 w-fit rounded-sm px-1 text-red-400 ">
-                    No media associated with this generated report.
-                </p>
+            {report &&
+                !(['failed', 'completed'] as TGeneratedReportStatus[]).includes(
+                    report?.status
+                ) && (
+                    <GeneratedReportCardProgress
+                        label="Generating Report..."
+                        onReportUpdate={setReport}
+                        report={report}
+                    />
+                )}
+        </div>
+    )
+}
+
+export const GeneratedReportCardProgress = ({
+    label,
+    report,
+    onReportUpdate,
+}: {
+    label?: string
+    report: IGeneratedReport
+    onReportUpdate: (
+        value:
+            | IGeneratedReport
+            | ((prevState: IGeneratedReport) => IGeneratedReport)
+    ) => void
+}) => {
+    const eventName =
+        report && report.status !== 'completed'
+            ? `live.${report?.id ?? 'undefined'}`
+            : undefined
+
+    useSubscribe('generated_report', eventName, (data: IGeneratedReport) => {
+        onReportUpdate(() => {
+            if (report.status !== data.status) onReportUpdate?.(data)
+            return data
+        })
+    })
+
+    return (
+        <div className="w-full mt-3">
+            {label && (
+                <div className="flex justify-between items-center text-xs text-muted-foreground mb-1.5">
+                    <span>{label}</span>
+                    <span className="font-medium ">{report.progress}%</span>
+                </div>
             )}
-            {report.media?.progress && (
-                <Progress
-                    className={`h-0.5  -translate-x-3 px-.5 bottom-0 absolute ${mediaProgess === 0 ? 'hidden' : ''}`}
-                    value={mediaProgess}
-                />
-            )}
+            <Progress
+                className="h-1"
+                indicatorClassName="bg-primary"
+                value={report.progress}
+            />
         </div>
     )
 }

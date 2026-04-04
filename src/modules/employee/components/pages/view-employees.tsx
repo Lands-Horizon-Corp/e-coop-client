@@ -24,19 +24,19 @@ const ViewEmployeePage = () => {
         },
     } = useAuthUserWithOrgBranch()
 
-    useSubscribe(`employees.created.branch.${branch_id}`, () =>
+    useSubscribe('employees', `create.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['employees', 'paginated'],
         })
     )
 
-    useSubscribe(`employees.updated.branch.${branch_id}`, () =>
+    useSubscribe('employees', `update.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['employees', 'paginated'],
         })
     )
 
-    useSubscribe(`employees.deleted.branch.${branch_id}`, () =>
+    useSubscribe('employees', `delete.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['employees', 'paginated'],
         })

@@ -88,7 +88,7 @@ export const LoanAmortizationModal = ({
     return (
         <Modal
             {...props}
-            className="!max-w-[90vw] p-4 shadow-none border-none gap-y-0"
+            className="max-w-[90vw]! p-4 shadow-none border-none gap-y-0"
             closeButtonClassName="top-2 right-2"
             descriptionClassName="sr-only"
             titleClassName="sr-only"

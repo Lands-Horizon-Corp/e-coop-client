@@ -30,7 +30,7 @@ const Heartbeat = () => {
             user_organization: { branch_id },
         },
     } = useAuthUserWithOrgBranch()
-    useSubscribe(`user_organization.status.branch.${branch_id}`, refetch)
+    useSubscribe('user_organization', `status.branch.${branch_id}`, refetch)
 
     if (isLoading)
         return (
