@@ -1,6 +1,6 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
-import { UseFormReturn, useFieldArray } from 'react-hook-form'
+import { UseFormReturn, useFieldArray, useWatch } from 'react-hook-form'
 
 import { cn } from '@/helpers'
 import { IAccount, TAccountType } from '@/modules/account'
@@ -271,7 +271,7 @@ type CashCheckJournalEntryTableProps = {
     mode: TCashCheckVoucherModalMode
     cashCheckCurrency?: ICurrency
     form: UseFormReturn<TCashCheckVoucherSchema>
-    ref: React.Ref<HTMLDivElement>
+    // ref: React.Ref<HTMLDivElement>
 }
 
 export const CashCheckJournalEntryTable = ({
@@ -285,12 +285,26 @@ export const CashCheckJournalEntryTable = ({
     const isUpdateMode = mode === 'update'
     const isReadOnlyMode = mode === 'readOnly'
 
-    const watchedCashCheckEntries = form.watch('cash_check_voucher_entries')
-
-    const { append: addEntry, remove: removeEntry } = useFieldArray({
+    const {
+        fields,
+        append: addEntry,
+        remove: removeEntry,
+    } = useFieldArray({
         name: 'cash_check_voucher_entries',
         control: form.control,
     })
+
+    const watchedEntries = useWatch({
+        name: 'cash_check_voucher_entries',
+        control: form.control,
+    })
+
+    const tableData = useMemo(() => {
+        return fields.map((field, index) => ({
+            ...field,
+            ...watchedEntries?.[index],
+        }))
+    }, [fields, watchedEntries])
 
     const { append: addRemovedId } = useFieldArray({
         name: 'cash_check_voucher_entries_deleted',
@@ -331,7 +345,7 @@ export const CashCheckJournalEntryTable = ({
     }, [addEntry, defaultMemberProfile, isReadOnlyMode])
 
     const table = useReactTable<ICashCheckVoucherEntryRequest>({
-        data: watchedCashCheckEntries || [],
+        data: tableData,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
         meta: {

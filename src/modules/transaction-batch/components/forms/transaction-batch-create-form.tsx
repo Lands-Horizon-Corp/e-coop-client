@@ -96,8 +96,10 @@ const TransactionBatchCreateForm = ({
     }, [form])
 
     useHotkeys(
-        'control + enter',
-        () => {
+        'enter',
+        (e) => {
+            e.preventDefault()
+            e.stopPropagation()
             onSubmit()
         },
         {

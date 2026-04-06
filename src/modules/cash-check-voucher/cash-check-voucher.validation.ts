@@ -8,7 +8,7 @@ import { WithReportConfigSchema } from '../generated-report'
 
 export const CashCheckVoucherSchema = z.object({
     id: z.string().optional(),
-    name: z.string().optional(),
+    name: z.string().min(1, 'Name is Required'),
 
     cash_voucher_number: z.string().optional(),
 

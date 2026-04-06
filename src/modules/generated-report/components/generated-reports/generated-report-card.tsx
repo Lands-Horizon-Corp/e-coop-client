@@ -256,7 +256,7 @@ export const GeneratedReportCard = ({
                                     }
                                 >
                                     {cooldownCount > 0 ? (
-                                        `Please wait ${cooldownCount}s`
+                                        `${cooldownCount}s`
                                     ) : (
                                         <>
                                             <DownloadIcon

@@ -1,7 +1,7 @@
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { visualizer } from "rollup-plugin-visualizer";
-import { defineConfig, normalizePath, type PluginOption } from "vite";
+import { defineConfig, type PluginOption } from "vite";
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import tailwindcss from '@tailwindcss/vite'
 import { compression } from 'vite-plugin-compression2'
@@ -13,15 +13,15 @@ import { VitePWA } from 'vite-plugin-pwa';
 import fs from 'node:fs';
 import path from 'node:path';
 import { nitro } from "nitro/vite"; 
-import { createRequire } from 'node:module';
+// import { createRequire } from 'node:module';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
-const require = createRequire(import.meta.url);
-const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
-const cMapsDir = normalizePath(path.join(pdfjsDistPath, 'cmaps'));
-const pdfWorkerPath = normalizePath(
-  path.join(pdfjsDistPath, 'build', 'pdf.worker.min.mjs')
-)
+// const require = createRequire(import.meta.url);
+// const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
+// const cMapsDir = normalizePath(path.join(pdfjsDistPath, 'cmaps'));
+// const pdfWorkerPath = normalizePath(
+//   path.join(pdfjsDistPath, 'build', 'pdf.worker.min.mjs')
+// )
 
 const pwaAssetManifest = () => ({
     name: 'pwa-asset-manifest',
@@ -50,12 +50,12 @@ export default defineConfig({
     UnheadVite(),
     viteStaticCopy({
       targets: [
-        { src: cMapsDir, dest: 'cmaps' },
-        { 
-          src: pdfWorkerPath, 
-          dest: '', 
-          rename: 'pdf.worker.min.js'
-        },
+        // { src: cMapsDir, dest: 'cmaps' },
+        // { 
+        //   src: pdfWorkerPath, 
+        //   dest: '', 
+        //   rename: 'pdf.worker.min.js'
+        // },
       ],
     }),
     NodeGlobalsPolyfillPlugin({

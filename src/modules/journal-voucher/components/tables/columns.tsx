@@ -66,12 +66,12 @@ const JournalVoucherTableColumns = (
         id: 'name',
         accessorKey: 'name',
         header: (props) => (
-            <DataTableColumnHeader {...props} title="Type">
+            <DataTableColumnHeader {...props} title="Name">
                 <ColumnActions {...props}>
                     <TextFilter<IJournalVoucher>
                         defaultMode="contains"
-                        displayText="Type"
-                        field="type"
+                        displayText="Name"
+                        field="Name"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
@@ -116,11 +116,11 @@ const JournalVoucherTableColumns = (
         id: 'description',
         accessorKey: 'description',
         header: (props) => (
-            <DataTableColumnHeader {...props} title="Type">
+            <DataTableColumnHeader {...props} title="Description">
                 <ColumnActions {...props}>
                     <TextFilter<IJournalVoucher>
                         defaultMode="contains"
-                        displayText="Type"
+                        displayText="Description"
                         field="type"
                     />
                 </ColumnActions>
@@ -153,7 +153,7 @@ const JournalVoucherTableColumns = (
                 original: { date },
             },
         }) => (
-            <div className="!text-wrap">
+            <div className="text-wrap!">
                 {new Date(date).toLocaleDateString()}
             </div>
         ),
@@ -196,7 +196,7 @@ const JournalVoucherTableColumns = (
                 original: { total_debit, currency },
             },
         }) => (
-            <div className="!text-wrap">
+            <div className="text-wrap!">
                 {currencyFormat(total_debit, {
                     currency: currency,
                     showSymbol: !!currency,
@@ -221,7 +221,7 @@ const JournalVoucherTableColumns = (
                 original: { total_credit, currency },
             },
         }) => (
-            <div className="!text-wrap">
+            <div className="text-wrap!">
                 {currencyFormat(total_credit, {
                     currency: currency,
                     showSymbol: !!currency,
@@ -245,7 +245,7 @@ const JournalVoucherTableColumns = (
             row: {
                 original: { posted_by },
             },
-        }) => <div className="!text-wrap">{posted_by?.first_name ?? '-'}</div>,
+        }) => <div className="text-wrap!">{posted_by?.first_name ?? '-'}</div>,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,

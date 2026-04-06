@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
@@ -19,6 +19,7 @@ import {
     cashCheckVoucherBaseKey,
     useCreateUpdateCashCheckVoucher,
 } from '@/modules/cash-check-voucher'
+import { ICashCheckVoucherEntryRequest } from '@/modules/cash-check-voucher-entry'
 import { CashCheckVoucherTagsManagerPopover } from '@/modules/cash-check-voucher-tag/components/cash-check-voucher-tag-manager'
 import CompanyCombobox from '@/modules/company/components/company-combobox'
 import { CurrencyCombobox, currencyFormat } from '@/modules/currency'
@@ -94,11 +95,11 @@ const CashCheckVoucherCreateUpdateForm = ({
     const [defaultMember, setDefaultMember] = useState<
         IMemberProfile | undefined
     >(defaultValues?.member_profile)
+    const [cashCheckVoucher, setCashCheckVoucher] = useState<
+        Partial<ICashCheckVoucher> | undefined
+    >(defaultValues)
 
-    const [cashCheckId, setCashCheckId] = useState<TEntityId | undefined>(
-        cashCheckVoucherId
-    )
-    const isEditMode = !!cashCheckId
+    const isEditMode = !!cashCheckVoucher?.id
 
     const { setSelectedMember } = useMemberPickerStore()
 
@@ -126,8 +127,8 @@ const CashCheckVoucherCreateUpdateForm = ({
                 textSuccess: 'Cash Check Voucher Created',
                 onSuccess: (data) => {
                     formProps.onSuccess?.(data)
-                    setCashCheckId(data.id)
                     form.reset(data)
+                    setCashCheckVoucher(data)
                 },
                 onError: formProps.onError,
             }),
@@ -155,7 +156,7 @@ const CashCheckVoucherCreateUpdateForm = ({
         }
 
         createUpdateCashCheckVoucher({
-            id: cashCheckId,
+            id: cashCheckVoucher?.id,
             payload: {
                 ...payload,
             },
@@ -166,7 +167,8 @@ const CashCheckVoucherCreateUpdateForm = ({
     const rawError = createError
     const error =
         serverRequestErrExtractor({ error: rawError }) ||
-        form.formState.errors?.root?.message
+        form.formState.errors?.root?.message ||
+        form.formState.errors.cash_check_voucher_entries?.message
 
     useHotkeys('Enter', (e) => {
         e.preventDefault()
@@ -277,6 +279,47 @@ const CashCheckVoucherCreateUpdateForm = ({
             },
         ])
     }, [cashCheckVoucherId, isEditMode, form])
+
+    const { replace } = useFieldArray({
+        name: 'cash_check_voucher_entries',
+        control: form.control,
+    })
+
+    const currency = useWatch({
+        name: 'currency',
+        control: form.control,
+    })
+
+    const handleReset = () => {
+        if (isEditMode) {
+            form.reset({
+                ...cashCheckVoucher,
+            })
+        } else {
+            const newRow: ICashCheckVoucherEntryRequest = {
+                debit: 0,
+                credit: 0,
+                account_id: '' as TEntityId,
+                member_profile_id: defaultMember?.id,
+                member_profile: defaultMember,
+            }
+            const values = {
+                ...defaultValues,
+                cash_check_voucher_entries:
+                    defaultValues?.cash_check_voucher_entries ?? [newRow],
+            }
+
+            form.reset(values)
+            replace(values.cash_check_voucher_entries)
+        }
+        resetCreate()
+        setSelectedMember(null)
+        queryClient.invalidateQueries({
+            queryKey: [cashCheckVoucherBaseKey, 'paginated'],
+        })
+    }
+
+    console.log('render')
 
     return (
         <Form {...form}>
@@ -617,30 +660,22 @@ const CashCheckVoucherCreateUpdateForm = ({
                                 disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Particulars"
-                                // tabIndex={-1}
+                                value={field.value || ''}
                             />
                         )}
                     />
                     {/* ================= ENTRIES ================= */}
-                    <FormFieldWrapper
-                        className="col-span-1 md:col-span-2 max-h-xs!"
-                        control={form.control}
-                        name="cash_check_voucher_entries"
-                        render={({ field }) => (
-                            <CashCheckJournalEntryTable
-                                cashCheckCurrency={form.watch('currency')}
-                                cashCheckVoucherId={cashCheckVoucherId ?? ''}
-                                className="col-span-1 md:col-span-2"
-                                defaultMemberProfile={defaultMember}
-                                form={form}
-                                mode={mode}
-                                ref={field.ref}
-                            />
-                        )}
+                    <CashCheckJournalEntryTable
+                        cashCheckCurrency={currency}
+                        cashCheckVoucherId={cashCheckVoucherId ?? ''}
+                        className="col-span-1 md:col-span-2"
+                        defaultMemberProfile={defaultMember}
+                        form={form}
+                        mode={mode}
                     />
                 </fieldset>
                 <div className="w-full flex justify-end gap-4">
-                    <div className="max-w-[130px] flex-col flex justify-end">
+                    <div className="max-w-fit flex-col flex justify-end">
                         <p className="text-primary bg-background border py-1 text-left rounded-md pl-8 pr-10 text-lg font-bold">
                             {currencyFormat(form.watch('total_debit'), {
                                 currency: form.watch('currency'),
@@ -648,7 +683,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                             })}
                         </p>
                     </div>
-                    <div className="max-w-[130px]">
+                    <div className="max-w-fit">
                         <p className="text-primary bg-background border py-1 text-left rounded-md pl-8 pr-10 text-lg font-bold">
                             {currencyFormat(form.watch('total_credit'), {
                                 currency: form.watch('currency'),
@@ -660,20 +695,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                 <FormFooterResetSubmit
                     error={error}
                     isLoading={isPending}
-                    onReset={() => {
-                        if (isEditMode) {
-                            form.reset({
-                                ...defaultValues,
-                            })
-                        } else {
-                            form.reset()
-                        }
-                        resetCreate()
-                        setSelectedMember(null)
-                        queryClient.invalidateQueries({
-                            queryKey: [cashCheckVoucherBaseKey, 'paginated'],
-                        })
-                    }}
+                    onReset={handleReset}
                     readOnly={formProps.readOnly}
                     submitText={
                         <div className="inline-flex items-center gap-2">
@@ -681,7 +703,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                                 {isEditMode ? 'Update' : 'Create'}
                             </kbd>
                             <CommandShortcut className=" text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-secondary">
-                                Ctrl + Enter
+                                Enter
                             </CommandShortcut>
                         </div>
                     }

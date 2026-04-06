@@ -1,6 +1,6 @@
-import { forwardRef, useCallback } from 'react'
+import { forwardRef, useCallback, useMemo } from 'react'
 
-import { UseFormReturn, useFieldArray } from 'react-hook-form'
+import { UseFormReturn, useFieldArray, useWatch } from 'react-hook-form'
 
 import { cn } from '@/helpers'
 import { IAccount, TAccountType } from '@/modules/account'
@@ -275,8 +275,11 @@ export const OtherFundEntryTable = forwardRef(
         const isUpdateMode = mode === 'update'
         const isReadOnlyMode = mode === 'readOnly'
 
-        const watchedEntries = form.watch('other_fund_entries')
-        const { append: addEntry, remove: removeEntry } = useFieldArray({
+        const {
+            fields,
+            append: addEntry,
+            remove: removeEntry,
+        } = useFieldArray({
             name: 'other_fund_entries',
             control: form.control,
         })
@@ -286,6 +289,10 @@ export const OtherFundEntryTable = forwardRef(
             control: form.control,
         })
 
+        const watchedEntries = useWatch({
+            control: form.control,
+            name: 'other_fund_entries',
+        })
         const handleDeleteRow = useCallback(
             (index: number) => {
                 if (isReadOnlyMode) return
@@ -297,6 +304,13 @@ export const OtherFundEntryTable = forwardRef(
             },
             [isReadOnlyMode, form, isUpdateMode, removeEntry, addDeletedId]
         )
+
+        const tableData = useMemo(() => {
+            return fields.map((field, index) => ({
+                ...field,
+                ...watchedEntries?.[index],
+            }))
+        }, [fields, watchedEntries])
 
         const handleAddRow = useCallback(() => {
             if (isReadOnlyMode) return
@@ -311,7 +325,7 @@ export const OtherFundEntryTable = forwardRef(
         }, [addEntry, defaultMemberProfile, isReadOnlyMode, transactionBatchId])
 
         const table = useReactTable<IOtherFundEntryRequest>({
-            data: watchedEntries || [],
+            data: tableData,
             columns: columns,
             getCoreRowModel: getCoreRowModel(),
             meta: {
@@ -333,26 +347,31 @@ export const OtherFundEntryTable = forwardRef(
 
         return (
             <div className={cn('space-y-2', className)}>
-                <div className="flex justify-end items-center gap-2 py-2">
-                    <Button
-                        className="h-8 text-xs"
-                        disabled={isReadOnlyMode}
-                        onClick={(e) => {
-                            e.preventDefault()
-                            handleAddRow()
-                        }}
-                        size="sm"
-                    >
-                        Add Entry <PlusIcon className="ml-1 size-3" />
-                    </Button>
-                    <CommandShortcut className="bg-secondary px-2 py-1 text-primary rounded text-[10px]">
-                        Shift + I
-                    </CommandShortcut>
+                <div className="w-full flex justify-end">
+                    <div className="flex py-2 items-center space-x-2">
+                        <Button
+                            aria-label="Add new journal entry"
+                            className="size-fit px-2 py-0.5 text-xs"
+                            disabled={isReadOnlyMode}
+                            onClick={(e) => {
+                                e.preventDefault()
+                                handleAddRow()
+                            }}
+                            size="sm"
+                            tabIndex={-1}
+                            type="button"
+                        >
+                            Add <PlusIcon className="inline" />
+                        </Button>
+                        <CommandShortcut className="bg-secondary min-w-fit p-1 px-2 text-primary rounded-sm mr-1">
+                            Shift + I
+                        </CommandShortcut>
+                    </div>
                 </div>
 
                 <Table
                     wrapperClassName={cn(
-                        'max-h-[400px] ecoop-scroll border rounded-md',
+                        'max-h-[400px] ecoop-scroll rounded-md',
                         TableClassName
                     )}
                 >

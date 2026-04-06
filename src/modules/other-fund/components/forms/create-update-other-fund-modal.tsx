@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -15,11 +15,14 @@ import { CurrencyCombobox, currencyFormat } from '@/modules/currency'
 import {
     IJournalVoucher,
     IJournalVoucherRequest,
-    journalVoucherBaseKey,
 } from '@/modules/journal-voucher'
 import JournalVoucherStatusIndicator from '@/modules/journal-voucher/components/journal-voucher-status-indicator'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
+import {
+    IOtherFundEntryRequest,
+    otherFundEntryBaseKey,
+} from '@/modules/other-fund-entry'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { getTimeMachineValue } from '@/modules/user-organization/user-organization-utils'
 import { useMemberPickerStore } from '@/store/member-picker-store'
@@ -84,8 +87,11 @@ const OtherFundCreateUpdateForm = ({
 
     const { data } = useTransactionBatchStore()
 
-    const [_, setOtherFundId] = useState<TEntityId | undefined>(otherFundId)
-    const isEditMode = !!otherFundId
+    const [otherFund, setOtherFund] = useState<Partial<IOtherFund> | undefined>(
+        defaultValues
+    )
+
+    const isEditMode = !!otherFund?.id
 
     const [defaultMemberProfile, setDefaultMemberProfile] = useState<
         IMemberProfile | undefined
@@ -126,7 +132,7 @@ const OtherFundCreateUpdateForm = ({
                 onSuccess: (data) => {
                     form.reset(data)
                     formProps.onSuccess?.(data)
-                    setOtherFundId(data.id)
+                    setOtherFund(data)
                 },
                 onError: formProps.onError,
             }),
@@ -147,7 +153,7 @@ const OtherFundCreateUpdateForm = ({
         }
 
         createUpdateOtherFund({
-            otherFundId: isEditMode ? otherFundId : otherFundId,
+            otherFundId: isEditMode ? otherFund.id : otherFundId,
             payload: payload,
         })
     }, handleFocusError)
@@ -157,7 +163,8 @@ const OtherFundCreateUpdateForm = ({
 
     const error =
         serverRequestErrExtractor({ error: rawError }) ||
-        form.formState.errors?.root?.message
+        form.formState.errors?.root?.message ||
+        form.formState.errors.other_fund_entries?.message
 
     const handleSetMemberProfile = useCallback(
         (memberProfile: IMemberProfile | undefined) => {
@@ -170,11 +177,6 @@ const OtherFundCreateUpdateForm = ({
     const handleClearMember = useCallback(() => {
         handleSetMemberProfile(undefined)
     }, [handleSetMemberProfile])
-
-    useHotkeys('d', (e) => {
-        e.preventDefault()
-        handleClearMember()
-    })
 
     useSubmitHotkey({
         onSubmit: onSubmit,
@@ -193,7 +195,6 @@ const OtherFundCreateUpdateForm = ({
         { enableOnFormTags: true },
         [form]
     )
-
     useHotkeys(
         'alt + 2',
         (e) => {
@@ -203,7 +204,6 @@ const OtherFundCreateUpdateForm = ({
         { enableOnFormTags: true },
         [form]
     )
-
     useHotkeys(
         'alt + 3',
         (e) => {
@@ -213,7 +213,6 @@ const OtherFundCreateUpdateForm = ({
         { enableOnFormTags: true },
         [form]
     )
-
     useHotkeys(
         'alt + 4',
         (e) => {
@@ -241,7 +240,6 @@ const OtherFundCreateUpdateForm = ({
         { enableOnFormTags: true },
         [form]
     )
-
     useHotkeys(
         'alt + semicolon',
         (e) => {
@@ -251,6 +249,56 @@ const OtherFundCreateUpdateForm = ({
         { enableOnFormTags: true },
         [popOverState]
     )
+    useHotkeys('d', (e) => {
+        e.preventDefault()
+        handleClearMember()
+    })
+    const currency = useWatch({
+        control: form.control,
+        name: 'currency',
+    })
+
+    const { replace } = useFieldArray({
+        name: 'journal_voucher_entries',
+        control: form.control,
+    })
+
+    const handleReset = () => {
+        if (isEditMode) {
+            if (otherFund) {
+                console.log(otherFund.date)
+                form.reset({
+                    date: otherFund?.date
+                        ? new Date(otherFund.date).toISOString()
+                        : undefined,
+                    ...otherFund,
+                })
+            }
+        } else {
+            const newRow: IOtherFundEntryRequest = {
+                debit: 0,
+                credit: 0,
+                member_profile_id: defaultMemberProfile?.id,
+                member_profile: defaultMemberProfile,
+                account_id: '' as TEntityId,
+                transaction_batch_id: undefined,
+            }
+            const values = {
+                ...defaultValues,
+                other_fund_entries: defaultValues?.other_fund_entries ?? [
+                    newRow,
+                ],
+            }
+
+            form.reset(values)
+            replace(values.other_fund_entries)
+        }
+        resetCreate()
+        setSelectedMember(null)
+        queryClient.invalidateQueries({
+            queryKey: [otherFundEntryBaseKey, 'paginated'],
+        })
+    }
 
     return (
         <Form {...form}>
@@ -576,26 +624,15 @@ const OtherFundCreateUpdateForm = ({
                             }}
                         />
                     </div>
-
-                    <>
-                        <FormFieldWrapper
-                            className="col-span-1 md:col-span-4 max-h-xs!"
-                            control={form.control}
-                            name="other_fund_entries"
-                            render={({ field }) => (
-                                <OtherFundEntryTable
-                                    className="col-span-1 md:col-span-4"
-                                    currency={form.watch('currency')}
-                                    defaultMemberProfile={defaultMemberProfile}
-                                    form={form}
-                                    mode={mode}
-                                    otherFundId={otherFundId ?? ''}
-                                    ref={field.ref}
-                                    transactionBatchId={data?.id}
-                                />
-                            )}
-                        />
-                    </>
+                    <OtherFundEntryTable
+                        className="col-span-1 md:col-span-4"
+                        currency={currency}
+                        defaultMemberProfile={defaultMemberProfile}
+                        form={form}
+                        mode={mode}
+                        otherFundId={otherFundId ?? ''}
+                        transactionBatchId={data?.id}
+                    />
                 </fieldset>
                 <div className="w-full flex justify-end gap-4">
                     <div className="max-w-[130px] flex-col flex justify-end">
@@ -618,23 +655,7 @@ const OtherFundCreateUpdateForm = ({
                 <FormFooterResetSubmit
                     error={error}
                     isLoading={isPending}
-                    onReset={() => {
-                        if (isEditMode) {
-                            form.reset({
-                                ...defaultValues,
-                                date: defaultValues?.date
-                                    ? new Date(defaultValues.date).toISOString()
-                                    : undefined,
-                            })
-                        } else {
-                            form.reset()
-                        }
-                        resetCreate()
-                        setSelectedMember(null)
-                        queryClient.invalidateQueries({
-                            queryKey: [journalVoucherBaseKey, 'paginated'],
-                        })
-                    }}
+                    onReset={handleReset}
                     readOnly={formProps.readOnly}
                     submitText={
                         <div className="inline-flex items-center gap-2">
@@ -642,7 +663,7 @@ const OtherFundCreateUpdateForm = ({
                                 {isEditMode ? 'Update' : 'Create'}
                             </kbd>
                             <CommandShortcut className="bg-secondary text-accent-foreground/50 text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm ">
-                                Ctrl + Enter
+                                Enter
                             </CommandShortcut>
                         </div>
                     }
