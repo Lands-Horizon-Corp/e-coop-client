@@ -1,5 +1,5 @@
 import { toReadableDate } from '@/helpers/date-utils'
-import { TReportConfigSchema } from '@/modules/generated-report'
+import { TGeneratedReportSchema } from '@/modules/generated-report'
 import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import { IOtherFund } from '@/modules/other-fund'
@@ -113,7 +113,7 @@ export const OtherFundCardActions = ({
                             ...getTemplateAt(OTHER_FUND_PRINT_TEMPLATES, 0),
                             name: `other_fund_${toReadableDate(otherFund.created_at, 'MMddyy_mmss')}.pdf`,
                             module: 'OtherFund',
-                        } as TReportConfigSchema,
+                        } as TGeneratedReportSchema,
                     },
                     otherFundId: otherFund.id,
                     onSuccess: (data) => {
@@ -135,7 +135,7 @@ export const OtherFundCardActions = ({
                             ...getTemplateAt(OTHER_FUND_PRINT_TEMPLATES, 0),
                             name: `other_fund_${toReadableDate(otherFund.created_at, 'MMddyy_mmss')}.pdf`,
                             module: 'OtherFund',
-                        } as TReportConfigSchema,
+                        } as TGeneratedReportSchema,
                     },
                     otherFundId: otherFund.id,
                     onSuccess: (data) => {

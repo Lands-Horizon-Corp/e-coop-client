@@ -1,41 +1,16 @@
 import z from 'zod'
 
-import { descriptionTransformerSanitizer } from '@/validation'
+import {
+    MonthSchema,
+    YearSchema,
+    stringDateWithTransformSchema,
+} from '@/validation'
 
 import { GENERATE_REPORT_TYPE } from './generated-report.types'
 import {
     ACCOUNT_MODEL_NAMES,
     PAPER_SIZE_UNIT,
 } from './generated-reports.constants'
-
-export const GeneratedReportSchema = z.object({
-    name: z.string().optional(),
-    description: z
-        .string()
-        .optional()
-        .transform(descriptionTransformerSanitizer),
-    filter_search: z.string().optional(),
-    url: z.string().optional(),
-    model: z.enum(ACCOUNT_MODEL_NAMES),
-    generated_report_type: z.enum(GENERATE_REPORT_TYPE),
-
-    // Optional print settings
-    paper_size: z.string().optional(),
-    template: z.string().optional(),
-    width: z.number().optional(),
-    height: z.number().optional(),
-    unit: z.enum(PAPER_SIZE_UNIT).optional(),
-    landscape: z.boolean().optional(),
-    template_config: z
-        .object({
-            value: z.string().optional(),
-            label: z.string().optional(),
-            defaultSize: z.string(),
-            description: z.string().optional(),
-        })
-        .optional(),
-})
-export type TGeneratedReportFormValues = z.infer<typeof GeneratedReportSchema>
 
 const SIZE_REGEX = new RegExp(`^\\d+(\\.\\d+)?(${PAPER_SIZE_UNIT.join('|')})$`)
 
@@ -47,7 +22,7 @@ export const SizeWithUnitSchema = z
     })
 
 // FOR PRINT CONFIG SECTION ON PRINTABLE FORMS
-export const ReportConfigSchema = z.object({
+export const GeneratedReportSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     password: z.string().min(1, 'Password is required').optional(),
 
@@ -59,13 +34,184 @@ export const ReportConfigSchema = z.object({
 
     filters: z.any().optional().default({}),
 
-    landscape: z.boolean().optional(),
+    orientation: z.enum(['portrait', 'landscape']).default('portrait'),
     unit: z.enum(PAPER_SIZE_UNIT).optional(),
-})
-export type TReportConfigSchema = z.infer<typeof ReportConfigSchema>
 
-export const WithReportConfigSchema = z.object({
-    report_config: ReportConfigSchema,
+    generated_report_type: z.enum(GENERATE_REPORT_TYPE).default('pdf'),
 })
 
-export type TWithReportConfigSchema = z.infer<typeof WithReportConfigSchema>
+//GENERATED REPORT SCHEMA
+export type TGeneratedReportSchema = z.infer<typeof GeneratedReportSchema>
+
+export const WithGeneratedReportSchema = z.object({
+    report_config: GeneratedReportSchema,
+})
+
+export type TWithReportConfigSchema = z.infer<typeof WithGeneratedReportSchema>
+
+// INCOME STATEMENT VALIDATION
+export const IncomeStatementReportSchema = z
+    .object({
+        month: MonthSchema,
+        year: z.number().min(1900, 'Year must be 19000 or later'),
+
+        report_type: z
+            .enum([
+                'standard',
+                'comparative_monthly',
+                'comparative_yearly',
+                'closed_book',
+                'budget_forecasted',
+            ])
+            .default('standard'),
+
+        include_previous_year: z.boolean().optional().default(false),
+    })
+    .and(WithGeneratedReportSchema)
+
+export type TIncomeStatementReportSchema = z.infer<
+    typeof IncomeStatementReportSchema
+>
+
+// BALANCE SHEET VALIDATION REPORT
+export const BalanceSheetReportSchema = z
+    .object({
+        month: MonthSchema,
+        year: YearSchema,
+
+        report_type: z
+            .enum([
+                'standard',
+                'comparative_monthly',
+                'comparative_yearly',
+                'closed_book',
+                'budget_forecasting',
+            ])
+            .default('standard'),
+
+        as_of_previous_year: z.boolean().optional().default(false),
+        sort_by_link_code: z.boolean().optional().default(false),
+    })
+    .and(WithGeneratedReportSchema)
+
+export type TBalanceSheetReportSchema = z.infer<typeof BalanceSheetReportSchema>
+
+// Financial statement conditionb report
+export const FinancialStatementConditionReportSchema = z
+    .object({
+        month: MonthSchema,
+        year: YearSchema,
+
+        report_type: z
+            .enum([
+                'standard',
+                'comparative_monthly',
+                'comparative_yearly',
+                'budget_forecasted',
+            ])
+            .default('standard'),
+
+        as_of_previous_year: z.boolean().optional().default(false),
+
+        par_calculation_method: z
+            .enum([
+                'by_amortization_loan_balance',
+                'by_amortization_arrears',
+                'by_amortization_arrears_distributed',
+                'by_maturity',
+            ])
+            .default('by_amortization_loan_balance'),
+
+        fall_to_current_if_1_30_days: z.boolean().optional().default(false),
+    })
+    .and(WithGeneratedReportSchema)
+    .superRefine((data, ctx) => {
+        if (
+            data.report_type !== 'comparative_yearly' &&
+            data.as_of_previous_year
+        ) {
+            ctx.addIssue({
+                code: 'custom',
+                message:
+                    'As of previous year is only applicable for Comparative Yearly report',
+                path: ['as_of_previous_year'],
+            })
+        }
+    })
+
+export type TFinancialStatementConditionReportSchema = z.infer<
+    typeof FinancialStatementConditionReportSchema
+>
+
+// FOR Statement of operation report
+
+export const StatementOfOperationsReportSchema = z
+    .object({
+        month: MonthSchema,
+        year: YearSchema,
+
+        report_type: z
+            .enum([
+                'standard',
+                'comparative_monthly',
+                'comparative_yearly',
+                'budget_forecasted',
+            ])
+            .default('standard'),
+
+        as_of_previous_year: z.boolean().optional().default(false),
+    })
+    .and(WithGeneratedReportSchema)
+    .superRefine((data, ctx) => {
+        if (
+            data.report_type !== 'comparative_yearly' &&
+            data.as_of_previous_year
+        ) {
+            ctx.addIssue({
+                code: 'custom',
+                message:
+                    'As of previous year is only applicable for Comparative Yearly report',
+                path: ['as_of_previous_year'],
+            })
+        }
+    })
+
+export type TStatementOfOperationsReportSchema = z.infer<
+    typeof StatementOfOperationsReportSchema
+>
+
+// FOR REPORT CASH FLOW
+export const CashFlowReportSchema = z
+    .object({
+        month: MonthSchema,
+        year: YearSchema,
+
+        comparative_type: z.enum(['yearly', 'monthly']).default('yearly'),
+    })
+    .and(WithGeneratedReportSchema)
+
+export type TCashFlowReportSchema = z.infer<typeof CashFlowReportSchema>
+
+// SL-GL Report schema
+
+export const SLGLComparisonReportSchema = z
+    .object({
+        as_of_date: stringDateWithTransformSchema,
+        exclude_write_off: z.boolean().optional().default(false),
+    })
+    .and(z.object({ report_config: z.any() }))
+
+export type TSLGLComparisonReportSchema = z.infer<
+    typeof SLGLComparisonReportSchema
+>
+
+// SL-TRX_GL
+export const SLTRXGLComparisonReportSchema = z
+    .object({
+        as_of_date: z.string(),
+    })
+    .and(z.object({ report_config: z.any() }))
+
+export type TSLTRXGLComparisonReportSchema = z.infer<
+    typeof SLTRXGLComparisonReportSchema
+>

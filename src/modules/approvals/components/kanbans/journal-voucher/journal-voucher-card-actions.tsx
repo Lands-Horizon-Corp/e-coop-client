@@ -1,6 +1,6 @@
 import { toReadableDate } from '@/helpers/date-utils'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
-import { TReportConfigSchema } from '@/modules/generated-report'
+import { TGeneratedReportSchema } from '@/modules/generated-report'
 // import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
 import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
@@ -129,7 +129,7 @@ export const JournalVoucherCardActions = ({
                             ),
                             name: `journal_voucher_${toReadableDate(journalVoucher.created_at, 'MMddyy_mmss')}.pdf`,
                             module: 'JournalVoucher',
-                        } as TReportConfigSchema,
+                        } as TGeneratedReportSchema,
                     },
                     orSettings: resolvedOrSettings,
                     journalVoucherId: journalVoucher.id,

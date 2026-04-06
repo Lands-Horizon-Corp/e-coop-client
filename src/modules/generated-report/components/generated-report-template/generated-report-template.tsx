@@ -161,7 +161,6 @@ export function GenerateReportTemplatePicker<T = unknown>({
         const parsedW = dimSchema.safeParse(inputW)
         const parsedH = dimSchema.safeParse(inputH)
 
-        // If valid numbers, use them. Otherwise, stay as is.
         const nextW = parsedW.success ? parsedW.data : pageW
         const nextH = parsedH.success ? parsedH.data : pageH
 
@@ -403,13 +402,6 @@ export function GenerateReportTemplatePicker<T = unknown>({
                             <LoadingSpinner />
                         </div>
                     ) : (
-                        // <div
-                        //     className="mx-auto shadow-lg border border-red rounded overflow-hidden bg-background"
-                        //     style={{
-                        //         width: `${pageW}${unit}`,
-                        //         height: `${pageH}${unit}`,
-                        //     }}
-                        // >
                         <iframe
                             className="border-0 block rounded-xl"
                             sandbox="allow-same-origin"

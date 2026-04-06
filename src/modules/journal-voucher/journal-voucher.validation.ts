@@ -6,7 +6,7 @@ import {
     entityIdSchema,
 } from '@/validation'
 
-import { WithReportConfigSchema } from '../generated-report'
+import { WithGeneratedReportSchema } from '../generated-report'
 import { JournalVoucherEntrySchema } from '../journal-voucher-entry'
 
 export const JournalVoucherSchema = z.object({
@@ -82,14 +82,14 @@ export const JournalVoucherPrintSchema = z
         cash_voucher_number: z.string().min(1, 'Voucher Number is required'),
         or_auto_generated: z.boolean().default(false).optional(),
     })
-    .and(WithReportConfigSchema)
+    .and(WithGeneratedReportSchema)
 
 export type TJournalVoucherSchema = z.infer<typeof JournalVoucherSchema>
 export type TJournalVoucherPrintSchema = z.infer<
     typeof JournalVoucherPrintSchema
 >
 
-export const JournalVoucherReprintSchema = WithReportConfigSchema
+export const JournalVoucherReprintSchema = WithGeneratedReportSchema
 
 export type TJournalVoucherReprintSchema = z.infer<
     typeof JournalVoucherReprintSchema

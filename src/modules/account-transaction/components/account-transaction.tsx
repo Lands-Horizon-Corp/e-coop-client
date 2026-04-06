@@ -11,7 +11,6 @@ import {
     ArrowDownLeftIcon,
     ArrowUpRightIcon,
     BookOpenIcon,
-    CalendarIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
     PlusIcon,
@@ -29,13 +28,6 @@ import {
     CarouselContent,
     CarouselItem,
 } from '@/components/ui/carousel'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
 
 import { useModalState } from '@/hooks/use-modal-state'
@@ -44,6 +36,7 @@ import { useGetAllAccountTransaction } from '..'
 import { IAccountTransaction } from '../account-transaction.types'
 import { AccountTransactionUpdateFormModal } from './forms/account-transaction-update-form'
 import { AccountTransactionGenerateFormModal } from './forms/process-account-gl-form'
+import { MonthSelector } from '@/components/selects/month-select'
 
 const AccountTransaction = () => {
     const currentDate = new Date()
@@ -163,57 +156,6 @@ const AccountTransaction = () => {
                     <TransactionList transactions={transactions} />
                 )}
             </div>
-        </div>
-    )
-}
-
-const MONTHS = [
-    { value: 1, label: 'January' },
-    { value: 2, label: 'February' },
-    { value: 3, label: 'March' },
-    { value: 4, label: 'April' },
-    { value: 5, label: 'May' },
-    { value: 6, label: 'June' },
-    { value: 7, label: 'July' },
-    { value: 8, label: 'August' },
-    { value: 9, label: 'September' },
-    { value: 10, label: 'October' },
-    { value: 11, label: 'November' },
-    { value: 12, label: 'December' },
-]
-
-interface MonthSelectorProps {
-    selectedMonth: number
-    onMonthChange: (month: number) => void
-}
-
-export function MonthSelector({
-    selectedMonth,
-    onMonthChange,
-}: MonthSelectorProps) {
-    return (
-        <div className="w-full sm:w-auto sm:min-w-[180px]">
-            <Select
-                onValueChange={(value) => onMonthChange(parseInt(value, 10))}
-                value={selectedMonth.toString()}
-            >
-                <SelectTrigger className="w-full h-11 bg-card">
-                    <div className="flex items-center gap-2">
-                        <CalendarIcon className="size-4 text-muted-foreground" />
-                        <SelectValue placeholder="Select month" />
-                    </div>
-                </SelectTrigger>
-                <SelectContent>
-                    {MONTHS.map((month) => (
-                        <SelectItem
-                            key={month.value}
-                            value={month.value.toString()}
-                        >
-                            {month.label}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
         </div>
     )
 }

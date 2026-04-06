@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react'
+
 import { UseFormReturn } from 'react-hook-form'
 
+import { cn } from '@/helpers'
 import { useHotkeys } from 'react-hotkeys-hook'
 
-import { PrinterFillIcon } from '@/components/icons'
+import { ChevronDownIcon, PrinterFillIcon } from '@/components/icons'
 import { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,21 +20,11 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Kbd } from '@/components/ui/kbd'
 import PasswordInput from '@/components/ui/password-input'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-// import {
-//     Select,
-//     SelectContent,
-//     SelectItem,
-//     SelectTrigger,
-//     SelectValue,
-// } from '@/components/ui/select'
-// import { Label } from '@/components/ui/label'
-// import { Switch } from '@/components/ui/switch'
-// import { TPaperSizeUnit } from '../../generated-report.types'
-// import { PAPER_SIZE_UNIT } from '../../generated-reports.constants'
 import { TWithReportConfigSchema } from '../../generated-report.validation'
 import {
     GenerateReportTemplatePickerModal,
@@ -41,178 +34,252 @@ import {
 type Props = {
     form: UseFormReturn<TWithReportConfigSchema>
     withTemplatePicker?: boolean
+    displayMode?: 'solo' | 'dropdown'
 } & Pick<GenerateReportTemplatePickerProps, 'registryKey' | 'templates'>
 
-export function PrintSettingsSection({ form, ...otherConfig }: Props) {
+export function PrintSettingsSection({
+    form,
+    displayMode = 'solo',
+    ...otherConfig
+}: Props) {
     const modalState = useModalState()
+    const [open, setOpen] = useState(displayMode === 'solo')
+
+    const { control, setValue, formState } = form
+
+    const hasError = !!formState.errors?.report_config
+
+    useEffect(() => {
+        if (displayMode === 'dropdown' && hasError) {
+            setOpen(true)
+        }
+    }, [displayMode, hasError])
 
     useHotkeys(
         'alt+enter',
         (e) => {
             e.preventDefault()
             e.stopPropagation()
+
+            if (displayMode === 'dropdown') {
+                setOpen(true)
+            }
+
             modalState.onOpenChange(true)
         },
         { enableOnFormTags: true }
     )
 
-    const { control, setValue } = form
+    const content = (
+        <div className="grid grid-cols-2 gap-4 mt-4">
+            <FormFieldWrapper
+                control={control}
+                description="Set document file name"
+                label="Generated File Name"
+                name="report_config.name"
+                render={({ field }) => (
+                    <Input
+                        {...field}
+                        autoComplete="off-name"
+                        placeholder="Enter file name"
+                    />
+                )}
+            />
 
-    return (
-        <div>
-            <p className="text-sm">Generate Option</p>
-            <p className="text-xs text-muted-foreground">
-                Adjust options to define size of the template
-            </p>
-            <div className="grid grid-cols-2 gap-4">
-                <FormFieldWrapper
-                    control={control}
-                    description="Set document file name"
-                    label="Generated File Name"
-                    name="report_config.name"
-                    render={({ field }) => (
-                        <Input
-                            {...field}
-                            autoComplete="off-name"
-                            placeholder="Enter file name"
-                        />
-                    )}
-                />
+            <FormFieldWrapper
+                control={control}
+                description="Set document password"
+                label="Password"
+                name="report_config.password"
+                render={({ field }) => (
+                    <PasswordInput
+                        {...field}
+                        autoComplete="new-password"
+                        placeholder="Enter password (optional)"
+                    />
+                )}
+            />
 
-                <FormFieldWrapper
-                    control={control}
-                    description="Set document password"
-                    label="Password"
-                    name="report_config.password"
-                    render={({ field }) => (
-                        <PasswordInput
-                            {...field}
-                            autoComplete="new-password"
-                            placeholder="Enter password (optional)"
-                        />
-                    )}
-                />
+            <FormFieldWrapper
+                control={control}
+                label="Width"
+                name="report_config.width"
+                render={({ field }) => (
+                    <Input {...field} placeholder="e.g., 210in" />
+                )}
+            />
 
-                <FormFieldWrapper
-                    control={control}
-                    label="Width"
-                    name="report_config.width"
-                    render={({ field }) => (
-                        <Input {...field} placeholder="e.g., 210in" />
-                    )}
-                />
+            <FormFieldWrapper
+                control={control}
+                label="Height"
+                name="report_config.height"
+                render={({ field }) => (
+                    <Input {...field} placeholder="e.g., 297in" />
+                )}
+            />
 
-                <FormFieldWrapper
-                    control={control}
-                    label="Height"
-                    name="report_config.height"
-                    render={({ field }) => (
-                        <Input {...field} placeholder="e.g., 297in" />
-                    )}
-                />
+            <FormFieldWrapper
+                control={form.control}
+                label="Orientation"
+                name="report_config.orientation"
+                render={({ field }) => (
+                    <RadioGroup
+                        className="flex gap-2"
+                        onValueChange={field.onChange}
+                        value={field.value}
+                    >
+                        {[
+                            {
+                                value: 'portrait',
+                                label: 'Portrait',
+                                size: { width: 14, height: 18 },
+                            },
+                            {
+                                value: 'landscape',
+                                label: 'Landscape',
+                                size: { width: 18, height: 14 },
+                            },
+                        ].map((opt) => {
+                            const isSelected = field.value === opt.value
 
-                {/* <FormFieldWrapper
-                    control={form.control}
-                    label="Landscape"
-                    name="landscape"
-                    render={({ field }) => (
-                        <div className="flex items-center space-x-2 mt-2">
-                            <Switch
-                                checked={field.value}
-                                id="landscape-mode"
-                                onCheckedChange={field.onChange}
-                            />
-                            <Label htmlFor="landscape-mode">
-                                Enable Landscape
-                            </Label>
-                        </div>
-                    )}
-                />
+                            return (
+                                <label
+                                    className={cn(
+                                        'flex-1 flex items-center justify-center gap-1.5 rounded-md border-2 py-1.5 px-2 cursor-pointer transition-all',
+                                        isSelected
+                                            ? 'border-primary bg-primary/5'
+                                            : 'border-border bg-card hover:border-muted-foreground/30'
+                                    )}
+                                    key={opt.value}
+                                >
+                                    <RadioGroupItem
+                                        className="sr-only"
+                                        value={opt.value}
+                                    />
+                                    <div
+                                        className={cn(
+                                            'rounded-[2px] border transition-all',
+                                            isSelected
+                                                ? 'border-primary bg-primary/20'
+                                                : 'border-border bg-muted'
+                                        )}
+                                        style={opt.size}
+                                    />
+                                    <span
+                                        className={cn(
+                                            'text-xs font-medium capitalize',
+                                            isSelected
+                                                ? 'text-primary'
+                                                : 'text-muted-foreground'
+                                        )}
+                                    >
+                                        {opt.label}
+                                    </span>
+                                </label>
+                            )
+                        })}
+                    </RadioGroup>
+                )}
+            />
 
-                <FormFieldWrapper
-                    control={form.control}
-                    label="Unit"
-                    name="unit"
-                    render={({ field }) => (
-                        <Select
-                            defaultValue={field.value}
-                            onValueChange={field.onChange}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Unit" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {(
-                                    Object.values(
-                                        PAPER_SIZE_UNIT
-                                    ) as TPaperSizeUnit[]
-                                ).map((unit) => (
-                                    <SelectItem key={unit} value={unit}>
-                                        {unit}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    )}
-                /> */}
-
-                <div className="col-span-2">
-                    <GenerateReportTemplatePickerModal
-                        {...modalState}
-                        templatePickerProps={{
-                            ...otherConfig,
-                            onSelect: async (template, dimension) => {
-                                setValue(
-                                    'report_config.template',
-                                    template.template,
-                                    {
-                                        shouldDirty: true,
-                                        shouldTouch: true,
-                                    }
-                                )
-                                setValue(
-                                    'report_config.width',
-                                    dimension.width,
-                                    {
-                                        shouldDirty: true,
-                                        shouldTouch: true,
-                                    }
-                                )
-                                setValue(
-                                    'report_config.height',
-                                    dimension.height,
-                                    {
-                                        shouldDirty: true,
-                                        shouldTouch: true,
-                                    }
-                                )
-                                setValue('report_config.unit', dimension.unit, {
+            <div className="col-span-2">
+                <GenerateReportTemplatePickerModal
+                    {...modalState}
+                    templatePickerProps={{
+                        ...otherConfig,
+                        onSelect: async (template, dimension) => {
+                            setValue(
+                                'report_config.template',
+                                template.template,
+                                {
                                     shouldDirty: true,
                                     shouldTouch: true,
-                                })
-                            },
-                        }}
-                        trigger={
-                            <Button
-                                className="col-span-2 w-full"
-                                size="sm"
-                                type="button"
-                                variant="secondary"
-                            >
-                                Template
-                                <span>
-                                    <Kbd className="mr-1">Alt</Kbd>
-                                    <Kbd>Enter</Kbd>
-                                </span>
-                            </Button>
-                        }
-                    />
+                                }
+                            )
+                            setValue('report_config.width', dimension.width, {
+                                shouldDirty: true,
+                                shouldTouch: true,
+                            })
+                            setValue('report_config.height', dimension.height, {
+                                shouldDirty: true,
+                                shouldTouch: true,
+                            })
+                            setValue('report_config.unit', dimension.unit, {
+                                shouldDirty: true,
+                                shouldTouch: true,
+                            })
+                        },
+                    }}
+                    trigger={
+                        <Button
+                            className="w-full"
+                            size="sm"
+                            type="button"
+                            variant="secondary"
+                        >
+                            Template
+                            <span>
+                                <Kbd className="mr-1">Alt</Kbd>
+                                <Kbd>Enter</Kbd>
+                            </span>
+                        </Button>
+                    }
+                />
 
-                    <p className="text-sm text-muted-foreground mt-2">
-                        For more standard measurement, we suggest using defined
-                        template
+                <p className="text-sm text-muted-foreground mt-2">
+                    For more standard measurement, we suggest using defined
+                    template
+                </p>
+            </div>
+        </div>
+    )
+
+    if (displayMode === 'solo') {
+        return (
+            <div>
+                <p className="text-sm">Generate Option</p>
+                <p className="text-xs text-muted-foreground">
+                    Adjust options to define size of the template
+                </p>
+                {content}
+            </div>
+        )
+    }
+
+    return (
+        <div className="rounded-xl overflow-hidden bg-popover border p-4">
+            <button
+                className={cn(
+                    'w-full text-left flex items-center justify-between',
+                    'group'
+                )}
+                onClick={() => setOpen((prev) => !prev)}
+                type="button"
+            >
+                <div>
+                    <p className="text-sm font-medium">Generate Option</p>
+                    <p className="text-xs text-muted-foreground">
+                        Adjust options to define size of the template
                     </p>
                 </div>
+
+                <ChevronDownIcon
+                    className={cn(
+                        'size-4 text-muted-foreground transition-transform duration-200',
+                        open && 'rotate-180'
+                    )}
+                />
+            </button>
+
+            <div
+                className={cn(
+                    'grid transition-all duration-200 ease-in-out',
+                    open
+                        ? 'grid-rows-[1fr] opacity-100 mt-4'
+                        : 'grid-rows-[0fr] opacity-0'
+                )}
+            >
+                <div className="overflow-hidden">{content}</div>
             </div>
         </div>
     )

@@ -35,7 +35,7 @@ export const currencyFormat = (
     value: number | string | undefined | null,
     options: ICurrencyFormatOptions = {}
 ): string => {
-    const { showSymbol = false, currency } = options
+    const { currency, showSymbol = !currency } = options
 
     // Handle null/undefined values
     if (value === null || value === undefined || value === '') {

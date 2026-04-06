@@ -9,7 +9,7 @@ import {
     hasPermissionFromAuth,
     useAuthStore,
 } from '@/modules/authentication/authgentication.store'
-import { TReportConfigSchema } from '@/modules/generated-report'
+import { TGeneratedReportSchema } from '@/modules/generated-report'
 import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import useConfirmModalStore from '@/store/confirm-modal-store'
@@ -50,7 +50,6 @@ import LoanApproveReleaseDisplayModal, {
 } from '../loan-approve-release-display-modal'
 import { ILoanTransactionTableActionComponentProp } from './columns'
 
-// ===== TYPE DEFINITIONS =====
 export type LoanTransactionActionType =
     | 'edit'
     | 'loan-edit'
@@ -668,7 +667,7 @@ export const LoanTransactionTableActionManager = () => {
                                 ),
                                 name: `loan_release_${toReadableDate(loanTransaction.created_at, 'MMddyy_mmss')}.pdf`,
                                 module: 'LoanTransaction',
-                            } as TReportConfigSchema,
+                            } as TGeneratedReportSchema,
                             check_date: loanTransaction.check_date,
                             check_number: loanTransaction.check_number,
                             voucher: loanTransaction.voucher,
@@ -697,7 +696,7 @@ export const LoanTransactionTableActionManager = () => {
                                 ),
                                 name: `loan_release_${toReadableDate(loanTransaction.created_at, 'MMddyy_mmss')}.pdf`,
                                 module: 'LoanTransaction',
-                            } as TReportConfigSchema,
+                            } as TGeneratedReportSchema,
                         },
                         loanTransactionId: loanTransaction.id,
                         onSuccess(data) {
@@ -726,7 +725,6 @@ export const LoanTransactionTableActionManager = () => {
                         loanTransactionId: loanTransaction.id,
                         defaultValues: loanTransaction,
                     }}
-                    // loanTransaction={loanTransaction}
                     onOpenChange={close}
                     open={state.isOpen}
                 />

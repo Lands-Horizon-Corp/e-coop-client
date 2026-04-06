@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
 import { useForm } from 'react-hook-form'
-import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -37,14 +36,12 @@ import {
     TPaperSizeUnit,
     TemplateOptions,
 } from '../../generated-report.types'
-import { GeneratedReportSchema } from '../../generated-report.validation'
+import { GeneratedReportSchema, TGeneratedReportSchema } from '../../generated-report.validation'
 import {
     PAPER_SIZE_UNIT,
     getPaperSize,
 } from '../../generated-reports.constants'
 import PaperSizeSelector, { TPaperSizeName } from './paper-size-selector'
-
-export type TGeneratedReportFormValues = z.infer<typeof GeneratedReportSchema>
 
 export interface IGeneratedReportFormProps
     extends
@@ -53,7 +50,7 @@ export interface IGeneratedReportFormProps
             Partial<IGeneratedReportRequest>,
             IGeneratedReport,
             Error,
-            TGeneratedReportFormValues
+            TGeneratedReportSchema
         > {
     reportId?: TEntityId
     onClose: () => void
@@ -69,7 +66,7 @@ const PrintReportForm = ({
     const [selectedTemplatePath, setSelectedTemplatePath] = useState<
         TemplateOptions | undefined
     >(templateOptions?.[0])
-    const form = useForm<TGeneratedReportFormValues>({
+    const form = useForm<TGeneratedReportSchema>({
         resolver: standardSchemaResolver(GeneratedReportSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
@@ -84,7 +81,7 @@ const PrintReportForm = ({
     })
 
     const { formRef, handleFocusError } =
-        useFormHelper<TGeneratedReportFormValues>({
+        useFormHelper<TGeneratedReportSchema>({
             form,
             ...formProps,
         })

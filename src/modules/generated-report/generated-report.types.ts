@@ -4,6 +4,7 @@ import { IGeneratedReportsDownloadUsers } from '../generated-reports-download-us
 import { IMedia } from '../media'
 import { IUser } from '../user'
 import { TPaperSizeName } from './components/forms/paper-size-selector'
+import { TGeneratedReportSchema } from './generated-report.validation'
 import {
     ACCOUNT_MODEL_NAMES,
     PAPER_SIZES,
@@ -69,22 +70,7 @@ export interface IGeneratedReport extends IBaseEntityMeta {
     landscape: boolean
 }
 
-export interface IGeneratedReportRequest {
-    name?: string
-    description?: string
-    filter_search?: string
-    url?: string
-    model: TModelName
-    generated_report_type: TGeneratedReportType
-
-    //optional settings
-    paper_size?: string
-    template?: string
-    width?: number
-    height?: number
-    unit?: TPaperSizeUnit
-    landscape?: boolean
-}
+export interface IGeneratedReportRequest extends TGeneratedReportSchema {}
 
 export interface IPFGeneratedReport extends IGeneratedReport {}
 export interface IExcelGeneratedReport extends IGeneratedReport {}

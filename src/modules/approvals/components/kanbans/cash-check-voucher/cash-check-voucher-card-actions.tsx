@@ -12,7 +12,7 @@ import CashCheckVoucherPrintFormModal from '@/modules/cash-check-voucher/compone
 import CashCheckVoucherOtherAction from '@/modules/cash-check-voucher/components/tables/cash-check-other-voucher'
 import { TCashCheckVoucherApproveReleaseDisplayMode } from '@/modules/cash-check-voucher/components/tables/row-action-context'
 import { CASH_CHECK_VOUCHER_PRINT_TEMPLATES } from '@/modules/cash-check-voucher/reports/cash-check-voucher-templates'
-import { TReportConfigSchema } from '@/modules/generated-report'
+import { TGeneratedReportSchema } from '@/modules/generated-report'
 // import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
 import { useGenerateReport } from '@/modules/generated-report/components/generate-report-hooks/use-report-generate'
 import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
@@ -164,7 +164,7 @@ export const CashCheckVoucherCardActions = ({
                             ),
                             name: `cash_check_voucher_${toReadableDate(cashCheckVoucher.created_at, 'MMddyy_mmss')}.pdf`,
                             module: 'CashCheckVoucher',
-                        } as TReportConfigSchema,
+                        } as TGeneratedReportSchema,
                     },
                     onSuccess: (data) => {
                         refetch()
