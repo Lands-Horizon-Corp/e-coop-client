@@ -1,4 +1,5 @@
 export type * from './api'
+export type * from './date'
 export type * from './common'
 export type * from './type-utils'
 export type * from './component-types'

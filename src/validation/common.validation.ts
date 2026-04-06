@@ -5,6 +5,7 @@ import {
     CIVIL_STATUS,
     GENERAL_STATUS,
     LETTERS_REGEX,
+    MONTHS,
     NUMBER_LETTER_REGEX,
     PASSWORD_MIN_LENGTH,
     SEX,
@@ -108,5 +109,16 @@ export const PercentageSchema = z.coerce
     .max(100, 'Max is 100 %')
 
 export const DaySchema = z.coerce.number('Must be a number').int().nonnegative()
+
+export const MonthSchema = z.union(
+    MONTHS.map((m) => z.literal(m.value)) as [
+        z.ZodLiteral<number>,
+        ...z.ZodLiteral<number>[],
+    ]
+)
+
+export const YearSchema = z.coerce
+    .number({ error: 'Invalid year' })
+    .min(1900, 'Year must be 1900 or later')
 
 export const SexSchema = z.enum(SEX, 'Please select a valid sex')
