@@ -1,14 +1,16 @@
 import { useCallback, useRef } from 'react'
 
+import { randomSyncGenerator } from '@/helpers/random-generator'
+
 export const useIdempotency = (namespace: string) => {
     const keyRef = useRef<string>('')
 
     if (!keyRef.current) {
-        keyRef.current = `${namespace}:${crypto.randomUUID()}`
+        keyRef.current = randomSyncGenerator(`${namespace}:`)
     }
 
     const resetKey = useCallback(() => {
-        keyRef.current = `${namespace}:${crypto.randomUUID()}`
+        keyRef.current = randomSyncGenerator(`${namespace}:`)
     }, [namespace])
 
     return {
