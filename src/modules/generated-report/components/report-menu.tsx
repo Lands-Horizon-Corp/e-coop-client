@@ -319,9 +319,9 @@ function ReportsMenu() {
     }, [flatReports])
 
     const filteredGroups = useMemo(() => {
-        if (!search.trim()) return reportGroups
-
-        const results = fuse.search(search).map((r) => r.item)
+        const results = search.trim()
+            ? fuse.search(search).map((r) => r.item)
+            : flatReports
 
         const grouped: Record<string, ReportGroup> = {}
 
@@ -342,7 +342,7 @@ function ReportsMenu() {
         })
 
         return Object.values(grouped)
-    }, [search, fuse])
+    }, [search, fuse, flatReports])
 
     // const totalReports = reportGroups.reduce(
     //     (sum, g) => sum + g.reports.length,
