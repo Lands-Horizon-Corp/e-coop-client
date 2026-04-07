@@ -855,6 +855,12 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
             'Delete',
         ] as TPermissionAction[],
     },
+    {
+        resource: 'Report',
+        label: 'Report',
+        description: 'Allow actions for report',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
 ] as const satisfies PermissionResourceAction[]
 
 export const PERMISSION_BASE_RESOURCE = PERMISSION_ALL_RESOURCE_ACTION.map(

@@ -36,7 +36,10 @@ import {
     TPaperSizeUnit,
     TemplateOptions,
 } from '../../generated-report.types'
-import { GeneratedReportSchema, TGeneratedReportSchema } from '../../generated-report.validation'
+import {
+    GeneratedReportSchema,
+    TGeneratedReportSchema,
+} from '../../generated-report.validation'
 import {
     PAPER_SIZE_UNIT,
     getPaperSize,
@@ -80,11 +83,12 @@ const PrintReportForm = ({
         },
     })
 
-    const { formRef, handleFocusError } =
-        useFormHelper<TGeneratedReportSchema>({
+    const { formRef, handleFocusError } = useFormHelper<TGeneratedReportSchema>(
+        {
             form,
             ...formProps,
-        })
+        }
+    )
 
     const { setConfig } = useGeneratedReportConfigStore()
 

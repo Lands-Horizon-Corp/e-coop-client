@@ -1,16 +1,9 @@
-import { AccountHistoryReportCreateFormModal } from '@/modules/account/components/forms/account-history-create-report-form'
-import { GLBooksReportCreateFormModal } from '@/modules/general-ledger/components/forms/gl-books-create-report-form'
-import { BalanceSheetReportCreateFormModal } from '@/modules/generated-report/components/forms/balance-sheet-create-report-form'
-import { CashFlowReportCreateFormModal } from '@/modules/generated-report/components/forms/cash-flow-create-report-form'
-import { FinancialStatementConditionReportCreateFormModal } from '@/modules/generated-report/components/forms/financial-statement-condition-create-report-form'
-import { IncomeStatementReportCreateFormModal } from '@/modules/generated-report/components/forms/income-statement-create-report-form'
+import { TrialBalanceReportCreateFormModal } from '@/modules/general-ledger-definition/components/forms/trial-balance-create-report-form'
+import { AdjustmentReportCreateFormModal } from '@/modules/generated-report/components/forms/adjustment-create-report-form'
+import { CloseAccountReportCreateFormModal } from '@/modules/generated-report/components/forms/close-account-create-report-form'
+import { DailyCashCollectionReceiptJournalReportCreateFormModal } from '@/modules/generated-report/components/forms/daily-cash-receipt-create-report-form'
+import { JournalVoucherReportCreateFormModal } from '@/modules/generated-report/components/forms/journal-voucher-create-report-form'
 import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
-import { SLGLComparisonReportCreateFormModal } from '@/modules/generated-report/components/forms/sl-gl-comparison-create-report-form'
-import { SLTRXGLComparisonReportCreateFormModal } from '@/modules/generated-report/components/forms/sl-trx-gl-comparison-create-report-form'
-import { StatementOfOperationsReportCreateFormModal } from '@/modules/generated-report/components/forms/statements-of-operation-create-report-form'
-import { TrialBalanceReportCreateFormModal } from '@/modules/generated-report/components/forms/trial-balance-create-report-form'
-import { GenerateReportTemplatePicker } from '@/modules/generated-report/components/generated-report-template/generated-report-template'
-import { LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES } from '@/modules/loan-transaction/reports/loan-transaction-templates'
 
 import AuthGuard from '@/components/wrappers/auth-guard'
 import UserOrgGuard from '@/components/wrappers/user-org-guard'
@@ -24,11 +17,23 @@ function PlaygroundPage() {
         <AuthGuard>
             <UserOrgGuard>
                 <div className="min-h-screen bg-background p-8 font-sans text-foreground transition-colors duration-300">
+                    <TrialBalanceReportCreateFormModal
+                        trigger={<p>HITLER B</p>}
+                    />
                     <Broadcaster />
                     <PDFUploader />
                     <GeneratedReports />
-                    <GenerateReportTemplatePicker
-                        templates={LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES}
+                    <DailyCashCollectionReceiptJournalReportCreateFormModal
+                        trigger={<p>HITLER A</p>}
+                    />
+                    <AdjustmentReportCreateFormModal
+                        trigger={<p>HITLER B</p>}
+                    />
+                    <JournalVoucherReportCreateFormModal
+                        trigger={<p>HITLER C</p>}
+                    />
+                    <CloseAccountReportCreateFormModal
+                        trigger={<p>HITLER D</p>}
                     />
                     {/* 
                     <GenerateReportTemplatePicker
@@ -43,7 +48,7 @@ function PlaygroundPage() {
                         templates={JOURNAL_VOUCHER_PRINT_TEMPLATES}
                     /> */}
                     <PrintReportFormModal />
-                    <GLBooksReportCreateFormModal trigger={<p>HITLER A</p>} />
+                    {/* <GLBooksReportCreateFormModal trigger={<p>HITLER A</p>} />
                     <TrialBalanceReportCreateFormModal
                         trigger={<p>HITLER B</p>}
                     />
@@ -75,7 +80,7 @@ function PlaygroundPage() {
 
                     <SLTRXGLComparisonReportCreateFormModal
                         trigger={<p>HITLER J</p>}
-                    />
+                    /> */}
                 </div>
             </UserOrgGuard>
         </AuthGuard>

@@ -1,8 +1,9 @@
-import { FieldValues, Form, UseFormReturn, useForm } from 'react-hook-form'
+import { Form, UseFormReturn, useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
+import { cn } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 
@@ -19,9 +20,8 @@ import {
     WithGeneratedReportSchema,
 } from '../../generated-report.validation'
 import { PrintSettingsSection } from './print-config-section'
-import { cn } from '@/helpers'
 
-type ReportFormBaseProps<TSchema extends z.ZodType<FieldValues>> = IClassProps &
+type ReportFormBaseProps<TSchema extends z.ZodObject<any, any>> = IClassProps &
     IForm<
         Partial<z.infer<TSchema>>,
         IGeneratedReport,
@@ -29,7 +29,6 @@ type ReportFormBaseProps<TSchema extends z.ZodType<FieldValues>> = IClassProps &
         z.infer<TSchema>
     > & {
         schema: TSchema
-
         render: (params: {
             form: UseFormReturn<z.infer<TSchema>>
             isDisabled: (name: keyof z.infer<TSchema>) => boolean
@@ -37,7 +36,7 @@ type ReportFormBaseProps<TSchema extends z.ZodType<FieldValues>> = IClassProps &
         }) => React.ReactNode
     }
 
-export function ReportFormBase<TSchema extends z.ZodType<FieldValues>>({
+export function ReportFormBase<TSchema extends z.ZodObject<any, any>>({
     schema,
     defaultValues,
     readOnly,
@@ -46,21 +45,21 @@ export function ReportFormBase<TSchema extends z.ZodType<FieldValues>>({
     onError,
     render,
 }: ReportFormBaseProps<TSchema>) {
-    const finalSchema = schema.and(WithGeneratedReportSchema)
+    const finalSchema = schema.merge(WithGeneratedReportSchema)
 
     type TForm = z.infer<typeof finalSchema>
 
-    const form = useForm<TForm>({
+    const form = useForm<TForm, any, TForm>({
         resolver: standardSchemaResolver(finalSchema),
         mode: 'onSubmit',
         defaultValues: {
             ...defaultValues,
             report_config: {
-                module: 'FinancialStatementDefinition',
-                name: `report_${toReadableDate(new Date(), 'MMddyy_mmss')}.pdf`,
+                // @ts-expect-error TS type mismatch due to RHF + Zod merge
                 ...defaultValues?.report_config,
+                name: `report_${toReadableDate(new Date(), 'MMddyy_mmss')}.pdf`,
             },
-        },
+        } as Partial<TForm>,
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -74,6 +73,7 @@ export function ReportFormBase<TSchema extends z.ZodType<FieldValues>>({
 
     const onSubmit = form.handleSubmit(({ report_config, ...filters }) => {
         generateMutation.mutate({
+            // @ts-expect-error TS type mismatch due to RHF + Zod merge
             ...report_config,
             generated_report_type: 'pdf',
             filters,
@@ -96,6 +96,7 @@ export function ReportFormBase<TSchema extends z.ZodType<FieldValues>>({
                     disabled={generateMutation.isPending || readOnly}
                 >
                     {render({
+                        // @ts-expect-error TS type mismatch due to RHF + Zod merge
                         form,
                         generateMutation,
                     })}
