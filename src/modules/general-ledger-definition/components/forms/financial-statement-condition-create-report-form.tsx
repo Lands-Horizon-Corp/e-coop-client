@@ -7,8 +7,6 @@ import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import {
     IGeneratedReport,
-    StatementOfOperationsReportSchema,
-    TStatementOfOperationsReportSchema,
     TWithReportConfigSchema,
     useCreateGeneratedReport,
 } from '@/modules/generated-report'
@@ -25,42 +23,48 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useInternalState } from '@/hooks/use-internal-state'
 
 import { IClassProps, IForm } from '@/types'
 
-import { getTemplateAt } from '../../generated-report-template-registry'
+import {
+    FinancialStatementConditionReportSchema,
+    TFinancialStatementConditionReportSchema,
+} from '../../general-ledger-definition.validation'
 
-export interface IStatementOfOperationsReportFormProps
+export interface IFinancialStatementConditionReportFormProps
     extends
         IClassProps,
         IForm<
-            Partial<TStatementOfOperationsReportSchema>,
+            Partial<TFinancialStatementConditionReportSchema>,
             IGeneratedReport,
             Error,
-            TStatementOfOperationsReportSchema
+            TFinancialStatementConditionReportSchema
         > {}
 
-export const StatementOfOperationsReportCreateForm = ({
+export const FinancialStatementConditionReportCreateForm = ({
     className,
     defaultValues,
     readOnly,
     onSuccess,
     onError,
-}: IStatementOfOperationsReportFormProps) => {
-    const form = useForm<TStatementOfOperationsReportSchema>({
-        resolver: standardSchemaResolver(StatementOfOperationsReportSchema),
+}: IFinancialStatementConditionReportFormProps) => {
+    const form = useForm<TFinancialStatementConditionReportSchema>({
+        resolver: standardSchemaResolver(
+            FinancialStatementConditionReportSchema
+        ),
         mode: 'onSubmit',
         defaultValues: {
+            ...defaultValues,
             month: new Date().getMonth(),
             year: new Date().getFullYear(),
             report_type: 'standard',
             as_of_previous_year: false,
-            ...defaultValues,
+            par_calculation_method: 'by_amortization_loan_balance',
+            fall_to_current_if_1_30_days: false,
             report_config: {
-                // TODO: Report Template - Jervx
-                ...getTemplateAt(undefined, 0),
                 module: 'FinancialStatementDefinition',
-                name: `statement_of_operations_report_${toReadableDate(
+                name: `portfolio_at_risk_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'
                 )}.pdf`,
@@ -74,7 +78,7 @@ export const StatementOfOperationsReportCreateForm = ({
     })
 
     const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TStatementOfOperationsReportSchema>({
+        useFormHelper<TFinancialStatementConditionReportSchema>({
             form,
             readOnly,
         })
@@ -219,6 +223,46 @@ export const StatementOfOperationsReportCreateForm = ({
                         }}
                     />
 
+                    <FormFieldWrapper
+                        control={form.control}
+                        label="PAR Calculation Method *"
+                        name="par_calculation_method"
+                        render={({ field }) => (
+                            <RadioGroup
+                                className="grid grid-cols-1 p-4 rounded-xl bg-muted/60 border border-border/60 gap-2"
+                                onValueChange={field.onChange}
+                                value={field.value}
+                            >
+                                {[
+                                    {
+                                        value: 'by_amortization_loan_balance',
+                                        label: 'By Amortization Loan Balance',
+                                    },
+                                    {
+                                        value: 'by_amortization_arrears',
+                                        label: 'By Amortization Arrears',
+                                    },
+                                    {
+                                        value: 'by_amortization_arrears_distributed',
+                                        label: 'By Amortization Arrears Distributed',
+                                    },
+                                    {
+                                        value: 'by_maturity',
+                                        label: 'By Maturity',
+                                    },
+                                ].map((opt) => (
+                                    <label
+                                        className="flex items-center gap-2"
+                                        key={opt.value}
+                                    >
+                                        <RadioGroupItem value={opt.value} />
+                                        {opt.label}
+                                    </label>
+                                ))}
+                            </RadioGroup>
+                        )}
+                    />
+
                     <Separator />
 
                     <PrintSettingsSection
@@ -247,27 +291,35 @@ export const StatementOfOperationsReportCreateForm = ({
     )
 }
 
-export const StatementOfOperationsReportCreateFormModal = ({
-    title = 'Create Statement of Operations Report',
-    description = 'Define filters and configuration for statement of operations',
+export const FinancialStatementConditionReportCreateFormModal = ({
+    title = 'Create Portfolio At Risk Report',
+    description = 'Define filters and configuration for portfolio at risk',
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: IStatementOfOperationsReportFormProps
+    formProps?: IFinancialStatementConditionReportFormProps
 }) => {
+    const [open, onOpenChange] = useInternalState(
+        false,
+        props.open,
+        props.onOpenChange
+    )
+
     return (
         <Modal
             className={cn('sm:max-w-xl', className)}
             description={description}
             title={title}
             {...props}
+            onOpenChange={onOpenChange}
+            open={open}
         >
-            <StatementOfOperationsReportCreateForm
+            <FinancialStatementConditionReportCreateForm
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    props.onOpenChange?.(false)
+                    onOpenChange(false)
                 }}
             />
         </Modal>

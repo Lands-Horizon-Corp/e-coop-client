@@ -24,6 +24,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useInternalState } from '@/hooks/use-internal-state'
 
 import { IClassProps, IForm } from '@/types'
 
@@ -214,18 +215,26 @@ export const TrialBalanceReportCreateFormModal = ({
 }: IModalProps & {
     formProps?: Omit<ITrialBalanceReportFormProps, 'className' | 'onClose'>
 }) => {
+    const [open, onOpenChange] = useInternalState(
+        false,
+        props.open,
+        props.onOpenChange
+    )
+
     return (
         <Modal
             className={cn('sm:max-w-xl', className)}
             description={description}
             title={title}
             {...props}
+            onOpenChange={onOpenChange}
+            open={open}
         >
             <TrialBalanceReportCreateForm
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    props.onOpenChange?.(false)
+                    onOpenChange(false)
                 }}
             />
         </Modal>

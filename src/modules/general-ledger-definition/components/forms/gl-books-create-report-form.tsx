@@ -2,7 +2,7 @@ import { UseFormReturn, useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { toReadableDate } from '@/helpers/date-utils'
+import { toInputDateString, toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import {
@@ -15,55 +15,59 @@ import { getTemplateAt } from '@/modules/generated-report/generated-report-templ
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import InputDate from '@/components/ui/input-date'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useInternalState } from '@/hooks/use-internal-state'
 
 import { IClassProps, IForm } from '@/types'
 
+import { GL_BOOKS } from '../../../general-ledger/general-ledger.constants'
 import {
-    AccountLedgerReport,
-    TAccountLedgerReportSchema,
-} from '../../account.validation'
-import { AccountMultiPickerModal } from '../picker/account-multi-picker'
+    GLBooksReport,
+    TGLBooksReportSchema,
+} from '../../../general-ledger/general-ledger.validation'
 
-export interface IAccountLedgerReportFormProps
+export interface IGLBooksReportFormProps
     extends
         IClassProps,
         IForm<
-            Partial<TAccountLedgerReportSchema>,
+            Partial<TGLBooksReportSchema>,
             IGeneratedReport,
             Error,
-            TAccountLedgerReportSchema
+            TGLBooksReportSchema
         > {}
 
-const AccountLedgerReportCreateForm = ({
+const GLBooksReportCreateForm = ({
     className,
     ...formProps
-}: IAccountLedgerReportFormProps) => {
-    const form = useForm<TAccountLedgerReportSchema>({
-        resolver: standardSchemaResolver(AccountLedgerReport),
+}: IGLBooksReportFormProps) => {
+    const form = useForm<TGLBooksReportSchema>({
+        resolver: standardSchemaResolver(GLBooksReport),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            account_ids: [],
             start_date: undefined,
-            end_date: undefined,
+            end_date: toInputDateString(new Date()),
+            book: undefined,
             report_type: 'detailed',
-            is_account_per_page: false,
             ...formProps.defaultValues,
             report_config: {
-                // TODO: Jervx - add real template array list pick
                 ...getTemplateAt(undefined, 0),
                 ...formProps.defaultValues?.report_config,
-                module: 'Account',
-                name: `account_ledger_report_${toReadableDate(new Date(), 'MMddyy_mmss')}.pdf`,
+                module: 'GeneralLedger',
+                name: `gl_books_report_${toReadableDate(new Date(), 'MMddyy_mmss')}.pdf`,
             },
         },
     })
@@ -76,7 +80,7 @@ const AccountLedgerReportCreateForm = ({
     })
 
     const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TAccountLedgerReportSchema>({
+        useFormHelper<TGLBooksReportSchema>({
             form,
             ...formProps,
         })
@@ -103,46 +107,6 @@ const AccountLedgerReportCreateForm = ({
                     className="grid gap-y-4"
                     disabled={isPending || formProps.readOnly}
                 >
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Accounts *"
-                        name="account_ids"
-                        render={({ field }) => (
-                            <div className="flex flex-col gap-y-2">
-                                <AccountMultiPickerModal
-                                    pickerProps={{
-                                        defaultSelected:
-                                            form.getValues('accounts'),
-                                        onConfirm: (accounts) => {
-                                            field.onChange(
-                                                accounts.map(
-                                                    (account) => account.id
-                                                )
-                                            )
-                                            form.setValue('accounts', accounts)
-                                        },
-                                    }}
-                                    trigger={
-                                        <Button
-                                            disabled={isDisabled(field.name)}
-                                            type="button"
-                                            variant="outline"
-                                        >
-                                            {field.value.length === 0
-                                                ? 'Select account'
-                                                : `${field.value.length} Accounts Selected`}
-                                        </Button>
-                                    }
-                                />
-                                {field.value?.length > 0 && (
-                                    <span className="text-sm text-muted-foreground">
-                                        {field.value.length} account(s) selected
-                                    </span>
-                                )}
-                            </div>
-                        )}
-                    />
-
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <FormFieldWrapper
                             control={form.control}
@@ -171,6 +135,34 @@ const AccountLedgerReportCreateForm = ({
 
                     <FormFieldWrapper
                         control={form.control}
+                        label="Book *"
+                        name="book"
+                        render={({ field }) => (
+                            <Select
+                                onValueChange={field.onChange}
+                                value={field.value}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select book" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {Object.entries(GL_BOOKS).map(
+                                        ([value, label]) => (
+                                            <SelectItem
+                                                key={value}
+                                                value={value}
+                                            >
+                                                {label}
+                                            </SelectItem>
+                                        )
+                                    )}
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
+
+                    <FormFieldWrapper
+                        control={form.control}
                         label="Report Type"
                         name="report_type"
                         render={({ field }) => (
@@ -183,19 +175,20 @@ const AccountLedgerReportCreateForm = ({
                                     {
                                         value: 'detailed',
                                         label: 'Detailed',
-                                        desc: 'Provides a full breakdown of each item. Ideal for audits or in-depth review.',
+                                        desc: 'Full breakdown of transactions',
                                     },
                                     {
                                         value: 'summary',
                                         label: 'Summary',
-                                        desc: 'Gives a overview, perfect for management and quick decision-making.',
+                                        desc: 'Condensed overview',
                                     },
                                 ].map((opt) => {
                                     const isSelected = field.value === opt.value
+
                                     return (
                                         <label
                                             className={cn(
-                                                'relative flex flex-col gap-1 rounded-lg border p-3 cursor-pointer transition-all',
+                                                'relative flex flex-col gap-1 rounded-lg border p-3 cursor-pointer',
                                                 'hover:bg-accent/50',
                                                 isSelected
                                                     ? 'bg-gradient-to-br from-popover to-primary/20 border-primary shadow-md ring-1 ring-primary/20'
@@ -206,7 +199,7 @@ const AccountLedgerReportCreateForm = ({
                                             <div className="flex items-center justify-between">
                                                 <p
                                                     className={cn(
-                                                        'text-sm font-medium transition-colors',
+                                                        'text-sm font-medium',
                                                         isSelected
                                                             ? 'text-primary'
                                                             : 'text-foreground'
@@ -215,7 +208,6 @@ const AccountLedgerReportCreateForm = ({
                                                     {opt.label}
                                                 </p>
                                                 <RadioGroupItem
-                                                    className="mt-0.5"
                                                     value={opt.value}
                                                 />
                                             </div>
@@ -229,54 +221,6 @@ const AccountLedgerReportCreateForm = ({
                         )}
                     />
 
-                    <FormFieldWrapper
-                        control={form.control}
-                        name="is_account_per_page"
-                        render={({ field }) => (
-                            <fieldset>
-                                <label
-                                    className={cn(
-                                        'group flex items-start gap-3 rounded-xl border p-4 cursor-pointer',
-                                        'transition-all duration-700 ease-out',
-                                        'bg-popover border-border',
-                                        'hover:border-primary/40 hover:shadow-sm',
-                                        field.value &&
-                                            'bg-gradient-to-br from-popover to-primary/20 border-primary shadow-md'
-                                    )}
-                                >
-                                    <Checkbox
-                                        checked={field.value}
-                                        className={cn(
-                                            'mt-1 transition-all',
-                                            field.value && 'border-primary'
-                                        )}
-                                        onCheckedChange={(val) =>
-                                            field.onChange(!!val)
-                                        }
-                                    />
-
-                                    <div className="flex flex-col">
-                                        <span
-                                            className={cn(
-                                                'text-sm font-medium transition-colors',
-                                                field.value
-                                                    ? 'text-primary'
-                                                    : 'text-foreground'
-                                            )}
-                                        >
-                                            Print account per page
-                                        </span>
-
-                                        <span className="text-xs text-muted-foreground">
-                                            Each account will be printed on a
-                                            separate page for better
-                                            readability.
-                                        </span>
-                                    </div>
-                                </label>
-                            </fieldset>
-                        )}
-                    />
                     <Separator />
                     <PrintSettingsSection
                         displayMode="dropdown"
@@ -302,29 +246,37 @@ const AccountLedgerReportCreateForm = ({
     )
 }
 
-export default AccountLedgerReportCreateForm
+export default GLBooksReportCreateForm
 
-export const AccountLedgerReportCreateFormModal = ({
-    title = 'Create Account Ledger Report',
-    description = 'Define Filters and Report configuration for account ledger',
+export const GLBooksReportCreateFormModal = ({
+    title = 'Create GL Books Report',
+    description = 'Define filters and configuration for GL Books report',
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<IAccountLedgerReportFormProps, 'className' | 'onClose'>
+    formProps?: Omit<IGLBooksReportFormProps, 'className' | 'onClose'>
 }) => {
+    const [open, onOpenChange] = useInternalState(
+        false,
+        props.open,
+        props.onOpenChange
+    )
+
     return (
         <Modal
             className={cn('sm:max-w-xl', className)}
             description={description}
             title={title}
             {...props}
+            onOpenChange={onOpenChange}
+            open={open}
         >
-            <AccountLedgerReportCreateForm
+            <GLBooksReportCreateForm
                 {...formProps}
-                onSuccess={(createdData) => {
-                    formProps?.onSuccess?.(createdData)
-                    props.onOpenChange?.(false)
+                onSuccess={(data) => {
+                    formProps?.onSuccess?.(data)
+                    onOpenChange(false)
                 }}
             />
         </Modal>

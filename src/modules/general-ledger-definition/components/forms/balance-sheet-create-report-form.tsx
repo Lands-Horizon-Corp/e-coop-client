@@ -7,12 +7,11 @@ import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import {
-    BalanceSheetReportSchema,
     IGeneratedReport,
-    TBalanceSheetReportSchema,
     TWithReportConfigSchema,
     useCreateGeneratedReport,
 } from '@/modules/generated-report'
+import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -25,10 +24,14 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useInternalState } from '@/hooks/use-internal-state'
 
 import { IClassProps, IForm } from '@/types'
 
-import { PrintSettingsSection } from './print-config-section'
+import {
+    BalanceSheetReportSchema,
+    TBalanceSheetReportSchema,
+} from '../../general-ledger-definition.validation'
 
 export interface IBalanceSheetReportFormProps
     extends
@@ -305,18 +308,26 @@ export const BalanceSheetReportCreateFormModal = ({
     formProps,
     ...props
 }: IModalProps & { formProps?: IBalanceSheetReportFormProps }) => {
+    const [open, onOpenChange] = useInternalState(
+        false,
+        props.open,
+        props.onOpenChange
+    )
+
     return (
         <Modal
             className={cn('sm:max-w-xl', className)}
             description={description}
             title={title}
             {...props}
+            onOpenChange={onOpenChange}
+            open={open}
         >
             <BalanceSheetReportCreateForm
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    props.onOpenChange?.(false)
+                    onOpenChange(false)
                 }}
             />
         </Modal>

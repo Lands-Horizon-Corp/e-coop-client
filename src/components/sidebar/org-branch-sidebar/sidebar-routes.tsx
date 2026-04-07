@@ -14,6 +14,7 @@ import {
     BriefCaseIcon,
     CalendarDotsIcon,
     CashClockIcon,
+    ChartBarIcon,
     ChecksGridIcon,
     CurlyBracketIcon,
     DashboardIcon,
@@ -483,6 +484,16 @@ export const generateSidebarGroups = (
                     canAccess: hasPermissionFromAuth({
                         action: 'Read',
                         resourceType: 'GenerateMutualFundAid',
+                    }),
+                },
+                {
+                    type: 'item',
+                    icon: ChartBarIcon,
+                    title: 'Reports',
+                    url: `${baseUrl}/system/report`,
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Report',
                     }),
                 },
             ],

@@ -7,8 +7,6 @@ import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import {
     IGeneratedReport,
-    SLGLComparisonReportSchema,
-    TSLGLComparisonReportSchema,
     TWithReportConfigSchema,
     useCreateGeneratedReport,
 } from '@/modules/generated-report'
@@ -22,11 +20,16 @@ import InputDate from '@/components/ui/input-date'
 import { Separator } from '@/components/ui/separator'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useInternalState } from '@/hooks/use-internal-state'
 
 import { IClassProps, IForm } from '@/types'
 
-import { getTemplateAt } from '../../generated-report-template-registry'
-import { PrintSettingsSection } from './print-config-section'
+import { PrintSettingsSection } from '../../../generated-report/components/forms/print-config-section'
+import { getTemplateAt } from '../../../generated-report/generated-report-template-registry'
+import {
+    SLGLComparisonReportSchema,
+    TSLGLComparisonReportSchema,
+} from '../../general-ledger-definition.validation'
 
 export interface ISLGLComparisonReportFormProps
     extends
@@ -185,18 +188,26 @@ export const SLGLComparisonReportCreateFormModal = ({
     formProps,
     ...props
 }: IModalProps & { formProps?: ISLGLComparisonReportFormProps }) => {
+    const [open, onOpenChange] = useInternalState(
+        false,
+        props.open,
+        props.onOpenChange
+    )
+
     return (
         <Modal
             className={cn('sm:max-w-xl', className)}
             description={description}
             title={title}
             {...props}
+            onOpenChange={onOpenChange}
+            open={open}
         >
             <SLGLComparisonReportCreateForm
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    props.onOpenChange?.(false)
+                    onOpenChange(false)
                 }}
             />
         </Modal>

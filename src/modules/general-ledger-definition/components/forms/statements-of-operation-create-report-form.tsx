@@ -7,60 +7,66 @@ import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import {
     IGeneratedReport,
-    IncomeStatementReportSchema,
-    TIncomeStatementReportSchema,
     TWithReportConfigSchema,
     useCreateGeneratedReport,
 } from '@/modules/generated-report'
+import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { MonthSelector } from '@/components/selects/month-select'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Form, FormLabel } from '@/components/ui/form'
+import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useInternalState } from '@/hooks/use-internal-state'
 
 import { IClassProps, IForm } from '@/types'
 
-import { getTemplateAt } from '../../generated-report-template-registry'
-import { PrintSettingsSection } from './print-config-section'
+import { getTemplateAt } from '../../../generated-report/generated-report-template-registry'
+import {
+    StatementOfOperationsReportSchema,
+    TStatementOfOperationsReportSchema,
+} from '../../general-ledger-definition.validation'
 
-export interface IIncomeStatementReportFormProps
+export interface IStatementOfOperationsReportFormProps
     extends
         IClassProps,
         IForm<
-            Partial<TIncomeStatementReportSchema>,
+            Partial<TStatementOfOperationsReportSchema>,
             IGeneratedReport,
             Error,
-            TIncomeStatementReportSchema
+            TStatementOfOperationsReportSchema
         > {}
 
-export const IncomeStatementReportCreateForm = ({
+export const StatementOfOperationsReportCreateForm = ({
     className,
     defaultValues,
     readOnly,
     onSuccess,
     onError,
-}: IIncomeStatementReportFormProps) => {
-    const form = useForm<TIncomeStatementReportSchema>({
-        resolver: standardSchemaResolver(IncomeStatementReportSchema),
+}: IStatementOfOperationsReportFormProps) => {
+    const form = useForm<TStatementOfOperationsReportSchema>({
+        resolver: standardSchemaResolver(StatementOfOperationsReportSchema),
         mode: 'onSubmit',
         defaultValues: {
             month: new Date().getMonth(),
             year: new Date().getFullYear(),
             report_type: 'standard',
-            include_previous_year: false,
+            as_of_previous_year: false,
             ...defaultValues,
             report_config: {
                 // TODO: Report Template - Jervx
                 ...getTemplateAt(undefined, 0),
                 module: 'FinancialStatementDefinition',
-                name: `income_statement_report_${toReadableDate(new Date(), 'MMddyy_mmss')}.pdf`,
+                name: `statement_of_operations_report_${toReadableDate(
+                    new Date(),
+                    'MMddyy_mmss'
+                )}.pdf`,
                 ...defaultValues?.report_config,
             },
         },
@@ -71,7 +77,10 @@ export const IncomeStatementReportCreateForm = ({
     })
 
     const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TIncomeStatementReportSchema>({ form, readOnly })
+        useFormHelper<TStatementOfOperationsReportSchema>({
+            form,
+            readOnly,
+        })
 
     const onSubmit = form.handleSubmit(({ report_config, ...filters }) => {
         generateMutation.mutate({
@@ -91,7 +100,7 @@ export const IncomeStatementReportCreateForm = ({
                 ref={formRef}
             >
                 <fieldset
-                    className="space-y-2"
+                    className="space-y-4"
                     disabled={generateMutation.isPending || readOnly}
                 >
                     <div className="flex gap-x-2">
@@ -106,6 +115,7 @@ export const IncomeStatementReportCreateForm = ({
                                 />
                             )}
                         />
+
                         <FormFieldWrapper
                             control={form.control}
                             label="Year *"
@@ -140,10 +150,6 @@ export const IncomeStatementReportCreateForm = ({
                                         label: 'Comparative Yearly',
                                     },
                                     {
-                                        value: 'closed_book',
-                                        label: 'Closed Book',
-                                    },
-                                    {
                                         value: 'budget_forecasted',
                                         label: 'Budget Forecasted',
                                     },
@@ -159,15 +165,10 @@ export const IncomeStatementReportCreateForm = ({
                             </RadioGroup>
                         )}
                     />
-                    <FormLabel
-                        className="text-muted-foreground text-xs"
-                        tabIndex={-1}
-                    >
-                        Other Options
-                    </FormLabel>
+
                     <FormFieldWrapper
                         control={form.control}
-                        name="include_previous_year"
+                        name="as_of_previous_year"
                         render={({ field }) => {
                             const isActive =
                                 form.watch('report_type') ===
@@ -207,11 +208,12 @@ export const IncomeStatementReportCreateForm = ({
                                                         : 'text-foreground'
                                                 )}
                                             >
-                                                Include Previous Year
+                                                As of Previous Year
                                             </span>
                                             <span className="text-xs text-muted-foreground">
-                                                Include previous year's data in
-                                                the report for comparison.
+                                                Use previous year's snapshot for
+                                                comparison in comparative yearly
+                                                report.
                                             </span>
                                         </div>
                                     </label>
@@ -248,25 +250,35 @@ export const IncomeStatementReportCreateForm = ({
     )
 }
 
-export const IncomeStatementReportCreateFormModal = ({
-    title = 'Create Income Statement Report',
-    description = 'Define Filters and Report configuration for income statement',
+export const StatementOfOperationsReportCreateFormModal = ({
+    title = 'Create Statement of Operations Report',
+    description = 'Define filters and configuration for statement of operations',
     className,
     formProps,
     ...props
-}: IModalProps & { formProps?: IIncomeStatementReportFormProps }) => {
+}: IModalProps & {
+    formProps?: IStatementOfOperationsReportFormProps
+}) => {
+    const [open, onOpenChange] = useInternalState(
+        false,
+        props.open,
+        props.onOpenChange
+    )
+
     return (
         <Modal
             className={cn('sm:max-w-xl', className)}
             description={description}
             title={title}
             {...props}
+            onOpenChange={onOpenChange}
+            open={open}
         >
-            <IncomeStatementReportCreateForm
+            <StatementOfOperationsReportCreateForm
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    props.onOpenChange?.(false)
+                    onOpenChange(false)
                 }}
             />
         </Modal>

@@ -6,64 +6,64 @@ import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import {
-    FinancialStatementConditionReportSchema,
     IGeneratedReport,
-    TFinancialStatementConditionReportSchema,
     TWithReportConfigSchema,
     useCreateGeneratedReport,
 } from '@/modules/generated-report'
-import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { MonthSelector } from '@/components/selects/month-select'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Form } from '@/components/ui/form'
+import { Form, FormLabel } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useInternalState } from '@/hooks/use-internal-state'
 
 import { IClassProps, IForm } from '@/types'
 
-export interface IFinancialStatementConditionReportFormProps
+import { PrintSettingsSection } from '../../../generated-report/components/forms/print-config-section'
+import { getTemplateAt } from '../../../generated-report/generated-report-template-registry'
+import {
+    IncomeStatementReportSchema,
+    TIncomeStatementReportSchema,
+} from '../../general-ledger-definition.validation'
+
+export interface IIncomeStatementReportFormProps
     extends
         IClassProps,
         IForm<
-            Partial<TFinancialStatementConditionReportSchema>,
+            Partial<TIncomeStatementReportSchema>,
             IGeneratedReport,
             Error,
-            TFinancialStatementConditionReportSchema
+            TIncomeStatementReportSchema
         > {}
 
-export const FinancialStatementConditionReportCreateForm = ({
+export const IncomeStatementReportCreateForm = ({
     className,
     defaultValues,
     readOnly,
     onSuccess,
     onError,
-}: IFinancialStatementConditionReportFormProps) => {
-    const form = useForm<TFinancialStatementConditionReportSchema>({
-        resolver: standardSchemaResolver(
-            FinancialStatementConditionReportSchema
-        ),
+}: IIncomeStatementReportFormProps) => {
+    const form = useForm<TIncomeStatementReportSchema>({
+        resolver: standardSchemaResolver(IncomeStatementReportSchema),
         mode: 'onSubmit',
         defaultValues: {
-            ...defaultValues,
             month: new Date().getMonth(),
             year: new Date().getFullYear(),
             report_type: 'standard',
-            as_of_previous_year: false,
-            par_calculation_method: 'by_amortization_loan_balance',
-            fall_to_current_if_1_30_days: false,
+            include_previous_year: false,
+            ...defaultValues,
             report_config: {
+                // TODO: Report Template - Jervx
+                ...getTemplateAt(undefined, 0),
                 module: 'FinancialStatementDefinition',
-                name: `portfolio_at_risk_report_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
+                name: `income_statement_report_${toReadableDate(new Date(), 'MMddyy_mmss')}.pdf`,
                 ...defaultValues?.report_config,
             },
         },
@@ -74,10 +74,7 @@ export const FinancialStatementConditionReportCreateForm = ({
     })
 
     const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TFinancialStatementConditionReportSchema>({
-            form,
-            readOnly,
-        })
+        useFormHelper<TIncomeStatementReportSchema>({ form, readOnly })
 
     const onSubmit = form.handleSubmit(({ report_config, ...filters }) => {
         generateMutation.mutate({
@@ -97,7 +94,7 @@ export const FinancialStatementConditionReportCreateForm = ({
                 ref={formRef}
             >
                 <fieldset
-                    className="space-y-4"
+                    className="space-y-2"
                     disabled={generateMutation.isPending || readOnly}
                 >
                     <div className="flex gap-x-2">
@@ -112,7 +109,6 @@ export const FinancialStatementConditionReportCreateForm = ({
                                 />
                             )}
                         />
-
                         <FormFieldWrapper
                             control={form.control}
                             label="Year *"
@@ -147,6 +143,10 @@ export const FinancialStatementConditionReportCreateForm = ({
                                         label: 'Comparative Yearly',
                                     },
                                     {
+                                        value: 'closed_book',
+                                        label: 'Closed Book',
+                                    },
+                                    {
                                         value: 'budget_forecasted',
                                         label: 'Budget Forecasted',
                                     },
@@ -162,10 +162,15 @@ export const FinancialStatementConditionReportCreateForm = ({
                             </RadioGroup>
                         )}
                     />
-
+                    <FormLabel
+                        className="text-muted-foreground text-xs"
+                        tabIndex={-1}
+                    >
+                        Other Options
+                    </FormLabel>
                     <FormFieldWrapper
                         control={form.control}
-                        name="as_of_previous_year"
+                        name="include_previous_year"
                         render={({ field }) => {
                             const isActive =
                                 form.watch('report_type') ===
@@ -205,58 +210,17 @@ export const FinancialStatementConditionReportCreateForm = ({
                                                         : 'text-foreground'
                                                 )}
                                             >
-                                                As of Previous Year
+                                                Include Previous Year
                                             </span>
                                             <span className="text-xs text-muted-foreground">
-                                                Use previous year's snapshot for
-                                                comparison in comparative yearly
-                                                report.
+                                                Include previous year's data in
+                                                the report for comparison.
                                             </span>
                                         </div>
                                     </label>
                                 </fieldset>
                             )
                         }}
-                    />
-
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="PAR Calculation Method *"
-                        name="par_calculation_method"
-                        render={({ field }) => (
-                            <RadioGroup
-                                className="grid grid-cols-1 p-4 rounded-xl bg-muted/60 border border-border/60 gap-2"
-                                onValueChange={field.onChange}
-                                value={field.value}
-                            >
-                                {[
-                                    {
-                                        value: 'by_amortization_loan_balance',
-                                        label: 'By Amortization Loan Balance',
-                                    },
-                                    {
-                                        value: 'by_amortization_arrears',
-                                        label: 'By Amortization Arrears',
-                                    },
-                                    {
-                                        value: 'by_amortization_arrears_distributed',
-                                        label: 'By Amortization Arrears Distributed',
-                                    },
-                                    {
-                                        value: 'by_maturity',
-                                        label: 'By Maturity',
-                                    },
-                                ].map((opt) => (
-                                    <label
-                                        className="flex items-center gap-2"
-                                        key={opt.value}
-                                    >
-                                        <RadioGroupItem value={opt.value} />
-                                        {opt.label}
-                                    </label>
-                                ))}
-                            </RadioGroup>
-                        )}
                     />
 
                     <Separator />
@@ -287,27 +251,33 @@ export const FinancialStatementConditionReportCreateForm = ({
     )
 }
 
-export const FinancialStatementConditionReportCreateFormModal = ({
-    title = 'Create Portfolio At Risk Report',
-    description = 'Define filters and configuration for portfolio at risk',
+export const IncomeStatementReportCreateFormModal = ({
+    title = 'Create Income Statement Report',
+    description = 'Define Filters and Report configuration for income statement',
     className,
     formProps,
     ...props
-}: IModalProps & {
-    formProps?: IFinancialStatementConditionReportFormProps
-}) => {
+}: IModalProps & { formProps?: IIncomeStatementReportFormProps }) => {
+    const [open, onOpenChange] = useInternalState(
+        false,
+        props.open,
+        props.onOpenChange
+    )
+
     return (
         <Modal
             className={cn('sm:max-w-xl', className)}
             description={description}
             title={title}
             {...props}
+            onOpenChange={onOpenChange}
+            open={open}
         >
-            <FinancialStatementConditionReportCreateForm
+            <IncomeStatementReportCreateForm
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    props.onOpenChange?.(false)
+                    onOpenChange(false)
                 }}
             />
         </Modal>

@@ -6,13 +6,10 @@ import {
     PercentageSchema,
     descriptionTransformerSanitizer,
     entityIdSchema,
-    stringDateWithTransformSchema,
 } from '@/validation'
 
 import { FINANCIAL_STATEMENT_TYPE } from '../financial-statement-definition'
-import { GeneralLedgerSourceSchema } from '../general-ledger'
 import { GENERAL_LEDGER_TYPE } from '../general-ledger/general-ledger.constants'
-import { WithGeneratedReportSchema } from '../generated-report'
 import {
     ACCOUNT_EXCLUSIVE_SETTING_TYPE,
     ACCOUNT_INTEREST_STANDARD_COMPUTATION,
@@ -322,58 +319,3 @@ export const IAccountRequestSchema = z
     .and(AccountTypeDiscriminator)
 
 export type TAccountFormValues = z.infer<typeof IAccountRequestSchema>
-
-// FOR REPORT
-
-// REPORT ACCT LEDGER
-export const AccountLedgerReport = z
-    .object({
-        accounts: z.any(), // ONLY FOR UI
-        account_ids: z
-            .array(entityIdSchema)
-            .min(1, 'at least one account selected'),
-
-        start_date: stringDateWithTransformSchema,
-        end_date: stringDateWithTransformSchema,
-
-        report_type: z.enum(['detailed', 'summary']).default('detailed'),
-        is_account_per_page: z.boolean().optional().default(false),
-    })
-    .and(WithGeneratedReportSchema)
-    .superRefine((data, ctx) => {
-        if (data.start_date !== undefined && data.end_date !== undefined) {
-            if (data.start_date > data.end_date) {
-                ctx.addIssue({
-                    code: 'custom',
-                    message: 'Start Date must not be past of End Date',
-                    path: ['start_date'],
-                })
-                ctx.addIssue({
-                    code: 'custom',
-                    message: 'To Date must be earlier than Start Date',
-                    path: ['end_date'],
-                })
-            }
-        }
-    })
-
-export type TAccountLedgerReportSchema = z.infer<typeof AccountLedgerReport>
-
-// ACCOUNT HISTORY REPORT
-export const AccountHistoryReportSchema = z
-    .object({
-        accounts: z.any(),
-        account_ids: z
-            .array(entityIdSchema)
-            .min(1, 'at least one account selected'),
-
-        sort_by: z.enum(['by_date', 'by_cv_no', 'none']).default('by_date'),
-
-        member_id: entityIdSchema.optional(),
-        member: z.any().optional(),
-
-        source: GeneralLedgerSourceSchema.default('payment'),
-    })
-    .and(WithGeneratedReportSchema)
-
-export type TAccountHistoryReportSchema = z.infer<typeof AccountHistoryReportSchema>

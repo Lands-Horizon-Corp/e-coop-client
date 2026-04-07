@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import { AccountMultiPickerModal } from '@/modules/account/components/picker/account-multi-picker'
 import GeneralLedgerSourceCombobox from '@/modules/general-ledger/components/pickers/general-ledger-source-combobox'
 import {
     IGeneratedReport,
@@ -23,14 +24,14 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useInternalState } from '@/hooks/use-internal-state'
 
 import { IClassProps, IForm } from '@/types'
 
 import {
     AccountHistoryReportSchema,
     TAccountHistoryReportSchema,
-} from '../../account.validation'
-import { AccountMultiPickerModal } from '../picker/account-multi-picker'
+} from '../../general-ledger-definition.validation'
 
 export interface IAccountHistoryReportFormProps
     extends
@@ -253,18 +254,26 @@ export const AccountHistoryReportCreateFormModal = ({
 }: IModalProps & {
     formProps?: Omit<IAccountHistoryReportFormProps, 'className' | 'onClose'>
 }) => {
+    const [open, onOpenChange] = useInternalState(
+        false,
+        props.open,
+        props.onOpenChange
+    )
+
     return (
         <Modal
             className={cn('sm:max-w-xl', className)}
             description={description}
             title={title}
             {...props}
+            onOpenChange={onOpenChange}
+            open={open}
         >
             <AccountHistoryReportCreateForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
-                    props.onOpenChange?.(false)
+                    onOpenChange(false)
                 }}
             />
         </Modal>
