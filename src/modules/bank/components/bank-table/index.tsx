@@ -207,6 +207,7 @@ const BankTable = ({
                         onRowClick={onRowClick}
                         RowContextComponent={RowContextComponent}
                         setColumnOrder={tableState.setColumnOrder}
+                        isLoading={isPending}
                         table={table}
                     />
                     <DataTablePagination table={table} totalSize={totalSize} />

@@ -191,7 +191,7 @@ const TransactionBatchNavButton = (_props: Props) => {
                         variant="outline-ghost"
                     >
                         <PlusIcon className="duration-300 group-hover:text-inherit" />
-                        {hasNoTransactionBatch && 'Start Transaction Batch'}
+                        {!transactionBatch && 'Start Transaction Batch'}
                     </Button>
                 </ButtonGroup>
                 <ButtonGroup>
