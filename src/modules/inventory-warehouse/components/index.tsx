@@ -27,6 +27,7 @@ import { useDataTableSorting } from '@/components/data-table/use-datatable-sorti
 import useDataTableState, {
     useResolvedColumnOrder,
 } from '@/components/data-table/use-datatable-state'
+import { useLoadingColumns } from '@/components/data-table/use-loading-columns'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -114,11 +115,15 @@ const InventoryWarehouseTable = ({
         },
     })
 
+    const tableColumns = useLoadingColumns({
+        columns,
+        isLoading: isPending || isRefetching,
+    })
     const handleRowSelectionChange =
         tableState.createHandleRowSelectionChange(data)
 
     const table = useReactTable({
-        columns,
+        columns: tableColumns,
         data,
         initialState: {
             columnPinning: { left: ['select'] },

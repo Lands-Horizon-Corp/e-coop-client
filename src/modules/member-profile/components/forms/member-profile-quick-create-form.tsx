@@ -435,7 +435,7 @@ const MemberProfileQuickCreateForm = ({
                                 hiddenFields={formProps.hiddenFields}
                                 name="is_mutual_fund_member"
                                 render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                         <Checkbox
                                             aria-describedby={`${field.name}`}
                                             checked={field.value}
@@ -470,7 +470,7 @@ const MemberProfileQuickCreateForm = ({
                                 hiddenFields={formProps.hiddenFields}
                                 name="is_micro_finance_member"
                                 render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                         <Checkbox
                                             aria-describedby={`${field.name}`}
                                             checked={field.value}
@@ -628,7 +628,7 @@ export const MemberProfileQuickCreateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('!max-w-4xl bg-popover', className)}
+            className={cn('max-w-4xl! bg-popover', className)}
             description={description}
             title={title}
             {...props}

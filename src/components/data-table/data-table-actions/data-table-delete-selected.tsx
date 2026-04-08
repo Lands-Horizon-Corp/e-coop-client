@@ -78,7 +78,7 @@ const DataTableDeleteSelected = <T,>({
             )}
             {selectedRows.length > 0 && (
                 <Badge
-                    className="absolute -right-[0%] top-[10px] size-fit w-fit -translate-y-1/2 translate-x-1/2 px-[3px] text-xs animate-in fade-in dark:bg-popover/60"
+                    className="absolute right-[0%] top-[10px] size-fit w-fit -translate-y-1/2 translate-x-1/2 px-[3px] text-xs animate-in fade-in dark:bg-popover/60"
                     variant="secondary"
                 >
                     {selectedRows.length}

@@ -162,7 +162,7 @@ const MemberProfileSettings = ({
                     <TabsList className="border-bx mb-3 h-auto flex-col justify-start gap-x-2 gap-y-1 rounded-none bg-transparent px-0 py-1 text-foreground">
                         {SettingsTabs.map((tab) => (
                             <TabsTrigger
-                                className="dara-[state=active]:border relative w-full justify-start rounded-md from-primary/20 to-transparent text-muted-foreground after:absolute after:inset-y-0 after:left-0 after:w-0.5 after:content-[''] hover:text-foreground data-[state=active]:bg-secondary data-[state=active]:bg-gradient-to-r data-[state=active]:shadow-none data-[state=active]:after:bg-primary dark:bg-transparent"
+                                className="dara-[state=active]:border relative w-full justify-start rounded-md from-primary/20 to-transparent text-muted-foreground after:absolute after:inset-y-0 after:left-0 after:w-0.5 after:content-[''] hover:text-foreground data-[state=active]:bg-secondary data-[state=active]:bg-linear-to-r data-[state=active]:shadow-none data-[state=active]:after:bg-primary dark:bg-transparent"
                                 key={tab.value}
                                 value={tab.value}
                             >

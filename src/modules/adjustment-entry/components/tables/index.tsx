@@ -29,6 +29,7 @@ import { useDataTableSorting } from '@/components/data-table/use-datatable-sorti
 import useDataTableState, {
     useResolvedColumnOrder,
 } from '@/components/data-table/use-datatable-state'
+import { useLoadingColumns } from '@/components/data-table/use-loading-columns'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -101,7 +102,6 @@ const AdjustmentEntryTable = ({
     const { sortingStateBase64, tableSorting, setTableSorting } =
         useDataTableSorting()
 
-    // --- Columns Memoization ---
     const columns = useMemo(
         () =>
             AdjustmentEntryTableColumns({
@@ -116,7 +116,6 @@ const AdjustmentEntryTable = ({
             persistKey,
         })
 
-    // --- Data Table State ---
     const tableState = useDataTableState<IAdjustmentEntry>({
         key: finalKeys,
         defaultColumnVisibility: resolvedColumnVisibility,
@@ -124,14 +123,11 @@ const AdjustmentEntryTable = ({
         onSelectData,
     })
 
-    // --- Filter State ---
     const filterState = useDatableFilterState({
         defaultFilter,
-        // Reset to page 0 when filters change
         onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
     })
 
-    // --- Data Fetching (React Query) ---
     const {
         isPending,
         isRefetching,
@@ -148,13 +144,16 @@ const AdjustmentEntryTable = ({
         },
     })
 
-    // --- Row Selection Handler ---
     const handleRowSelectionChange =
         tableState.createHandleRowSelectionChange(data)
 
-    // --- TanStack Table Instance ---
-    const table = useReactTable({
+    const tableColumns = useLoadingColumns({
         columns,
+        isLoading: isPending || isRefetching,
+    })
+
+    const table = useReactTable({
+        columns: tableColumns,
         data: data,
         initialState: {
             columnPinning: { left: ['select'] },
@@ -205,7 +204,7 @@ const AdjustmentEntryTable = ({
                     className={cn(
                         'flex h-full flex-col gap-y-2',
                         className,
-                        !tableState.isScrollable && 'h-fit !max-h-none'
+                        !tableState.isScrollable && 'h-fit max-h-none!'
                     )}
                 >
                     <DataTableToolbar

@@ -22,6 +22,7 @@ import { useDataTableSorting } from '@/components/data-table/use-datatable-sorti
 import useDataTableState, {
     useResolvedColumnOrder,
 } from '@/components/data-table/use-datatable-state'
+import { useLoadingColumns } from '@/components/data-table/use-loading-columns'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -112,9 +113,12 @@ const OtherFundTable = ({
     const handleRowSelectionChange =
         tableState.createHandleRowSelectionChange(data)
 
-    // 5. Initialize TanStack Table
-    const table = useReactTable({
+    const tableColumns = useLoadingColumns({
         columns,
+        isLoading: isPending || isRefetching,
+    })
+    const table = useReactTable({
+        columns: tableColumns,
         data: data,
         initialState: {
             columnPinning: { left: ['select'] },
