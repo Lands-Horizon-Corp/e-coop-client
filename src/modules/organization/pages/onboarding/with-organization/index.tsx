@@ -32,7 +32,11 @@ export const useHandleVisitOrganization = () => {
         updateCurrentAuth,
         currentAuth: { user },
     } = useAuthUser()
-    const { mutateAsync: switchOrganization } = useSwitchOrganization()
+    const {
+        mutateAsync: switchOrganization,
+        isPending: isSwitchingOrganization,
+    } = useSwitchOrganization()
+
     const { selectedOrg, setSelectedOrg, switchingOrgId, setSwitchingOrgId } =
         useSelectedOrganizationStore()
 
@@ -79,14 +83,21 @@ export const useHandleVisitOrganization = () => {
         switchingOrgId,
         selectedOrg,
         setSelectedOrg,
+        isSwitchingOrganization,
     }
 }
 
 const WithOrganization = () => {
     const navigate = useNavigate()
     const openOrgBranch = useModalState(false)
-    const { handleVisit, user, switchingOrgId, selectedOrg, setSelectedOrg } =
-        useHandleVisitOrganization()
+    const {
+        handleVisit,
+        user,
+        switchingOrgId,
+        selectedOrg,
+        setSelectedOrg,
+        isSwitchingOrganization,
+    } = useHandleVisitOrganization()
 
     const { data: organizationsWithBranches } = useGetCurrentUserOrganizations()
 
@@ -119,6 +130,7 @@ const WithOrganization = () => {
                     {...openOrgBranch}
                     className="min-w-fit"
                     handleVisit={handleVisit}
+                    isLoading={isSwitchingOrganization}
                     organization={selectedOrg}
                     overlayClassName="!bg-transparent"
                     switchingOrgId={switchingOrgId}
