@@ -32,7 +32,7 @@ const mapColumnsToLoading = <TData,>(
 export const useLoadingColumns = <TData,>({
     columns,
     isLoading,
-    skeletonClassName = 'h-9 w-full rounded-xl opacity-0',
+    skeletonClassName = 'h-9 w-full rounded-xl opacity-30',
 }: TUseLoadingColumnsArgs<TData>): ColumnDef<TData>[] => {
     return useMemo(() => {
         if (!isLoading) return columns
