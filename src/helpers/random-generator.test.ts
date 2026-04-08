@@ -1,64 +1,61 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { randomSyncGenerator } from './random-generator'
+import { generateUUID } from './idempotency-utils'
 
-describe('randomSyncGenerator Suite', () => {
+describe('generateUUID Suite', () => {
     it('should return a string', () => {
-        const result = randomSyncGenerator()
+        const result = generateUUID()
         expect(typeof result).toBe('string')
     })
 
-    it('should return a non-empty hash', () => {
-        const result = randomSyncGenerator()
+    it('should return a non-empty string', () => {
+        const result = generateUUID()
         expect(result.length).toBeGreaterThan(0)
     })
 
-    it('should return a SHA-256 length (64 chars)', () => {
-        const result = randomSyncGenerator()
-        expect(result.length).toBe(64)
-    })
+    it('should return a valid UUID v4 format', () => {
+        const result = generateUUID()
 
-    it('should return hex string only', () => {
-        const result = randomSyncGenerator()
-        expect(result).toMatch(/^[a-f0-9]+$/)
+        // UUID v4 regex
+        const uuidV4Regex =
+            /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+
+        expect(result).toMatch(uuidV4Regex)
     })
 
     it('should generate unique values', () => {
-        const a = randomSyncGenerator()
-        const b = randomSyncGenerator()
+        const a = generateUUID()
+        const b = generateUUID()
+
         expect(a).not.toBe(b)
     })
 
-    it('should include prefix influence (different prefix = different hash)', () => {
-        const a = randomSyncGenerator('A')
-        const b = randomSyncGenerator('B')
-        expect(a).not.toBe(b)
+    it('should fallback when crypto.randomUUID is not available', () => {
+        const originalCrypto = globalThis.crypto
+
+        vi.stubGlobal('crypto', undefined)
+
+        const result = generateUUID()
+
+        expect(result).toMatch(
+            /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+        )
+
+        vi.stubGlobal('crypto', originalCrypto)
     })
 
-    it('should be deterministic for same input if mocked (advanced)', () => {
-        const uuidSpy = vi
-            .spyOn(globalThis.crypto, 'randomUUID')
-            .mockReturnValue('123e4567-e89b-12d3-a456-426614174000')
+    it('should fallback when crypto.randomUUID is not available', () => {
+        const originalCrypto = globalThis.crypto
 
-        const RealDate = Date
+        // @ts-expect-error override for test
+        globalThis.crypto = undefined
 
-        const dateSpy = vi
-            .spyOn(global, 'Date')
-            .mockImplementation(
-                (...args: ConstructorParameters<typeof Date>) => {
-                    if (args.length) {
-                        return new RealDate(...args)
-                    }
-                    return new RealDate('2026-01-01T00:00:00Z')
-                }
-            )
+        const result = generateUUID()
 
-        const a = randomSyncGenerator('TEST')
-        const b = randomSyncGenerator('TEST')
+        expect(result).toMatch(
+            /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+        )
 
-        expect(a).toBe(b)
-
-        uuidSpy.mockRestore()
-        dateSpy.mockRestore()
+        globalThis.crypto = originalCrypto
     })
 })

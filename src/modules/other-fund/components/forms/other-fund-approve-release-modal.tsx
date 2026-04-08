@@ -18,6 +18,8 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
+import { useIdempotency } from '@/hooks/use-idempotency'
+
 import { IClassProps } from '@/types'
 
 import {
@@ -61,12 +63,13 @@ const OtherFundApproveReleaseDisplayModal = ({
     const { onOpen } = useConfirmModalStore()
     const { data: currentTransactionBatch } = useTransactionBatchStore()
     const { onOpen: onOpenInfoModal } = useInfoModalStore()
-
+    const { idempotencyKey, resetIdempotencyKey } = useIdempotency()
     const handleFundAction = useOtherFundActions({
         options: {
             onSuccess: (data) => {
                 onSuccess?.(data)
                 props.onOpenChange?.(false)
+                resetIdempotencyKey()
             },
         },
     })
@@ -90,6 +93,7 @@ const OtherFundApproveReleaseDisplayModal = ({
                     handleFundAction.mutateAsync({
                         other_fund_id: otherFund.id,
                         mode: 'approve-undo',
+                        idempotencyKey,
                     }),
                     {
                         loading: 'Unapproving fund...',

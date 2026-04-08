@@ -29,6 +29,7 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useIdempotency } from '@/hooks/use-idempotency'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
@@ -67,6 +68,7 @@ const LoanTransactionEntryCreateUpdate = ({
         },
     })
 
+    const { idempotencyKey, resetIdempotencyKey } = useIdempotency()
     const deductionType = form.watch('type')
 
     const { firstError, formRef, isDisabled } =
@@ -84,7 +86,10 @@ const LoanTransactionEntryCreateUpdate = ({
     })
     const updateMutation = useUpdateLoanTransactionEntryById({
         options: {
-            onSuccess: onSuccess,
+            onSuccess: () => {
+                onSuccess?.(form.getValues() as ILoanTransactionEntry)
+                resetIdempotencyKey()
+            },
             onError: formProps.onError,
         },
     })
@@ -104,6 +109,7 @@ const LoanTransactionEntryCreateUpdate = ({
             : createMutation.mutateAsync({
                   loanTransactionId,
                   payload: formData,
+                  idempotencyKey,
               })
 
         toast.promise(requestFn, {
@@ -374,7 +380,7 @@ export const LoanTransactionEntryCreateUpdateModal = ({
 }) => {
     return (
         <Modal
-            className={cn('!max-w-xl', className)}
+            className={cn('max-w-xl!', className)}
             description={description}
             title={title}
             {...props}
@@ -391,3 +397,10 @@ export const LoanTransactionEntryCreateUpdateModal = ({
 }
 
 export default LoanTransactionEntryCreateUpdate
+
+export type CreateVariables<TPayload> =
+    | TPayload // Direct: create(payload)
+    | {
+          payload: TPayload // Wrapped: create({ payload, idempotencyKey })
+          idempotencyKey?: string
+      }

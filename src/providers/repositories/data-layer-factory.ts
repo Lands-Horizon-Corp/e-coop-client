@@ -3,6 +3,10 @@ import { type QueryObserverOptions, useQuery } from '@tanstack/react-query'
 import type { TAPIQueryOptions } from '@/types/api'
 import type { IPaginatedResult, TEntityId } from '@/types/common'
 
+import {
+    CreateVariables,
+    normalizeCreateVariables,
+} from '../../helpers/indempotency-helpers'
 import { createAPIRepository } from './api-crud-factory'
 import {
     createMutationFactory,
@@ -77,8 +81,19 @@ export const createDataLayerFactory = <
         })
     }
 
-    const useCreate = createMutationFactory<TResponse, Error, TRequest>({
-        mutationFn: (payload) => baseAPI.create({ payload }),
+    const useCreate = createMutationFactory<
+        TResponse,
+        Error,
+        CreateVariables<TRequest>
+    >({
+        mutationFn: (variables) => {
+            const { data, idempotencyKey } = normalizeCreateVariables(variables)
+
+            return baseAPI.create({
+                payload: data,
+                config: idempotencyKey ? { idempotencyKey } : undefined,
+            })
+        },
         defaultInvalidates: [
             [baseKey, 'infinite'],
             [baseKey, 'paginated'],

@@ -48,6 +48,8 @@ import SignatureField from '@/components/ui/signature-field'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
+import { useIdempotency } from '@/hooks/use-idempotency'
+
 import { IClassProps, IForm } from '@/types'
 
 import { useQuickTransferContext } from '../../context/quick-transfer-context'
@@ -92,6 +94,7 @@ export const QuickTransferTransactionForm = ({
         user_organization,
     } = useQuickTransferContext()
     const { onOpen } = usePaymentOnSuccessStore()
+    const { idempotencyKey, resetIdempotencyKey } = useIdempotency()
 
     const form = useForm<TQuickWithdrawSchemaFormValues>({
         resolver: standardSchemaResolver(QuickWithdrawSchema),
@@ -165,6 +168,7 @@ export const QuickTransferTransactionForm = ({
                     generalLedger: transaction,
                     mode: mode,
                 })
+                resetIdempotencyKey()
             },
         },
     })
@@ -179,6 +183,7 @@ export const QuickTransferTransactionForm = ({
                 entry_date: entryDate,
             },
             mode: mode,
+            idempotencyKey,
         })
     }
 

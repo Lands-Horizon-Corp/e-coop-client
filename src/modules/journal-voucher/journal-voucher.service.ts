@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
+import { injectIdempotency } from '@/helpers/indempotency-helpers'
 import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
@@ -175,13 +176,25 @@ export const useJournalVoucherActions = createMutationFactory<
     {
         journal_voucher_id: TEntityId
         mode: TJournalActionMode
+        idempotencyKey?: string
     }
 >({
-    mutationFn: async ({ journal_voucher_id, mode = 'print-only' }) => {
+    mutationFn: async ({
+        journal_voucher_id,
+        mode = 'print-only',
+        idempotencyKey,
+    }) => {
         const response = await API.post<
             { journal_voucher_id?: TEntityId },
             IJournalVoucher
-        >(`${journalVoucherAPIRoute}/${journal_voucher_id}/${mode}`)
+        >(
+            `${journalVoucherAPIRoute}/${journal_voucher_id}/${mode}`,
+            {},
+            {},
+            mode === 'release'
+                ? injectIdempotency({ idempotencyKey })
+                : undefined
+        )
         return response.data
     },
     invalidationFn: (args) =>

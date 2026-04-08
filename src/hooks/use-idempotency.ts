@@ -1,17 +1,17 @@
-import { useCallback, useRef } from 'react'
+import { useRef } from 'react'
 
-import { randomSyncGenerator } from '@/helpers/random-generator'
+import { generateUUID } from '@/helpers/idempotency-utils'
 
-export const useIdempotency = (namespace: string) => {
+export const useIdempotency = () => {
     const keyRef = useRef<string>('')
 
     if (!keyRef.current) {
-        keyRef.current = randomSyncGenerator(`${namespace}:`)
+        keyRef.current = generateUUID()
     }
 
-    const resetKey = useCallback(() => {
-        keyRef.current = randomSyncGenerator(`${namespace}:`)
-    }, [namespace])
+    const resetKey = () => {
+        keyRef.current = generateUUID()
+    }
 
     return {
         idempotencyKey: keyRef.current,
