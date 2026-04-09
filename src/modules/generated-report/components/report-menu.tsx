@@ -47,8 +47,21 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
+import { AccountBalanceReportCreateFormModal } from './forms/account-balance-create-report-form'
 import { AdjustmentReportCreateFormModal } from './forms/adjustment-create-report-form'
+import { CashCheckDisbursementReportCreateFormModal } from './forms/cash-check-disbursement-create-report-form'
+import { CloseAccountReportCreateFormModal } from './forms/close-account-create-report-form'
+import { ComakerReportCreateFormModal } from './forms/comaker-create-report-form'
 import { DailyCashCollectionReceiptJournalReportCreateFormModal } from './forms/daily-cash-receipt-create-report-form'
+import { DirectAdjustmentReportCreateFormModal } from './forms/direct-adjustment-create-report-form'
+import { JournalVoucherReportCreateFormModal } from './forms/journal-voucher-create-report-form'
+import { LoanProtectionPlanReportCreateFormModal } from './forms/loan-protection-place-create-report-form'
+import { LoanReleasesReportCreateFormModal } from './forms/loan-release-tabulated-create-report-form'
+import { PrintNumberTagReportCreateFormModal } from './forms/number-tag-create-report-form'
+import { RebateReportCreateFormModal } from './forms/rebate-create-report-form'
+import { TellerMonitoringReportCreateFormModal } from './forms/teller-monitoring-create-report-form'
+import { TimeDepositBalanceYTDReportCreateFormModal } from './forms/time-deposit-balance-ytd-create-report-form'
+import { TimeDepositReportCreateFormModal } from './forms/time-deposit-create-report-form'
 
 interface ReportItem {
     label: string
@@ -94,20 +107,26 @@ const reportGroups: ReportGroup[] = [
         icon: Banknote,
         reports: [
             {
-                label: 'Loan Rel. Tabulated',
+                label: 'Loan Release Tabulated',
                 icon: BarChart3,
+                component: LoanReleasesReportCreateFormModal,
             },
             {
-                label: 'Loan Rel. Summary',
+                label: 'Loan Release Summary',
                 icon: FileText,
             },
             {
-                label: 'Loan Rel. Detail',
+                label: 'Loan Release Detail',
                 icon: ScrollText,
             },
             {
                 label: 'Loan Balances',
                 icon: Scale,
+            },
+            {
+                label: 'Loan Protection Plan',
+                icon: FileText,
+                component: LoanProtectionPlanReportCreateFormModal,
             },
             {
                 label: 'Loan Receivable',
@@ -136,6 +155,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Comaker',
                 icon: UserCheck,
+                component: ComakerReportCreateFormModal,
             },
         ],
     },
@@ -154,6 +174,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Time Deposit',
                 icon: Clock,
+                component: TimeDepositReportCreateFormModal,
             },
             {
                 label: 'TD Balance',
@@ -162,6 +183,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'TD Bal / YTD',
                 icon: BarChart3,
+                component: TimeDepositBalanceYTDReportCreateFormModal,
             },
             {
                 label: 'TD Accrued',
@@ -178,16 +200,13 @@ const reportGroups: ReportGroup[] = [
                 icon: ListChecks,
             },
             {
-                label: 'Number Tag',
-                icon: Hash,
-            },
-            {
                 label: 'Stmt of Account',
                 icon: ReceiptText,
             },
             {
                 label: 'Account Balance',
                 icon: Wallet,
+                component: AccountBalanceReportCreateFormModal,
             },
             {
                 label: 'Account Hold Out',
@@ -196,9 +215,10 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Close Account',
                 icon: FileX,
+                component: CloseAccountReportCreateFormModal,
             },
             {
-                label: 'Voters List',
+                label: 'Voters List (ACE) - Comming soon',
                 icon: Vote,
             },
         ],
@@ -210,6 +230,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Cash Disbursement',
                 icon: CreditCard,
+                component: CashCheckDisbursementReportCreateFormModal,
             },
             {
                 label: 'Cash Receipt Journal',
@@ -220,15 +241,17 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Journal Voucher',
                 icon: FileText,
-                component: AdjustmentReportCreateFormModal,
+                component: JournalVoucherReportCreateFormModal,
             },
             {
                 label: 'Adjustment',
                 icon: Calculator,
+                component: AdjustmentReportCreateFormModal,
             },
             {
                 label: 'Direct Adjustment',
                 icon: Calculator,
+                component: DirectAdjustmentReportCreateFormModal,
             },
             {
                 label: 'Blotter',
@@ -267,12 +290,13 @@ const reportGroups: ReportGroup[] = [
         icon: FolderOpen,
         reports: [
             {
-                label: 'Other Funds',
-                icon: Coins,
+                label: 'Number Tag',
+                icon: Hash,
+                component: PrintNumberTagReportCreateFormModal,
             },
             {
-                label: 'CLPP',
-                icon: FileText,
+                label: 'Other Funds',
+                icon: Coins,
             },
             {
                 label: 'ICPR',
@@ -285,10 +309,12 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Teller Monitor',
                 icon: Monitor,
+                component: TellerMonitoringReportCreateFormModal,
             },
             {
                 label: 'Rebates',
                 icon: DollarSign,
+                component: RebateReportCreateFormModal,
             },
             {
                 label: 'Proof of Purchase',
