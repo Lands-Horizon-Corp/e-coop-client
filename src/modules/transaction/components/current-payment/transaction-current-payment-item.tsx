@@ -23,6 +23,8 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
+import { useIdempotency } from '@/hooks/use-idempotency'
+
 import { TEntityId } from '@/types'
 
 import PaymentsEntryListSkeleton from '../skeleton/transaction-payment-entry-skeleton'
@@ -42,6 +44,7 @@ const TransactionCurrentPaymentItem = ({
 }: TTransactionCurrentPaymentItemProps) => {
     const queryClient = useQueryClient()
     const { onOpenReverseRequestAction } = useTransactionReverseSecurityStore()
+    const { idempotencyKey, resetIdempotencyKey } = useIdempotency()
     const { mutate: reverseSinglePayment } = useSingleReverseTransaction({
         options: {
             onSuccess: () => {
@@ -49,6 +52,7 @@ const TransactionCurrentPaymentItem = ({
                     queryKey: [generalLedgerBaseKey],
                     exact: false,
                 })
+                resetIdempotencyKey()
             },
             onError: (error) => {
                 toast.error(error.message)
@@ -59,7 +63,10 @@ const TransactionCurrentPaymentItem = ({
     const handleReversePayment = (general_ledger_id: TEntityId) => {
         onOpenReverseRequestAction({
             onSuccess: () => {
-                reverseSinglePayment({ general_ledger_id })
+                reverseSinglePayment({
+                    general_ledger_id,
+                    idempotencyId: idempotencyKey,
+                })
             },
         })
     }

@@ -29,6 +29,7 @@ interface ITableProps<TData> extends IClassProps {
     isStaticWidth?: boolean
     isStickyHeader?: boolean
     isStickyFooter?: boolean
+    isLoading?: boolean
     onRowClick?: (
         row: Row<TData>,
         e: React.MouseEvent<HTMLTableRowElement, MouseEvent>

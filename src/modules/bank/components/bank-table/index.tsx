@@ -23,6 +23,7 @@ import { useDataTableSorting } from '@/components/data-table/use-datatable-sorti
 import useDataTableState, {
     useResolvedColumnOrder,
 } from '@/components/data-table/use-datatable-state'
+import { useLoadingColumns } from '@/components/data-table/use-loading-columns'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -109,9 +110,14 @@ const BankTable = ({
     const handleRowSelectionChange =
         tableState.createHandleRowSelectionChange(data)
 
+    const tableColumns = useLoadingColumns({
+        columns,
+        isLoading: isPending || isRefetching,
+    })
+
     const table = useReactTable({
-        columns: columns,
         data: data,
+        columns: tableColumns,
         initialState: {
             columnPinning: { left: ['select'] },
         },

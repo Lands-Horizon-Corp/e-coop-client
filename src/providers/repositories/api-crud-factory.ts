@@ -1,15 +1,19 @@
+import { AxiosRequestConfig } from 'axios'
 import qs from 'query-string'
 
 import type { TAPIQueryOptions } from '@/types/api'
 import type { IPaginatedResult, TEntityId } from '@/types/common'
 
-import API from '../api'
+import { injectIdempotency } from '../../helpers/indempotency-helpers'
+import API, { IRequestParams } from '../api'
 
 export interface IAPIRepository<TResponse, TRequest> {
     route: string
     create: <TReq = TRequest, TDat = TResponse>(args: {
         payload: TReq
         url?: string
+        params?: IRequestParams
+        config?: AxiosRequestConfig & { idempotencyKey?: string }
     }) => Promise<TDat>
     updateById: <TUpdateData = TResponse, TUpdatePayload = TRequest>(args: {
         id: TEntityId
@@ -43,11 +47,20 @@ export const createAPIRepository = <TResponse, TRequest>(
     const create = async <TDat = TResponse, TReq = TRequest>({
         payload,
         url,
+        params,
+        config,
     }: {
         payload: TReq
         url?: string
+        params?: IRequestParams
+        config?: AxiosRequestConfig & { idempotencyKey?: string }
     }) => {
-        const response = await API.post<TReq, TDat>(url || route, payload)
+        const response = await API.post<TReq, TDat>(
+            url || route,
+            payload,
+            params,
+            injectIdempotency(config)
+        )
         return response.data
     }
 

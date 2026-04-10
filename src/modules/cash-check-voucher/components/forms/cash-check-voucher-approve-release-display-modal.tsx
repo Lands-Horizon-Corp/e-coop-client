@@ -18,6 +18,8 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
+import { useIdempotency } from '@/hooks/use-idempotency'
+
 import { IClassProps } from '@/types'
 
 import {
@@ -57,12 +59,14 @@ const CashCheckVoucherApproveReleaseDisplayModal = ({
     const { data: currentTransactionBatch } = useTransactionBatchStore()
     const { onOpen: onOpenInfoModal } = useInfoModalStore()
 
+    const { idempotencyKey, resetIdempotencyKey } = useIdempotency()
     // Hook for 'undo-approve' and 'release' actions
     const handleCashCheckAction = useCashCheckVoucherActions({
         options: {
             onSuccess: (data) => {
                 onSuccess?.(data)
                 props.onOpenChange?.(false)
+                resetIdempotencyKey()
             },
             onError: (error) => {
                 toast.error(
@@ -98,6 +102,7 @@ const CashCheckVoucherApproveReleaseDisplayModal = ({
                     handleCashCheckAction.mutateAsync({
                         cash_check_voucher_id: cashCheckVoucher.id,
                         mode: 'approve-undo',
+                        idempotencyKey,
                     }),
                     {
                         loading: 'Unapproving voucher...',
@@ -154,7 +159,7 @@ const CashCheckVoucherApproveReleaseDisplayModal = ({
 
     return (
         <Modal
-            className={cn('!max-w-3xl', className)}
+            className={cn('max-w-3xl!', className)}
             description={description}
             descriptionClassName="sr-only"
             title={title}
@@ -164,7 +169,7 @@ const CashCheckVoucherApproveReleaseDisplayModal = ({
             <div className="space-y-4 max-w-full min-w-0 pt-2">
                 <CashCheckVoucherCard cashCheckVoucher={cashCheckVoucher} />
                 <JournalKanbanInfoItem
-                    className="!p-2"
+                    className="p-2!"
                     content={cashCheckVoucher.cash_voucher_number}
                     icon={<TicketIcon className="inline mr-2 size-5" />}
                     infoTitle={cashCheckVoucher.cash_voucher_number}

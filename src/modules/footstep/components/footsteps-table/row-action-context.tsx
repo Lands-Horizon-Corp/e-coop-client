@@ -131,7 +131,7 @@ export const FootstepTableActionManager = () => {
             {state.action === 'view-footstep' && (
                 <Sheet onOpenChange={close} open={state.isOpen}>
                     <SheetContent
-                        className="!max-w-lg bg-transparent p-2 focus:outline-none border-none"
+                        className="max-w-lg! bg-transparent p-2 focus:outline-none border-none"
                         side="right"
                     >
                         <SheetTitle className="sr-only hidden">

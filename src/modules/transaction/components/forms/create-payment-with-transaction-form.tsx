@@ -48,6 +48,7 @@ import { Label } from '@/components/ui/label'
 import SignatureField from '@/components/ui/signature-field'
 import { Textarea } from '@/components/ui/textarea'
 
+import { useIdempotency } from '@/hooks/use-idempotency'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
@@ -85,6 +86,7 @@ const PaymentWithTransactionForm = ({
         settings_payment_type_default_value_id,
         allow_withdraw_negative_balance,
     } = useTransactionContext()
+    const { idempotencyKey, resetIdempotencyKey } = useIdempotency()
 
     const { onOpenReverseRequestAction } = modalTransactionReverseState
     const { onOpen, open } = usePaymentOnSuccessStore()
@@ -156,6 +158,7 @@ const PaymentWithTransactionForm = ({
                 )
                 transactionForm.setValue('general_ledger_id', generalLedger.id)
                 form.setFocus('amount')
+                resetIdempotencyKey()
             },
         },
     })
@@ -200,6 +203,7 @@ const PaymentWithTransactionForm = ({
             mode: 'payment',
             transactionId,
             transactionPayload: transactionPaymentPayload,
+            idempotencyKey,
         }
 
         const isORDirty = transactionForm.formState.dirtyFields.reference_number

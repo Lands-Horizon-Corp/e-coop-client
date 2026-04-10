@@ -196,7 +196,7 @@ const FootstepTableColumns = (
         ),
         cell: ({ row }) => (
             <div>
-                <p className="break-words !text-xs text-foreground/80 !text-wrap">
+                <p className="wrap-break-word text-xs! text-foreground/80 text-wrap!">
                     {row.original.description}
                 </p>
             </div>
@@ -314,7 +314,7 @@ const ViewFootstepDetailCell = ({ footstep }: { footstep: IFootstep }) => {
                     <SheetDescription />
                 </SheetHeader>
                 <SheetContent
-                    className="!max-w-lg bg-transparent p-2 focus:outline-none border-none"
+                    className="max-w-lg! bg-transparent p-2 focus:outline-none border-none"
                     side="right"
                 >
                     <div className="rounded-xl bg-popover p-6 ecoop-scroll relative h-full overflow-y-auto">

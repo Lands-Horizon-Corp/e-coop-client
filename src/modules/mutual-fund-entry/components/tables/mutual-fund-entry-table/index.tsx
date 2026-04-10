@@ -32,6 +32,7 @@ import {
 import { Plus } from 'lucide-react'
 
 import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
+import { useLoadingColumns } from '@/components/data-table/use-loading-columns'
 import {
     MagnifyingGlassIcon,
     RefreshIcon,
@@ -246,12 +247,13 @@ export const MutualFundEntryTable = ({
     const tableContainerRef = useRef<HTMLDivElement>(null)
     const [searchQuery, setSearchQuery] = useState('')
 
-    const { data, isLoading, isFetching, refetch } = useGetMutualFundEntry({
-        mutualFundId: mutualFundId,
-        options: {
-            enabled: !!mutualFundId,
-        },
-    })
+    const { data, isLoading, isFetching, refetch, isPending, isRefetching } =
+        useGetMutualFundEntry({
+            mutualFundId: mutualFundId,
+            options: {
+                enabled: !!mutualFundId,
+            },
+        })
 
     const entries = useMemo(
         () => data?.mutual_fund_entries || [],
@@ -289,7 +291,7 @@ export const MutualFundEntryTable = ({
                 header: () => <p className="w-full">Member Name</p>,
                 cell: (info) => (
                     <div className="flex items-center gap-1 min-w-0">
-                        <div className="flex-shrink-0">
+                        <div className="shrink-0">
                             <ImageDisplay
                                 src={
                                     info.row.original.member_profile?.media
@@ -351,9 +353,13 @@ export const MutualFundEntryTable = ({
         [actionComponent, readOnly]
     )
 
+    const tableColumns = useLoadingColumns({
+        columns,
+        isLoading: isPending || isRefetching,
+    })
     const table = useReactTable({
         data: filteredEntries,
-        columns,
+        columns: tableColumns,
         getCoreRowModel: getCoreRowModel(),
     })
 
@@ -369,7 +375,7 @@ export const MutualFundEntryTable = ({
                     className
                 )}
             >
-                <div className="flex items-center justify-between p-2 gap-4 rounded-t bg-muted/50">
+                <div className="flex items-center justify-between p-2 gap-4 rounded-t-lg bg-muted/50">
                     <SearchInput onSearch={setSearchQuery} />
                     <div className="flex items-center gap-2">
                         <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 border border-primary/70">
@@ -505,7 +511,7 @@ export const MutualFundEntryTableModal = ({
 
     return (
         <Modal
-            className={cn('!max-w-[70vw]', className)}
+            className={cn('max-w-[70vw]!', className)}
             description={description || defaultDescription}
             title={title}
             {...props}

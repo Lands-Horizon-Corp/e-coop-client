@@ -1,3 +1,4 @@
+import { injectIdempotency } from '@/helpers/indempotency-helpers'
 import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 import {
@@ -65,13 +66,21 @@ export const {
 export const useCreateLoanTransactionEntry = createMutationFactory<
     ILoanTransactionEntry,
     Error,
-    { loanTransactionId: TEntityId; payload: ILoanTransactionEntryRequest }
+    {
+        loanTransactionId: TEntityId
+        payload: ILoanTransactionEntryRequest
+        idempotencyKey: string
+    }
 >({
-    mutationFn: ({ loanTransactionId, payload }) =>
-        createLoanTransactionEntry({
+    mutationFn: ({ loanTransactionId, payload, idempotencyKey }) => {
+        return createLoanTransactionEntry({
             url: `${loanTransactionEntryAPIRoute}/loan-transaction/${loanTransactionId}/deduction`,
             payload,
-        }),
+            params: {},
+            config: injectIdempotency({ idempotencyKey }),
+        })
+    },
+
     invalidationFn: (props) => {
         createMutationInvalidateFn(loanTransactionEntryBaseKey, props)
         props.queryClient.invalidateQueries({

@@ -20,6 +20,7 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 
+import { useIdempotency } from '@/hooks/use-idempotency'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps } from '@/types'
@@ -62,7 +63,7 @@ const LoanApproveReleaseDisplayModal = ({
     const loanSignatureModal = useModalState()
     const { onOpen: onOpenInfoModal } = useInfoModalStore()
     const { data: currentTransactionBatch } = useTransactionBatchStore()
-
+    const { idempotencyKey, resetIdempotencyKey } = useIdempotency()
     const { onOpen } = useConfirmModalStore()
     const memberProfile = loanTransaction.member_profile
     const approveMutation = useApproveLoanTransaction({
@@ -86,6 +87,7 @@ const LoanApproveReleaseDisplayModal = ({
             onSuccess: (data) => {
                 onSuccess?.(data)
                 props.onOpenChange?.(false)
+                resetIdempotencyKey()
             },
         },
     })
@@ -163,6 +165,7 @@ const LoanApproveReleaseDisplayModal = ({
                 toast.promise(
                     releaseMutation.mutateAsync({
                         loanTransactionId: loanTransaction.id,
+                        idempotencyKey,
                     }),
                     {
                         loading: 'Releasing loan...',

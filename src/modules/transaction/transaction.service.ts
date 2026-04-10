@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { withCatchAsync } from '@/helpers/function-utils'
+import { injectIdempotency } from '@/helpers/indempotency-helpers'
 import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
@@ -88,17 +89,21 @@ export type TPaymentTransactionProps = {
     mode: TPaymentMode
     transactionId?: TEntityId
     transactionPayload?: ITransactionRequest
+    idempotencyKey?: string
 }
 
 export const createPaymentTransaction = async ({
     data,
     mode,
     transactionId,
+    idempotencyKey,
 }: TPaymentTransactionProps) => {
     return (
         await API.post<IPaymentRequest, IGeneralLedger>(
             `${transactionAPIRoute}/${transactionId}/${mode}`,
-            data
+            data,
+            {},
+            injectIdempotency({ idempotencyKey })
         )
     ).data
 }
@@ -108,12 +113,28 @@ export const useCreateTransactionPaymentByMode = createMutationFactory<
     Error,
     TPaymentTransactionProps
 >({
-    mutationFn: async ({ data, mode, transactionId, transactionPayload }) => {
+    mutationFn: async ({
+        data,
+        mode,
+        transactionId,
+        transactionPayload,
+        idempotencyKey,
+    }) => {
         if (transactionId) {
-            return createPaymentTransaction({ data, mode, transactionId })
+            return createPaymentTransaction({
+                data,
+                mode,
+                transactionId,
+                idempotencyKey,
+            })
         } else {
             const [error, result] = await withCatchAsync(
-                create({ payload: transactionPayload })
+                create({
+                    payload: transactionPayload,
+                    config: injectIdempotency({
+                        idempotencyKey: idempotencyKey,
+                    }),
+                })
             )
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
@@ -124,6 +145,7 @@ export const useCreateTransactionPaymentByMode = createMutationFactory<
                 data,
                 mode,
                 transactionId: result.id,
+                idempotencyKey,
             })
         }
     },
@@ -157,13 +179,15 @@ export const useCreateTransactionPaymentByMode = createMutationFactory<
 export const useCreateQuickTransactionPayment = createMutationFactory<
     IGeneralLedger,
     Error,
-    { data: IPaymentQuickRequest; mode: TPaymentMode }
+    { data: IPaymentQuickRequest; mode: TPaymentMode; idempotencyKey: string }
 >({
-    mutationFn: async ({ data, mode }) =>
+    mutationFn: async ({ data, mode, idempotencyKey }) =>
         (
             await API.post<IPaymentQuickRequest, IGeneralLedger>(
                 `${transactionAPIRoute}/${mode}`,
-                data
+                data,
+                {},
+                injectIdempotency({ idempotencyKey })
             )
         ).data,
     defaultInvalidates: [['transaction-batch']],
@@ -236,12 +260,19 @@ export const useUpdateReferenceNumber = createMutationFactory<
 export const useSingleReverseTransaction = createMutationFactory<
     IGeneralLedger,
     Error,
-    { general_ledger_id: TEntityId }
+    { general_ledger_id: TEntityId; idempotencyId: string }
 >({
-    mutationFn: async ({ general_ledger_id }) =>
+    mutationFn: async ({ general_ledger_id, idempotencyId }) =>
         (
             await API.post<void, IGeneralLedger>(
-                `${transactionAPIRoute}/general-ledger/${general_ledger_id}/reverse`
+                `${transactionAPIRoute}/general-ledger/${general_ledger_id}/reverse`,
+                undefined,
+                undefined,
+                {
+                    headers: {
+                        'X-Idempotency-Key': idempotencyId,
+                    },
+                }
             )
         ).data,
     invalidationFn: (args) => {
@@ -256,12 +287,15 @@ export const useSingleReverseTransaction = createMutationFactory<
 export const useAllReverseTransaction = createMutationFactory<
     IGeneralLedger,
     Error,
-    { transaction_id: TEntityId }
+    { transaction_id: TEntityId; idempotencyKey: string }
 >({
-    mutationFn: async ({ transaction_id }) =>
+    mutationFn: async ({ transaction_id, idempotencyKey }) =>
         (
             await API.post<void, IGeneralLedger>(
-                `${transactionAPIRoute}/${transaction_id}/reverse`
+                `${transactionAPIRoute}/${transaction_id}/reverse`,
+                undefined,
+                undefined,
+                injectIdempotency({ idempotencyKey })
             )
         ).data,
     invalidationFn: (args) =>
@@ -275,13 +309,23 @@ export const logger = Logger.getInstance('transaction')
 export const useCreateMultiTransactionPayment = createMutationFactory<
     IGeneralLedger,
     Error,
-    { transactionId: TEntityId; payments: IPaymentRequest[] }
+    {
+        transactionId: TEntityId
+        payments: IPaymentRequest[]
+        idempotencyId: string
+    }
 >({
-    mutationFn: async ({ payments, transactionId }) =>
+    mutationFn: async ({ payments, transactionId, idempotencyId }) =>
         (
             await API.post<IPaymentRequest[], IGeneralLedger>(
                 `${transactionAPIRoute}/${transactionId}/multipayment`,
-                payments
+                payments,
+                {},
+                {
+                    headers: {
+                        'X-Idempotency-Key': idempotencyId,
+                    },
+                }
             )
         ).data,
     invalidationFn: (args) => {

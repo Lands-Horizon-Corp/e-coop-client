@@ -251,7 +251,7 @@ const InventorySupplierPicker = forwardRef<HTMLButtonElement, Props>(
                             )}
 
                             {!value ? (
-                                <span className="text-foreground/70 min-w-full v1 truncate">
+                                <span className="text-foreground/70 min-w-full truncate">
                                     {placeholder || 'Select supplier'}
                                 </span>
                             ) : (
