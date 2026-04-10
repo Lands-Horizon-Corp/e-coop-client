@@ -419,16 +419,16 @@ function ReportsMenu() {
                     </div>
                 )}
 
-                <div className="columns-2 md:columns-3 lg:columns-4 gap-6 space-y-4">
+                <div className="columns-2 md:columns-3 lg:columns-4 gap-6 space-y-5">
                     {filteredGroups.map((group) => (
                         <div
-                            className="break-inside-avoid space-y-1.5"
+                            className="break-inside-avoid space-y-2.5"
                             key={group.title}
                         >
-                            <div className="flex items-center gap-2 mb-2">
-                                <group.icon className="size-3.5 text-muted-foreground" />
+                            <div className="flex items-center gap-3 mb-3">
+                                <group.icon className="size-6 text-muted-foreground" />
                                 <Badge
-                                    className="text-[10px] font-semibold uppercase tracking-wide"
+                                    className="px-3 py-1.5 text-sm font-semibold uppercase tracking-wide"
                                     variant="secondary"
                                 >
                                     {group.title}
@@ -441,14 +441,14 @@ function ReportsMenu() {
                                     if (!Component) {
                                         return (
                                             <Button
-                                                className="justify-start gap-2 px-2 text-left w-full opacity-50 cursor-not-allowed"
+                                                className="h-9 justify-start gap-2.5 px-3 text-left w-full opacity-50 cursor-not-allowed"
                                                 disabled
                                                 key={report.label}
                                                 size="sm"
                                                 variant="ghost"
                                             >
-                                                <report.icon className="size-3.5 shrink-0 text-muted-foreground" />
-                                                <span className="text-xs font-medium truncate">
+                                                <report.icon className="size-4 shrink-0 text-muted-foreground" />
+                                                <span className="text-sm font-medium truncate">
                                                     {report.label}
                                                 </span>
                                             </Button>
@@ -460,12 +460,12 @@ function ReportsMenu() {
                                             key={report.label}
                                             trigger={
                                                 <Button
-                                                    className="justify-start gap-2 px-2 text-left w-full"
+                                                    className="h-9 justify-start gap-2.5 px-3 text-left w-full"
                                                     size="sm"
                                                     variant="ghost"
                                                 >
-                                                    <report.icon className="size-3.5 shrink-0 text-muted-foreground" />
-                                                    <span className="text-xs font-medium truncate">
+                                                    <report.icon className="size-4 shrink-0 text-muted-foreground" />
+                                                    <span className="text-sm font-medium truncate">
                                                         {report.label}
                                                     </span>
                                                 </Button>
