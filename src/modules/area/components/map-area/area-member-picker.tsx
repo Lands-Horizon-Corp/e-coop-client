@@ -1,4 +1,9 @@
-import * as React from 'react'
+import {
+    ComponentPropsWithoutRef,
+    forwardRef,
+    useEffect,
+    useState,
+} from 'react'
 
 import { cn } from '@/helpers/tw-utils'
 import { useGetMemberProfileByAreaId } from '@/modules/member-profile'
@@ -22,12 +27,9 @@ import {
 
 import { TEntityId } from '@/types'
 
-import { TUserLocation } from '../../area.types'
+import { TUserLocation, dummyUserLocations } from '../../area.types'
 
-interface Props extends Omit<
-    React.ComponentPropsWithoutRef<'button'>,
-    'onChange'
-> {
+interface Props extends Omit<ComponentPropsWithoutRef<'button'>, 'onChange'> {
     value?: TEntityId
     disabled?: boolean
     className?: string
@@ -35,9 +37,12 @@ interface Props extends Omit<
     onChange?: (selected: TUserLocation) => void
     areaId: TEntityId
     onSave?: () => void
+    multipleSelection?: boolean
 }
 
-const MemberAreaPicker = React.forwardRef<HTMLButtonElement, Props>(
+type TSelectedMember = TUserLocation & { selected: boolean }
+
+const MemberAreaPicker = forwardRef<HTMLButtonElement, Props>(
     (
         {
             value,
@@ -47,15 +52,61 @@ const MemberAreaPicker = React.forwardRef<HTMLButtonElement, Props>(
             areaId,
             onChange,
             onSave,
+            multipleSelection = true,
             ...other
         },
         ref
     ) => {
-        const [open, setOpen] = React.useState(false)
+        const [open, setOpen] = useState(false)
 
         const { data, isLoading } = useGetMemberProfileByAreaId({ areaId })
 
         const selected = data?.find((m) => m.id === value)
+
+        const [modifiedData, setModifiedData] = useState<
+            TSelectedMember[] | null | undefined
+        >(
+            data?.map((member) => ({
+                ...member,
+                selected: false,
+            }))
+        )
+
+        useEffect(() => {
+            if (dummyUserLocations) {
+                const modified = dummyUserLocations.map((member) => ({
+                    ...member,
+                    selected: false,
+                }))
+                setModifiedData(modified)
+            }
+        }, [dummyUserLocations])
+
+        const handleMutipleSelect = (member: TUserLocation) => {
+            if (!multipleSelection) {
+                onChange?.(member)
+                setOpen(false)
+                return
+            }
+
+            const isAlreadySelected = modifiedData?.some(
+                (m) => m.id === member.id && m.selected
+            )
+
+            setModifiedData((prev) => {
+                if (!prev) return [{ ...member, selected: true }]
+                if (isAlreadySelected) {
+                    return [
+                        ...prev.map((m) =>
+                            m.id === member.id ? { ...m, selected: false } : m
+                        ),
+                    ]
+                } else {
+                    return [...prev, { ...member, selected: true }]
+                }
+            })
+            onChange?.(member)
+        }
 
         return (
             <Popover modal onOpenChange={setOpen} open={open}>
@@ -108,7 +159,7 @@ const MemberAreaPicker = React.forwardRef<HTMLButtonElement, Props>(
                                 <CommandEmpty>No members found.</CommandEmpty>
 
                                 <CommandGroup>
-                                    {data?.map((member) => {
+                                    {/* {data?.map((member) => {
                                         const isSelected = member.id === value
 
                                         return (
@@ -118,6 +169,46 @@ const MemberAreaPicker = React.forwardRef<HTMLButtonElement, Props>(
                                                 onSelect={() => {
                                                     onChange?.(member)
                                                     setOpen(false)
+                                                }}
+                                                value={member.full_name}
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-xs font-medium">
+                                                        {member.full_name?.charAt(
+                                                            0
+                                                        )}
+                                                    </div>
+
+                                                    <div className="flex flex-col leading-tight">
+                                                        <span className="text-sm font-medium">
+                                                            {member.full_name}
+                                                        </span>
+                                                     
+                                                    </div>
+                                                </div>
+
+                                                {isSelected && (
+                                                    <CheckIcon className="h-4 w-4 text-primary" />
+                                                )}
+                                            </CommandItem>
+                                        )
+                                    })} */}
+
+                                    {modifiedData?.map((member) => {
+                                        const isSelected = member.id === value
+
+                                        return (
+                                            <CommandItem
+                                                className="flex items-center justify-between gap-2 px-3 py-2"
+                                                key={member.id}
+                                                onSelect={() => {
+                                                    if (multipleSelection) {
+                                                        handleMutipleSelect(
+                                                            member
+                                                        )
+                                                        return
+                                                    }
+                                                    // setOpen(false)
                                                 }}
                                                 value={member.full_name}
                                             >
