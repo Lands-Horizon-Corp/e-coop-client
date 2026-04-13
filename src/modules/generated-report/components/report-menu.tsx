@@ -53,15 +53,27 @@ import { CashCheckDisbursementReportCreateFormModal } from './forms/cash-check-d
 import { CloseAccountReportCreateFormModal } from './forms/close-account-create-report-form'
 import { ComakerReportCreateFormModal } from './forms/comaker-create-report-form'
 import { DailyCashCollectionReceiptJournalReportCreateFormModal } from './forms/daily-cash-receipt-create-report-form'
+import { DailyWithdrawalCreateReportFormModal } from './forms/daily-withdrawal-create-report-form'
 import { DirectAdjustmentReportCreateFormModal } from './forms/direct-adjustment-create-report-form'
+import { ICPRCreateReportFormModal } from './forms/icpr-create-report-form'
+import { InterestOnShareCapitalCreateReportFormModal } from './forms/interest-share-capital-create-report-form'
 import { JournalVoucherReportCreateFormModal } from './forms/journal-voucher-create-report-form'
+import { LoanBalancesCreateReportFormModal } from './forms/loan-balances-create-report-form'
 import { LoanProtectionPlanReportCreateFormModal } from './forms/loan-protection-place-create-report-form'
-import { LoanReleasesReportCreateFormModal } from './forms/loan-release-tabulated-create-report-form'
+import { LoanReleaseDetailCreateReportFormModal } from './forms/loan-release-create-report-form'
+import { LoanReleaseSummaryCreateReportFormModal } from './forms/loan-release-summary-create-report-form'
+import { LoanReleaseCreateReportFormModal } from './forms/loan-release-tabulated-create-report-form'
 import { PrintNumberTagReportCreateFormModal } from './forms/number-tag-create-report-form'
+import { OtherFundsEntryCreateReportFormModal } from './forms/other-funds-entry-create-report-form'
+import { ProofOfPurchaseCreateReportFormModal } from './forms/proof-of-purchase-create-report-form'
 import { RebateReportCreateFormModal } from './forms/rebate-create-report-form'
+import { SupposedActualCollectionCreateReportFormModal } from './forms/supposed-actual-colleaction-create-report-form'
 import { TellerMonitoringReportCreateFormModal } from './forms/teller-monitoring-create-report-form'
 import { TimeDepositBalanceYTDReportCreateFormModal } from './forms/time-deposit-balance-ytd-create-report-form'
 import { TimeDepositReportCreateFormModal } from './forms/time-deposit-create-report-form'
+import { LoanStatementCreateReportFormModal } from './forms/loan-statement-create-report-form'
+import { LoanMaturityCreateReportFormModal } from './forms/loan-maturity-create-report-form'
+import { TimeDepositBalanceCreateReportFormModal } from './forms/time-deposit-balance-create-report-form'
 
 interface ReportItem {
     label: string
@@ -109,19 +121,22 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Loan Release Tabulated',
                 icon: BarChart3,
-                component: LoanReleasesReportCreateFormModal,
+                component: LoanReleaseCreateReportFormModal,
             },
             {
                 label: 'Loan Release Summary',
                 icon: FileText,
+                component: LoanReleaseSummaryCreateReportFormModal,
             },
             {
                 label: 'Loan Release Detail',
                 icon: ScrollText,
+                component: LoanReleaseDetailCreateReportFormModal,
             },
             {
                 label: 'Loan Balances',
                 icon: Scale,
+                component: LoanBalancesCreateReportFormModal,
             },
             {
                 label: 'Loan Protection Plan',
@@ -135,10 +150,12 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Loan Maturity',
                 icon: FileClock,
+                component : LoanMaturityCreateReportFormModal
             },
             {
                 label: 'Loan Statement',
                 icon: FileBarChart,
+                component: LoanStatementCreateReportFormModal,
             },
             {
                 label: 'Grocery Loan',
@@ -166,6 +183,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Daily Withdrawal',
                 icon: ArrowLeftRight,
+                component: DailyWithdrawalCreateReportFormModal,
             },
             {
                 label: 'Deposit Balances',
@@ -179,6 +197,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'TD Balance',
                 icon: DollarSign,
+                component : TimeDepositBalanceCreateReportFormModal
             },
             {
                 label: 'TD Bal / YTD',
@@ -276,8 +295,9 @@ const reportGroups: ReportGroup[] = [
                 icon: ArrowLeftRight,
             },
             {
-                label: 'Interest Share Cap',
+                label: 'Interest Share Capital',
                 icon: CircleDollarSign,
+                component: InterestOnShareCapitalCreateReportFormModal,
             },
             {
                 label: 'Earned / Unearned',
@@ -295,16 +315,19 @@ const reportGroups: ReportGroup[] = [
                 component: PrintNumberTagReportCreateFormModal,
             },
             {
-                label: 'Other Funds',
+                label: 'Other Funds Entry',
                 icon: Coins,
+                component: OtherFundsEntryCreateReportFormModal,
             },
             {
                 label: 'ICPR',
                 icon: FileText,
+                component: ICPRCreateReportFormModal,
             },
             {
                 label: 'Supposed / Actual',
                 icon: Scale,
+                component: SupposedActualCollectionCreateReportFormModal,
             },
             {
                 label: 'Teller Monitor',
@@ -319,6 +342,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Proof of Purchase',
                 icon: ShoppingCart,
+                component: ProofOfPurchaseCreateReportFormModal,
             },
         ],
     },

@@ -173,6 +173,7 @@ const LoanProtectionPlanReportCreateForm = ({
                                     form.setValue('account', account)
                                 }}
                                 placeholder="All Account"
+                                triggerClassName="!w-full !min-w-0 flex-1"
                                 value={form.watch('account')}
                             />
                         )}

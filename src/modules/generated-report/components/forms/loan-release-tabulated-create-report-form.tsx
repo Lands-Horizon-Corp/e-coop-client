@@ -89,7 +89,7 @@ export interface ILoanReleasesReportFormProps
             TLoanReleasesReportSchema
         > {}
 
-const LoanReleasesReportCreateForm = ({
+const LoanReleaseCreateReportForm = ({
     className,
     defaultValues,
     readOnly,
@@ -312,6 +312,7 @@ const LoanReleasesReportCreateForm = ({
                                     form.setValue('account', account)
                                 }}
                                 placeholder="All Account"
+                                triggerClassName="!w-full !min-w-0 flex-1"
                                 value={form.getValues('account')}
                             />
                         )}
@@ -465,9 +466,9 @@ const LoanReleasesReportCreateForm = ({
     )
 }
 
-export default LoanReleasesReportCreateForm
+export default LoanReleaseCreateReportForm
 
-export const LoanReleasesReportCreateFormModal = ({
+export const LoanReleaseCreateReportFormModal = ({
     title = 'Create Loan Releases Report',
     description = 'Define filters and configuration for loan releases report',
     className,
@@ -491,7 +492,7 @@ export const LoanReleasesReportCreateFormModal = ({
             onOpenChange={onOpenChange}
             open={open}
         >
-            <LoanReleasesReportCreateForm
+            <LoanReleaseCreateReportForm
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
