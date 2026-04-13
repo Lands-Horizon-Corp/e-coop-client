@@ -13,7 +13,6 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { AreaCreateUpdateFormModal } from '../forms/area-create-update-form'
-import MapArea from '../map-area/map-area'
 
 const AreaPage = () => {
     const createModal = useModalState()
@@ -45,7 +44,6 @@ const AreaPage = () => {
 
     return (
         <PageContainer>
-            <MapArea />
             <PermissionGuard action="Read" resourceType="Area">
                 <AreaCreateUpdateFormModal {...createModal} />
                 <AreaTable
