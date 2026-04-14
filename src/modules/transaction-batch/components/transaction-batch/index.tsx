@@ -91,7 +91,7 @@ const TransactionBatch = ({
     //show time machine only if not exisiting time machine session,
     const showTimeMachineButton = notToday && !showCancelTimeMachine
 
-    const showButtonRed = notToday && hasCurrentTimeMachineSession
+    const showButtonRed = notToday && hasCurrentTimeMachineSession && !transactionBatch.is_today
 
     return (
         <div
