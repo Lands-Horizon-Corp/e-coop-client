@@ -6,6 +6,7 @@ import { IBranch } from '../branch'
 import { IOrganization } from '../organization'
 import { IPaymentType } from '../payment-type/payment-type.types'
 import { TPermission } from '../permission'
+import { ITimeMachineLog } from '../time-machine-log'
 import { IUserBase, TUserType } from '../user/user.types'
 import {
     TTimeMachineSchema,
@@ -71,6 +72,8 @@ export interface IUserOrganization<TUser = IUserBase>
     status: TUserOrganizationApplicationStatus
     last_online_at: string
     time_machine_time?: string
+    time_machine_log_id: TEntityId
+    time_machine_log: ITimeMachineLog
 
     /** Accounting Defaults */
     settings_accounting_payment_default_value_id?: TEntityId

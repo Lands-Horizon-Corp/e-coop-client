@@ -1,14 +1,8 @@
-import { toast } from 'sonner'
-
 import { cn } from '@/helpers'
 import { toReadableDateTime } from '@/helpers/date-utils'
 
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-
 import { InfoFillCircleIcon } from '../../../components/icons'
 import InfoTooltip from '../../../components/tooltips/info-tooltip'
-import { Button } from '../../../components/ui/button'
-import { useCancelTimeMachineTime } from '../user-organization.service'
 
 type Props = {
     timeMachineTime?: string
@@ -16,8 +10,6 @@ type Props = {
 }
 
 const TimeMachineTimeStatusBar = ({ className, timeMachineTime }: Props) => {
-    const { mutateAsync, isPending } = useCancelTimeMachineTime()
-
     if (!timeMachineTime) return null
 
     return (
@@ -50,21 +42,6 @@ const TimeMachineTimeStatusBar = ({ className, timeMachineTime }: Props) => {
                     </span>
                 </p>
             </InfoTooltip>
-            <Button
-                className=""
-                disabled={isPending}
-                onClick={() =>
-                    toast.promise(mutateAsync(), {
-                        loading: 'Cancelling Time Machine...',
-                        success: 'Time Machine cancelled',
-                        error: 'Error cancelling Time Machine',
-                    })
-                }
-                size="sm"
-                variant="secondary"
-            >
-                {isPending ? <LoadingSpinner /> : 'Cancel Time Machine'}
-            </Button>
         </div>
     )
 }

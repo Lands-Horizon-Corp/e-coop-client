@@ -148,12 +148,6 @@ const TransactionBatchNavButton = (_props: Props) => {
         (item) => !item.is_today
     )
 
-    console.log(
-        hasNoTransactionBatch,
-        transactionBatch,
-        'batch nav button render'
-    )
-
     return (
         <div className="flex gap-2 items-center">
             <TransactionBatchCreateFormModal

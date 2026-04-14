@@ -22,7 +22,6 @@ const MapArea = () => {
                             actions={<Button size="sm">View Area</Button>}
                             cardProps={{
                                 onClick: () => {
-                                    console.log('hello')
                                     setSelectedArea(area)
                                 },
                             }}

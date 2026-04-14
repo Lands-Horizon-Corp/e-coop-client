@@ -1,43 +1,67 @@
 import { useEffect, useState } from 'react'
 
 import { cn } from '@/helpers/tw-utils'
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
+import TimeMachineCancelFormModal from '@/modules/time-machine-log/components/cancel-time-machine-modal'
 
 import { Button } from '@/components/ui/button'
+
+import { useModalState } from '@/hooks/use-modal-state'
+
+import { XIcon } from './icons'
 
 export interface NavClockProps {
     className?: string
     buttonClassName?: string
     tooltipClassName?: string
+    onClick?: () => void
 }
 
 const Clock = ({
     className,
     buttonClassName,
     tooltipClassName,
+    onClick,
 }: NavClockProps) => {
+    const {
+        currentAuth: { user_organization },
+    } = useAuthStore()
+
     const [time, setTime] = useState(new Date())
     const [is24Hour, setIs24Hour] = useState(false)
     const [showTooltip, setShowTooltip] = useState(false)
+
     useEffect(() => {
         const timer = setInterval(() => setTime(new Date()), 1000)
         return () => clearInterval(timer)
     }, [])
+
     const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+    const timeMachineCancel = useModalState()
+
+    const hasActiveTimeMachine = !!user_organization?.time_machine_time
+
     return (
         <div
             className={cn(
-                'relative flex items-center pointer-events-auto',
+                'relative flex items-center pointer-events-auto ',
                 className
             )}
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
         >
+            <TimeMachineCancelFormModal {...timeMachineCancel} />
             <Button
                 className={cn(
-                    'font-mono text-sm px-2 w-[110px]',
+                    'relative overflow-visible',
+                    hasActiveTimeMachine && 'snake-border',
                     buttonClassName
                 )}
-                onClick={() => setIs24Hour(!is24Hour)}
+                onClick={() => {
+                    setIs24Hour(!is24Hour)
+                    onClick?.()
+                }}
                 size="sm"
                 variant="ghost"
             >
@@ -48,6 +72,15 @@ const Clock = ({
                     hour12: !is24Hour,
                 })}
             </Button>
+            {user_organization?.time_machine_time && showTooltip && (
+                <Button
+                    onClick={() => timeMachineCancel.openModal()}
+                    size="sm"
+                    variant="destructive"
+                >
+                    <XIcon />
+                </Button>
+            )}
             {showTooltip && (
                 <div
                     className={cn(
