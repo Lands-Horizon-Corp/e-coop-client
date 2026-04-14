@@ -18,7 +18,9 @@ import { LOAN_MODE_OF_PAYMENT } from '@/modules/loan-transaction/loan.constants'
 import { stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormLabel } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -32,8 +34,6 @@ import { useInternalState } from '@/hooks/use-internal-state'
 import { IClassProps, IForm } from '@/types'
 
 import { WithGeneratedReportSchema } from '../../generated-report.validation'
-import { Button } from '@/components/ui/button'
-import { XIcon } from '@/components/icons'
 
 export const LoanReleaseSummarySchema = z
     .object({

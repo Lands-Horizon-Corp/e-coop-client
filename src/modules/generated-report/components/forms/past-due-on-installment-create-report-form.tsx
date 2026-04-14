@@ -6,6 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import { AccountPicker } from '@/modules/account'
 import AreaCombobox from '@/modules/area/components/area-combobox'
 import {
     IGeneratedReport,
@@ -14,17 +15,18 @@ import {
 } from '@/modules/generated-report'
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
-import MemberClassificationCombobox from '@/modules/member-classification/components/member-classification-combobox'
 import MemberGroupCombobox from '@/modules/member-group/components/member-group-combobox'
 import MemberOccupationCombobox from '@/modules/member-occupation/components/member-occupation-combobox'
+import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
+import { stringDateWithTransformSchema } from '@/validation'
 
-import YearCombobox from '@/components/comboboxes/year-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Form, FormLabel } from '@/components/ui/form'
+import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import InputDate from '@/components/ui/input-date'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
 
@@ -35,68 +37,83 @@ import { IClassProps, IForm } from '@/types'
 
 import { WithGeneratedReportSchema } from '../../generated-report.validation'
 
-export const InterestOnShareCapitalSchema = z
+export const PastDueOnInstallmentSchema = z
     .object({
-        year: z.coerce.number(),
+        as_of_date: stringDateWithTransformSchema,
 
-        include_closed_acct: z.boolean().default(false),
-        print_zero_share_cap: z.boolean().default(false),
+        group_by_loan_category: z.boolean().default(false),
 
-        groupings: z
+        group_by: z
             .enum([
-                'no_grouping',
-                'occupation',
-                'group',
+                'no_group',
                 'barangay',
-                'classification',
+                'group',
                 'area',
+                'mmember_type',
+                'member_area',
+                'member_type_grp',
+                'member_type_area_grp',
+                'member_class_area_type_grp',
             ])
-            .default('no_grouping'),
+            .default('no_group'),
 
-        sort_by: z.enum(['by_passbook', 'by_name']).default('by_passbook'),
+        sort_by: z.enum(['by_pb_no', 'by_name']).default('by_pb_no'),
+
+        member_type_id: z.string().optional(),
+
+        account_id: z.string().optional(),
+        account: z.any().optional(),
 
         barangay: z.string().optional(),
         member_occupation_id: z.string().optional(),
-        member_classification_id: z.string().optional(),
+        area_id: z.string().optional(),
         member_group_id: z.string().optional(),
-        member_address_area_id: z.string().optional(),
+
+        category_id: z.string().optional(),
+        collector_id: z.string().optional(),
     })
     .and(WithGeneratedReportSchema)
 
-export type TInterestOnShareCapitalSchema = z.infer<
-    typeof InterestOnShareCapitalSchema
+export type TPastDueOnInstallmentSchema = z.infer<
+    typeof PastDueOnInstallmentSchema
 >
 
-export interface IInterestOnShareCapitalFormProps
+export interface IPastDueOnInstallmentFormProps
     extends
         IClassProps,
         IForm<
-            Partial<TInterestOnShareCapitalSchema>,
+            Partial<TPastDueOnInstallmentSchema>,
             IGeneratedReport,
             Error,
-            TInterestOnShareCapitalSchema
+            TPastDueOnInstallmentSchema
         > {}
 
-const InterestOnShareCapitalCreateReportForm = ({
+const PastDueOnInstallmentCreateReportForm = ({
     className,
     ...formProps
-}: IInterestOnShareCapitalFormProps) => {
-    const form = useForm<TInterestOnShareCapitalSchema>({
-        resolver: standardSchemaResolver(InterestOnShareCapitalSchema),
+}: IPastDueOnInstallmentFormProps) => {
+    const form = useForm<TPastDueOnInstallmentSchema>({
+        resolver: standardSchemaResolver(PastDueOnInstallmentSchema),
         defaultValues: {
-            year: new Date().getFullYear(),
+            as_of_date: undefined,
 
-            include_closed_acct: false,
-            print_zero_share_cap: false,
+            group_by_loan_category: false,
 
-            groupings: 'no_grouping',
-            sort_by: 'by_passbook',
+            group_by: 'no_group',
+            sort_by: 'by_pb_no',
+
+            member_type_id: undefined,
+
+            account_id: undefined,
+            account: undefined,
 
             barangay: '',
             member_occupation_id: undefined,
-            member_classification_id: undefined,
+            area_id: undefined,
             member_group_id: undefined,
-            member_address_area_id: undefined,
+
+            category_id: '',
+            collector_id: undefined,
 
             ...formProps.defaultValues,
 
@@ -104,7 +121,7 @@ const InterestOnShareCapitalCreateReportForm = ({
                 ...getTemplateAt(undefined, 0),
                 ...formProps.defaultValues?.report_config,
                 module: 'GeneratedReport',
-                name: `interest_on_share_capital_${toReadableDate(
+                name: `past_due_on_installment_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'
                 )}.pdf`,
@@ -120,7 +137,7 @@ const InterestOnShareCapitalCreateReportForm = ({
     })
 
     const { formRef, handleFocusError } =
-        useFormHelper<TInterestOnShareCapitalSchema>({
+        useFormHelper<TPastDueOnInstallmentSchema>({
             form,
             ...formProps,
         })
@@ -134,7 +151,9 @@ const InterestOnShareCapitalCreateReportForm = ({
     }, handleFocusError)
 
     const { error: rawError, isPending, reset } = generateMutation
-    const error = serverRequestErrExtractor({ error: rawError })
+    const error = serverRequestErrExtractor({
+        error: rawError,
+    })
 
     return (
         <Form {...form}>
@@ -149,26 +168,48 @@ const InterestOnShareCapitalCreateReportForm = ({
                 >
                     <FormFieldWrapper
                         control={form.control}
-                        label="Year"
-                        name="year"
-                        render={
-                            ({ field }) => (
-                                <YearCombobox
-                                    {...field}
-                                    endYear={new Date().getFullYear() + 1}
-                                    placeholder="Select Year"
-                                    startYear={1960}
-                                />
-                            )
-
-                            // <Input type="text" {...field} />
-                        }
+                        label="As Of Date"
+                        name="as_of_date"
+                        render={({ field }) => <InputDate {...field} />}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        label="Groupings"
-                        name="groupings"
+                        name="group_by_loan_category"
+                        render={({ field }) => {
+                            const checked = field.value
+                            return (
+                                <label
+                                    className={cn(
+                                        'flex items-start justify-between gap-3 rounded-xl border p-4 cursor-pointer',
+                                        checked &&
+                                            'bg-gradient-to-br from-popover to-primary/20 border-primary'
+                                    )}
+                                >
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-medium">
+                                            Group By Loan Category
+                                        </span>
+                                        <span className="text-xs text-muted-foreground">
+                                            Organize results based on loan
+                                            categories.
+                                        </span>
+                                    </div>
+                                    <Checkbox
+                                        checked={checked}
+                                        onCheckedChange={(v) =>
+                                            field.onChange(!!v)
+                                        }
+                                    />
+                                </label>
+                            )
+                        }}
+                    />
+
+                    <FormFieldWrapper
+                        control={form.control}
+                        label="Group By"
+                        name="group_by"
                         render={({ field }) => (
                             <RadioGroup
                                 className="grid grid-cols-3 p-4 rounded-xl bg-muted/60 border gap-2"
@@ -176,21 +217,30 @@ const InterestOnShareCapitalCreateReportForm = ({
                                 value={field.value}
                             >
                                 {[
-                                    {
-                                        value: 'no_grouping',
-                                        label: 'No Grouping',
-                                    },
-                                    {
-                                        value: 'occupation',
-                                        label: 'Occupation',
-                                    },
-                                    { value: 'group', label: 'Group' },
+                                    { value: 'no_group', label: 'No Group' },
                                     { value: 'barangay', label: 'Barangay' },
-                                    {
-                                        value: 'classification',
-                                        label: 'Classification',
-                                    },
+                                    { value: 'group', label: 'Group' },
                                     { value: 'area', label: 'Area' },
+                                    {
+                                        value: 'mmember_type',
+                                        label: 'Member Type',
+                                    },
+                                    {
+                                        value: 'member_area',
+                                        label: 'Member Area',
+                                    },
+                                    {
+                                        value: 'member_type_grp',
+                                        label: 'Member Type Group',
+                                    },
+                                    {
+                                        value: 'member_type_area_grp',
+                                        label: 'Member Type Area Group',
+                                    },
+                                    {
+                                        value: 'member_class_area_type_grp',
+                                        label: 'Member Class Area Type Group',
+                                    },
                                 ].map((opt) => (
                                     <label
                                         className="flex items-center gap-2 text-sm"
@@ -216,38 +266,37 @@ const InterestOnShareCapitalCreateReportForm = ({
                             >
                                 {[
                                     {
-                                        value: 'by_passbook',
-                                        label: 'Passbook',
+                                        value: 'by_pb_no',
+                                        label: 'Passbook No',
+                                        desc: 'Sort records by passbook number.',
                                     },
-                                    { value: 'by_name', label: 'Name' },
+                                    {
+                                        value: 'by_name',
+                                        label: 'Name',
+                                        desc: 'Sort records alphabetically by member name.',
+                                    },
                                 ].map((opt) => {
-                                    const isSelected = field.value === opt.value
+                                    const selected = field.value === opt.value
                                     return (
                                         <label
                                             className={cn(
-                                                'relative flex flex-col gap-1 rounded-xl border p-4 cursor-pointer transition-all',
-                                                'hover:bg-accent/50',
-                                                isSelected
-                                                    ? 'bg-gradient-to-br from-popover to-primary/20 border-primary shadow-md ring-1 ring-primary/20'
-                                                    : 'bg-background border-border'
+                                                'flex flex-col gap-1 rounded-xl border p-3 cursor-pointer',
+                                                selected &&
+                                                    'bg-gradient-to-br from-popover to-primary/20 border-primary'
                                             )}
                                             key={opt.value}
                                         >
                                             <div className="flex items-center justify-between">
-                                                <span
-                                                    className={cn(
-                                                        'text-sm font-medium',
-                                                        isSelected
-                                                            ? 'text-primary'
-                                                            : 'text-foreground'
-                                                    )}
-                                                >
+                                                <span className="text-sm font-medium">
                                                     {opt.label}
                                                 </span>
                                                 <RadioGroupItem
                                                     value={opt.value}
                                                 />
                                             </div>
+                                            <span className="text-xs text-muted-foreground">
+                                                {opt.desc}
+                                            </span>
                                         </label>
                                     )
                                 })}
@@ -255,7 +304,45 @@ const InterestOnShareCapitalCreateReportForm = ({
                         )}
                     />
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-3 gap-4">
+                        <FormFieldWrapper
+                            className="col-span-2"
+                            control={form.control}
+                            label="Account"
+                            name="account_id"
+                            render={({ field }) => (
+                                <AccountPicker
+                                    {...field}
+                                    mode="all"
+                                    onSelect={(v) => {
+                                        field.onChange(v?.id)
+                                        form.setValue('account', v)
+                                    }}
+                                    value={form.getValues('account')}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Member Type"
+                            name="member_type_id"
+                            render={({ field }) => (
+                                <MemberTypeCombobox
+                                    {...field}
+                                    onChange={(v) => field.onChange(v?.id)}
+                                    placeholder="All"
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Barangay"
+                            name="barangay"
+                            render={({ field }) => (
+                                <Input {...field} placeholder="All" />
+                            )}
+                        />
+
                         <FormFieldWrapper
                             control={form.control}
                             label="Occupation"
@@ -271,10 +358,10 @@ const InterestOnShareCapitalCreateReportForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            label="Classification"
-                            name="member_classification_id"
+                            label="Area"
+                            name="area_id"
                             render={({ field }) => (
-                                <MemberClassificationCombobox
+                                <AreaCombobox
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
@@ -297,101 +384,23 @@ const InterestOnShareCapitalCreateReportForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            label="Area"
-                            name="member_address_area_id"
+                            label="Category"
+                            name="category_id"
+                            render={({ field }) => <Input {...field} />}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Collector"
+                            name="collector_id"
                             render={({ field }) => (
-                                <AreaCombobox
+                                <p
                                     {...field}
-                                    onChange={(v) => field.onChange(v?.id)}
-                                    placeholder="All"
-                                />
+                                    className="text-sm text-muted-foreground"
+                                >
+                                    TODO: CollectorPicker
+                                </p>
                             )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Barangay"
-                            name="barangay"
-                            render={({ field }) => (
-                                <Input {...field} placeholder="All" />
-                            )}
-                        />
-                    </div>
-
-                    <FormLabel
-                        className="text-muted-foreground text-xs"
-                        tabIndex={-1}
-                    >
-                        Other Options
-                    </FormLabel>
-
-                    <div className="grid grid-cols-2 gap-3">
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="include_closed_acct"
-                            render={({ field }) => {
-                                const checked = field.value
-                                return (
-                                    <label
-                                        className={cn(
-                                            'flex items-start justify-between gap-3 rounded-xl border p-4 cursor-pointer transition-all',
-                                            checked
-                                                ? 'bg-gradient-to-br from-popover to-primary/20 border-primary shadow-md ring-1 ring-primary/20'
-                                                : 'bg-background border-border'
-                                        )}
-                                    >
-                                        <div className="flex flex-col gap-1">
-                                            <span className="text-sm font-medium">
-                                                Include Closed Account
-                                            </span>
-                                            <span className="text-xs text-muted-foreground">
-                                                Include accounts that are
-                                                already closed.
-                                            </span>
-                                        </div>
-                                        <Checkbox
-                                            checked={checked}
-                                            onCheckedChange={(v) =>
-                                                field.onChange(!!v)
-                                            }
-                                        />
-                                    </label>
-                                )
-                            }}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="print_zero_share_cap"
-                            render={({ field }) => {
-                                const checked = field.value
-                                return (
-                                    <label
-                                        className={cn(
-                                            'flex items-start justify-between gap-3 rounded-xl border p-4 cursor-pointer transition-all',
-                                            checked
-                                                ? 'bg-gradient-to-br from-popover to-primary/20 border-primary shadow-md ring-1 ring-primary/20'
-                                                : 'bg-background border-border'
-                                        )}
-                                    >
-                                        <div className="flex flex-col gap-1">
-                                            <span className="text-sm font-medium">
-                                                Print Zero Share Capital
-                                            </span>
-                                            <span className="text-xs text-muted-foreground">
-                                                Include members with zero share
-                                                capital balance.
-                                            </span>
-                                        </div>
-                                        <Checkbox
-                                            checked={checked}
-                                            onCheckedChange={(v) =>
-                                                field.onChange(!!v)
-                                            }
-                                        />
-                                    </label>
-                                )
-                            }}
                         />
                     </div>
 
@@ -421,16 +430,14 @@ const InterestOnShareCapitalCreateReportForm = ({
     )
 }
 
-export default InterestOnShareCapitalCreateReportForm
-
-export const InterestOnShareCapitalCreateReportFormModal = ({
-    title = 'Interest on Share Capital',
-    description = 'Generate interest on share capital report',
+export const PastDueOnInstallmentCreateReportFormModal = ({
+    title = 'Past Due on Installment',
+    description = 'Generate past due installment report',
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<IInterestOnShareCapitalFormProps, 'className' | 'onClose'>
+    formProps?: Omit<IPastDueOnInstallmentFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
         false,
@@ -440,14 +447,14 @@ export const InterestOnShareCapitalCreateReportFormModal = ({
 
     return (
         <Modal
-            className={cn('sm:max-w-3xl', className)}
+            className={cn('sm:max-w-4xl', className)}
             description={description}
             onOpenChange={onOpenChange}
             open={open}
             title={title}
             {...props}
         >
-            <InterestOnShareCapitalCreateReportForm
+            <PastDueOnInstallmentCreateReportForm
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
