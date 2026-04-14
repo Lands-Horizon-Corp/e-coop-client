@@ -74,6 +74,22 @@ const TransactionBatch = ({
         })
     }
 
+    const hasCurrentTimeMachineSession = !!user_organization?.time_machine_time
+
+    const notToday = !transactionBatch.created_at
+        ? false
+        : toReadableDate(transactionBatch.created_at, 'yyyy-MM-dd') !==
+          toReadableDate(new Date(), 'yyyy-MM-dd')
+
+    // will show cancel time machine button if the transaction batch is not from today,
+    // or if the transaction batch is from today but the current date is not today (time machine is active)
+    //  and it will not show if no current time machine session is active
+    const showCancelTimeMachine =
+        (!transactionBatch.is_today || notToday) && hasCurrentTimeMachineSession
+
+    //show time machine only if not exisiting time machine session,
+    const showTimeMachineButton = notToday && !showCancelTimeMachine
+
     return (
         <div
             className={cn(
@@ -168,15 +184,14 @@ const TransactionBatch = ({
                     </div>
                 </div>
                 <div className="flex items-center gap-x-2">
-                    <Button
-                        size={'sm'}
-                        onClick={() => timeMachineForm.openModal()}
-                    >
-                        <ClockIcon className="inline" />{' '}
-                        {!transactionBatch.is_today
-                            ? 'Time Machine'
-                            : 'View in Time Machine'}
-                    </Button>
+                    {showTimeMachineButton && (
+                        <Button
+                            size={'sm'}
+                            onClick={() => timeMachineForm.openModal()}
+                        >
+                            <ClockIcon className="inline" /> Time Machine
+                        </Button>
+                    )}
                     <Button
                         hoverVariant="primary"
                         onClick={() => invalidateTransactionBatch()}
@@ -209,7 +224,7 @@ const TransactionBatch = ({
                             size: 'sm',
                         }}
                     />
-                    {!transactionBatch.is_today && (
+                    {showCancelTimeMachine && (
                         <Button
                             onClick={(e) => {
                                 e.preventDefault()
