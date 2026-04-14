@@ -1,5 +1,4 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
 import { toReadableDate, toReadableDateTime } from '@/helpers/date-utils'
@@ -10,18 +9,18 @@ import {
 import { ICurrency } from '@/modules/currency'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import { ChangeORFormModal } from '@/modules/general-ledger/components/change-or-form'
-import { useTimeMachine } from '@/modules/user-organization'
-import useActionSecurityStore from '@/store/action-security-store'
+
+// import { useTimeMachine } from '@/modules/user-organization'
+// import useActionSecurityStore from '@/store/action-security-store'
 
 import {
-    ClockIcon,
     DotMediumIcon,
     ErrorExclamationIcon,
     EyeIcon,
     LayersSharpDotIcon,
     RefreshIcon,
 } from '@/components/icons'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+// import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
@@ -58,7 +57,7 @@ const TransactionBatch = ({
     const historyModal = useModalState()
     const endModal = useModalState()
 
-    const { onOpenSecurityAction } = useActionSecurityStore()
+    // const { onOpenSecurityAction } = useActionSecurityStore()
 
     const {
         currentAuth: { user, user_organization },
@@ -74,21 +73,21 @@ const TransactionBatch = ({
         })
     }
 
-    const { mutate: timeMachine, isPending: isPendingTimeMachine } =
-        useTimeMachine({
-            options: {
-                onSuccess: () => {
-                    toast.success(
-                        `Successfully Changed to  ${toReadableDate(transactionBatch.created_at)}`
-                    )
-                },
-                onError: () => {
-                    toast.error(
-                        `Something went wrong with time machine ${toReadableDate(transactionBatch.created_at)}`
-                    )
-                },
-            },
-        })
+    // const { mutate: timeMachine, isPending: isPendingTimeMachine } =
+    //     useTimeMachine({
+    //         options: {
+    //             onSuccess: () => {
+    //                 toast.success(
+    //                     `Successfully Changed to  ${toReadableDate(transactionBatch.created_at)}`
+    //                 )
+    //             },
+    //             onError: () => {
+    //                 toast.error(
+    //                     `Something went wrong with time machine ${toReadableDate(transactionBatch.created_at)}`
+    //                 )
+    //             },
+    //         },
+    //     })
 
     return (
         <div
@@ -202,7 +201,7 @@ const TransactionBatch = ({
                             size: 'sm',
                         }}
                     />
-                    {!transactionBatch.is_today && (
+                    {/* {!transactionBatch.is_today && (
                         <Button
                             disabled={isPendingTimeMachine}
                             onClick={(e) => {
@@ -227,7 +226,7 @@ const TransactionBatch = ({
                             )}
                             <ClockIcon />
                         </Button>
-                    )}
+                    )} */}
                 </div>
             </div>
             <div className="flex min-h-[40vh] w-full max-w-7xl shrink-0 gap-x-2">

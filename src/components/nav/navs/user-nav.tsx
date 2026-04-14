@@ -9,6 +9,7 @@ import {
 } from '@/modules/authentication/authgentication.store'
 import GeneratedReportsListSheet from '@/modules/generated-report/components/generated-reports/generated-reports-list'
 import { NotificationNav } from '@/modules/notification/components/notification'
+import TimeMachineFormModal from '@/modules/time-machine-log/components/time-machine-modal'
 import TransactionBatchNavButton from '@/modules/transaction-batch/components/batch-nav-button'
 import NavProfileMenu from '@/modules/user-profile/components/nav/nav-profile-menu'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -25,6 +26,8 @@ import GeneralButtonShortcuts from '@/components/shorcuts/general-button-shorcut
 import AppSidebarToggle from '@/components/ui/app-sidebar/app-sidebar-toggle'
 import { Button } from '@/components/ui/button'
 
+import { useModalState } from '@/hooks/use-modal-state'
+
 import { IClassProps } from '@/types'
 
 import NavTimeInBar from '../../../modules/timesheet/components/nav-time-in-bar'
@@ -39,6 +42,7 @@ const UserNav = ({
 
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(true)
+    const timeMachine = useModalState()
 
     useHotkeys(
         'alt+a',
@@ -132,8 +136,13 @@ const UserNav = ({
                 />
             </NavContainer>
 
-            <Clock />
-
+            {user_organization?.id && (
+                <TimeMachineFormModal
+                    {...timeMachine}
+                    userOrganizationId={user_organization.id}
+                />
+            )}
+            <Clock onClick={() => timeMachine.openModal()} />
             <NavContainer className="pointer-events-auto">
                 <div className="flex items-center">
                     {/* Collapsible secondary navigation */}
