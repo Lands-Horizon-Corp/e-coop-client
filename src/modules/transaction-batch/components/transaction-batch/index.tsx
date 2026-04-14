@@ -10,6 +10,7 @@ import { ICurrency } from '@/modules/currency'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import { ChangeORFormModal } from '@/modules/general-ledger/components/change-or-form'
 import TimeMachineCancelFormModal from '@/modules/time-machine-log/components/cancel-time-machine-modal'
+import TimeMachineFormModal from '@/modules/time-machine-log/components/time-machine-modal'
 
 import {
     ClockIcon,
@@ -57,6 +58,7 @@ const TransactionBatch = ({
     const endModal = useModalState()
 
     const timeMachineCancel = useModalState()
+    const timeMachineForm = useModalState()
 
     const {
         currentAuth: { user, user_organization },
@@ -82,6 +84,18 @@ const TransactionBatch = ({
             )}
         >
             <TimeMachineCancelFormModal {...timeMachineCancel} />
+            {user_organization.id && (
+                <TimeMachineFormModal
+                    userOrganizationId={user_organization.id}
+                    {...timeMachineForm}
+                    formProps={{
+                        frozen_at: transactionBatch.created_at,
+                        reason: 'Blotter balancing verification is in progress',
+                        description:
+                            'Unabalanced blotter detected during review, requiring time machine to verify transactions under current batch date',
+                    }}
+                />
+            )}
             <TransactionBatchHistoriesModal
                 {...historyModal}
                 title={`${transactionBatch?.batch_name ?? 'Transaction Batch'} History`}
@@ -155,6 +169,15 @@ const TransactionBatch = ({
                 </div>
                 <div className="flex items-center gap-x-2">
                     <Button
+                        size={'sm'}
+                        onClick={() => timeMachineForm.openModal()}
+                    >
+                        <ClockIcon className="inline" />{' '}
+                        {!transactionBatch.is_today
+                            ? 'Time Machine'
+                            : 'View in Time Machine'}
+                    </Button>
+                    <Button
                         hoverVariant="primary"
                         onClick={() => invalidateTransactionBatch()}
                         size="icon-sm"
@@ -179,6 +202,7 @@ const TransactionBatch = ({
                     </Button>
 
                     <DotMediumIcon className="text-primary animate-pulse" />
+
                     <ChangeORFormModal
                         buttonProps={{
                             variant: 'secondary',

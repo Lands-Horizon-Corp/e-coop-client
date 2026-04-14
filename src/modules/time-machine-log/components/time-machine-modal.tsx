@@ -39,7 +39,10 @@ import {
     ITimeMachineLog,
     TTimeMachineCancelRequest,
 } from '../time-machine-log.types'
-import { TIME_MACHINE_REASON_OPTIONS } from '../time-machine-log.utils'
+import {
+    TIME_MACHINE_REASON_OPTIONS,
+    TTimeMachineReasonOption,
+} from '../time-machine-log.utils'
 import { TimeMachineLogSchema } from '../time-machine-log.validation'
 import TimeMachineCancelFormModal from './cancel-time-machine-modal'
 import TimeLeft from './time-left'
@@ -55,11 +58,18 @@ export interface ITimeMachineCancelFormProps
             ITimeMachineLog,
             Error,
             TTimeMachineFormValues
-        > {}
+        > {
+    frozen_at?: string
+    reason?: TTimeMachineReasonOption
+    description?: string
+}
 
 const TimeMachineForm = ({
     className,
     userOrganizationId,
+    frozen_at,
+    description,
+    reason,
     ...formProps
 }: ITimeMachineCancelFormProps & { userOrganizationId: string }) => {
     const timeMachineCancel = useModalState()
@@ -91,9 +101,10 @@ const TimeMachineForm = ({
         mode: 'onSubmit',
         defaultValues: {
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-            reason: undefined,
+            reason: reason,
             frozen_until_seconds: 3600,
-            description: undefined,
+            description: description,
+            frozen_at: frozen_at,
             ...formProps.defaultValues,
         },
     })
@@ -333,11 +344,7 @@ const TimeMachineForm = ({
                         </fieldset>
 
                         <FormFooterResetSubmit
-                            disableSubmit={
-                                !form.formState.isDirty ||
-                                isPending ||
-                                !!frozenAtValue
-                            }
+                            disableSubmit={isPending || !!frozenAtValue}
                             error={error}
                             isLoading={isPending}
                             onReset={() => {

@@ -39,6 +39,7 @@ export const TIME_MACHINE_REASON_OPTIONS = [
     'Performance issues detected while time machine is active',
     'Data consistency checks failed under simulated time',
     'Emergency operational incident requires real-time mode',
+    'Blotter balancing verification is in progress',
 ] as const
 
 export type TTimeMachineReasonOption =
