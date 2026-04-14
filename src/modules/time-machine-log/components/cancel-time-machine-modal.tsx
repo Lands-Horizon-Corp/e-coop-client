@@ -7,6 +7,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import useActionSecurityStore from '@/store/action-security-store'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { InfoFillCircleIcon } from '@/components/icons'
@@ -63,6 +64,8 @@ const TimeMachineCancelForm = ({
         },
     })
 
+    const { onOpenSecurityAction } = useActionSecurityStore()
+
     const cancelMutation = useTimeMachineCancel({
         options: {
             ...withToastCallbacks({
@@ -83,16 +86,22 @@ const TimeMachineCancelForm = ({
         })
 
     const onSubmit = form.handleSubmit((formData) => {
-        toast.promise(
-            cancelMutation.mutateAsync({
-                userOrganizationId: formProps.userOrganizationId,
-                ...formData,
-            }),
-            {
-                loading: 'Cancelling Time Machine...',
-                error: 'Error cancelling Time Machine',
-            }
-        )
+        onOpenSecurityAction({
+            title: 'Time Machine Confirmation',
+            description: 'Type password to cancel time machine.',
+            onSuccess: () => {
+                toast.promise(
+                    cancelMutation.mutateAsync({
+                        userOrganizationId: formProps.userOrganizationId,
+                        ...formData,
+                    }),
+                    {
+                        loading: 'Cancelling Time Machine...',
+                        error: 'Error cancelling Time Machine',
+                    }
+                )
+            },
+        })
     }, handleFocusError)
 
     const { error: errorResponse, isPending, reset } = cancelMutation

@@ -9,11 +9,10 @@ import {
 import { ICurrency } from '@/modules/currency'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import { ChangeORFormModal } from '@/modules/general-ledger/components/change-or-form'
-
-// import { useTimeMachine } from '@/modules/user-organization'
-// import useActionSecurityStore from '@/store/action-security-store'
+import TimeMachineCancelFormModal from '@/modules/time-machine-log/components/cancel-time-machine-modal'
 
 import {
+    ClockIcon,
     DotMediumIcon,
     ErrorExclamationIcon,
     EyeIcon,
@@ -57,6 +56,7 @@ const TransactionBatch = ({
     const historyModal = useModalState()
     const endModal = useModalState()
 
+    const timeMachineCancel = useModalState()
 
     const {
         currentAuth: { user, user_organization },
@@ -72,7 +72,6 @@ const TransactionBatch = ({
         })
     }
 
-
     return (
         <div
             className={cn(
@@ -82,6 +81,7 @@ const TransactionBatch = ({
                 !transactionBatch.is_today && 'ring-destructive! ring'
             )}
         >
+            <TimeMachineCancelFormModal {...timeMachineCancel} />
             <TransactionBatchHistoriesModal
                 {...historyModal}
                 title={`${transactionBatch?.batch_name ?? 'Transaction Batch'} History`}
@@ -185,32 +185,17 @@ const TransactionBatch = ({
                             size: 'sm',
                         }}
                     />
-                    {/* {!transactionBatch.is_today && (
+                    {!transactionBatch.is_today && (
                         <Button
-                            disabled={isPendingTimeMachine}
                             onClick={(e) => {
                                 e.preventDefault()
-                                onOpenSecurityAction({
-                                    title: 'Time Machine Confirmation',
-                                    description:
-                                        'Type password to implement time machine.',
-                                    onSuccess: () =>
-                                        timeMachine({
-                                            time_machine_time: new Date(
-                                                transactionBatch.created_at
-                                            ),
-                                        }),
-                                })
+                                timeMachineCancel.openModal()
                             }}
                         >
-                            {isPendingTimeMachine ? (
-                                <LoadingSpinner />
-                            ) : (
-                                'Time Machine'
-                            )}
+                            Cancel Time Machine
                             <ClockIcon />
                         </Button>
-                    )} */}
+                    )}
                 </div>
             </div>
             <div className="flex min-h-[40vh] w-full max-w-7xl shrink-0 gap-x-2">

@@ -92,7 +92,7 @@ const TimeMachineForm = ({
         defaultValues: {
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             reason: undefined,
-            frozen_until_seconds: undefined,
+            frozen_until_seconds: 3600,
             description: undefined,
             ...formProps.defaultValues,
         },
