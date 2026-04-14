@@ -57,7 +57,6 @@ const TransactionBatch = ({
     const historyModal = useModalState()
     const endModal = useModalState()
 
-    // const { onOpenSecurityAction } = useActionSecurityStore()
 
     const {
         currentAuth: { user, user_organization },
@@ -73,21 +72,6 @@ const TransactionBatch = ({
         })
     }
 
-    // const { mutate: timeMachine, isPending: isPendingTimeMachine } =
-    //     useTimeMachine({
-    //         options: {
-    //             onSuccess: () => {
-    //                 toast.success(
-    //                     `Successfully Changed to  ${toReadableDate(transactionBatch.created_at)}`
-    //                 )
-    //             },
-    //             onError: () => {
-    //                 toast.error(
-    //                     `Something went wrong with time machine ${toReadableDate(transactionBatch.created_at)}`
-    //                 )
-    //             },
-    //         },
-    //     })
 
     return (
         <div

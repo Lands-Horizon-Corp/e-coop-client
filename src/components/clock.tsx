@@ -43,7 +43,7 @@ const Clock = ({
     return (
         <div
             className={cn(
-                'relative flex items-center pointer-events-auto',
+                'relative flex items-center pointer-events-auto ',
                 className
             )}
             onMouseEnter={() => setShowTooltip(true)}
@@ -52,8 +52,8 @@ const Clock = ({
             <TimeMachineCancelFormModal {...timeMachineCancel} />
             <Button
                 className={cn(
-                    'font-mono text-sm px-2 w-[110px] relative',
-                    hasActiveTimeMachine && 'snake-border text-green-600',
+                    'relative overflow-visible',
+                    hasActiveTimeMachine && 'snake-border',
                     buttonClassName
                 )}
                 onClick={() => {

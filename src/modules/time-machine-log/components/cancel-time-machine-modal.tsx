@@ -90,7 +90,6 @@ const TimeMachineCancelForm = ({
             }),
             {
                 loading: 'Cancelling Time Machine...',
-                success: 'Time Machine cancelled',
                 error: 'Error cancelling Time Machine',
             }
         )

@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -7,6 +8,7 @@ import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { useGetById } from '@/modules/user-organization'
+import useActionSecurityStore from '@/store/action-security-store'
 
 import TimezoneCombobox from '@/components/comboboxes/timezone-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -64,6 +66,8 @@ const TimeMachineForm = ({
 
     const userOrgId = userOrganizationId
 
+    const { onOpenSecurityAction } = useActionSecurityStore()
+
     const { data: userOrganization, refetch } = useGetById({
         id: userOrganizationId,
         options: {
@@ -97,7 +101,6 @@ const TimeMachineForm = ({
     const timeMachineMutation = useCreateTimeMachine({
         options: {
             ...withToastCallbacks({
-                textSuccess: 'Created Time machine successfully',
                 onSuccess: (data) => {
                     formProps.onSuccess?.(data)
                     refetch()
@@ -126,10 +129,22 @@ const TimeMachineForm = ({
         })
 
     const onSubmit = form.handleSubmit((formData) => {
-        timeMachineMutation.mutate({
-            userOrganizationId: userOrgId,
-            ...formData,
-            frozen_at: new Date(formData.frozen_at).toISOString(),
+        onOpenSecurityAction({
+            title: 'Time Machine Confirmation',
+            description: 'Type password to implement time machine.',
+            onSuccess: () => {
+                toast.promise(
+                    timeMachineMutation.mutateAsync({
+                        userOrganizationId: userOrgId,
+                        ...formData,
+                        frozen_at: new Date(formData.frozen_at).toISOString(),
+                    }),
+                    {
+                        loading: 'Creating Time Machine...',
+                        error: 'Failed to create Time machine',
+                    }
+                )
+            },
         })
     }, handleFocusError)
 

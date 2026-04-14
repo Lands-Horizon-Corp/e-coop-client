@@ -293,11 +293,12 @@ html {
 }
 
 .footer-link {
-    @apply text-[min(14px, 2.5vw)] text-[#727272];
+    font-size: min(14px, 2.5vw);
+    @apply text-[#727272];
 }
 
 .nav-links {
-    @apply text-[min(15px, 2.5vw)];
+    font-size: min(15px, 2.5vw);
 }
 
 @keyframes fadeIn {
@@ -411,6 +412,7 @@ body[data-scroll-locked] {
 }
 
 @keyframes gradient-pulse {
+
     0%,
     100% {
         opacity: 1;
@@ -436,6 +438,7 @@ body[data-scroll-locked] {
 }
 
 @keyframes gradient-bounce {
+
     0%,
     20%,
     50%,
@@ -454,15 +457,15 @@ body[data-scroll-locked] {
 }
 
 .r1 {
-    @apply border-1 border-red-500;
+    @apply border border-red-500;
 }
 
 .g1 {
-    @apply border-1 border-green-500;
+    @apply border border-green-500;
 }
 
 .v1 {
-    @apply border-1 border-violet-500;
+    @apply border border-violet-500;
 }
 
 .flex-center {
@@ -670,32 +673,38 @@ body[data-scroll-locked] {
 
 .snake-border {
     position: relative;
+    border-radius: var(--radius);
     z-index: 0;
 }
 
 .snake-border::before {
     content: '';
     position: absolute;
-    inset: -2px;
-    border-radius: var(--radius);
-    padding: 1px;
+    inset: 0;
+    padding: 2px;
+    /* thickness of border */
+    border-radius: inherit;
 
-    background: linear-gradient(
-        90deg,
-        transparent,
-        var(--ring),
-        transparent,
-        var(--primary),
-        transparent
-    );
+    background: linear-gradient(90deg,
+            transparent,
+            var(--ring),
+            var(--primary),
+            var(--ring),
+            transparent);
 
     background-size: 200% 100%;
     animation: snake-border 2s linear infinite;
 
+    /* THIS is the key */
     -webkit-mask:
         linear-gradient(#000 0 0) content-box,
         linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
+
+    /* fallback for other browsers */
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
     mask-composite: exclude;
 
     pointer-events: none;
