@@ -5,11 +5,17 @@ import { type VariantProps, cva } from 'class-variance-authority'
 import {
     ArrowDownLeftIcon,
     ArrowUpRightIcon,
+    BankIcon,
     BookOpenIcon,
     CreditCardIcon,
     FileFillIcon,
+    LayersIcon,
+    QuestionIcon,
     ReceiptIcon,
     SettingsIcon,
+    TrendingUpIcon,
+    Users3Icon,
+    WalletIcon,
 } from '../../../components/icons'
 
 const ledgerSourceVariants = cva(
@@ -42,8 +48,32 @@ const ledgerSourceVariants = cva(
                     'dark:bg-indigo-950 dark:text-indigo-300 dark:border-indigo-800 dark:hover:bg-indigo-900'
                 ),
                 'check voucher': cn(
-                    'bg-background text-primary/60 border-teal-200 hover:bg-teal-200',
-                    'dark:bg-teal-950 dark:text-primary dark:border-teal-800 dark:hover:bg-teal-900'
+                    'bg-teal-100 text-teal-800 border-teal-200 hover:bg-teal-200',
+                    'dark:bg-teal-950 dark:text-teal-300 dark:border-teal-800 dark:hover:bg-teal-900'
+                ),
+                loan: cn(
+                    'bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-200',
+                    'dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 dark:hover:bg-blue-900'
+                ),
+                'savings interest': cn(
+                    'bg-sky-100 text-sky-800 border-sky-200 hover:bg-sky-200',
+                    'dark:bg-sky-950 dark:text-sky-300 dark:border-sky-800 dark:hover:bg-sky-900'
+                ),
+                'mutual contribution': cn(
+                    'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-200 hover:bg-fuchsia-200',
+                    'dark:bg-fuchsia-950 dark:text-fuchsia-300 dark:border-fuchsia-800 dark:hover:bg-fuchsia-900'
+                ),
+                disbursement: cn(
+                    'bg-cyan-100 text-cyan-800 border-cyan-200 hover:bg-cyan-200',
+                    'dark:bg-cyan-950 dark:text-cyan-300 dark:border-cyan-800 dark:hover:bg-cyan-900'
+                ),
+                blotter: cn(
+                    'bg-orange-100 text-orange-800 border-orange-200 hover:bg-orange-200',
+                    'dark:bg-orange-950 dark:text-orange-300 dark:border-orange-800 dark:hover:bg-orange-900'
+                ),
+                'other fund': cn(
+                    'bg-zinc-100 text-zinc-800 border-zinc-200 hover:bg-zinc-200',
+                    'dark:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700 dark:hover:bg-zinc-700'
                 ),
                 default: cn(
                     'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200',
@@ -94,7 +124,7 @@ export function LedgerSourceBadge({
     ...props
 }: LedgerSourceBadgeProps) {
     const getSourceIcon = (source: TGeneralLedgerSource) => {
-        const icons = {
+        const icons: Record<TGeneralLedgerSource, React.ElementType> = {
             withdraw: ArrowDownLeftIcon,
             deposit: ArrowUpRightIcon,
             journal: BookOpenIcon,
@@ -102,6 +132,13 @@ export function LedgerSourceBadge({
             adjustment: SettingsIcon,
             'journal voucher': FileFillIcon,
             'check voucher': ReceiptIcon,
+            // Added the missing mappings:
+            loan: BankIcon,
+            'savings interest': TrendingUpIcon,
+            'mutual contribution': Users3Icon,
+            disbursement: WalletIcon,
+            blotter: LayersIcon,
+            'other fund': QuestionIcon,
         }
         return icons[source]
     }

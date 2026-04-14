@@ -9,6 +9,12 @@ const transactionPhraseMap: Record<TGeneralLedgerSource, string> = {
     adjustment: 'made an adjustment to',
     'journal voucher': 'posted a journal voucher for',
     'check voucher': 'created a check voucher for',
+    loan: 'processed a loan transaction for',
+    'savings interest': 'credited savings interest to',
+    'mutual contribution': 'remitted a mutual contribution for',
+    disbursement: 'released a disbursement for',
+    blotter: 'logged a blotter entry for',
+    'other fund': 'allocated funds to',
 }
 
 interface TransactionMessageGeneratorProps {

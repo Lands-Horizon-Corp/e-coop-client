@@ -1,7 +1,7 @@
 import { TFinalFilter } from '@/contexts/filter-context'
-import { toReadableDate } from '@/helpers/date-utils'
+// import { toReadableDate } from '@/helpers/date-utils'
 import { TModelName } from '@/modules/generated-report'
-import GeneratedReportCreateFormModal from '@/modules/generated-report/components/forms/generate-report-create-update-modal'
+// import GeneratedReportCreateFormModal from '@/modules/generated-report/components/forms/generate-report-create-update-modal'
 import { Table } from '@tanstack/react-table'
 import { useHotkeys } from 'react-hotkeys-hook'
 
@@ -30,12 +30,12 @@ export interface IDataTableExportProps<TData> {
 }
 
 const DataTableExport = <TData,>({
-    filters,
-    url,
-    model,
+    // filters,
+    // url,
+    // model,
     disabled = false,
     isLoading = false,
-    hbsDataPath,
+    // hbsDataPath,
     table,
 }: IDataTableExportProps<TData>) => {
     const modalState = useModalState(false)
@@ -66,7 +66,7 @@ const DataTableExport = <TData,>({
     return (
         <GenerateReportFilterContext.Provider value={filterState}>
             <>
-                <GeneratedReportCreateFormModal
+                {/* <GeneratedReportCreateFormModal
                     // open
                     formProps={{
                         disabledFields: ['url'],
@@ -87,7 +87,7 @@ const DataTableExport = <TData,>({
                         },
                     }}
                     {...modalState}
-                />
+                /> */}
                 <Button
                     className="gap-x-1 rounded-md"
                     disabled={disabled || isLoading}

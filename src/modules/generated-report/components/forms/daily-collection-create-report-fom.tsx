@@ -149,7 +149,8 @@ const DailyCollectionSummaryCreateReportForm = ({
                                             Sundries Print Separate Page
                                         </span>
                                         <span className="text-xs text-muted-foreground">
-                                            Print sundries entries on a separate page in the report.
+                                            Print sundries entries on a separate
+                                            page in the report.
                                         </span>
                                     </div>
                                     <Checkbox
@@ -204,10 +205,7 @@ export const DailyCollectionSummaryCreateReportFormModal = ({
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<
-        IDailyCollectionSummaryFormProps,
-        'className' | 'onClose'
-    >
+    formProps?: Omit<IDailyCollectionSummaryFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
         false,

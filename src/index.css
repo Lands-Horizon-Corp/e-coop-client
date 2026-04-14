@@ -412,7 +412,6 @@ body[data-scroll-locked] {
 }
 
 @keyframes gradient-pulse {
-
     0%,
     100% {
         opacity: 1;
@@ -438,7 +437,6 @@ body[data-scroll-locked] {
 }
 
 @keyframes gradient-bounce {
-
     0%,
     20%,
     50%,
@@ -685,12 +683,14 @@ body[data-scroll-locked] {
     /* thickness of border */
     border-radius: inherit;
 
-    background: linear-gradient(90deg,
-            transparent,
-            var(--ring),
-            var(--primary),
-            var(--ring),
-            transparent);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--ring),
+        var(--primary),
+        var(--ring),
+        transparent
+    );
 
     background-size: 200% 100%;
     animation: snake-border 2s linear infinite;

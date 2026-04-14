@@ -91,7 +91,8 @@ const TransactionBatch = ({
     //show time machine only if not exisiting time machine session,
     const showTimeMachineButton = notToday && !showCancelTimeMachine
 
-    const showButtonRed = notToday && hasCurrentTimeMachineSession && !transactionBatch.is_today
+    const showButtonRed =
+        notToday && hasCurrentTimeMachineSession && !transactionBatch.is_today
 
     return (
         <div
@@ -189,8 +190,8 @@ const TransactionBatch = ({
                 <div className="flex items-center gap-x-2">
                     {showTimeMachineButton && (
                         <Button
-                            size={'sm'}
                             onClick={() => timeMachineForm.openModal()}
+                            size={'sm'}
                         >
                             <ClockIcon className="inline" /> Time Machine
                         </Button>
@@ -230,11 +231,11 @@ const TransactionBatch = ({
                     {showCancelTimeMachine && (
                         <Button
                             className={cn('', showButtonRed && 'animate-pulse')}
-                            variant={showButtonRed ? 'destructive' : 'default'}
                             onClick={(e) => {
                                 e.preventDefault()
                                 timeMachineCancel.openModal()
                             }}
+                            variant={showButtonRed ? 'destructive' : 'default'}
                         >
                             Cancel Time Machine
                             <ClockIcon />

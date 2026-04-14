@@ -3,7 +3,8 @@ import { AdjustmentReportCreateFormModal } from '@/modules/generated-report/comp
 import { CloseAccountReportCreateFormModal } from '@/modules/generated-report/components/forms/close-account-create-report-form'
 import { DailyCashCollectionReceiptJournalReportCreateFormModal } from '@/modules/generated-report/components/forms/daily-cash-receipt-create-report-form'
 import { JournalVoucherReportCreateFormModal } from '@/modules/generated-report/components/forms/journal-voucher-create-report-form'
-import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
+
+// import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
 
 import AuthGuard from '@/components/wrappers/auth-guard'
 import UserOrgGuard from '@/components/wrappers/user-org-guard'
@@ -47,7 +48,7 @@ function PlaygroundPage() {
                     <GenerateReportTemplatePicker
                         templates={JOURNAL_VOUCHER_PRINT_TEMPLATES}
                     /> */}
-                    <PrintReportFormModal />
+                    {/* <PrintReportFormModal /> */}
                     {/* <GLBooksReportCreateFormModal trigger={<p>HITLER A</p>} />
                     <TrialBalanceReportCreateFormModal
                         trigger={<p>HITLER B</p>}
