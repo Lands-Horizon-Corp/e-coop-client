@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
+import { XIcon } from './icons'
+
 export interface NavClockProps {
     className?: string
     buttonClassName?: string
@@ -70,13 +72,13 @@ const Clock = ({
                     hour12: !is24Hour,
                 })}
             </Button>
-            {user_organization?.time_machine_time && (
+            {user_organization?.time_machine_time && showTooltip && (
                 <Button
                     onClick={() => timeMachineCancel.openModal()}
                     size="sm"
-                    variant="outline"
+                    variant="destructive"
                 >
-                    cancel
+                    <XIcon />
                 </Button>
             )}
             {showTooltip && (

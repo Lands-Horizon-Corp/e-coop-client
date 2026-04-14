@@ -23,6 +23,7 @@ import {
 // import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Kbd } from '@/components/ui/kbd'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
 import { useModalState } from '@/hooks/use-modal-state'
@@ -89,6 +90,8 @@ const TransactionBatch = ({
 
     //show time machine only if not exisiting time machine session,
     const showTimeMachineButton = notToday && !showCancelTimeMachine
+
+    const showButtonRed = notToday && hasCurrentTimeMachineSession
 
     return (
         <div
@@ -226,6 +229,8 @@ const TransactionBatch = ({
                     />
                     {showCancelTimeMachine && (
                         <Button
+                            className={cn('', showButtonRed && 'animate-pulse')}
+                            variant={showButtonRed ? 'destructive' : 'default'}
                             onClick={(e) => {
                                 e.preventDefault()
                                 timeMachineCancel.openModal()
@@ -237,6 +242,12 @@ const TransactionBatch = ({
                     )}
                 </div>
             </div>
+            {showButtonRed && (
+                <Kbd className=" self-end italic text-xs text-destructive">
+                    To proceed with this blotter date, please cancel the active
+                    Time Machine session first.
+                </Kbd>
+            )}
             <div className="flex min-h-[40vh] w-full max-w-7xl shrink-0 gap-x-2">
                 <div className="flex-1 space-y-2 rounded-2xl border bg-background p-4">
                     <div className="flex gap-x-2">

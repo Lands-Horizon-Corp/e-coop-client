@@ -21,16 +21,19 @@ interface ITimeMachineLogsListProps {
 const TimeMachineLogsList = ({
     userOrganizationId,
 }: ITimeMachineLogsListProps) => {
-    const { data, isLoading, error, refetch, isRefetching } =
-        useGetTimeMachineLogs({
-            options: {
-                enabled: !!userOrganizationId,
-            },
+    const {
+        data: timeMachine,
+        isLoading,
+        error,
+        refetch,
+        isRefetching,
+    } = useGetTimeMachineLogs({
+        options: {
+            enabled: !!userOrganizationId,
+        },
 
-            userOrganizationId,
-        })
-
-    if (error) return <div>Error loading logs</div>
+        userOrganizationId,
+    })
 
     return (
         <div className="flex flex-col p-5 bg-background w-1/2 gap-2 ecoop-scroll overflow-auto max-h-[80vh] rounded-xl">
@@ -46,7 +49,7 @@ const TimeMachineLogsList = ({
                         <Skeleton className="h-10 w-full mb-2 rounded-xl" />
                     </div>
                 ))}
-            {data
+            {timeMachine
                 ?.sort(
                     (a, b) =>
                         new Date(b.frozen_at).getTime() -
@@ -123,7 +126,9 @@ const TimeMachineLogsList = ({
                             </span>
                         </div>
                     </div>
-                )) || (
+                ))}
+
+            {(error || timeMachine?.length === 0) && (
                 <Empty className="mt-10">
                     <EmptyTitle>No logs available</EmptyTitle>
                     <EmptyIcon />
