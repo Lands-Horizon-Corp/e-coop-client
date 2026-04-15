@@ -90,9 +90,7 @@ const TimeMachineForm = ({
     useSubscribe(
         'time_machine_log',
         `update.${userOrganization?.time_machine_log_id}`,
-        (data) => {
-            console.log('Received pubsub for time machine log update', data)
-        }
+        () => {}
     )
 
     const form = useForm<TTimeMachineFormValues>({

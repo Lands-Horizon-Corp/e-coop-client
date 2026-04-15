@@ -349,7 +349,7 @@ const JournalVoucherCreateUpdateForm = ({
 
     useEffect(() => {
         form.reset(initialValues)
-    }, [initialValues])
+    }, [initialValues, form])
 
     return (
         <Form {...form}>
