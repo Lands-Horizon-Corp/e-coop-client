@@ -368,7 +368,7 @@ export const useReleaseLoanTransaction = createMutationFactory<
     { loanTransactionId: TEntityId; idempotencyKey: string }
 >({
     mutationFn: async ({ loanTransactionId, idempotencyKey }) => {
-        const response = await API.put<void, ILoanTransaction>(
+        const response = await API.post<void, ILoanTransaction>(
             `${loanTransactionAPIRoute}/${loanTransactionId}/release`,
             undefined,
             {},
