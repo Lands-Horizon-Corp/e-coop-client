@@ -165,7 +165,13 @@ const TransactionBatchNavButton = (_props: Props) => {
                         currency,
                         currency_id: currency.id,
                     },
-                    onSuccess: setData,
+                    onSuccess: (data) => {
+                        setData(data)
+                        console.log({ data })
+                        queryClient.invalidateQueries({
+                            queryKey: ['transaction-batch', 'unclosed', 'me'],
+                        })
+                    },
                 }}
             />
             <ButtonGroup>
@@ -269,7 +275,17 @@ const TransactionBatchNavButton = (_props: Props) => {
                                         currency,
                                         currency_id: currency.id,
                                     },
-                                    onSuccess: setData,
+                                    onSuccess: (data) => {
+                                        setData(data)
+                                        console.log({ data })
+                                        queryClient.invalidateQueries({
+                                            queryKey: [
+                                                'transaction-batch',
+                                                'unclosed',
+                                                'me',
+                                            ],
+                                        })
+                                    },
                                 }}
                             />
                         </>
