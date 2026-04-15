@@ -387,8 +387,6 @@ export const TotalsSummary = ({
     }
 
     const getTotalsForTab = () => {
-        console.log(activeTab)
-        console.log(totals.payment_entry_credit_total)
         switch (activeTab) {
             case 'general-ledger':
                 return {

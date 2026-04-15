@@ -108,8 +108,6 @@ const TimeMachineCancelForm = ({
 
     const error = serverRequestErrExtractor({ error: errorResponse })
 
-    console.log(form.formState.errors)
-
     return (
         <Form {...form}>
             <form

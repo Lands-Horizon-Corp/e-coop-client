@@ -156,7 +156,6 @@ const TimezoneCombobox = forwardRef<HTMLButtonElement, Props>(
                                         key={timezone.value}
                                         onSelect={() => {
                                             setOpen(false)
-                                            console.log(timezone)
                                             onChange?.(timezone.value)
                                         }}
                                         value={timezone.value}

@@ -45,7 +45,6 @@ function Broadcaster() {
     )
 
     const simulateBurst = () => {
-        console.log('Switching to Burst Mode options...')
         setSubOptions({
             debounceTime: 0,
             delay: 250,
