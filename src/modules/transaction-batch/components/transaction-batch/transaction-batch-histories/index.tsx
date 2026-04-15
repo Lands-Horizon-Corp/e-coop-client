@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 
 import { cn } from '@/helpers'
-import { currencyFormat } from '@/modules/currency'
+import { ICurrency, currencyFormat } from '@/modules/currency'
 import DisbursementAllTransactionTable from '@/modules/disbursement-transaction/components/disbursement-transaction-table/disbursement-transaction-all-table'
 import GeneralLedgerAllTable from '@/modules/general-ledger/components/tables/general-ledger-table/general-ledger-all-table'
 import { useTransactionBatchHistoryTotal } from '@/modules/transaction-batch'
@@ -225,7 +225,7 @@ export const TransactionBatchHistoriesModal = ({
     return (
         <Modal
             {...props}
-            className={cn('flex !max-w-[95vw] px-0 pb-4 pt-0', className)}
+            className={cn('flex max-w-[95vw]! px-0 pb-4 pt-0', className)}
             closeButtonClassName="top-2 right-2"
             title={title}
             titleHeaderContainerClassName="sr-only"
@@ -240,14 +240,19 @@ interface TotalsSummaryProps {
     activeTab: (typeof HistoryTabs)[number]['value']
 }
 
-interface TotalCardProps {
+const TotalCard = ({
+    label,
+    amount,
+    icon,
+    variant,
+    currency,
+}: {
     label: string
     amount: number
     icon: React.ReactNode
     variant: 'debit' | 'credit' | 'total'
-}
-
-const TotalCard = ({ label, amount, icon, variant }: TotalCardProps) => {
+    currency: ICurrency
+}) => {
     const variantStyles = {
         debit: 'border-debit/30',
         credit: 'border-credit/30',
@@ -288,7 +293,10 @@ const TotalCard = ({ label, amount, icon, variant }: TotalCardProps) => {
                             amountStyles[variant]
                         )}
                     >
-                        {currencyFormat(amount)}
+                        {currencyFormat(amount, {
+                            currency: currency,
+                            showSymbol: !!currency,
+                        })}
                     </span>
                 </div>
             </CardContent>
@@ -355,6 +363,7 @@ export const TotalsSummary = ({
             <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <TotalCard
                     amount={totals.batch_funding_total}
+                    currency={totals.currency}
                     icon={<WalletIcon className="h-5 w-5" />}
                     label="Total Batch Funding"
                     variant="total"
@@ -368,6 +377,7 @@ export const TotalsSummary = ({
             <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <TotalCard
                     amount={totals.disbursement_transaction_total}
+                    currency={totals.currency}
                     icon={<WalletIcon className="h-5 w-5" />}
                     label="Total Disbursement"
                     variant="total"
@@ -377,38 +387,40 @@ export const TotalsSummary = ({
     }
 
     const getTotalsForTab = () => {
+        console.log(activeTab)
+        console.log(totals.payment_entry_credit_total)
         switch (activeTab) {
-            case 'general_ledger':
+            case 'general-ledger':
                 return {
                     debit: totals.general_ledger_debit_total,
                     credit: totals.general_ledger_credit_total,
                 }
-            case 'check_entry':
+            case 'check-entry':
                 return {
                     debit: totals.check_entry_debit_total,
                     credit: totals.check_entry_credit_total,
                 }
-            case 'online_entry':
+            case 'online-entry':
                 return {
                     debit: totals.online_entry_debit_total,
                     credit: totals.online_entry_credit_total,
                 }
-            case 'cash_entry':
+            case 'cash-entry':
                 return {
                     debit: totals.cash_entry_debit_total,
                     credit: totals.cash_entry_credit_total,
                 }
-            case 'payment_entry':
+            case 'payment-entry':
                 return {
                     debit: totals.payment_entry_debit_total,
                     credit: totals.payment_entry_credit_total,
                 }
-            case 'withdraw_entry':
+            case 'withdraw-entry':
                 return {
                     debit: totals.withdraw_entry_debit_total,
                     credit: totals.withdraw_entry_credit_total,
                 }
-            case 'deposit_entry':
+            case 'deposit-entry':
                 return {
                     debit: totals.deposit_entry_debit_total,
                     credit: totals.deposit_entry_credit_total,
@@ -424,18 +436,21 @@ export const TotalsSummary = ({
         <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <TotalCard
                 amount={debit}
+                currency={totals.currency}
                 icon={<ArrowUpRightIcon className="h-5 w-5" />}
                 label="Total Debit"
                 variant="debit"
             />
             <TotalCard
                 amount={credit}
+                currency={totals.currency}
                 icon={<ArrowDownLeftIcon className="h-5 w-5" />}
                 label="Total Credit"
                 variant="credit"
             />
             <TotalCard
                 amount={debit - credit}
+                currency={totals.currency}
                 icon={<WalletIcon className="h-5 w-5" />}
                 label="Net Balance"
                 variant="total"

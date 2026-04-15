@@ -184,6 +184,9 @@ export interface ITransactionBatchHistoryTotal {
 
     deposit_entry_debit_total: number
     deposit_entry_credit_total: number
+
+    currency_id: TEntityId
+    currency: ICurrency
 }
 
 export interface ITransactionBatchPaginated extends IPaginatedResult<ITransactionBatch> {}
