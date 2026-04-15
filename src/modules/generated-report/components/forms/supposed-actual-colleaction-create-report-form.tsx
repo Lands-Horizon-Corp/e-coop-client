@@ -7,7 +7,9 @@ import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
+import { AccountCategoryComboBox } from '@/modules/account-category'
 import AreaCombobox from '@/modules/area/components/area-combobox'
+import EmployeePicker from '@/modules/employee/components/employee-picker'
 import {
     IGeneratedReport,
     TWithReportConfigSchema,
@@ -18,10 +20,12 @@ import { getTemplateAt } from '@/modules/generated-report/generated-report-templ
 import MemberGroupCombobox from '@/modules/member-group/components/member-group-combobox'
 import MemberOccupationCombobox from '@/modules/member-occupation/components/member-occupation-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormLabel } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -66,20 +70,21 @@ export const SupposedActualCollectionSchema = z
 
         loan_status: z.enum(['all', 'current', 'dq']).default('all'),
 
-        member_type_id: z.string().optional(),
+        member_type_id: entityIdSchema.optional(),
 
-        account_id: z.string().optional(),
+        account_id: entityIdSchema.optional(),
         account: z.any().optional(),
 
         barangay: z.string().optional(),
 
-        member_occupation_id: z.string().optional(),
-        member_address_area_id: z.string().optional(),
-        member_group_id: z.string().optional(),
+        member_occupation_id: entityIdSchema.optional(),
+        member_address_area_id: entityIdSchema.optional(),
+        member_group_id: entityIdSchema.optional(),
 
-        collector_id: z.string().optional(),
+        collector_id: entityIdSchema.optional(),
+        collector: z.any().optional(),
 
-        category_id: z.string().optional(),
+        account_category_id: entityIdSchema.optional(),
 
         include_interest: z.boolean().default(false),
         filter_by_dosri: z.boolean().default(false),
@@ -129,7 +134,7 @@ const SupposedActualCollectionCreateReportForm = ({
 
             collector_id: undefined,
 
-            category_id: undefined,
+            account_category_id: undefined,
 
             include_interest: false,
             filter_by_dosri: false,
@@ -376,6 +381,7 @@ const SupposedActualCollectionCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
@@ -422,6 +428,7 @@ const SupposedActualCollectionCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
@@ -435,6 +442,7 @@ const SupposedActualCollectionCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
@@ -452,23 +460,55 @@ const SupposedActualCollectionCreateReportForm = ({
                             control={form.control}
                             label="Collector"
                             name="collector_id"
-                            render={({ field }) => (
-                                // TODO: ADD COLLECTOR PICKER
-                                <p {...field}>TODO: COllector</p>
-                                // <CollectorPicker
-                                //     {...field}
-                                //     onSelect={(v) =>
-                                //         field.onChange(v?.id)
-                                //     }
-                                // />
-                            )}
+                            render={({ field }) => {
+                                const selected = form.getValues('collector')
+                                return (
+                                    <div className="flex items-center gap-2">
+                                        <EmployeePicker
+                                            {...field}
+                                            onSelect={(v) => {
+                                                field.onChange(v?.user_id)
+                                                form.setValue(
+                                                    'collector',
+                                                    v?.user
+                                                )
+                                            }}
+                                            placeholder="ALL"
+                                            value={selected}
+                                        />
+                                        {selected && (
+                                            <Button
+                                                onClick={() => {
+                                                    field.onChange(undefined)
+                                                    form.setValue(
+                                                        'collector',
+                                                        undefined
+                                                    )
+                                                }}
+                                                size="icon"
+                                                type="button"
+                                                variant="ghost"
+                                            >
+                                                <XIcon className="size-4" />
+                                            </Button>
+                                        )}
+                                    </div>
+                                )
+                            }}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            label="Category"
-                            name="category_id"
-                            render={({ field }) => <Input {...field} />}
+                            label="Account Category"
+                            name="account_category_id"
+                            render={({ field }) => (
+                                <AccountCategoryComboBox
+                                    onChange={field.onChange}
+                                    placeholder="All Category"
+                                    undefinable
+                                    value={field.value}
+                                />
+                            )}
                         />
                     </div>
 

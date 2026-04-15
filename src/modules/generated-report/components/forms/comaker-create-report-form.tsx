@@ -18,7 +18,7 @@ import { getTemplateAt } from '@/modules/generated-report/generated-report-templ
 import MemberGroupCombobox from '@/modules/member-group/components/member-group-combobox'
 import MemberOccupationCombobox from '@/modules/member-occupation/components/member-occupation-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -58,13 +58,13 @@ export const ComakerReportSchema = z
 
         include: z.enum(['comaker', 'collateral', 'all']).default('all'),
 
-        member_type_id: z.string().optional(),
+        member_type_id: entityIdSchema.optional(),
         account: z.any().optional(), // for UI only
-        account_id: z.string().optional(),
+        account_id: entityIdSchema.optional(),
         barangay: z.string().optional(),
-        member_occupation_id: z.string().optional(),
-        member_area_id: z.string().optional(),
-        member_group_id: z.string().optional(),
+        member_occupation_id: entityIdSchema.optional(),
+        member_area_id: entityIdSchema.optional(),
+        member_group_id: entityIdSchema.optional(),
     })
     .and(WithGeneratedReportSchema)
     .superRefine((data, ctx) => {
@@ -98,7 +98,7 @@ export interface IComakerReportFormProps
             TComakerReportSchema
         > {}
 
-const ComakerReportCreateForm = ({
+const ComakerCreateReportForm = ({
     className,
     ...formProps
 }: IComakerReportFormProps) => {
@@ -291,6 +291,7 @@ const ComakerReportCreateForm = ({
                                         field.onChange(selected?.id)
                                     }
                                     placeholder="All member type"
+                                    undefinable
                                 />
                             )}
                         />
@@ -368,6 +369,7 @@ const ComakerReportCreateForm = ({
                                         field.onChange(selected?.id)
                                     }
                                     placeholder="All group"
+                                    undefinable
                                 />
                             )}
                         />
@@ -398,9 +400,9 @@ const ComakerReportCreateForm = ({
     )
 }
 
-export default ComakerReportCreateForm
+export default ComakerCreateReportForm
 
-export const ComakerReportCreateFormModal = ({
+export const ComakerCreateReportFormModal = ({
     title = 'Create Comaker Report',
     description = 'Define filters and configuration for Comaker report',
     className,
@@ -424,7 +426,7 @@ export const ComakerReportCreateFormModal = ({
             onOpenChange={onOpenChange}
             open={open}
         >
-            <ComakerReportCreateForm
+            <ComakerCreateReportForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)

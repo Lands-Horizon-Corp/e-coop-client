@@ -18,7 +18,7 @@ import useFilterState from '@/hooks/use-filter-state'
 import { useShortcut } from '@/hooks/use-shorcuts'
 
 import {
-    TEmployeesPaginatedHookMode,
+    TEmployeesFetchMode,
     useFilteredPaginatedEmployees,
 } from '../employee.service'
 
@@ -28,7 +28,7 @@ interface Props {
     placeholder?: string
     onSelect?: (selectedEmployee: IUserOrganization) => void
     allowShorcutCommand?: boolean
-    mode?: TEmployeesPaginatedHookMode
+    mode?: TEmployeesFetchMode
     triggerClassName?: string
 }
 

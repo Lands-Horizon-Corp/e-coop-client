@@ -163,7 +163,7 @@ const PrintNumberTagForm = ({
 
 export default PrintNumberTagForm
 
-export const PrintNumberTagReportCreateFormModal = ({
+export const PrintNumberTagCreateReportFormModal = ({
     title = 'Create Print Number Tag Report',
     description = 'Define number range for printing tags',
     className,

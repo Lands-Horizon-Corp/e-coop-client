@@ -7,6 +7,7 @@ import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
+import EmployeePicker from '@/modules/employee/components/employee-picker'
 import {
     IGeneratedReport,
     TWithReportConfigSchema,
@@ -18,10 +19,12 @@ import { LOAN_MODE_OF_PAYMENT } from '@/modules/loan-transaction/loan.constants'
 import MemberDepartmentCombobox from '@/modules/member-department/components/member-department-combobox'
 import MemberGroupCombobox from '@/modules/member-group/components/member-group-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormLabel } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -63,17 +66,17 @@ export const LoanCollectionDetailSchema = z
             ])
             .default('by_account'),
 
-        member_type_id: z.string().optional(),
+        member_type_id: entityIdSchema.optional(),
 
         barangay: z.string().optional(),
 
-        member_group_id: z.string().optional(),
-        member_department_id: z.string().optional(),
+        member_group_id: entityIdSchema.optional(),
+        member_department_id: entityIdSchema.optional(),
 
-        account_id: z.string().optional(),
+        account_id: entityIdSchema.optional(),
         account: z.any().optional(),
 
-        collector_id: z.string().optional(),
+        collector_id: entityIdSchema.optional(),
         collector: z.any().optional(),
 
         past_due_below_starting_date: z.boolean().default(false),
@@ -306,6 +309,7 @@ const LoanCollectionDetailCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
@@ -330,10 +334,10 @@ const LoanCollectionDetailCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
-
                         <FormFieldWrapper
                             control={form.control}
                             label="Department"
@@ -343,37 +347,70 @@ const LoanCollectionDetailCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Account"
+                            name="account"
+                            render={({ field }) => (
+                                <AccountPicker
+                                    {...field}
+                                    hideDescription
+                                    mode="all"
+                                    onSelect={(account) => {
+                                        field.onChange(account.id)
+                                        form.setValue('account', account)
+                                    }}
+                                    placeholder="All Account"
+                                    triggerClassName="!w-full !min-w-0 flex-1"
+                                    value={form.getValues('account')}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Collector"
+                            name="collector_id"
+                            render={({ field }) => {
+                                const selected = form.getValues('collector')
+                                return (
+                                    <div className="flex items-center gap-2">
+                                        <EmployeePicker
+                                            {...field}
+                                            onSelect={(v) => {
+                                                field.onChange(v?.user_id)
+                                                form.setValue(
+                                                    'collector',
+                                                    v?.user
+                                                )
+                                            }}
+                                            placeholder="ALL"
+                                            value={selected}
+                                        />
+                                        {selected && (
+                                            <Button
+                                                onClick={() => {
+                                                    field.onChange(undefined)
+                                                    form.setValue(
+                                                        'collector',
+                                                        undefined
+                                                    )
+                                                }}
+                                                size="icon"
+                                                type="button"
+                                                variant="ghost"
+                                            >
+                                                <XIcon className="size-4" />
+                                            </Button>
+                                        )}
+                                    </div>
+                                )
+                            }}
+                        />
                     </div>
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Account"
-                        name="account"
-                        render={({ field }) => (
-                            <AccountPicker
-                                {...field}
-                                hideDescription
-                                mode="all"
-                                onSelect={(account) => {
-                                    field.onChange(account.id)
-                                    form.setValue('account', account)
-                                }}
-                                placeholder="All Account"
-                                triggerClassName="!w-full !min-w-0 flex-1"
-                                value={form.getValues('account')}
-                            />
-                        )}
-                    />
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Collector"
-                        name="collector_id"
-                        render={() => (
-                            <p className="text-sm">TODO Collector picker</p>
-                        )}
-                    />
 
                     <FormLabel className="text-xs text-muted-foreground">
                         Other Options

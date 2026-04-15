@@ -1,8 +1,8 @@
 import { TrialBalanceReportCreateFormModal } from '@/modules/general-ledger-definition/components/forms/trial-balance-create-report-form'
-import { AdjustmentReportCreateFormModal } from '@/modules/generated-report/components/forms/adjustment-create-report-form'
-import { CloseAccountReportCreateFormModal } from '@/modules/generated-report/components/forms/close-account-create-report-form'
-import { DailyCashCollectionReceiptJournalReportCreateFormModal } from '@/modules/generated-report/components/forms/daily-cash-receipt-create-report-form'
-import { JournalVoucherReportCreateFormModal } from '@/modules/generated-report/components/forms/journal-voucher-create-report-form'
+import { AdjustmentCreateReportFormModal } from '@/modules/generated-report/components/forms/adjustment-create-report-form'
+import { CloseAccountCreateReportFormModal } from '@/modules/generated-report/components/forms/close-account-create-report-form'
+import { DailyCashCollectionReceiptJournalCreateReportFormModal } from '@/modules/generated-report/components/forms/daily-cash-receipt-create-report-form'
+import { JournalVoucherCreateReportFormModal } from '@/modules/generated-report/components/forms/journal-voucher-create-report-form'
 
 // import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
 
@@ -24,16 +24,16 @@ function PlaygroundPage() {
                     <Broadcaster />
                     <PDFUploader />
                     <GeneratedReports />
-                    <DailyCashCollectionReceiptJournalReportCreateFormModal
+                    <DailyCashCollectionReceiptJournalCreateReportFormModal
                         trigger={<p>HITLER A</p>}
                     />
-                    <AdjustmentReportCreateFormModal
+                    <AdjustmentCreateReportFormModal
                         trigger={<p>HITLER B</p>}
                     />
-                    <JournalVoucherReportCreateFormModal
+                    <JournalVoucherCreateReportFormModal
                         trigger={<p>HITLER C</p>}
                     />
-                    <CloseAccountReportCreateFormModal
+                    <CloseAccountCreateReportFormModal
                         trigger={<p>HITLER D</p>}
                     />
                     {/* 

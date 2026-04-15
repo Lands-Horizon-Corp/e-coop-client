@@ -76,7 +76,7 @@ export interface IDailyCashCollectionReceiptJournalReportFormProps
             TDailyCashReceiptJournalReportSchema
         > {}
 
-const DailyCashCollectionReceiptJournalReportCreateForm = ({
+const DailyCashCollectionReceiptJournalCreateReportForm = ({
     className,
     ...formProps
 }: IDailyCashCollectionReceiptJournalReportFormProps) => {
@@ -289,9 +289,9 @@ const DailyCashCollectionReceiptJournalReportCreateForm = ({
     )
 }
 
-export default DailyCashCollectionReceiptJournalReportCreateForm
+export default DailyCashCollectionReceiptJournalCreateReportForm
 
-export const DailyCashCollectionReceiptJournalReportCreateFormModal = ({
+export const DailyCashCollectionReceiptJournalCreateReportFormModal = ({
     title = 'Create Daily Cash Collection Report',
     description = 'Define filters and report configuration for daily cash collection',
     className,
@@ -318,7 +318,7 @@ export const DailyCashCollectionReceiptJournalReportCreateFormModal = ({
             onOpenChange={onOpenChange}
             open={open}
         >
-            <DailyCashCollectionReceiptJournalReportCreateForm
+            <DailyCashCollectionReceiptJournalCreateReportForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)

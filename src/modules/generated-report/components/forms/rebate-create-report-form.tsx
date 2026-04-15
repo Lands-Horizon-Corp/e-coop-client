@@ -66,7 +66,7 @@ export interface IRebateReportFormProps
             TRebateReportSchema
         > {}
 
-const RebateReportCreateForm = ({
+const RebateCreateReportForm = ({
     className,
     ...formProps
 }: IRebateReportFormProps) => {
@@ -179,9 +179,9 @@ const RebateReportCreateForm = ({
     )
 }
 
-export default RebateReportCreateForm
+export default RebateCreateReportForm
 
-export const RebateReportCreateFormModal = ({
+export const RebateCreateReportFormModal = ({
     title = 'Create Rebate Report',
     description = 'Define date range for rebate report',
     className,
@@ -205,7 +205,7 @@ export const RebateReportCreateFormModal = ({
             onOpenChange={onOpenChange}
             open={open}
         >
-            <RebateReportCreateForm
+            <RebateCreateReportForm
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)

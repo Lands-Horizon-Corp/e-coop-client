@@ -14,10 +14,11 @@ import {
 } from '@/modules/generated-report'
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
+import MemberDepartmentCombobox from '@/modules/member-department/components/member-department-combobox'
 import MemberGroupCombobox from '@/modules/member-group/components/member-group-combobox'
 import MemberOccupationCombobox from '@/modules/member-occupation/components/member-occupation-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -48,12 +49,12 @@ export const AccountBalanceReportSchema = z
             .enum(['by_passbook_no', 'by_name'])
             .default('by_passbook_no'),
 
-        member_type_id: z.string().optional(),
+        member_type_id: entityIdSchema.optional(),
         barangay: z.string().optional(),
-        member_occupation_id: z.string().optional(),
-        member_department_id: z.string().optional(),
-        member_group_id: z.string().optional(),
-        member_address_area_id: z.string().optional(),
+        member_occupation_id: entityIdSchema.optional(),
+        member_department_id: entityIdSchema.optional(),
+        member_group_id: entityIdSchema.optional(),
+        member_address_area_id: entityIdSchema.optional(),
     })
     .and(WithGeneratedReportSchema)
     .superRefine((data, ctx) => {
@@ -89,7 +90,7 @@ export interface IAccountBalanceReportFormProps
             TAccountBalanceReportSchema
         > {}
 
-const AccountBalanceReportCreateForm = ({
+const AccountBalanceCreateReportForm = ({
     className,
     ...formProps
 }: IAccountBalanceReportFormProps) => {
@@ -218,10 +219,10 @@ const AccountBalanceReportCreateForm = ({
                                         field.onChange(selected?.id)
                                     }
                                     placeholder="All member type"
+                                    undefinable
                                 />
                             )}
                         />
-
                         <FormFieldWrapper
                             control={form.control}
                             label="Barangay"
@@ -233,7 +234,6 @@ const AccountBalanceReportCreateForm = ({
                                 />
                             )}
                         />
-
                         <FormFieldWrapper
                             control={form.control}
                             label="Occupation"
@@ -248,19 +248,19 @@ const AccountBalanceReportCreateForm = ({
                                 />
                             )}
                         />
-
                         <FormFieldWrapper
                             control={form.control}
                             label="Department"
                             name="member_department_id"
                             render={({ field }) => (
-                                <Input
+                                <MemberDepartmentCombobox
                                     {...field}
-                                    disabled={isDisabled(field.name)}
+                                    onChange={(v) => field.onChange(v?.id)}
+                                    placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
-
                         <FormFieldWrapper
                             control={form.control}
                             label="Group"
@@ -272,10 +272,10 @@ const AccountBalanceReportCreateForm = ({
                                         field.onChange(selected?.id)
                                     }
                                     placeholder="All group"
+                                    undefinable
                                 />
                             )}
                         />
-
                         <FormFieldWrapper
                             control={form.control}
                             label="Area"
@@ -287,6 +287,7 @@ const AccountBalanceReportCreateForm = ({
                                         field.onChange(selected?.id)
                                     }
                                     placeholder="All area"
+                                    undefinable
                                 />
                             )}
                         />
@@ -408,9 +409,9 @@ const AccountBalanceReportCreateForm = ({
     )
 }
 
-export default AccountBalanceReportCreateForm
+export default AccountBalanceCreateReportForm
 
-export const AccountBalanceReportCreateFormModal = ({
+export const AccountBalanceCreateReportFormModal = ({
     title = 'Account Balance',
     description = 'Define filters and configuration for account balance report',
     className,
@@ -434,7 +435,7 @@ export const AccountBalanceReportCreateFormModal = ({
             onOpenChange={onOpenChange}
             open={open}
         >
-            <AccountBalanceReportCreateForm
+            <AccountBalanceCreateReportForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)

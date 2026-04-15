@@ -14,7 +14,7 @@ import {
 } from '@/modules/generated-report'
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -40,7 +40,7 @@ export const DailyWithdrawalSchema = z
         start_ref_no: z.string().optional(),
         end_ref_no: z.string().optional(),
 
-        teller_id: z.string().optional(),
+        teller_id: entityIdSchema.optional(),
         teller: z.any().optional(),
 
         sort_by: z

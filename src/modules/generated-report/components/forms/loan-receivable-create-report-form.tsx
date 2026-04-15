@@ -6,6 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import { AccountCategoryComboBox } from '@/modules/account-category'
 import { AccountMultiPickerModal } from '@/modules/account/components/picker/account-multi-picker'
 import {
     IGeneratedReport,
@@ -24,7 +25,6 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
@@ -68,15 +68,15 @@ export const LoanReceivableSchema = z
 
         investment_only: z.boolean().default(false),
 
-        member_group_id: z.string().optional(),
+        member_group_id: entityIdSchema.optional(),
         member_group: z.any().optional(),
         include_share_cap: z.boolean().default(false),
 
-        loan_transaction_id: z.string().optional(),
+        loan_transaction_id: entityIdSchema.optional(),
         loan_transaction: z.any().optional(),
         exclude_zero_expose_amount: z.boolean().default(false),
 
-        category_id: z.string().optional(),
+        account_category_id: entityIdSchema.optional(),
 
         over_12_mos_format: z.boolean().default(false),
         fall_to_current_1_30_days: z.boolean().default(false),
@@ -127,7 +127,7 @@ const LoanReceivableCreateReportForm = ({
             loan_transaction: undefined,
             exclude_zero_expose_amount: false,
 
-            category_id: '',
+            account_category_id: '',
 
             over_12_mos_format: false,
             fall_to_current_1_30_days: false,
@@ -460,6 +460,7 @@ const LoanReceivableCreateReportForm = ({
                                         form.setValue('member_group', v)
                                     }}
                                     placeholder="All"
+                                    undefinable
                                 />
                                 <FormFieldWrapper
                                     className="w-fit"
@@ -524,9 +525,16 @@ const LoanReceivableCreateReportForm = ({
 
                     <FormFieldWrapper
                         control={form.control}
-                        label="Category"
-                        name="category_id"
-                        render={({ field }) => <Input {...field} />}
+                        label="Account Category"
+                        name="account_category_id"
+                        render={({ field }) => (
+                            <AccountCategoryComboBox
+                                onChange={field.onChange}
+                                placeholder="All Category"
+                                undefinable
+                                value={field.value}
+                            />
+                        )}
                     />
 
                     <div className="grid grid-cols-3 gap-2">

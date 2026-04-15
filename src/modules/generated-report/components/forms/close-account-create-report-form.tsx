@@ -66,7 +66,7 @@ export interface ICloseAccountReportFormProps
             TCloseAccountReportSchema
         > {}
 
-const CloseAccountReportCreateForm = ({
+const CloseAccountCreateReportForm = ({
     className,
     ...formProps
 }: ICloseAccountReportFormProps) => {
@@ -173,9 +173,9 @@ const CloseAccountReportCreateForm = ({
     )
 }
 
-export default CloseAccountReportCreateForm
+export default CloseAccountCreateReportForm
 
-export const CloseAccountReportCreateFormModal = ({
+export const CloseAccountCreateReportFormModal = ({
     title = 'Create Close Account Report',
     description = 'Define filters and report configuration for close account report',
     className,
@@ -199,7 +199,7 @@ export const CloseAccountReportCreateFormModal = ({
             onOpenChange={onOpenChange}
             open={open}
         >
-            <CloseAccountReportCreateForm
+            <CloseAccountCreateReportForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)

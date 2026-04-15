@@ -6,6 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import EmployeePicker from '@/modules/employee/components/employee-picker'
 import {
     IGeneratedReport,
     TWithReportConfigSchema,
@@ -16,9 +17,12 @@ import { getTemplateAt } from '@/modules/generated-report/generated-report-templ
 import { stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
 import { Separator } from '@/components/ui/separator'
 
@@ -29,60 +33,50 @@ import { IClassProps, IForm } from '@/types'
 
 import { WithGeneratedReportSchema } from '../../generated-report.validation'
 
-export const AdjustmentReportSchema = z
+export const TransactionBatchSchema = z
     .object({
-        start_date: stringDateWithTransformSchema,
-        end_date: stringDateWithTransformSchema,
+        entry_date: stringDateWithTransformSchema,
+
+        teller_id: z.string().optional(),
+        teller: z.any().optional(),
+        batch_no: z.coerce.number().optional(),
     })
     .and(WithGeneratedReportSchema)
-    .superRefine((data, ctx) => {
-        if (
-            data.start_date &&
-            data.end_date &&
-            data.start_date > data.end_date
-        ) {
-            ctx.addIssue({
-                code: 'custom',
-                message: 'Start Date must not be after End Date',
-                path: ['start_date'],
-            })
-            ctx.addIssue({
-                code: 'custom',
-                message: 'End Date must not be before Start Date',
-                path: ['end_date'],
-            })
-        }
-    })
 
-export type TAdjustmentReportSchema = z.infer<typeof AdjustmentReportSchema>
+export type TTransactionBatchSchema = z.infer<typeof TransactionBatchSchema>
 
-export interface IAdjustmentReportFormProps
+export interface ITransactionBatchFormProps
     extends
         IClassProps,
         IForm<
-            Partial<TAdjustmentReportSchema>,
+            Partial<TTransactionBatchSchema>,
             IGeneratedReport,
             Error,
-            TAdjustmentReportSchema
+            TTransactionBatchSchema
         > {}
 
-const AdjustmentCreateReportForm = ({
+const TransactionBatchCreateReportForm = ({
     className,
     ...formProps
-}: IAdjustmentReportFormProps) => {
-    const form = useForm<TAdjustmentReportSchema>({
-        resolver: standardSchemaResolver(AdjustmentReportSchema),
-        reValidateMode: 'onChange',
-        mode: 'onSubmit',
+}: ITransactionBatchFormProps) => {
+    const form = useForm<TTransactionBatchSchema>({
+        resolver: standardSchemaResolver(TransactionBatchSchema),
         defaultValues: {
-            start_date: undefined,
-            end_date: undefined,
+            entry_date: undefined,
+
+            teller_id: undefined,
+            batch_no: undefined,
+
             ...formProps.defaultValues,
+
             report_config: {
                 ...getTemplateAt(undefined, 0),
                 ...formProps.defaultValues?.report_config,
-                module: 'Account',
-                name: `adjustment_report_${toReadableDate(new Date(), 'MMddyy_mmss')}.pdf`,
+                module: 'GeneratedReport',
+                name: `transaction_batch_${toReadableDate(
+                    new Date(),
+                    'MMddyy_mmss'
+                )}.pdf`,
             },
         },
     })
@@ -94,8 +88,8 @@ const AdjustmentCreateReportForm = ({
         },
     })
 
-    const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TAdjustmentReportSchema>({
+    const { formRef, handleFocusError } =
+        useFormHelper<TTransactionBatchSchema>({
             form,
             ...formProps,
         })
@@ -122,33 +116,64 @@ const AdjustmentCreateReportForm = ({
                     className="grid gap-y-4"
                     disabled={isPending || formProps.readOnly}
                 >
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <FormFieldWrapper
+                        control={form.control}
+                        label="Entry Date"
+                        name="entry_date"
+                        render={({ field }) => <InputDate {...field} />}
+                    />
+
+                    <div className="grid grid-cols-2 gap-4">
                         <FormFieldWrapper
                             control={form.control}
-                            label="Start Date *"
-                            name="start_date"
-                            render={({ field }) => (
-                                <InputDate
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                />
-                            )}
+                            label="Teller"
+                            name="teller_id"
+                            render={({ field }) => {
+                                const selected = form.getValues('teller')
+                                return (
+                                    <div className="flex items-center gap-2">
+                                        <EmployeePicker
+                                            {...field}
+                                            onSelect={(v) => {
+                                                field.onChange(v?.user_id)
+                                                form.setValue('teller', v?.user)
+                                            }}
+                                            placeholder="ALL"
+                                            value={selected}
+                                        />
+                                        {selected && (
+                                            <Button
+                                                onClick={() => {
+                                                    field.onChange(undefined)
+                                                    form.setValue(
+                                                        'teller',
+                                                        undefined
+                                                    )
+                                                }}
+                                                size="icon"
+                                                type="button"
+                                                variant="ghost"
+                                            >
+                                                <XIcon className="size-4" />
+                                            </Button>
+                                        )}
+                                    </div>
+                                )
+                            }}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            label="End Date *"
-                            name="end_date"
+                            label="Batch No"
+                            name="batch_no"
                             render={({ field }) => (
-                                <InputDate
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                />
+                                <Input type="number" {...field} />
                             )}
                         />
                     </div>
 
                     <Separator />
+
                     <PrintSettingsSection
                         displayMode="dropdown"
                         form={
@@ -173,16 +198,16 @@ const AdjustmentCreateReportForm = ({
     )
 }
 
-export default AdjustmentCreateReportForm
+export default TransactionBatchCreateReportForm
 
-export const AdjustmentCreateReportFormModal = ({
-    title = 'Create Adjustment Report',
-    description = 'Define filters and report configuration for adjustment report',
+export const TransactionBatchCreateReportFormModal = ({
+    title = 'Transaction Batch',
+    description = 'Generate transaction batch report',
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<IAdjustmentReportFormProps, 'className' | 'onClose'>
+    formProps?: Omit<ITransactionBatchFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
         false,
@@ -192,17 +217,17 @@ export const AdjustmentCreateReportFormModal = ({
 
     return (
         <Modal
-            className={cn('sm:max-w-xl', className)}
+            className={cn('sm:max-w-2xl', className)}
             description={description}
-            title={title}
-            {...props}
             onOpenChange={onOpenChange}
             open={open}
+            title={title}
+            {...props}
         >
-            <AdjustmentCreateReportForm
+            <TransactionBatchCreateReportForm
                 {...formProps}
-                onSuccess={(createdData) => {
-                    formProps?.onSuccess?.(createdData)
+                onSuccess={(data) => {
+                    formProps?.onSuccess?.(data)
                     onOpenChange(false)
                 }}
             />

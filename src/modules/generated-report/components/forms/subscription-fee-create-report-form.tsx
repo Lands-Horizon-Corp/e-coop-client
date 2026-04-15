@@ -15,7 +15,7 @@ import { PrintSettingsSection } from '@/modules/generated-report/components/form
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import MemberOccupationCombobox from '@/modules/member-occupation/components/member-occupation-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -44,9 +44,9 @@ export const SubscriptionFeeSchema = z
             .enum(['by_passbook_no', 'by_name'])
             .default('by_passbook_no'),
 
-        member_type_id: z.string().optional(),
+        member_type_id: entityIdSchema.optional(),
         barangay: z.string().optional(),
-        member_occupation_id: z.string().optional(),
+        member_occupation_id: entityIdSchema.optional(),
     })
     .and(WithGeneratedReportSchema)
 
@@ -174,6 +174,7 @@ const SubscriptionFeeCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />

@@ -14,7 +14,7 @@ import {
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import { LOAN_MODE_OF_PAYMENT } from '@/modules/loan-transaction/loan.constants'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -86,16 +86,16 @@ export const LoanBalancesSchema = z
             .enum(['by_amount', 'by_passbook_no', 'by_name'])
             .default('by_amount'),
 
-        member_type_id: z.string().optional(),
-        account_id: z.string().optional(),
+        member_type_id: entityIdSchema.optional(),
+        account_id: entityIdSchema.optional(),
         account: z.any().optional(),
 
         barangay: z.string().optional(),
 
-        member_occupation_id: z.string().optional(),
-        member_address_area_id: z.string().optional(),
-        member_group_id: z.string().optional(),
-        member_classification_id: z.string().optional(),
+        member_occupation_id: entityIdSchema.optional(),
+        member_address_area_id: entityIdSchema.optional(),
+        member_group_id: entityIdSchema.optional(),
+        member_classification_id: entityIdSchema.optional(),
 
         category: z.string().optional(),
 

@@ -13,7 +13,7 @@ import {
     useCreateGeneratedReport,
 } from '@/modules/generated-report'
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -39,7 +39,7 @@ export const CashCheckDisbursementReportSchema = z
         start_cv: z.string().optional(),
         end_cv: z.string().optional(),
         account: z.any().optional(),
-        account_id: z.string().optional(),
+        account_id: entityIdSchema.optional(),
 
         include_loan_releases: z.boolean().default(false),
         include_withdrawals: z.boolean().default(false),
@@ -95,7 +95,7 @@ export interface ICashCheckDisbursementReportFormProps
             TCashCheckDisbursementReportSchema
         > {}
 
-const CashCheckDisbursementReportCreateForm = ({
+const CashCheckDisbursementCreateReportForm = ({
     className,
     ...formProps
 }: ICashCheckDisbursementReportFormProps) => {
@@ -572,9 +572,9 @@ const CashCheckDisbursementReportCreateForm = ({
     )
 }
 
-export default CashCheckDisbursementReportCreateForm
+export default CashCheckDisbursementCreateReportForm
 
-export const CashCheckDisbursementReportCreateFormModal = ({
+export const CashCheckDisbursementCreateReportFormModal = ({
     title = 'Create Cash Check Disbursement Report',
     description = 'Define filters and configuration for cash check disbursement',
     className,
@@ -601,7 +601,7 @@ export const CashCheckDisbursementReportCreateFormModal = ({
             onOpenChange={onOpenChange}
             open={open}
         >
-            <CashCheckDisbursementReportCreateForm
+            <CashCheckDisbursementCreateReportForm
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)

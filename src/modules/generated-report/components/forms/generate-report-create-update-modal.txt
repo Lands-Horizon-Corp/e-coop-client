@@ -90,7 +90,7 @@ export const useGenerateReportCreateUpdateModalService = ({
     }
 }
 
-const GenerateReportCreateForm = <TData,>({
+const GenerateCreateReportForm = <TData,>({
     className,
     reportId,
     table,
@@ -218,7 +218,7 @@ const GenerateReportCreateForm = <TData,>({
     )
 }
 
-export const GeneratedReportCreateFormModal = <TData,>({
+export const GeneratedCreateReportFormModal = <TData,>({
     title = 'Generate Report',
     description = 'Fill out the form to generate report.',
     className,
@@ -234,7 +234,7 @@ export const GeneratedReportCreateFormModal = <TData,>({
             title={title}
             {...props}
         >
-            <GenerateReportCreateForm
+            <GenerateCreateReportForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
@@ -245,4 +245,4 @@ export const GeneratedReportCreateFormModal = <TData,>({
     )
 }
 
-export default GeneratedReportCreateFormModal
+export default GeneratedCreateReportFormModal

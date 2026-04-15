@@ -47,45 +47,47 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-import { AccountBalanceReportCreateFormModal } from './forms/account-balance-create-report-form'
+import { AccountBalanceCreateReportFormModal } from './forms/account-balance-create-report-form'
 import { AccountHoldOutCreateReportFormModal } from './forms/account-holdout-create-report-form'
-import { AdjustmentReportCreateFormModal } from './forms/adjustment-create-report-form'
-import { CashCheckDisbursementReportCreateFormModal } from './forms/cash-check-disbursement-create-report-form'
-import { CloseAccountReportCreateFormModal } from './forms/close-account-create-report-form'
-import { ComakerReportCreateFormModal } from './forms/comaker-create-report-form'
-import { DailyCashCollectionReceiptJournalReportCreateFormModal } from './forms/daily-cash-receipt-create-report-form'
+import { AdjustmentCreateReportFormModal } from './forms/adjustment-create-report-form'
+import { CashCheckDisbursementCreateReportFormModal } from './forms/cash-check-disbursement-create-report-form'
+import { CloseAccountCreateReportFormModal } from './forms/close-account-create-report-form'
+import { ComakerCreateReportFormModal } from './forms/comaker-create-report-form'
+import { DailyCashCollectionReceiptJournalCreateReportFormModal } from './forms/daily-cash-receipt-create-report-form'
 import { DailyCollectionSummaryCreateReportFormModal } from './forms/daily-collection-create-report-fom'
+import { DailyCollectionDetailCreateReportFormModal } from './forms/daily-collection-detail-create-report-form'
 import { DailyWithdrawalCreateReportFormModal } from './forms/daily-withdrawal-create-report-form'
-import { DirectAdjustmentReportCreateFormModal } from './forms/direct-adjustment-create-report-form'
+import { DirectAdjustmentCreateReportFormModal } from './forms/direct-adjustment-create-report-form'
 import { EarnedUnearnedCreateReportFormModal } from './forms/earned-unearned-create-report-form'
 import { GroceryLoanReleaseCreateReportFormModal } from './forms/grocery-loan-release-create-report-form'
 import { ICPRCreateReportFormModal } from './forms/icpr-create-report-form'
 import { InterestOnShareCapitalCreateReportFormModal } from './forms/interest-share-capital-create-report-form'
-import { JournalVoucherReportCreateFormModal } from './forms/journal-voucher-create-report-form'
+import { JournalVoucherCreateReportFormModal } from './forms/journal-voucher-create-report-form'
 import { LoanBalancesCreateReportFormModal } from './forms/loan-balances-create-report-form'
 import { LoanCollectionDetailCreateReportFormModal } from './forms/loan-collection-detail-create-report-form'
 import { LoanCollectionDueCreateReportFormModal } from './forms/loan-collection-due-create-report-form'
 import { LoanCollectionSummaryCreateReportFormModal } from './forms/loan-collection-summary-create-report-form'
 import { LoanMaturityCreateReportFormModal } from './forms/loan-maturity-create-report-form'
-import { LoanProtectionPlanReportCreateFormModal } from './forms/loan-protection-place-create-report-form'
+import { LoanProtectionPlanCreateReportFormModal } from './forms/loan-protection-place-create-report-form'
 import { LoanReceivableCreateReportFormModal } from './forms/loan-receivable-create-report-form'
-import { LoanReleaseDetailCreateReportFormModal } from './forms/loan-release-create-report-form'
+import { LoanReleaseDetailCreateReportFormModal } from './forms/loan-release-detail-create-report-form'
 import { LoanReleaseSummaryCreateReportFormModal } from './forms/loan-release-summary-create-report-form'
 import { LoanReleaseCreateReportFormModal } from './forms/loan-release-tabulated-create-report-form'
 import { LoanStatementCreateReportFormModal } from './forms/loan-statement-create-report-form'
-import { PrintNumberTagReportCreateFormModal } from './forms/number-tag-create-report-form'
+import { PrintNumberTagCreateReportFormModal } from './forms/number-tag-create-report-form'
 import { OtherFundsEntryCreateReportFormModal } from './forms/other-funds-entry-create-report-form'
 import { PastDueOnInstallmentCreateReportFormModal } from './forms/past-due-on-installment-create-report-form'
 import { ProofOfPurchaseCreateReportFormModal } from './forms/proof-of-purchase-create-report-form'
-import { RebateReportCreateFormModal } from './forms/rebate-create-report-form'
+import { RebateCreateReportFormModal } from './forms/rebate-create-report-form'
 import { ShareCapitalWithdrawalCreateReportFormModal } from './forms/share-capital-withdrawal-create-report-form'
 import { SubscriptionFeeCreateReportFormModal } from './forms/subscription-fee-create-report-form'
 import { SupposedActualCollectionCreateReportFormModal } from './forms/supposed-actual-colleaction-create-report-form'
-import { TellerMonitoringReportCreateFormModal } from './forms/teller-monitoring-create-report-form'
+import { TellerMonitoringCreateReportFormModal } from './forms/teller-monitoring-create-report-form'
 import { TimeDepositAccruedInterestCreateReportFormModal } from './forms/time-deposit-accrued-interest-create-report-form'
 import { TimeDepositBalanceCreateReportFormModal } from './forms/time-deposit-balance-create-report-form'
-import { TimeDepositBalanceYTDReportCreateFormModal } from './forms/time-deposit-balance-ytd-create-report-form'
-import { TimeDepositReportCreateFormModal } from './forms/time-deposit-create-report-form'
+import { TimeDepositBalanceYTDCreateReportFormModal } from './forms/time-deposit-balance-ytd-create-report-form'
+import { TimeDepositCreateReportFormModal } from './forms/time-deposit-create-report-form'
+import { TransactionBatchCreateReportFormModal } from './forms/transaction-batch-create-report-form'
 
 interface ReportItem {
     label: string
@@ -107,6 +109,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Daily Coll. Detail',
                 icon: FileText,
+                component: DailyCollectionDetailCreateReportFormModal,
             },
             {
                 label: 'Daily Coll. Summary',
@@ -157,7 +160,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Loan Protection Plan',
                 icon: FileText,
-                component: LoanProtectionPlanReportCreateFormModal,
+                component: LoanProtectionPlanCreateReportFormModal,
             },
             {
                 label: 'Loan Receivable',
@@ -191,7 +194,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Comaker',
                 icon: UserCheck,
-                component: ComakerReportCreateFormModal,
+                component: ComakerCreateReportFormModal,
             },
         ],
     },
@@ -211,7 +214,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Time Deposit',
                 icon: Clock,
-                component: TimeDepositReportCreateFormModal,
+                component: TimeDepositCreateReportFormModal,
             },
             {
                 label: 'TD Balance',
@@ -221,7 +224,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'TD Bal / YTD',
                 icon: BarChart3,
-                component: TimeDepositBalanceYTDReportCreateFormModal,
+                component: TimeDepositBalanceYTDCreateReportFormModal,
             },
             {
                 label: 'TD Accrued',
@@ -245,7 +248,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Account Balance',
                 icon: Wallet,
-                component: AccountBalanceReportCreateFormModal,
+                component: AccountBalanceCreateReportFormModal,
             },
             {
                 label: 'Account Hold Out',
@@ -255,7 +258,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Close Account',
                 icon: FileX,
-                component: CloseAccountReportCreateFormModal,
+                component: CloseAccountCreateReportFormModal,
             },
             {
                 label: 'Voters List (ACE) - Comming soon',
@@ -270,32 +273,33 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Cash Disbursement',
                 icon: CreditCard,
-                component: CashCheckDisbursementReportCreateFormModal,
+                component: CashCheckDisbursementCreateReportFormModal,
             },
             {
                 label: 'Cash Receipt Journal',
                 icon: Receipt,
                 component:
-                    DailyCashCollectionReceiptJournalReportCreateFormModal,
+                    DailyCashCollectionReceiptJournalCreateReportFormModal,
             },
             {
                 label: 'Journal Voucher',
                 icon: FileText,
-                component: JournalVoucherReportCreateFormModal,
+                component: JournalVoucherCreateReportFormModal,
             },
             {
                 label: 'Adjustment',
                 icon: Calculator,
-                component: AdjustmentReportCreateFormModal,
+                component: AdjustmentCreateReportFormModal,
             },
             {
                 label: 'Direct Adjustment',
                 icon: Calculator,
-                component: DirectAdjustmentReportCreateFormModal,
+                component: DirectAdjustmentCreateReportFormModal,
             },
             {
-                label: 'Blotter',
+                label: 'Transaction Batch',
                 icon: ClipboardList,
+                component: TransactionBatchCreateReportFormModal,
             },
             {
                 label: 'Ledger',
@@ -336,7 +340,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Number Tag',
                 icon: Hash,
-                component: PrintNumberTagReportCreateFormModal,
+                component: PrintNumberTagCreateReportFormModal,
             },
             {
                 label: 'Other Funds Entry',
@@ -356,12 +360,12 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Teller Monitor',
                 icon: Monitor,
-                component: TellerMonitoringReportCreateFormModal,
+                component: TellerMonitoringCreateReportFormModal,
             },
             {
                 label: 'Rebates',
                 icon: DollarSign,
-                component: RebateReportCreateFormModal,
+                component: RebateCreateReportFormModal,
             },
             {
                 label: 'Proof of Purchase',

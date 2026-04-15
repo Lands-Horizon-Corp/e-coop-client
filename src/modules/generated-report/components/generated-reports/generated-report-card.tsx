@@ -53,7 +53,7 @@ import {
     DELAY_DOWNLOAD_TIME_DURATION,
     DELAY_DOWNLOAD_TIME_INTERVAL,
 } from '../../generated-reports.constants'
-// import GeneratedReportCreateFormModal from '../forms/generate-report-create-update-modal'
+// import GeneratedCreateReportFormModal from '../forms/generate-report-create-update-modal'
 import { ReportViewerModal } from '../generated-report-view/generated-report-view'
 import GeneratedReportStatusBadge from './generated-report-status'
 
@@ -154,7 +154,7 @@ export const GeneratedReportCard = ({
                     'bg-gradient-to-tl border-destructive/40 border from-50% dark:popover/80 to-destructive/20'
             )}
         >
-            {/* <GeneratedReportCreateFormModal
+            {/* <GeneratedCreateReportFormModal
                 description="Update your generated report."
                 formProps={{
                     disabledFields: ['url'],

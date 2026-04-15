@@ -14,7 +14,7 @@ import {
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -38,7 +38,7 @@ export const TDThisMonthYTDReportSchema = z
         title: z.string().default('TIME DEPOSIT BALANCE'),
         date: stringDateWithTransformSchema,
 
-        member_type_id: z.string().optional(),
+        member_type_id: entityIdSchema.optional(),
 
         exclude_zero_balance: z.boolean().default(false),
         filter_by_maturity: z.boolean().default(false),
@@ -65,7 +65,7 @@ export interface TimeDepositBalanceYTDReportFormProps
             TTDThisMonthYTDReportSchema
         > {}
 
-const TimeDepositBalanceYTDReportCreateForm = ({
+const TimeDepositBalanceYTDCreateReportForm = ({
     className,
     ...formProps
 }: TimeDepositBalanceYTDReportFormProps) => {
@@ -163,6 +163,7 @@ const TimeDepositBalanceYTDReportCreateForm = ({
                                     field.onChange(selected?.id)
                                 }
                                 placeholder="All member type"
+                                undefinable
                             />
                         )}
                     />
@@ -348,9 +349,9 @@ const TimeDepositBalanceYTDReportCreateForm = ({
     )
 }
 
-export default TimeDepositBalanceYTDReportCreateForm
+export default TimeDepositBalanceYTDCreateReportForm
 
-export const TimeDepositBalanceYTDReportCreateFormModal = ({
+export const TimeDepositBalanceYTDCreateReportFormModal = ({
     title = 'Time Deposit Balance',
     description = 'Generate TD balance for this month and YTD',
     className,
@@ -377,7 +378,7 @@ export const TimeDepositBalanceYTDReportCreateFormModal = ({
             onOpenChange={onOpenChange}
             open={open}
         >
-            <TimeDepositBalanceYTDReportCreateForm
+            <TimeDepositBalanceYTDCreateReportForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)

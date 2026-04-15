@@ -81,7 +81,7 @@ export interface ILoanProtectionPlanReportFormProps
             TLoanProtectionPlanReportSchema
         > {}
 
-const LoanProtectionPlanReportCreateForm = ({
+const LoanProtectionPlanCreateReportForm = ({
     className,
     ...formProps
 }: ILoanProtectionPlanReportFormProps) => {
@@ -267,9 +267,9 @@ const LoanProtectionPlanReportCreateForm = ({
     )
 }
 
-export default LoanProtectionPlanReportCreateForm
+export default LoanProtectionPlanCreateReportForm
 
-export const LoanProtectionPlanReportCreateFormModal = ({
+export const LoanProtectionPlanCreateReportFormModal = ({
     title = 'Create Loan Protection Plan Report',
     description = 'Define filters for loan protection plan report',
     className,
@@ -296,7 +296,7 @@ export const LoanProtectionPlanReportCreateFormModal = ({
             onOpenChange={onOpenChange}
             open={open}
         >
-            <LoanProtectionPlanReportCreateForm
+            <LoanProtectionPlanCreateReportForm
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)

@@ -43,7 +43,8 @@ interface Props extends Omit<
     className?: string
     placeholder?: string
     memberClassificationCreateProps?: IMemberClassificationComboboxCreateProps
-    onChange?: (selected: IMemberClassification) => void
+    undefinable?: boolean
+    onChange?: (selected: IMemberClassification | undefined) => void
 }
 
 const MemberClassificationCombobox = React.forwardRef<HTMLButtonElement, Props>(
@@ -53,6 +54,7 @@ const MemberClassificationCombobox = React.forwardRef<HTMLButtonElement, Props>(
             placeholder = 'Select Member Classification...',
             disabled = false,
             className,
+            undefinable = false,
             memberClassificationCreateProps,
             onChange,
             ...other
@@ -136,6 +138,18 @@ const MemberClassificationCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                                 Classification
                                             </CommandItem>
                                         </CommandGroup>
+                                    )}
+                                    {undefinable && (
+                                        <CommandItem
+                                            className="justify-center text-muted-foreground"
+                                            onSelect={() => {
+                                                setOpen(false)
+                                                onChange?.(undefined)
+                                            }}
+                                            value={undefined}
+                                        >
+                                            Select None
+                                        </CommandItem>
                                     )}
                                     <CommandGroup>
                                         {data?.map((option) => (

@@ -18,7 +18,7 @@ import { getTemplateAt } from '@/modules/generated-report/generated-report-templ
 import MemberGroupCombobox from '@/modules/member-group/components/member-group-combobox'
 import MemberOccupationCombobox from '@/modules/member-occupation/components/member-occupation-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -42,7 +42,7 @@ export const ProofOfPurchaseSchema = z
         start_date: stringDateWithTransformSchema,
         end_date: stringDateWithTransformSchema,
 
-        account_id: z.string().optional(),
+        account_id: entityIdSchema.optional(),
         account: z.any().optional(),
 
         group_by: z
@@ -62,11 +62,11 @@ export const ProofOfPurchaseSchema = z
 
         rate: z.coerce.number().optional(),
 
-        member_type_id: z.string().optional(),
+        member_type_id: entityIdSchema.optional(),
         barangay: z.string().optional(),
-        member_occupation_id: z.string().optional(),
-        member_address_area_id: z.string().optional(),
-        member_group_id: z.string().optional(),
+        member_occupation_id: entityIdSchema.optional(),
+        member_address_area_id: entityIdSchema.optional(),
+        member_group_id: entityIdSchema.optional(),
 
         consolidate: z.boolean().default(false),
         get_from_history: z.boolean().default(false),
@@ -205,6 +205,7 @@ const ProofOfPurchaseCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
@@ -231,6 +232,7 @@ const ProofOfPurchaseCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
@@ -244,6 +246,7 @@ const ProofOfPurchaseCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />

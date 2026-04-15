@@ -44,7 +44,8 @@ interface Props extends Omit<
     className?: string
     placeholder?: string
     memberOccupationComboboxCreateProps?: IMemberOccupationComboboxCreateProps
-    onChange?: (selected: IMemberOccupation) => void
+    undefinable?: boolean
+    onChange?: (selected: IMemberOccupation | undefined) => void
 }
 
 const MemberOccupationCombobox = React.forwardRef<HTMLButtonElement, Props>(
@@ -56,6 +57,7 @@ const MemberOccupationCombobox = React.forwardRef<HTMLButtonElement, Props>(
             memberOccupationComboboxCreateProps,
             placeholder = 'Select Member Occupation...',
             onChange,
+            undefinable = false,
             ...other
         },
         ref
@@ -74,14 +76,15 @@ const MemberOccupationCombobox = React.forwardRef<HTMLButtonElement, Props>(
                 <MemberOccupationCreateUpdateFormModal
                     formProps={{
                         ...memberOccupationComboboxCreateProps,
-                        onSuccess: (newOccupation) => {
-                            onChange?.(newOccupation)
-                            setCreateModal(false)
+                        onSuccess: (data) => {
+                            onChange?.(data)
+                            setOpen(false)
                         },
                     }}
                     onOpenChange={setCreateModal}
                     open={createModal}
                 />
+
                 <Popover modal onOpenChange={setOpen} open={open}>
                     <PopoverTrigger asChild>
                         <Button
@@ -97,8 +100,7 @@ const MemberOccupationCombobox = React.forwardRef<HTMLButtonElement, Props>(
                             variant="outline"
                         >
                             {value ? (
-                                data?.find((option) => option.id === value)
-                                    ?.name
+                                data?.find((x) => x.id === value)?.name
                             ) : (
                                 <span className="text-muted-foreground">
                                     {placeholder}
@@ -107,15 +109,17 @@ const MemberOccupationCombobox = React.forwardRef<HTMLButtonElement, Props>(
                             <ChevronDownIcon className="opacity-50" />
                         </Button>
                     </PopoverTrigger>
+
                     <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                         <Command>
                             <CommandInput
                                 className="h-9"
                                 placeholder="Search Member Occupation..."
                             />
+
                             {isLoading ? (
                                 <CommandEmpty>
-                                    <LoadingSpinner className="mr-2 inline-block" />{' '}
+                                    <LoadingSpinner className="mr-2 inline-block" />
                                     Loading...
                                 </CommandEmpty>
                             ) : (
@@ -123,22 +127,39 @@ const MemberOccupationCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                     <CommandEmpty>
                                         No Member Occupation found.
                                     </CommandEmpty>
+
                                     {memberOccupationComboboxCreateProps && (
                                         <>
                                             <CommandGroup>
                                                 <CommandItem
-                                                    onClick={() => {}}
-                                                    onSelect={() => {
+                                                    onClick={(e) =>
+                                                        e.stopPropagation()
+                                                    }
+                                                    onSelect={() =>
                                                         setCreateModal(true)
-                                                    }}
+                                                    }
                                                 >
-                                                    <PlusIcon /> Create new
-                                                    occupation occupation
+                                                    <PlusIcon /> Create Member
+                                                    Occupation
                                                 </CommandItem>
                                             </CommandGroup>
                                             <CommandSeparator />
                                         </>
                                     )}
+
+                                    {undefinable && (
+                                        <CommandItem
+                                            className="justify-center text-muted-foreground"
+                                            onSelect={() => {
+                                                setOpen(false)
+                                                onChange?.(undefined)
+                                            }}
+                                            value="none"
+                                        >
+                                            Select None
+                                        </CommandItem>
+                                    )}
+
                                     <CommandGroup>
                                         {data?.map((option) => (
                                             <CommandItem

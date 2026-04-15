@@ -14,7 +14,7 @@ import {
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { GridIcon } from '@/components/icons'
@@ -41,7 +41,7 @@ export const TimeDepositBalanceSchema = z
 
         date: stringDateWithTransformSchema,
 
-        member_type_id: z.string().optional(),
+        member_type_id: entityIdSchema.optional(),
 
         groupings: z
             .enum(['no_grouping', 'terms', 'td_balance', 'terms_summary'])
@@ -159,6 +159,7 @@ const TimeDepositBalanceCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />

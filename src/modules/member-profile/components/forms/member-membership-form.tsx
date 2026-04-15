@@ -262,7 +262,7 @@ const MemberMembershipForm = ({
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         onChange={(selected) =>
-                                            field.onChange(selected.id)
+                                            field.onChange(selected?.id)
                                         }
                                         placeholder="Select Member Group"
                                     />
@@ -280,7 +280,7 @@ const MemberMembershipForm = ({
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         onChange={(selected) =>
-                                            field.onChange(selected.id)
+                                            field.onChange(selected?.id)
                                         }
                                         placeholder="Select Classification"
                                     />
@@ -314,7 +314,7 @@ const MemberMembershipForm = ({
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         onChange={(selected) =>
-                                            field.onChange(selected.id)
+                                            field.onChange(selected?.id)
                                         }
                                         placeholder="Select Department"
                                     />

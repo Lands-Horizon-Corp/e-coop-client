@@ -44,7 +44,8 @@ interface Props extends Omit<
     className?: string
     placeholder?: string
     areaComboboxCreateProps?: IAreaComboboxCreateProps
-    onChange?: (selected: IArea) => void
+    undefinable?: boolean
+    onChange?: (selected: IArea | undefined) => void
 }
 
 const AreaCombobox = React.forwardRef<HTMLButtonElement, Props>(
@@ -56,6 +57,7 @@ const AreaCombobox = React.forwardRef<HTMLButtonElement, Props>(
             areaComboboxCreateProps,
             placeholder = 'Select Area...',
             onChange,
+            undefinable = false,
             ...other
         },
         ref
@@ -69,6 +71,18 @@ const AreaCombobox = React.forwardRef<HTMLButtonElement, Props>(
             },
         })
 
+        const selected = React.useMemo(
+            () => data?.find((option) => option.id === value),
+            [data, value]
+        )
+
+        const handleNone = () => {
+            setOpen(false)
+            if (undefinable) {
+                onChange?.(undefined as never)
+            }
+        }
+
         return (
             <>
                 <AreaCreateUpdateFormModal
@@ -76,7 +90,7 @@ const AreaCombobox = React.forwardRef<HTMLButtonElement, Props>(
                         ...areaComboboxCreateProps,
                         onSuccess: (newArea) => {
                             onChange?.(newArea)
-                            setCreateModal(false)
+                            setOpen(false)
                         },
                     }}
                     onOpenChange={setCreateModal}
@@ -97,9 +111,8 @@ const AreaCombobox = React.forwardRef<HTMLButtonElement, Props>(
                             role="combobox"
                             variant="outline"
                         >
-                            {value ? (
-                                data?.find((option) => option.id === value)
-                                    ?.name
+                            {selected ? (
+                                selected.name
                             ) : (
                                 <span className="text-muted-foreground">
                                     {placeholder}
@@ -118,7 +131,7 @@ const AreaCombobox = React.forwardRef<HTMLButtonElement, Props>(
 
                             {isLoading ? (
                                 <CommandEmpty>
-                                    <LoadingSpinner className="mr-2 inline-block" />{' '}
+                                    <LoadingSpinner className="mr-2 inline-block" />
                                     Loading...
                                 </CommandEmpty>
                             ) : (
@@ -129,6 +142,9 @@ const AreaCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                         <>
                                             <CommandGroup>
                                                 <CommandItem
+                                                    onClick={(e) =>
+                                                        e.stopPropagation()
+                                                    }
                                                     onSelect={() =>
                                                         setCreateModal(true)
                                                     }
@@ -138,6 +154,16 @@ const AreaCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                             </CommandGroup>
                                             <CommandSeparator />
                                         </>
+                                    )}
+
+                                    {undefinable && (
+                                        <CommandItem
+                                            className="justify-center text-muted-foreground"
+                                            onSelect={handleNone}
+                                            value="none"
+                                        >
+                                            Select None
+                                        </CommandItem>
                                     )}
 
                                     <CommandGroup>

@@ -17,7 +17,7 @@ import { getTemplateAt } from '@/modules/generated-report/generated-report-templ
 import MemberGroupCombobox from '@/modules/member-group/components/member-group-combobox'
 import MemberOccupationCombobox from '@/modules/member-occupation/components/member-occupation-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -57,11 +57,11 @@ export const ShareCapitalWithdrawalSchema = z
 
         filter_by: z.enum(['full', 'partial', 'all']).default('all'),
 
-        member_type_id: z.string().optional(),
+        member_type_id: entityIdSchema.optional(),
         barangay: z.string().optional(),
-        member_occupation_id: z.string().optional(),
-        area_id: z.string().optional(),
-        member_group_id: z.string().optional(),
+        member_occupation_id: entityIdSchema.optional(),
+        area_id: entityIdSchema.optional(),
+        member_group_id: entityIdSchema.optional(),
     })
     .and(WithGeneratedReportSchema)
 
@@ -313,6 +313,7 @@ const ShareCapitalWithdrawalCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
@@ -365,6 +366,7 @@ const ShareCapitalWithdrawalCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />

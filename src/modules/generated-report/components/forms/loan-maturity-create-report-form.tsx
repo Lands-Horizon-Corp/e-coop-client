@@ -17,7 +17,7 @@ import { PrintSettingsSection } from '@/modules/generated-report/components/form
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import { LOAN_MODE_OF_PAYMENT } from '@/modules/loan-transaction/loan.constants'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 import { XIcon } from 'lucide-react'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -44,13 +44,13 @@ export const LoanMaturitySchema = z
         end_date: stringDateWithTransformSchema,
         filter_by_date_release_from: stringDateWithTransformSchema.optional(),
         filter_by_date_release_to: stringDateWithTransformSchema.optional(),
-        member_type_id: z.string().optional(),
+        member_type_id: entityIdSchema.optional(),
         barangay: z.string().optional(),
-        account_id: z.string().optional(),
+        account_id: entityIdSchema.optional(),
         account: z.any().optional(),
-        teller_id: z.string().optional(),
+        teller_id: entityIdSchema.optional(),
         teller: z.any().optional(),
-        collector_id: z.string().optional(),
+        collector_id: entityIdSchema.optional(),
         collector: z.any().optional(),
         group_by_loan_category: z.boolean().default(false),
         sort_by: z
@@ -183,6 +183,7 @@ const LoanMaturityCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All member type"
+                                    undefinable
                                 />
                             )}
                         />
@@ -254,6 +255,7 @@ const LoanMaturityCreateReportForm = ({
                         />
 
                         <FormFieldWrapper
+                            className="col-span-2"
                             control={form.control}
                             label="Collector"
                             name="collector_id"
@@ -261,17 +263,18 @@ const LoanMaturityCreateReportForm = ({
                                 const selected = form.getValues('collector')
                                 return (
                                     <div className="flex items-center gap-2">
-                                        {/* TODO: IMPORTANT! ADD COLELCTOR PICKER */}
-                                        <p>TODO COLLECTOR</p>
-                                        {/* <CollectorPicker
+                                        <EmployeePicker
                                             {...field}
                                             onSelect={(v) => {
-                                                field.onChange(v?.id)
-                                                form.setValue('collector', v)
+                                                field.onChange(v?.user_id)
+                                                form.setValue(
+                                                    'collector',
+                                                    v?.user
+                                                )
                                             }}
-                                            placeholder="ALL Collector"
+                                            placeholder="ALL"
                                             value={selected}
-                                        /> */}
+                                        />
                                         {selected && (
                                             <Button
                                                 onClick={() => {
@@ -285,7 +288,7 @@ const LoanMaturityCreateReportForm = ({
                                                 type="button"
                                                 variant="ghost"
                                             >
-                                                <XIcon className="h-4 w-4" />
+                                                <XIcon className="size-4" />
                                             </Button>
                                         )}
                                     </div>

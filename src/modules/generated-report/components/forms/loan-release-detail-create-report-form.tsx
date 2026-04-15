@@ -7,7 +7,9 @@ import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
+import { AccountCategoryComboBox } from '@/modules/account-category'
 import AreaCombobox from '@/modules/area/components/area-combobox'
+import EmployeePicker from '@/modules/employee/components/employee-picker'
 import {
     IGeneratedReport,
     TWithReportConfigSchema,
@@ -16,12 +18,15 @@ import {
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import { LOAN_MODE_OF_PAYMENT } from '@/modules/loan-transaction/loan.constants'
+import MemberClassificationCombobox from '@/modules/member-classification/components/member-classification-combobox'
 import MemberOccupationCombobox from '@/modules/member-occupation/components/member-occupation-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormLabel } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -42,27 +47,27 @@ export const LoanReleaseDetailSchema = z
         start_date: stringDateWithTransformSchema,
         end_date: stringDateWithTransformSchema,
 
-        member_type_id: z.string().optional(),
+        member_type_id: entityIdSchema.optional(),
         barangay: z.string().optional(),
 
-        member_classification_id: z.string().optional(),
-        member_category_id: z.string().optional(),
+        member_classification_id: entityIdSchema.optional(),
 
         account: z.any().optional(),
-        account_id: z.string().optional(),
+        account_id: entityIdSchema.optional(),
 
-        member_address_area_id: z.string().optional(),
-        member_occupation_id: z.string().optional(),
+        account_category_id: entityIdSchema.optional(),
+
+        member_address_area_id: entityIdSchema.optional(),
+        member_occupation_id: entityIdSchema.optional(),
 
         collector: z.any().optional(),
-        collector_id: z.string().optional(),
+        collector_id: entityIdSchema.optional(),
 
         include_cancelled_cv: z.boolean().default(false),
         include_summary_of_loan_releases: z.boolean().default(false),
         include_excluded_to_gl: z.boolean().default(false),
         group_by_loan_category: z.boolean().default(false),
         first_loan_only: z.boolean().default(false),
-        export_to_excel: z.boolean().default(false),
 
         loan_amount_type: z
             .enum(['all', 'granted', 'applied'])
@@ -169,9 +174,7 @@ const LoanReleaseDetailCreateReportForm = ({
     const onSubmit = form.handleSubmit(({ report_config, ...filters }) => {
         generateMutation.mutate({
             ...report_config,
-            generated_report_type: form.getValues('export_to_excel')
-                ? 'excel'
-                : 'pdf',
+            generated_report_type: 'pdf',
             filters,
         })
     }, handleFocusError)
@@ -227,6 +230,7 @@ const LoanReleaseDetailCreateReportForm = ({
                                     disabled={isDisabled(field.name)}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All member type"
+                                    undefinable
                                 />
                             )}
                         />
@@ -255,6 +259,20 @@ const LoanReleaseDetailCreateReportForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
+                            label="Member Classification"
+                            name="member_classification_id"
+                            render={({ field }) => (
+                                <MemberClassificationCombobox
+                                    {...field}
+                                    disabled={isDisabled(field.name)}
+                                    placeholder="All"
+                                    undefinable
+                                />
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
                             label="Barangay"
                             name="barangay"
                             render={({ field }) => (
@@ -267,14 +285,29 @@ const LoanReleaseDetailCreateReportForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
+                            label="Account Category"
+                            name="account_category_id"
+                            render={({ field }) => (
+                                <AccountCategoryComboBox
+                                    onChange={field.onChange}
+                                    placeholder="All Category"
+                                    undefinable
+                                    value={field.value}
+                                />
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
                             label="Occupation"
                             name="member_occupation_id"
-                            render={({ field }) => (
+                            render={({ field: { onChange, ...field } }) => (
                                 <MemberOccupationCombobox
                                     {...field}
                                     disabled={isDisabled(field.name)}
-                                    onChange={(v) => field.onChange(v?.id)}
+                                    onChange={(v) => onChange(v?.id)}
                                     placeholder="All occupation"
+                                    undefinable
                                 />
                             )}
                         />
@@ -289,6 +322,7 @@ const LoanReleaseDetailCreateReportForm = ({
                                     disabled={isDisabled(field.name)}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All area"
+                                    undefinable
                                 />
                             )}
                         />
@@ -297,12 +331,41 @@ const LoanReleaseDetailCreateReportForm = ({
                             control={form.control}
                             label="Collector"
                             name="collector_id"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                />
-                            )}
+                            render={({ field }) => {
+                                const selected = form.getValues('collector')
+                                return (
+                                    <div className="flex items-center gap-2">
+                                        <EmployeePicker
+                                            {...field}
+                                            onSelect={(v) => {
+                                                field.onChange(v?.user_id)
+                                                form.setValue(
+                                                    'collector',
+                                                    v?.user
+                                                )
+                                            }}
+                                            placeholder="ALL"
+                                            value={selected}
+                                        />
+                                        {selected && (
+                                            <Button
+                                                onClick={() => {
+                                                    field.onChange(undefined)
+                                                    form.setValue(
+                                                        'collector',
+                                                        undefined
+                                                    )
+                                                }}
+                                                size="icon"
+                                                type="button"
+                                                variant="ghost"
+                                            >
+                                                <XIcon className="size-4" />
+                                            </Button>
+                                        )}
+                                    </div>
+                                )
+                            }}
                         />
                     </div>
 

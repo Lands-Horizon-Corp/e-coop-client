@@ -18,6 +18,7 @@ import { getTemplateAt } from '@/modules/generated-report/generated-report-templ
 import MemberClassificationCombobox from '@/modules/member-classification/components/member-classification-combobox'
 import MemberGroupCombobox from '@/modules/member-group/components/member-group-combobox'
 import MemberOccupationCombobox from '@/modules/member-occupation/components/member-occupation-combobox'
+import { entityIdSchema } from '@/validation'
 
 import YearCombobox from '@/components/comboboxes/year-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -67,10 +68,10 @@ export const ICPRSchema = z
 
         barangay: z.string().optional(),
 
-        member_occupation_id: z.string().optional(),
-        member_classification_id: z.string().optional(),
-        member_group_id: z.string().optional(),
-        member_address_area_id: z.string().optional(),
+        member_occupation_id: entityIdSchema.optional(),
+        member_classification_id: entityIdSchema.optional(),
+        member_group_id: entityIdSchema.optional(),
+        member_address_area_id: entityIdSchema.optional(),
 
         include_closed_acct: z.boolean().default(false),
         print_zero_share_cap: z.boolean().default(false),
@@ -317,6 +318,7 @@ const ICPRCreateReportForm = ({ className, ...formProps }: IICPRFormProps) => {
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
@@ -330,6 +332,7 @@ const ICPRCreateReportForm = ({ className, ...formProps }: IICPRFormProps) => {
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
@@ -343,6 +346,7 @@ const ICPRCreateReportForm = ({ className, ...formProps }: IICPRFormProps) => {
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />

@@ -15,7 +15,7 @@ import {
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import { LOAN_MODE_OF_PAYMENT } from '@/modules/loan-transaction/loan.constants'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { XIcon } from '@/components/icons'
@@ -39,7 +39,7 @@ export const LoanReleaseSummarySchema = z
     .object({
         start_date: stringDateWithTransformSchema,
         end_date: stringDateWithTransformSchema,
-        processor_id: z.string().optional(),
+        processor_id: entityIdSchema.optional(),
         processor: z.any().optional(),
         groupings: z
             .enum([

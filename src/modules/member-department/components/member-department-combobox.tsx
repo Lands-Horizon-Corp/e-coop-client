@@ -49,7 +49,8 @@ interface Props extends Omit<
     className?: string
     placeholder?: string
     memberDepartmentComboboxCreateProps?: IMemberDepartmentComboboxCreateProps
-    onChange?: (selected: IMemberDepartment) => void
+    undefinable?: boolean
+    onChange?: (selected: IMemberDepartment | undefined) => void
 }
 
 const MemberDepartmentCombobox = React.forwardRef<HTMLButtonElement, Props>(
@@ -61,6 +62,7 @@ const MemberDepartmentCombobox = React.forwardRef<HTMLButtonElement, Props>(
             memberDepartmentComboboxCreateProps,
             placeholder = 'Select Member Department...',
             onChange,
+            undefinable = false,
             ...other
         },
         ref
@@ -70,7 +72,17 @@ const MemberDepartmentCombobox = React.forwardRef<HTMLButtonElement, Props>(
 
         const { data, isLoading } = useGetAll()
 
-        const selectedDepartment = data?.find((option) => option.id === value)
+        const selected = React.useMemo(
+            () => data?.find((option) => option.id === value),
+            [data, value]
+        )
+
+        const handleNone = () => {
+            setOpen(false)
+            if (undefinable) {
+                onChange?.(undefined as never)
+            }
+        }
 
         return (
             <>
@@ -79,12 +91,13 @@ const MemberDepartmentCombobox = React.forwardRef<HTMLButtonElement, Props>(
                         defaultValues: memberDepartmentComboboxCreateProps,
                         onSuccess: (newDepartment) => {
                             onChange?.(newDepartment)
-                            setCreateModal(false)
+                            setOpen(false)
                         },
                     }}
                     onOpenChange={setCreateModal}
                     open={createModal}
                 />
+
                 <Popover modal onOpenChange={setOpen} open={open}>
                     <PopoverTrigger asChild>
                         <Button
@@ -99,13 +112,13 @@ const MemberDepartmentCombobox = React.forwardRef<HTMLButtonElement, Props>(
                             role="combobox"
                             variant="outline"
                         >
-                            {selectedDepartment ? (
-                                <div className="flex items-center text-muted-foreground gap-2">
+                            {selected ? (
+                                <div className="flex items-center gap-2">
                                     <RenderIcon
                                         className="size-4"
-                                        icon={selectedDepartment.icon as TIcon}
+                                        icon={selected.icon as TIcon}
                                     />
-                                    {selectedDepartment.name}
+                                    {selected.name}
                                 </div>
                             ) : (
                                 <span className="text-muted-foreground">
@@ -115,15 +128,17 @@ const MemberDepartmentCombobox = React.forwardRef<HTMLButtonElement, Props>(
                             <ChevronDownIcon className="opacity-50" />
                         </Button>
                     </PopoverTrigger>
+
                     <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                         <Command>
                             <CommandInput
                                 className="h-9"
                                 placeholder="Search Member Department..."
                             />
+
                             {isLoading ? (
                                 <CommandEmpty>
-                                    <LoadingSpinner className="mr-2 inline-block" />{' '}
+                                    <LoadingSpinner className="mr-2 inline-block" />
                                     Loading...
                                 </CommandEmpty>
                             ) : (
@@ -131,14 +146,17 @@ const MemberDepartmentCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                     <CommandEmpty>
                                         No Member Department found.
                                     </CommandEmpty>
+
                                     {memberDepartmentComboboxCreateProps && (
                                         <>
                                             <CommandGroup>
                                                 <CommandItem
-                                                    onClick={() => {}}
-                                                    onSelect={() => {
+                                                    onClick={(e) =>
+                                                        e.stopPropagation()
+                                                    }
+                                                    onSelect={() =>
                                                         setCreateModal(true)
-                                                    }}
+                                                    }
                                                 >
                                                     <PlusIcon /> Create new
                                                     department
@@ -147,6 +165,17 @@ const MemberDepartmentCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                             <CommandSeparator />
                                         </>
                                     )}
+
+                                    {undefinable && (
+                                        <CommandItem
+                                            className="justify-center text-muted-foreground"
+                                            onSelect={handleNone}
+                                            value="none"
+                                        >
+                                            Select None
+                                        </CommandItem>
+                                    )}
+
                                     <CommandGroup>
                                         {data?.map((option) => (
                                             <CommandItem

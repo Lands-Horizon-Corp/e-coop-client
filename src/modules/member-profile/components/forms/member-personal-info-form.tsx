@@ -392,7 +392,7 @@ const MemberPersonalInfoForm = ({
                                             {...field}
                                             disabled={isDisabled(field.name)}
                                             onChange={(occupation) => {
-                                                field.onChange(occupation.id)
+                                                field.onChange(occupation?.id)
                                             }}
                                             placeholder="Occupation"
                                         />

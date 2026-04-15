@@ -68,7 +68,7 @@ export interface ITellerMonitoringReportFormProps
             TTellerMonitoringReportSchema
         > {}
 
-const TellerMonitoringReportCreateForm = ({
+const TellerMonitoringCreateReportForm = ({
     className,
     ...formProps
 }: ITellerMonitoringReportFormProps) => {
@@ -175,9 +175,9 @@ const TellerMonitoringReportCreateForm = ({
     )
 }
 
-export default TellerMonitoringReportCreateForm
+export default TellerMonitoringCreateReportForm
 
-export const TellerMonitoringReportCreateFormModal = ({
+export const TellerMonitoringCreateReportFormModal = ({
     title = 'Create Teller Monitoring Report',
     description = 'Define date range and report configuration for teller monitoring',
     className,
@@ -201,7 +201,7 @@ export const TellerMonitoringReportCreateFormModal = ({
             onOpenChange={onOpenChange}
             open={open}
         >
-            <TellerMonitoringReportCreateForm
+            <TellerMonitoringCreateReportForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)

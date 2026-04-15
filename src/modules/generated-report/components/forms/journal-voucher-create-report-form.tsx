@@ -71,7 +71,7 @@ export interface IJournalVoucherReportFormProps
             TJournalVoucherReportSchema
         > {}
 
-const JournalVoucherReportCreateForm = ({
+const JournalVoucherCreateReportForm = ({
     className,
     ...formProps
 }: IJournalVoucherReportFormProps) => {
@@ -206,9 +206,9 @@ const JournalVoucherReportCreateForm = ({
     )
 }
 
-export default JournalVoucherReportCreateForm
+export default JournalVoucherCreateReportForm
 
-export const JournalVoucherReportCreateFormModal = ({
+export const JournalVoucherCreateReportFormModal = ({
     title = 'Create Journal Voucher Report',
     description = 'Define filters and report configuration for journal voucher report',
     className,
@@ -232,7 +232,7 @@ export const JournalVoucherReportCreateFormModal = ({
             onOpenChange={onOpenChange}
             open={open}
         >
-            <JournalVoucherReportCreateForm
+            <JournalVoucherCreateReportForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)

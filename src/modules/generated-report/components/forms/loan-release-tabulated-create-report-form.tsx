@@ -14,7 +14,7 @@ import {
     useCreateGeneratedReport,
 } from '@/modules/generated-report'
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -48,8 +48,8 @@ export const LoanReleasesReportSchema = z
         report_type: z.enum(['tabulated', 'register']).default('tabulated'),
 
         account: z.any().optional(),
-        account_id: z.string().optional(),
-        account_category_id: z.string().optional(),
+        account_id: entityIdSchema.optional(),
+        account_category_id: entityIdSchema.optional(),
 
         start_cv: z.string().optional(),
         end_cv: z.string().optional(),
@@ -326,6 +326,7 @@ const LoanReleaseCreateReportForm = ({
                             <AccountCategoryComboBox
                                 onChange={field.onChange}
                                 placeholder="All Category"
+                                undefinable
                                 value={field.value}
                             />
                         )}

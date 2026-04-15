@@ -13,7 +13,7 @@ import {
     useCreateGeneratedReport,
 } from '@/modules/generated-report'
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -34,7 +34,7 @@ export const DirectAdjustmentReportSchema = z
         start_date: stringDateWithTransformSchema,
         end_date: stringDateWithTransformSchema,
         account: z.any(),
-        account_id: z.string().optional(),
+        account_id: entityIdSchema.optional(),
     })
     .and(WithGeneratedReportSchema)
     .superRefine((data, ctx) => {
@@ -70,7 +70,7 @@ export interface IDirectAdjustmentReportFormProps
             TDirectAdjustmentReportSchema
         > {}
 
-const DirectAdjustmentReportCreateForm = ({
+const DirectAdjustmentCreateReportForm = ({
     className,
     ...formProps
 }: IDirectAdjustmentReportFormProps) => {
@@ -202,9 +202,9 @@ const DirectAdjustmentReportCreateForm = ({
     )
 }
 
-export default DirectAdjustmentReportCreateForm
+export default DirectAdjustmentCreateReportForm
 
-export const DirectAdjustmentReportCreateFormModal = ({
+export const DirectAdjustmentCreateReportFormModal = ({
     title = 'Create Direct Adjustment Report',
     description = 'Define date range and account for adjustments',
     className,
@@ -228,7 +228,7 @@ export const DirectAdjustmentReportCreateFormModal = ({
             onOpenChange={onOpenChange}
             open={open}
         >
-            <DirectAdjustmentReportCreateForm
+            <DirectAdjustmentCreateReportForm
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)

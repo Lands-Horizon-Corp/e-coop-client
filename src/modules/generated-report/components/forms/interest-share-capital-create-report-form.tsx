@@ -17,6 +17,7 @@ import { getTemplateAt } from '@/modules/generated-report/generated-report-templ
 import MemberClassificationCombobox from '@/modules/member-classification/components/member-classification-combobox'
 import MemberGroupCombobox from '@/modules/member-group/components/member-group-combobox'
 import MemberOccupationCombobox from '@/modules/member-occupation/components/member-occupation-combobox'
+import { entityIdSchema } from '@/validation'
 
 import YearCombobox from '@/components/comboboxes/year-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -56,10 +57,10 @@ export const InterestOnShareCapitalSchema = z
         sort_by: z.enum(['by_passbook', 'by_name']).default('by_passbook'),
 
         barangay: z.string().optional(),
-        member_occupation_id: z.string().optional(),
-        member_classification_id: z.string().optional(),
-        member_group_id: z.string().optional(),
-        member_address_area_id: z.string().optional(),
+        member_occupation_id: entityIdSchema.optional(),
+        member_classification_id: entityIdSchema.optional(),
+        member_group_id: entityIdSchema.optional(),
+        member_address_area_id: entityIdSchema.optional(),
     })
     .and(WithGeneratedReportSchema)
 
@@ -278,6 +279,7 @@ const InterestOnShareCapitalCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
@@ -291,6 +293,7 @@ const InterestOnShareCapitalCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
@@ -304,6 +307,7 @@ const InterestOnShareCapitalCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />

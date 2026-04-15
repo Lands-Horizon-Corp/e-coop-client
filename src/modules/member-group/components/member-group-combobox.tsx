@@ -44,7 +44,8 @@ interface Props extends Omit<
     className?: string
     placeholder?: string
     memberGroupComboboxCreateProps?: IMemberGroupComboboxCreateProps
-    onChange?: (selected: IMemberGroup) => void
+    undefinable?: boolean
+    onChange?: (selected: IMemberGroup | undefined) => void
 }
 
 const MemberGroupCombobox = React.forwardRef<HTMLButtonElement, Props>(
@@ -56,6 +57,7 @@ const MemberGroupCombobox = React.forwardRef<HTMLButtonElement, Props>(
             memberGroupComboboxCreateProps,
             placeholder = 'Select Member Group...',
             onChange,
+            undefinable = false,
             ...other
         },
         ref
@@ -69,6 +71,18 @@ const MemberGroupCombobox = React.forwardRef<HTMLButtonElement, Props>(
             },
         })
 
+        const selected = React.useMemo(
+            () => data?.find((option) => option.id === value),
+            [data, value]
+        )
+
+        const handleNone = () => {
+            setOpen(false)
+            if (undefinable) {
+                onChange?.(undefined as never)
+            }
+        }
+
         return (
             <>
                 <MemberGroupCreateUpdateFormModal
@@ -76,12 +90,13 @@ const MemberGroupCombobox = React.forwardRef<HTMLButtonElement, Props>(
                         ...memberGroupComboboxCreateProps,
                         onSuccess: (newGroup) => {
                             onChange?.(newGroup)
-                            setCreateModal(false)
+                            setOpen(false)
                         },
                     }}
                     onOpenChange={setCreateModal}
                     open={createModal}
                 />
+
                 <Popover modal onOpenChange={setOpen} open={open}>
                     <PopoverTrigger asChild>
                         <Button
@@ -96,9 +111,8 @@ const MemberGroupCombobox = React.forwardRef<HTMLButtonElement, Props>(
                             role="combobox"
                             variant="outline"
                         >
-                            {value ? (
-                                data?.find((option) => option.id === value)
-                                    ?.name
+                            {selected ? (
+                                selected.name
                             ) : (
                                 <span className="text-muted-foreground">
                                     {placeholder}
@@ -107,15 +121,17 @@ const MemberGroupCombobox = React.forwardRef<HTMLButtonElement, Props>(
                             <ChevronDownIcon className="opacity-50" />
                         </Button>
                     </PopoverTrigger>
+
                     <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                         <Command>
                             <CommandInput
                                 className="h-9"
                                 placeholder="Search Member Group..."
                             />
+
                             {isLoading ? (
                                 <CommandEmpty>
-                                    <LoadingSpinner className="mr-2 inline-block" />{' '}
+                                    <LoadingSpinner className="mr-2 inline-block" />
                                     Loading...
                                 </CommandEmpty>
                             ) : (
@@ -123,14 +139,17 @@ const MemberGroupCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                     <CommandEmpty>
                                         No Member Group found.
                                     </CommandEmpty>
+
                                     {memberGroupComboboxCreateProps && (
                                         <>
                                             <CommandGroup>
                                                 <CommandItem
-                                                    onClick={() => {}}
-                                                    onSelect={() => {
+                                                    onClick={(e) =>
+                                                        e.stopPropagation()
+                                                    }
+                                                    onSelect={() =>
                                                         setCreateModal(true)
-                                                    }}
+                                                    }
                                                 >
                                                     <PlusIcon /> Create new
                                                     group
@@ -139,6 +158,17 @@ const MemberGroupCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                             <CommandSeparator />
                                         </>
                                     )}
+
+                                    {undefinable && (
+                                        <CommandItem
+                                            className="justify-center text-muted-foreground"
+                                            onSelect={handleNone}
+                                            value="none"
+                                        >
+                                            Select None
+                                        </CommandItem>
+                                    )}
+
                                     <CommandGroup>
                                         {data?.map((option) => (
                                             <CommandItem

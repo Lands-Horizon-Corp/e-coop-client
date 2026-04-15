@@ -83,7 +83,7 @@ export interface ITimeDepositReportFormProps
             TTimeDepositReportSchema
         > {}
 
-const TimeDepositReportCreateForm = ({
+const TimeDepositCreateReportForm = ({
     className,
     ...formProps
 }: ITimeDepositReportFormProps) => {
@@ -356,9 +356,9 @@ const TimeDepositReportCreateForm = ({
     )
 }
 
-export default TimeDepositReportCreateForm
+export default TimeDepositCreateReportForm
 
-export const TimeDepositReportCreateFormModal = ({
+export const TimeDepositCreateReportFormModal = ({
     title = 'Create Time Deposit Report',
     description = 'Define filters and report configuration for Time Deposit report',
     className,
@@ -382,7 +382,7 @@ export const TimeDepositReportCreateFormModal = ({
             onOpenChange={onOpenChange}
             open={open}
         >
-            <TimeDepositReportCreateForm
+            <TimeDepositCreateReportForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)

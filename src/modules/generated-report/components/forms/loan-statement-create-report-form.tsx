@@ -7,6 +7,8 @@ import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
+import { AccountCategoryComboBox } from '@/modules/account-category'
+import EmployeePicker from '@/modules/employee/components/employee-picker'
 import {
     IGeneratedReport,
     TWithReportConfigSchema,
@@ -16,10 +18,12 @@ import { PrintSettingsSection } from '@/modules/generated-report/components/form
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import MemberGroupCombobox from '@/modules/member-group/components/member-group-combobox'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormLabel } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -39,18 +43,17 @@ export const LoanStatementSchema = z
     .object({
         as_of_date: stringDateWithTransformSchema,
 
-        member_id: z.string().optional(),
+        member_id: entityIdSchema.optional(),
         member: z.any().optional(),
 
-        account_id: z.string().optional(),
+        account_id: entityIdSchema.optional(),
         account: z.any().optional(),
 
-        category_id: z.string().optional(),
-        category_description: z.any().optional(),
+        account_category_id: entityIdSchema.optional(),
 
-        group_id: z.string().optional(),
+        group_id: entityIdSchema.optional(),
 
-        collector_id: z.string().optional(),
+        collector_id: entityIdSchema.optional(),
         collector: z.any().optional(),
 
         filter_by: z.enum(['all', 'due']).default('all'),
@@ -87,9 +90,7 @@ const LoanStatementCreateReportForm = ({
             account_id: undefined,
             account: undefined,
 
-            category_id: undefined,
-            category_description: undefined,
-
+            account_category_id: undefined,
             group_id: undefined,
 
             collector_id: undefined,
@@ -194,19 +195,15 @@ const LoanStatementCreateReportForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            label="Category"
-                            name="category_id"
+                            label="Account Category"
+                            name="account_category_id"
                             render={({ field }) => (
-                                // TODO: TO IMPLEMENT
-                                <p {...field}>TO IMPLEMENT CATEGORY</p>
-                                // <CategoryPicker
-                                //     {...field}
-                                //     onSelect={(v) => {
-                                //         field.onChange(v?.id)
-                                //         form.setValue('category_description', v)
-                                //     }}
-                                //     value={form.getValues('category_description')}
-                                // />
+                                <AccountCategoryComboBox
+                                    onChange={field.onChange}
+                                    placeholder="All Category"
+                                    undefinable
+                                    value={field.value}
+                                />
                             )}
                         />
 
@@ -224,21 +221,45 @@ const LoanStatementCreateReportForm = ({
                         />
 
                         <FormFieldWrapper
+                            className="col-span-2"
                             control={form.control}
                             label="Collector"
                             name="collector_id"
-                            render={({ field }) => (
-                                // TODO: TO IMPLEMENT
-                                <p {...field}>TODO Collector</p>
-                                // <CollectorPicker
-                                //     {...field}
-                                //     onSelect={(v) => {
-                                //         field.onChange(v?.id)
-                                //         form.setValue('collector', v)
-                                //     }}
-                                //     value={form.getValues('collector')}
-                                // />
-                            )}
+                            render={({ field }) => {
+                                const selected = form.getValues('collector')
+                                return (
+                                    <div className="flex items-center gap-2">
+                                        <EmployeePicker
+                                            {...field}
+                                            onSelect={(v) => {
+                                                field.onChange(v?.user_id)
+                                                form.setValue(
+                                                    'collector',
+                                                    v?.user
+                                                )
+                                            }}
+                                            placeholder="ALL"
+                                            value={selected}
+                                        />
+                                        {selected && (
+                                            <Button
+                                                onClick={() => {
+                                                    field.onChange(undefined)
+                                                    form.setValue(
+                                                        'collector',
+                                                        undefined
+                                                    )
+                                                }}
+                                                size="icon"
+                                                type="button"
+                                                variant="ghost"
+                                            >
+                                                <XIcon className="size-4" />
+                                            </Button>
+                                        )}
+                                    </div>
+                                )
+                            }}
                         />
                     </div>
 

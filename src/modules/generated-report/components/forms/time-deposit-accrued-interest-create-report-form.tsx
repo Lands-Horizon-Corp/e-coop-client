@@ -14,7 +14,7 @@ import {
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
-import { stringDateWithTransformSchema } from '@/validation'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -35,7 +35,7 @@ export const TimeDepositAccruedInterestSchema = z
     .object({
         from_date: stringDateWithTransformSchema,
         to_date: stringDateWithTransformSchema,
-        member_type_id: z.string().optional(),
+        member_type_id: entityIdSchema.optional(),
         groupings: z.enum(['no_grouping', 'terms']).default('no_grouping'),
         sort_by: z
             .enum(['by_td_no', 'by_amount', 'by_name'])
@@ -143,6 +143,7 @@ const TimeDepositAccruedInterestCreateReportForm = ({
                                 {...field}
                                 onChange={(v) => field.onChange(v?.id)}
                                 placeholder="All"
+                                undefinable
                             />
                         )}
                     />
