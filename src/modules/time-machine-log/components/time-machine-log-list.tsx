@@ -1,18 +1,12 @@
-import { cn } from '@/helpers/tw-utils'
 import { TEntityId } from '@/types/common'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import { EmptyIcon } from '@/components/icons'
 import { Empty, EmptyDescription, EmptyTitle } from '@/components/ui/empty'
 import { Skeleton } from '@/components/ui/skeleton'
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-} from '@/components/ui/tooltip'
 
 import { useGetTimeMachineLogs } from '../time-machine-log.service'
-import { formatTime } from '../time-machine-log.utils'
+import TimeMachineListItem from './time-mahine-list-item'
 
 interface ITimeMachineLogsListProps {
     userOrganizationId?: TEntityId
@@ -56,76 +50,7 @@ const TimeMachineLogsList = ({
                         new Date(a.frozen_at).getTime()
                 )
                 ?.map((log) => (
-                    <div
-                        className={cn(
-                            'flex items-center w-full justify-between rounded-xl border px-2 py-1 bg-card',
-                            log.is_active
-                                ? 'border-green-500/40'
-                                : 'border-muted'
-                        )}
-                        key={log.id}
-                    >
-                        {/* LEFT */}
-                        <div className="flex items-center gap-4 min-w-0">
-                            {/* STATUS DOT */}
-                            <div
-                                className={cn(
-                                    'h-2.5 w-2.5 rounded-full',
-                                    log.is_active
-                                        ? 'bg-green-500'
-                                        : 'bg-gray-400'
-                                )}
-                            />
-
-                            {/* TIME */}
-                            <div className="text-xs font-medium">
-                                {new Date(log.frozen_at).toLocaleString()}
-                            </div>
-
-                            {/* REASON */}
-                            <Tooltip delayDuration={1100}>
-                                <TooltipTrigger>
-                                    <div className="text-xs text-muted-foreground truncate max-w-[120px]">
-                                        {log.reason || 'No reason'}
-                                    </div>
-                                </TooltipTrigger>
-                                <TooltipContent className="bg-secondary text-primary">
-                                    <p>{log.reason || 'No reason provided'}</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </div>
-
-                        {/* RIGHT */}
-                        <div className="flex items-center gap-4 text-xs">
-                            {/* COUNTDOWN */}
-                            <span
-                                className={cn(
-                                    'font-mono',
-                                    new Date(log.frozen_until).getTime() -
-                                        Date.now() <=
-                                        0
-                                        ? 'text-red-500'
-                                        : 'text-primary'
-                                )}
-                            >
-                                {formatTime(
-                                    new Date(log.frozen_until).getTime()
-                                )}
-                            </span>
-
-                            {/* STATUS */}
-                            <span
-                                className={cn(
-                                    'text-xs px-2 py-1 rounded-md',
-                                    log.is_active
-                                        ? 'bg-green-500/10 text-green-600'
-                                        : 'bg-muted text-muted-foreground'
-                                )}
-                            >
-                                {log.is_active ? 'ACTIVE' : 'ENDED'}
-                            </span>
-                        </div>
-                    </div>
+                    <TimeMachineListItem key={log.id} log={log} />
                 ))}
 
             {(error || timeMachine?.length === 0) && (

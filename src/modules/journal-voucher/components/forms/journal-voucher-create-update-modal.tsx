@@ -132,37 +132,6 @@ const JournalVoucherCreateUpdateForm = ({
         },
     })
 
-    // const hasInitialized = useRef(false)
-
-    // const getCreateDefaults = (): TJournalVoucherFormValues => ({
-    //     name: '',
-    //     date: toInputDateString(getTimeMachineValue()),
-    //     description: '',
-    //     currency: currency,
-    //     currency_id: currency.id ?? '',
-    //     journal_voucher_entries: [
-    //         {
-    //             account_id: '',
-    //         },
-    //     ],
-    //     journal_voucher_entries_deleted: [],
-    // })
-
-    // useEffect(() => {
-    //     if (mode === 'update' && defaultValues && !hasInitialized.current) {
-    //         form.reset({
-    //             ...defaultValues,
-    //             date: toInputDateString(new Date(defaultValues.date ?? '')),
-    //         })
-    //         hasInitialized.current = true
-    //     }
-
-    //     if (mode === 'create' && !hasInitialized.current) {
-    //         form.reset(getCreateDefaults())
-    //         hasInitialized.current = true
-    //     }
-    // }, [mode, defaultValues])
-
     const { formRef, handleFocusError, isDisabled } =
         useFormHelper<TJournalVoucherFormValues>({
             form,

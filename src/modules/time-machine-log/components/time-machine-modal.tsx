@@ -300,13 +300,12 @@ const TimeMachineForm = ({
                                                 field.value?.toString() || ''
                                             }
                                         >
-                                            <SelectTrigger className="h-11 w-full bg-card">
-                                                <div className="flex min-w-0 items-center gap-2">
+                                            <SelectTrigger className="h-11 w-[460px] bg-card overflow-hidden">
+                                                <div className="flex min-w-0 items-center gap-2 overflow-hidden">
                                                     <InfoFillCircleIcon className="size-4 shrink-0 text-muted-foreground" />
-                                                    <SelectValue
-                                                        className="min-w-0 flex-1 truncate text-left"
-                                                        placeholder="Select reason"
-                                                    />
+                                                    <div className="min-w-0 flex-1 overflow-hidden text-ellipsis">
+                                                        <SelectValue placeholder="Select reason" />
+                                                    </div>
                                                 </div>
                                             </SelectTrigger>
                                             <SelectContent>
