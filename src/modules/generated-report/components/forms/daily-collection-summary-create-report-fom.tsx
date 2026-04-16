@@ -13,9 +13,17 @@ import {
 } from '@/modules/generated-report'
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
-import { stringDateWithTransformSchema } from '@/validation'
+import {
+    WithSignatureSchema,
+    stringDateWithTransformSchema,
+} from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import {
+    SignatureSectionModal,
+    TWithSignatureSchema,
+} from '@/components/form-components/form-signature-section'
+import { SignatureLightIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -39,6 +47,7 @@ export const DailyCollectionSummarySchema = z
         sundries_print_separate_page: z.boolean().default(false),
     })
     .and(WithGeneratedReportSchema)
+    .and(WithSignatureSchema)
 
 export type TDailyCollectionSummarySchema = z.infer<
     typeof DailyCollectionSummarySchema
@@ -115,18 +124,48 @@ const DailyCollectionSummaryCreateReportForm = ({
                     className="grid gap-y-4"
                     disabled={isPending || formProps.readOnly}
                 >
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="flex gap-2">
                         <FormFieldWrapper
+                            className="flex-1"
                             control={form.control}
                             label="Start Date"
                             name="start_date"
                             render={({ field }) => <InputDate {...field} />}
                         />
                         <FormFieldWrapper
+                            className="flex-1"
                             control={form.control}
                             label="End Date"
                             name="end_date"
                             render={({ field }) => <InputDate {...field} />}
+                        />
+
+                        <FormFieldWrapper
+                            className="w-fit"
+                            control={form.control}
+                            name="signatures"
+                            render={({
+                                field: { value: _value, ...field },
+                            }) => {
+                                return (
+                                    <SignatureSectionModal
+                                        form={
+                                            form as unknown as UseFormReturn<TWithSignatureSchema>
+                                        }
+                                        trigger={
+                                            <Button
+                                                {...field}
+                                                className="w-fit mt-6.5"
+                                                size="sm"
+                                                type="button"
+                                                variant="secondary"
+                                            >
+                                                <SignatureLightIcon /> Sign
+                                            </Button>
+                                        }
+                                    />
+                                )
+                            }}
                         />
                     </div>
 
@@ -163,12 +202,6 @@ const DailyCollectionSummaryCreateReportForm = ({
                             )
                         }}
                     />
-
-                    <div className="flex justify-end">
-                        <Button size="sm" type="button" variant="secondary">
-                            Signature
-                        </Button>
-                    </div>
 
                     <Separator />
 

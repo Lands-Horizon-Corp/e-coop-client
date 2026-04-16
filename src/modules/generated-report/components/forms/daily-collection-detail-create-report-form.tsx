@@ -15,10 +15,18 @@ import {
 } from '@/modules/generated-report'
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
-import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
+import {
+    WithSignatureSchema,
+    entityIdSchema,
+    stringDateWithTransformSchema,
+} from '@/validation'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import {
+    SignatureSectionModal,
+    TWithSignatureSchema,
+} from '@/components/form-components/form-signature-section'
 import { SignatureLightIcon, TrashIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -51,8 +59,6 @@ export const DailyCollectionDetailSchema = z
         title: z.string().default('COLLECTION REPORT'),
         start_date: stringDateWithTransformSchema,
         end_date: stringDateWithTransformSchema,
-
-        sign: z.boolean().default(false),
 
         teller_ids: z.array(entityIdSchema).optional(),
         tellers: z.array(z.any()).optional(),
@@ -103,6 +109,7 @@ export const DailyCollectionDetailSchema = z
             .default([]),
     })
     .and(WithGeneratedReportSchema)
+    .and(WithSignatureSchema)
 
 export type TDailyCollectionDetailSchema = z.infer<
     typeof DailyCollectionDetailSchema
@@ -128,8 +135,6 @@ const DailyCollectionDetailCreateReportForm = ({
             title: 'COLLECTION REPORT',
             start_date: undefined,
             end_date: undefined,
-
-            sign: false,
 
             teller_ids: undefined,
             tellers: undefined,
@@ -201,14 +206,33 @@ const DailyCollectionDetailCreateReportForm = ({
                             name="title"
                             render={({ field }) => <Input {...field} />}
                         />
-                        <Button
-                            className="w-fit mt-6.5"
-                            size="sm"
-                            type="button"
-                            variant="secondary"
-                        >
-                            <SignatureLightIcon /> Sign
-                        </Button>
+                        <FormFieldWrapper
+                            className="w-fit"
+                            control={form.control}
+                            name="signatures"
+                            render={({
+                                field: { value: _value, ...field },
+                            }) => {
+                                return (
+                                    <SignatureSectionModal
+                                        form={
+                                            form as unknown as UseFormReturn<TWithSignatureSchema>
+                                        }
+                                        trigger={
+                                            <Button
+                                                {...field}
+                                                className="w-fit mt-6.5"
+                                                size="sm"
+                                                type="button"
+                                                variant="secondary"
+                                            >
+                                                <SignatureLightIcon /> Sign
+                                            </Button>
+                                        }
+                                    />
+                                )
+                            }}
+                        />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -553,7 +577,7 @@ const BrowseDailyCollectionEntries = ({
     )
     return (
         <Modal
-            className={cn('!max-w-[97vw] w-full', className)}
+            className={cn('!max-w-[97vw] border-muted w-full', className)}
             description={description}
             onOpenChange={setState}
             open={state}
@@ -600,7 +624,7 @@ const BrowseDailyCollectionEntries = ({
             </div>
             <Table
                 className="border-separate border-spacing-0"
-                wrapperClassName="border  h-[60vh] rounded-md bg-muted/30 ecoop-scroll overflow-auto"
+                wrapperClassName="border-none ring-2 ring-muted h-[60vh]  rounded-xl bg-muted/30 ecoop-scroll overflow-auto"
             >
                 <TableHeader className="bg-popover/80 sticky top-0">
                     <TableRow>

@@ -339,6 +339,7 @@ const ComakerCreateReportForm = ({
                                         field.onChange(selected?.id)
                                     }
                                     placeholder="All occupation"
+                                    undefinable
                                 />
                             )}
                         />
@@ -354,6 +355,7 @@ const ComakerCreateReportForm = ({
                                         field.onChange(selected?.id)
                                     }
                                     placeholder="All area"
+                                    undefinable
                                 />
                             )}
                         />

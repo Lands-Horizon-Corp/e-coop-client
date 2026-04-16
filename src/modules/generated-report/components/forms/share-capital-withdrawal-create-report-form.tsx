@@ -340,6 +340,7 @@ const ShareCapitalWithdrawalCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
@@ -353,6 +354,7 @@ const ShareCapitalWithdrawalCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />

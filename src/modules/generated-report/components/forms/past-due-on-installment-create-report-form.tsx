@@ -358,6 +358,7 @@ const PastDueOnInstallmentCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
@@ -371,6 +372,7 @@ const PastDueOnInstallmentCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />

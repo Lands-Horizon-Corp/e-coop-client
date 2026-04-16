@@ -23,10 +23,11 @@ import { TGeneralLedgerSource } from '../../general-ledger.types'
 
 interface Props {
     value?: TGeneralLedgerSource
-    onChange?: (value: TGeneralLedgerSource) => void
+    onChange?: (value: TGeneralLedgerSource | undefined) => void
     disabled?: boolean
     placeholder?: string
     className?: string
+    undefinable?: boolean
 }
 
 const GeneralLedgerSourceCombobox = ({
@@ -35,8 +36,16 @@ const GeneralLedgerSourceCombobox = ({
     disabled = false,
     placeholder = 'Select Source...',
     className,
+    undefinable = false,
 }: Props) => {
     const [open, setOpen] = React.useState(false)
+
+    const handleNone = () => {
+        setOpen(false)
+        if (undefinable) {
+            onChange?.(undefined as never)
+        }
+    }
 
     return (
         <Popover modal onOpenChange={setOpen} open={open}>
@@ -59,12 +68,24 @@ const GeneralLedgerSourceCombobox = ({
                     <ChevronDownIcon className="opacity-50 shrink-0" />
                 </Button>
             </PopoverTrigger>
+
             <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
                 <Command>
                     <CommandInput placeholder="Search source..." />
                     <CommandList className="ecoop-scroll">
                         <CommandEmpty>No source found.</CommandEmpty>
+
                         <CommandGroup>
+                            {undefinable && (
+                                <CommandItem
+                                    className="justify-center text-muted-foreground"
+                                    onSelect={handleNone}
+                                    value="none"
+                                >
+                                    Select None
+                                </CommandItem>
+                            )}
+
                             {GENERAL_LEDGER_SOURCES.map((option, index) => (
                                 <CommandItem
                                     key={`${option}-${index}`}

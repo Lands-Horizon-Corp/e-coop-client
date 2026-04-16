@@ -245,6 +245,7 @@ const AccountBalanceCreateReportForm = ({
                                         field.onChange(selected?.id)
                                     }
                                     placeholder="All occupation"
+                                    undefinable
                                 />
                             )}
                         />

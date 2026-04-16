@@ -305,6 +305,7 @@ const ICPRCreateReportForm = ({ className, ...formProps }: IICPRFormProps) => {
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />

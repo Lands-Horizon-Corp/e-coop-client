@@ -54,15 +54,17 @@ import { CashCheckDisbursementCreateReportFormModal } from './forms/cash-check-d
 import { CloseAccountCreateReportFormModal } from './forms/close-account-create-report-form'
 import { ComakerCreateReportFormModal } from './forms/comaker-create-report-form'
 import { DailyCashCollectionReceiptJournalCreateReportFormModal } from './forms/daily-cash-receipt-create-report-form'
-import { DailyCollectionSummaryCreateReportFormModal } from './forms/daily-collection-create-report-fom'
 import { DailyCollectionDetailCreateReportFormModal } from './forms/daily-collection-detail-create-report-form'
+import { DailyCollectionSummaryCreateReportFormModal } from './forms/daily-collection-summary-create-report-fom'
 import { DailyWithdrawalCreateReportFormModal } from './forms/daily-withdrawal-create-report-form'
+import { DepositBalancesCreateReportFormModal } from './forms/deposit-balances-create-report-form'
 import { DirectAdjustmentCreateReportFormModal } from './forms/direct-adjustment-create-report-form'
 import { EarnedUnearnedCreateReportFormModal } from './forms/earned-unearned-create-report-form'
 import { GroceryLoanReleaseCreateReportFormModal } from './forms/grocery-loan-release-create-report-form'
 import { ICPRCreateReportFormModal } from './forms/icpr-create-report-form'
 import { InterestOnShareCapitalCreateReportFormModal } from './forms/interest-share-capital-create-report-form'
 import { JournalVoucherCreateReportFormModal } from './forms/journal-voucher-create-report-form'
+import { LedgerCreateReportFormModal } from './forms/ledger-create-report-form'
 import { LoanBalancesCreateReportFormModal } from './forms/loan-balances-create-report-form'
 import { LoanCollectionDetailCreateReportFormModal } from './forms/loan-collection-detail-create-report-form'
 import { LoanCollectionDueCreateReportFormModal } from './forms/loan-collection-due-create-report-form'
@@ -77,6 +79,7 @@ import { LoanStatementCreateReportFormModal } from './forms/loan-statement-creat
 import { PrintNumberTagCreateReportFormModal } from './forms/number-tag-create-report-form'
 import { OtherFundsEntryCreateReportFormModal } from './forms/other-funds-entry-create-report-form'
 import { PastDueOnInstallmentCreateReportFormModal } from './forms/past-due-on-installment-create-report-form'
+import { PortfolioAtRiskCreateReportFormModal } from './forms/portfolio-at-risk-create-report-form'
 import { ProofOfPurchaseCreateReportFormModal } from './forms/proof-of-purchase-create-report-form'
 import { RebateCreateReportFormModal } from './forms/rebate-create-report-form'
 import { ShareCapitalWithdrawalCreateReportFormModal } from './forms/share-capital-withdrawal-create-report-form'
@@ -190,6 +193,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Portfolio at Risk',
                 icon: Shield,
+                component: PortfolioAtRiskCreateReportFormModal,
             },
             {
                 label: 'Comaker',
@@ -210,6 +214,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Deposit Balances',
                 icon: Coins,
+                component: DepositBalancesCreateReportFormModal,
             },
             {
                 label: 'Time Deposit',
@@ -304,6 +309,7 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Ledger',
                 icon: BookOpen,
+                component: LedgerCreateReportFormModal,
             },
         ],
     },

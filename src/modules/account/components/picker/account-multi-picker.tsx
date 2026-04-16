@@ -4,6 +4,7 @@ import Fuse from 'fuse.js'
 
 import { cn } from '@/helpers'
 import { RefreshCw, Search } from 'lucide-react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -178,6 +179,18 @@ const AccountMultiPicker = ({
         lastClickedIndex.current = null
     }, [])
 
+    useHotkeys(
+        'enter',
+        (e) => {
+            e.preventDefault()
+            handleConfirm()
+        },
+        {
+            enableOnFormTags: true,
+        },
+        []
+    )
+
     return (
         <div className="h-[80vh] min-w-xl select-none flex flex-col overflow-clip">
             <div className="mb-4 flex items-center justify-between">
@@ -238,13 +251,14 @@ const AccountMultiPicker = ({
                 handleClick={handleClick}
                 selectedIds={selectedIds}
             />
-            <div className="mt-4">
-                <button
-                    className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+            <div className="mt-4 sticky bottom-0">
+                <Button
+                    className="w-full flex items-center justify-center gap-2"
                     onClick={handleConfirm}
                 >
                     Confirm Selection
-                </button>
+                    <Kbd>Enter</Kbd>
+                </Button>
             </div>
         </div>
     )

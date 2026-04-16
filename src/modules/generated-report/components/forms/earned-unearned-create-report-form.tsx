@@ -393,6 +393,7 @@ const EarnedUnearnedCreateReportForm = ({
                                     {...field}
                                     onChange={(v) => field.onChange(v?.id)}
                                     placeholder="All"
+                                    undefinable
                                 />
                             )}
                         />
