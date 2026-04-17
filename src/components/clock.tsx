@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import { toReadableDateTime } from '@/helpers/date-utils'
 import { cn } from '@/helpers/tw-utils'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import {
@@ -59,7 +60,7 @@ const Clock = ({
     })
 
     const isLowTime = remainingTime <= 30 && remainingTime > 0
-
+    const hasTimeMachineLog = !!user_organization?.time_machine_log
     return (
         <div
             className={cn(
@@ -83,19 +84,21 @@ const Clock = ({
             >
                 {user_organization?.time_machine_time && (
                     <span className="ml-1">
-                        {new Date(
-                            user_organization.time_machine_time
-                        ).toLocaleDateString('en-US', {
-                            dateStyle: 'medium',
-                        })}
+                        {toReadableDateTime(
+                            user_organization?.time_machine_time
+                        )}
                     </span>
                 )}
-                {time.toLocaleTimeString('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: true,
-                })}
+                {!user_organization?.time_machine_time && (
+                    <>
+                        {time.toLocaleTimeString('en-US', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
+                            hour12: true,
+                        })}
+                    </>
+                )}
             </Button>
             {showTooltip && (
                 <div
@@ -109,10 +112,20 @@ const Clock = ({
                     </span>
                     <span className="mr-2">{localTimeZone}</span>
                     <span className="border-l border-border pl-2">
+                        {hasTimeMachineLog &&
+                            time.toLocaleTimeString('en-US', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                second: '2-digit',
+                                hour12: true,
+                            })}{' '}
                         {time.toLocaleDateString('en-US', {
-                            dateStyle: 'medium',
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
                         })}
                     </span>
+
                     {hasActiveTimeMachine &&
                         user_organization?.time_machine_time && (
                             <>

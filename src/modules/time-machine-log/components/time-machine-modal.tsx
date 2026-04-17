@@ -100,7 +100,7 @@ const TimeMachineForm = ({
         defaultValues: {
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             reason: reason,
-            frozen_until_seconds: 300,
+            frozen_until_seconds: 3600,
             description: description,
             frozen_at: new Date(frozen_at || Date.now())
                 .toISOString()

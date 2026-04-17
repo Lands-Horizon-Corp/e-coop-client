@@ -59,12 +59,14 @@ const TimeLeft = ({
 
     const isLowTime = remainingTime <= 30 && remainingTime > 0
     const timeLeftDisplay = (
-        <Kbd className={cn(
-            '',
-            showAnimation && isLowTime
-                ? 'animate-pulse text-destructive self-center'
-                : ''
-        )}>
+        <Kbd
+            className={cn(
+                '',
+                showAnimation && isLowTime
+                    ? 'animate-pulse text-destructive self-center'
+                    : ''
+            )}
+        >
             {showLabel && (
                 <>{frozenAtInput ? 'Preview:' : 'Active:'} Time left: </>
             )}
