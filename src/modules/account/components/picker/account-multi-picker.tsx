@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Kbd } from '@/components/ui/kbd'
+import { Skeleton } from '@/components/ui/skeleton'
 
 import { useInternalState } from '@/hooks/use-internal-state'
 
@@ -41,6 +42,30 @@ const DebouncedSearch = memo(
     }
 )
 DebouncedSearch.displayName = 'DebouncedSearch'
+
+const AccountListSkeleton = ({ className }: { className?: string }) => {
+    return (
+        <div
+            className={cn(
+                'space-y-1.5 ecoop-scroll overflow-y-auto',
+                className
+            )}
+        >
+            {Array.from({ length: 16 }).map((_, i) => (
+                <div
+                    className="flex items-center gap-3 rounded-lg border px-3 py-4 bg-card"
+                    key={i}
+                >
+                    <Skeleton className="size-4 rounded-sm shrink-0" />
+
+                    <Skeleton className="h-4 flex-1" />
+
+                    <Skeleton className="h-5 w-16 rounded-full" />
+                </div>
+            ))}
+        </div>
+    )
+}
 
 const AccountList = ({
     className,
@@ -76,20 +101,6 @@ const AccountList = ({
                         {account.name}
                     </span>
                     <AccountTypeBadge type={account.type} />
-                    {/* <span
-                        className={cn(
-                            'font-mono text-xs shrink-0 w-20 text-right',
-                            (account.gl_total_balance ?? 0 < 0)
-                                ? 'text-destructive'
-                                : 'text-foreground'
-                        )}
-                    >
-                        {(account.gl_total_balance ?? 0 < 0) &&
-                            `(${currencyFormat(account.gl_total_balance, {
-                                currency: account.currency,
-                                showSymbol: !account.currency,
-                            })})`}
-                    </span> */}
                 </div>
             )
         })}
@@ -112,7 +123,7 @@ const AccountMultiPicker = ({
     onConfirm,
     onSelectChange,
 }: AccountMultiPickerProps) => {
-    const { data = [] } = useGetAllAccount()
+    const { data = [], isPending } = useGetAllAccount()
 
     const [selectedAccounts, setSelectedAccounts] =
         useState<IAccount[]>(defaultSelected)
@@ -245,12 +256,16 @@ const AccountMultiPicker = ({
                     Unselect
                 </Button>
             </div>
-            <AccountList
-                className="flex-1"
-                filteredAccounts={filteredAccounts}
-                handleClick={handleClick}
-                selectedIds={selectedIds}
-            />
+            {isPending ? (
+                <AccountListSkeleton className="flex-1" />
+            ) : (
+                <AccountList
+                    className="flex-1"
+                    filteredAccounts={filteredAccounts}
+                    handleClick={handleClick}
+                    selectedIds={selectedIds}
+                />
+            )}
             <div className="mt-4 sticky bottom-0">
                 <Button
                     className="w-full flex items-center justify-center gap-2"

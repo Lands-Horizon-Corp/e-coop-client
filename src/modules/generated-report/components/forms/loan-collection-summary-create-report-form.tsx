@@ -1,4 +1,4 @@
-import { UseFormReturn, useForm } from 'react-hook-form'
+import { UseFormReturn, useFieldArray, useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -6,6 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import { AccountMultiPickerModal } from '@/modules/account/components/picker/account-multi-picker'
 import {
     IGeneratedReport,
     TWithReportConfigSchema,
@@ -14,16 +15,34 @@ import {
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import { LOAN_MODE_OF_PAYMENT } from '@/modules/loan-transaction/loan.constants'
-import { stringDateWithTransformSchema } from '@/validation'
+import {
+    PercentageSchema,
+    entityIdSchema,
+    stringDateWithTransformSchema,
+} from '@/validation'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { getFormPersistedData } from '@/components/form-components/form-idb-persist-headless'
+import { ListOrderedIcon, TrashIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormLabel } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
+import { Kbd, KbdGroup } from '@/components/ui/kbd'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 import { useInternalState } from '@/hooks/use-internal-state'
@@ -66,6 +85,24 @@ export const LoanCollectionSummarySchema = z
         payment_type: z.enum(['all', 'office', 'field']).default('all'),
 
         past_due_below_starting_date: z.boolean().default(false),
+
+        loan_collections: z
+            .array(
+                z.object({
+                    description: z.string().optional(),
+                    age: PercentageSchema.default(0),
+                    account_entries_id: z
+                        .array(entityIdSchema)
+                        .optional()
+                        .default([]),
+                    account_entries: z
+                        .array(z.any().optional())
+                        .optional()
+                        .default([]), // UI only
+                })
+            )
+            .optional()
+            .default([]),
     })
     .and(WithGeneratedReportSchema)
 
@@ -85,35 +122,39 @@ export interface ILoanCollectionSummaryFormProps
 
 const LoanCollectionSummaryCreateReportForm = ({
     className,
+    persistKey = 'form-report-loan-collection-summary-report',
     ...formProps
 }: ILoanCollectionSummaryFormProps) => {
     const form = useForm<TLoanCollectionSummarySchema>({
         resolver: standardSchemaResolver(LoanCollectionSummarySchema),
-        defaultValues: {
-            start_date: undefined,
-            end_date: undefined,
+        defaultValues: async () => {
+            const persistedData =
+                await getFormPersistedData<TLoanCollectionSummarySchema>(
+                    persistKey
+                )
 
-            filter_by_date_release_start_date: undefined,
-            filter_by_date_release_end_date: undefined,
+            const baseDefaults = {
+                start_date: '',
+                end_date: '',
+                group_by: 'by_class',
+                mode_of_payment: 'all',
+                report_type: 'standard',
+                payment_type: 'all',
+                past_due_below_starting_date: false,
+            }
 
-            group_by: 'by_class',
-            mode_of_payment: 'all',
-            report_type: 'standard',
-            payment_type: 'all',
-
-            past_due_below_starting_date: false,
-
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `loan_collection_summary_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
+            return {
+                ...baseDefaults,
+                ...persistedData,
+                ...formProps.defaultValues,
+                report_config: {
+                    ...getTemplateAt(undefined, 0),
+                    ...formProps.defaultValues?.report_config,
+                    ...persistedData?.report_config,
+                    module: 'GeneratedReport',
+                    name: `loan_collection_summary_${toReadableDate(new Date(), 'MMddyy_mmss')}.pdf`,
+                },
+            }
         },
     })
 
@@ -264,6 +305,32 @@ const LoanCollectionSummaryCreateReportForm = ({
                                     >
                                         <RadioGroupItem value={opt.value} />
                                         <span>{opt.label}</span>
+                                        {opt.value === 'table' && (
+                                            <div
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    e.preventDefault()
+                                                }}
+                                            >
+                                                <LoanCollectionsSection
+                                                    form={form}
+                                                    trigger={
+                                                        <Button
+                                                            disabled={
+                                                                field.value !==
+                                                                'table'
+                                                            }
+                                                            size="xs"
+                                                            type="button"
+                                                            variant="outline"
+                                                        >
+                                                            <ListOrderedIcon />
+                                                            Collection
+                                                        </Button>
+                                                    }
+                                                />
+                                            </div>
+                                        )}
                                     </label>
                                 ))}
                             </RadioGroup>
@@ -399,6 +466,206 @@ const LoanCollectionSummaryCreateReportForm = ({
 }
 
 export default LoanCollectionSummaryCreateReportForm
+
+export const LoanCollectionsSection = ({
+    form,
+    title = 'Loan Collections',
+    description = 'Define loan collection list',
+    className,
+    trigger,
+    open,
+    onOpenChange,
+    ...props
+}: IModalProps & {
+    form: UseFormReturn<TLoanCollectionSummarySchema>
+}) => {
+    const [state, setState] = useInternalState(false, open, onOpenChange)
+
+    const { fields, append, remove } = useFieldArray({
+        control: form.control,
+        name: 'loan_collections',
+    })
+
+    useHotkeys(
+        'ctrl+enter',
+        (e) => {
+            e.preventDefault()
+            append({
+                description: '',
+                age: 0,
+                account_entries_id: [],
+                account_entries: [],
+            })
+        },
+        {
+            keydown: true,
+            enableOnFormTags: true,
+        }
+    )
+
+    return (
+        <Modal
+            className={cn('!max-w-lg border-muted w-full', className)}
+            closeButtonClassName="sr-only"
+            description={description}
+            onOpenChange={setState}
+            open={state}
+            title={title}
+            titleHeaderContainerClassName="sr-only"
+            trigger={trigger}
+            {...props}
+        >
+            <div className="flex justify-between">
+                <div>
+                    <p className="text-lg font-medium">Loan Collections</p>
+                    <p className="text-sm text-muted-foreground">
+                        Define loan collection configurations
+                    </p>
+                </div>
+                <div className="flex items-center gap-2">
+                    <p className="text-sm text-muted-foreground">
+                        <KbdGroup>
+                            <Kbd>Ctrl</Kbd>
+                            <Kbd>Enter</Kbd>
+                        </KbdGroup>
+                    </p>
+                    <Button
+                        onClick={() =>
+                            append({
+                                description: '',
+                                age: 0,
+                                account_entries_id: [],
+                                account_entries: [],
+                            })
+                        }
+                        size="xs"
+                        type="button"
+                        variant="secondary"
+                    >
+                        Add Entry
+                    </Button>
+                </div>
+            </div>
+
+            <Table
+                className="border-separate border-spacing-0"
+                wrapperClassName="border-none ring-2 ring-muted h-[60vh] rounded-xl bg-muted/30 ecoop-scroll overflow-auto"
+            >
+                <TableHeader className="bg-popover/80 sticky top-0">
+                    <TableRow>
+                        <TableHead className="w-[60px] text-center">
+                            #
+                        </TableHead>
+                        <TableHead className="">Description</TableHead>
+                        <TableHead className="text-center">Age (%)</TableHead>
+                        <TableHead className="w-[800px] text-center">
+                            Account Entries
+                        </TableHead>
+                        <TableHead className="w-[60px]" />
+                    </TableRow>
+                </TableHeader>
+
+                <TableBody>
+                    {fields.map((field, index) => (
+                        <TableRow key={field.id}>
+                            <TableCell className="text-center py-2">
+                                {index + 1}
+                            </TableCell>
+
+                            <TableCell className="py-2 px-2">
+                                <FormFieldWrapper
+                                    className="w-fit"
+                                    control={form.control}
+                                    name={`loan_collections.${index}.description`}
+                                    render={({ field }) => (
+                                        <Input
+                                            className="w-[100px]"
+                                            {...field}
+                                        />
+                                    )}
+                                />
+                            </TableCell>
+
+                            <TableCell className="py-2 px-2">
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name={`loan_collections.${index}.age`}
+                                    render={({ field }) => (
+                                        <Input
+                                            className="w-[100px]"
+                                            onChange={(e) =>
+                                                field.onChange(
+                                                    Number(e.target.value)
+                                                )
+                                            }
+                                            type="number"
+                                            value={field.value ?? 0}
+                                        />
+                                    )}
+                                />
+                            </TableCell>
+
+                            <TableCell className="py-2 px-2 w-fit">
+                                <FormFieldWrapper
+                                    className="w-fit"
+                                    control={form.control}
+                                    name={`loan_collections.${index}.account_entries_id`}
+                                    render={({ field }) => (
+                                        <div className="flex flex-col w-fit gap-y-2">
+                                            <AccountMultiPickerModal
+                                                pickerProps={{
+                                                    defaultSelected:
+                                                        form.getValues(
+                                                            `loan_collections.${index}.account_entries`
+                                                        ),
+                                                    onConfirm: (accounts) => {
+                                                        field.onChange(
+                                                            accounts.map(
+                                                                (a) => a.id
+                                                            )
+                                                        )
+                                                        form.setValue(
+                                                            `loan_collections.${index}.account_entries`,
+                                                            accounts
+                                                        )
+                                                    },
+                                                }}
+                                                trigger={
+                                                    <Button
+                                                        className="w-fit"
+                                                        size="xs"
+                                                        type="button"
+                                                        variant="secondary"
+                                                    >
+                                                        {field?.value
+                                                            ?.length === 0
+                                                            ? 'Select Accounts'
+                                                            : `${field.value?.length} Selected`}
+                                                    </Button>
+                                                }
+                                            />
+                                        </div>
+                                    )}
+                                />
+                            </TableCell>
+
+                            <TableCell className="py-2 px-2">
+                                <Button
+                                    onClick={() => remove(index)}
+                                    size="icon"
+                                    type="button"
+                                    variant="ghost"
+                                >
+                                    <TrashIcon className="size-4 text-destructive" />
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </Modal>
+    )
+}
 
 export const LoanCollectionSummaryCreateReportFormModal = ({
     title = 'Loan Collection Summary',

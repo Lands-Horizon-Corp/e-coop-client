@@ -76,6 +76,7 @@ import { LoanReleaseDetailCreateReportFormModal } from './forms/loan-release-det
 import { LoanReleaseSummaryCreateReportFormModal } from './forms/loan-release-summary-create-report-form'
 import { LoanReleaseCreateReportFormModal } from './forms/loan-release-tabulated-create-report-form'
 import { LoanStatementCreateReportFormModal } from './forms/loan-statement-create-report-form'
+import { MemberListingCreateReportFormModal } from './forms/member-listing-create-report-form'
 import { PrintNumberTagCreateReportFormModal } from './forms/number-tag-create-report-form'
 import { OtherFundsEntryCreateReportFormModal } from './forms/other-funds-entry-create-report-form'
 import { PastDueOnInstallmentCreateReportFormModal } from './forms/past-due-on-installment-create-report-form'
@@ -83,6 +84,7 @@ import { PortfolioAtRiskCreateReportFormModal } from './forms/portfolio-at-risk-
 import { ProofOfPurchaseCreateReportFormModal } from './forms/proof-of-purchase-create-report-form'
 import { RebateCreateReportFormModal } from './forms/rebate-create-report-form'
 import { ShareCapitalWithdrawalCreateReportFormModal } from './forms/share-capital-withdrawal-create-report-form'
+import { StatementOfDepositsCreateReportFormModal } from './forms/statement-of-account-create-report-form'
 import { SubscriptionFeeCreateReportFormModal } from './forms/subscription-fee-create-report-form'
 import { SupposedActualCollectionCreateReportFormModal } from './forms/supposed-actual-colleaction-create-report-form'
 import { TellerMonitoringCreateReportFormModal } from './forms/teller-monitoring-create-report-form'
@@ -245,10 +247,12 @@ const reportGroups: ReportGroup[] = [
             {
                 label: 'Member Listing',
                 icon: ListChecks,
+                component: MemberListingCreateReportFormModal,
             },
             {
-                label: 'Stmt of Account',
+                label: 'Statement of Account',
                 icon: ReceiptText,
+                component: StatementOfDepositsCreateReportFormModal,
             },
             {
                 label: 'Account Balance',

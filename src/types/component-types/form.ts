@@ -8,6 +8,7 @@ export interface IForm<
     IErr = unknown,
     THidisable = TDefaultVals,
 > extends IClassProps {
+    persistKey?: string
     readOnly?: boolean
     defaultValues?: TDefaultVals
     resetOnDefaultChange?: boolean
