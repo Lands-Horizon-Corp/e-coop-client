@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 
 import { cn } from '@/helpers/tw-utils'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
-import TimeMachineCancelFormModal from '@/modules/time-machine-log/components/cancel-time-machine-modal'
+import {
+    formatDuration,
+    useAutoCancelTimeMachine,
+    useTimeLeft,
+} from '@/modules/time-machine-log'
 
 import { Button } from '@/components/ui/button'
-
-import { useModalState } from '@/hooks/use-modal-state'
-
-import { XIcon } from './icons'
 
 export interface NavClockProps {
     className?: string
@@ -28,7 +28,6 @@ const Clock = ({
     } = useAuthStore()
 
     const [time, setTime] = useState(new Date())
-    const [is24Hour, setIs24Hour] = useState(false)
     const [showTooltip, setShowTooltip] = useState(false)
 
     useEffect(() => {
@@ -38,9 +37,28 @@ const Clock = ({
 
     const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
-    const timeMachineCancel = useModalState()
-
     const hasActiveTimeMachine = !!user_organization?.time_machine_time
+
+    const { remainingTime } = useTimeLeft({
+        serverFrozenUntil: user_organization?.time_machine_log?.frozen_until,
+    })
+
+    let timeDiff: number | undefined
+
+    if (user_organization?.time_machine_log?.frozen_until) {
+        const frozenUntilTime = new Date(
+            user_organization.time_machine_log.frozen_until
+        ).getTime()
+        timeDiff = frozenUntilTime - time.getTime()
+    }
+
+    useAutoCancelTimeMachine({
+        isActive: hasActiveTimeMachine,
+        timeDiff,
+        userOrganizationId: user_organization?.id,
+    })
+
+    const isLowTime = remainingTime <= 30 && remainingTime > 0
 
     return (
         <div
@@ -51,7 +69,6 @@ const Clock = ({
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
         >
-            <TimeMachineCancelFormModal {...timeMachineCancel} />
             <Button
                 className={cn(
                     'relative overflow-visible',
@@ -59,28 +76,27 @@ const Clock = ({
                     buttonClassName
                 )}
                 onClick={() => {
-                    setIs24Hour(!is24Hour)
                     onClick?.()
                 }}
                 size="sm"
                 variant="ghost"
             >
+                {user_organization?.time_machine_time && (
+                    <span className="ml-1">
+                        {new Date(
+                            user_organization.time_machine_time
+                        ).toLocaleDateString('en-US', {
+                            dateStyle: 'medium',
+                        })}
+                    </span>
+                )}
                 {time.toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit',
                     second: '2-digit',
-                    hour12: !is24Hour,
+                    hour12: true,
                 })}
             </Button>
-            {user_organization?.time_machine_time && showTooltip && (
-                <Button
-                    onClick={() => timeMachineCancel.openModal()}
-                    size="sm"
-                    variant="destructive"
-                >
-                    <XIcon />
-                </Button>
-            )}
             {showTooltip && (
                 <div
                     className={cn(
@@ -97,6 +113,23 @@ const Clock = ({
                             dateStyle: 'medium',
                         })}
                     </span>
+                    {hasActiveTimeMachine &&
+                        user_organization?.time_machine_time && (
+                            <>
+                                <div className="mt-2 flex justify-center border-t border-border pt-2">
+                                    <span
+                                        className={cn(
+                                            'ml-1 font-semibold transition-colors',
+                                            isLowTime &&
+                                                'text-red-500 animate-pulse'
+                                        )}
+                                    >
+                                        {formatDuration(remainingTime)}
+                                        {isLowTime && ' - Expiring soon!'}
+                                    </span>
+                                </div>
+                            </>
+                        )}
                 </div>
             )}
         </div>

@@ -77,10 +77,16 @@ export const useTimeMachineCancel = createMutationFactory<
     },
     invalidationFn(args) {
         args.queryClient.invalidateQueries({
+            queryKey: ['auth', 'context'],
+        })
+        args.queryClient.invalidateQueries({
             queryKey: ['user-organization', 'current'],
         })
         args.queryClient.invalidateQueries({
             queryKey: ['transaction-batch', 'current'],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['user-organization'],
         })
         args.queryClient.invalidateQueries({
             queryKey: ['disbursement-transaction'],
@@ -113,6 +119,9 @@ export const useCreateTimeMachine = createMutationFactory<
         ).data
     },
     invalidationFn(args) {
+        args.queryClient.invalidateQueries({
+            queryKey: ['auth', 'context'],
+        })
         args.queryClient.invalidateQueries({
             queryKey: ['user-organization', 'current'],
         })

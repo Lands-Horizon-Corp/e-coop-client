@@ -30,7 +30,7 @@ const TimeMachineLogsList = ({
     })
 
     return (
-        <div className="flex flex-col p-5 bg-background w-1/2 gap-2 ecoop-scroll overflow-auto max-h-[80vh] rounded-xl">
+        <div className="flex border flex-col p-5 bg-background w-1/2 gap-2 ecoop-scroll overflow-auto max-h-[80vh] rounded-xl">
             <div className="flex items-center justify-between">
                 <h1>Time Machine Logs</h1>
                 <RefreshButton className="self-end" onClick={() => refetch()} />

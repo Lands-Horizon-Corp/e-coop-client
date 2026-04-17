@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { cn, formatDate } from '@/helpers'
 import { format } from 'date-fns'
 
@@ -88,4 +90,4 @@ const TimeMachineListItem = ({ log, className }: Props) => {
     )
 }
 
-export default TimeMachineListItem
+export default React.memo(TimeMachineListItem)

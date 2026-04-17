@@ -100,9 +100,11 @@ const TimeMachineForm = ({
         defaultValues: {
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             reason: reason,
-            frozen_until_seconds: 3600,
+            frozen_until_seconds: 300,
             description: description,
-            frozen_at: frozen_at,
+            frozen_at: new Date(frozen_at || Date.now())
+                .toISOString()
+                .slice(0, 16),
             ...formProps.defaultValues,
         },
     })
@@ -185,7 +187,7 @@ const TimeMachineForm = ({
 
                     <form
                         className={cn(
-                            'flex bg-background rounded-2xl p-5 w-full flex-col gap-y-4',
+                            'flex bg-background border rounded-2xl p-5 w-full flex-col gap-y-4',
                             className
                         )}
                         onSubmit={onSubmit}
@@ -300,7 +302,7 @@ const TimeMachineForm = ({
                                                 field.value?.toString() || ''
                                             }
                                         >
-                                            <SelectTrigger className="h-11 w-[460px] bg-card overflow-hidden">
+                                            <SelectTrigger className="h-11 min-w-full max-w-[460px]! bg-card overflow-hidden">
                                                 <div className="flex min-w-0 items-center gap-2 overflow-hidden">
                                                     <InfoFillCircleIcon className="size-4 shrink-0 text-muted-foreground" />
                                                     <div className="min-w-0 flex-1 overflow-hidden text-ellipsis">

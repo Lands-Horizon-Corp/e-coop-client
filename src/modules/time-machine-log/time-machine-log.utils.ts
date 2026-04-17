@@ -40,6 +40,7 @@ export const TIME_MACHINE_REASON_OPTIONS = [
     'Data consistency checks failed under simulated time',
     'Emergency operational incident requires real-time mode',
     'Blotter balancing verification is in progress',
+    'Automatic cancellation after reaching maximum allowed time machine duration',
 ] as const
 
 export type TTimeMachineReasonOption =
@@ -63,4 +64,33 @@ export const formatTime = (seconds: number) => {
     const s = seconds % 60
 
     return [h, m, s].map((v) => v.toString().padStart(2, '0')).join(':')
+}
+
+type TUnit = 'year' | 'day' | 'hour' | 'minute' | 'second'
+
+type TimeUnit = {
+    unit: TUnit
+    value: number
+}
+
+export function formatDuration(totalSeconds: number): string {
+    if (totalSeconds === 0) return '0 seconds'
+    if (totalSeconds < 0) return 'Time cannot be negative'
+
+    const timeUnits: TimeUnit[] = [
+        { unit: 'year', value: Math.floor(totalSeconds / (3600 * 24 * 365)) },
+        { unit: 'day', value: Math.floor(totalSeconds / (3600 * 24)) % 365 },
+        { unit: 'hour', value: Math.floor(totalSeconds / 3600) % 24 },
+        { unit: 'minute', value: Math.floor(totalSeconds / 60) % 60 },
+        { unit: 'second', value: Math.floor(totalSeconds % 60) },
+    ]
+
+    const parts: string[] = timeUnits
+        .filter((t: TimeUnit) => t.value > 0)
+        .map((t: TimeUnit) => `${t.value} ${t.unit}${t.value !== 1 ? 's' : ''}`)
+    if (parts.length === 1) {
+        return parts[0]
+    }
+    const lastPart: string = parts.pop()!
+    return `${parts.join(', ')} and ${lastPart}`
 }
