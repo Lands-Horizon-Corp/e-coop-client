@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import {
     IGeneratedReport,
@@ -19,6 +20,7 @@ import {
 } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import {
     SignatureSectionModal,
     TWithSignatureSchema,
@@ -69,24 +71,26 @@ const DailyCollectionSummaryCreateReportForm = ({
 }: IDailyCollectionSummaryFormProps) => {
     const form = useForm<TDailyCollectionSummarySchema>({
         resolver: standardSchemaResolver(DailyCollectionSummarySchema),
-        defaultValues: {
-            start_date: undefined,
-            end_date: undefined,
+        defaultValues: async () =>
+            buildFormDefaults<TDailyCollectionSummarySchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    start_date: undefined,
+                    end_date: undefined,
 
-            sundries_print_separate_page: false,
+                    sundries_print_separate_page: false,
 
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `daily_collection_summary_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `daily_collection_summary_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -115,6 +119,10 @@ const DailyCollectionSummaryCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

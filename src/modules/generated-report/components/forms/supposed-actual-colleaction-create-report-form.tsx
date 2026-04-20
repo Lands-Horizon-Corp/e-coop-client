@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import { AccountCategoryComboBox } from '@/modules/account-category'
@@ -23,6 +24,7 @@ import MemberTypeCombobox from '@/modules/member-type/components/member-type-com
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import { XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -111,46 +113,48 @@ const SupposedActualCollectionCreateReportForm = ({
 }: ISupposedActualCollectionFormProps) => {
     const form = useForm<TSupposedActualCollectionSchema>({
         resolver: standardSchemaResolver(SupposedActualCollectionSchema),
-        defaultValues: {
-            start_date: undefined,
-            end_date: undefined,
+        defaultValues: async () =>
+            buildFormDefaults<TSupposedActualCollectionSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    start_date: undefined,
+                    end_date: undefined,
 
-            group_by: 'no_group',
-            filter_by_teller: 'member_tbl',
-            report_type: 'summary',
-            sort_by: 'by_pb_no',
-            loan_status: 'all',
+                    group_by: 'no_group',
+                    filter_by_teller: 'member_tbl',
+                    report_type: 'summary',
+                    sort_by: 'by_pb_no',
+                    loan_status: 'all',
 
-            member_type_id: undefined,
+                    member_type_id: undefined,
 
-            account_id: undefined,
-            account: undefined,
+                    account_id: undefined,
+                    account: undefined,
 
-            barangay: '',
+                    barangay: '',
 
-            member_occupation_id: undefined,
-            member_address_area_id: undefined,
-            member_group_id: undefined,
+                    member_occupation_id: undefined,
+                    member_address_area_id: undefined,
+                    member_group_id: undefined,
 
-            collector_id: undefined,
+                    collector_id: undefined,
 
-            account_category_id: undefined,
+                    account_category_id: undefined,
 
-            include_interest: false,
-            filter_by_dosri: false,
+                    include_interest: false,
+                    filter_by_dosri: false,
 
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `supposed_actual_collection_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `supposed_actual_collection_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -179,6 +183,10 @@ const SupposedActualCollectionCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

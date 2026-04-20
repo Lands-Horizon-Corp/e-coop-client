@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import { AccountCategoryComboBox } from '@/modules/account-category'
@@ -27,6 +28,7 @@ import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import { SwitchArrowIcon, TagIcon, TrashIcon, XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -171,65 +173,66 @@ const DepositBalancesCreateReportForm = ({
 }: IDepositBalancesFormProps) => {
     const form = useForm<TDepositBalancesSchema>({
         resolver: standardSchemaResolver(DepositBalancesSchema),
-        defaultValues: {
-            title: 'DEPOSIT BALANCE',
-            start_date: undefined,
-            end_date: undefined,
+        defaultValues: async () =>
+            buildFormDefaults<TDepositBalancesSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    title: 'DEPOSIT BALANCE',
+                    start_date: undefined,
+                    end_date: undefined,
 
-            report_type: 'summary',
+                    report_type: 'summary',
 
-            receivable_only: false,
-            include_closed_acct: false,
-            adj_by_date_of_entry: false,
-            exclude_with_write_off_loan: false,
-            damayan_only: false,
-            include_zero_amt: false,
+                    receivable_only: false,
+                    include_closed_acct: false,
+                    adj_by_date_of_entry: false,
+                    exclude_with_write_off_loan: false,
+                    damayan_only: false,
+                    include_zero_amt: false,
 
-            deposit_balances: [],
-            filter_by_source: [],
+                    deposit_balances: [],
+                    filter_by_source: [],
 
-            group_by: 'no_grouping',
-            sort_by: 'amount',
-            sex: 'all',
+                    group_by: 'no_grouping',
+                    sort_by: 'amount',
+                    sex: 'all',
 
-            exclude_other_ded: false,
-            exclude_int_icpr: false,
+                    exclude_other_ded: false,
+                    exclude_int_icpr: false,
 
-            amount_filter_type: 'all',
-            amount_value: 0,
+                    amount_filter_type: 'all',
+                    amount_value: 0,
 
-            option_type: 'single',
+                    option_type: 'single',
 
-            select_other_account_ids: [],
-            select_other_accounts: [],
+                    select_other_account_ids: [],
+                    select_other_accounts: [],
 
-            debit_credit: 'none',
-            loan_status: 'all',
+                    debit_credit: 'none',
+                    loan_status: 'all',
 
-            account_id: undefined,
-            account: undefined,
+                    account_id: undefined,
+                    account: undefined,
 
-            barangay: '',
-            member_type_id: undefined,
-            member_occupation_id: undefined,
-            member_department_id: undefined,
-            member_group_id: undefined,
-            member_address_area_id: undefined,
+                    barangay: '',
+                    member_type_id: undefined,
+                    member_occupation_id: undefined,
+                    member_department_id: undefined,
+                    member_group_id: undefined,
+                    member_address_area_id: undefined,
 
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `deposit_balances_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `deposit_balances_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
-
     const generateMutation = useCreateGeneratedReport({
         options: {
             onSuccess: formProps.onSuccess,
@@ -257,6 +260,10 @@ const DepositBalancesCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

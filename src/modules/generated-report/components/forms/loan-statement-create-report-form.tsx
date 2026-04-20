@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import { AccountCategoryComboBox } from '@/modules/account-category'
@@ -21,6 +22,7 @@ import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import { XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -81,38 +83,40 @@ const LoanStatementCreateReportForm = ({
 }: ILoanStatementFormProps) => {
     const form = useForm<TLoanStatementSchema>({
         resolver: standardSchemaResolver(LoanStatementSchema),
-        defaultValues: {
-            as_of_date: undefined,
+        defaultValues: async () =>
+            buildFormDefaults<TLoanStatementSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    as_of_date: undefined,
 
-            member_id: undefined,
-            member: undefined,
+                    member_id: undefined,
+                    member: undefined,
 
-            account_id: undefined,
-            account: undefined,
+                    account_id: undefined,
+                    account: undefined,
 
-            account_category_id: undefined,
-            group_id: undefined,
+                    account_category_id: undefined,
+                    group_id: undefined,
 
-            collector_id: undefined,
-            collector: undefined,
+                    collector_id: undefined,
+                    collector: undefined,
 
-            filter_by: 'all',
+                    filter_by: 'all',
 
-            remarks: '',
-            include_notes: false,
+                    remarks: '',
+                    include_notes: false,
 
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `loan_statement_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `loan_statement_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -140,6 +144,10 @@ const LoanStatementCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

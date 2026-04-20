@@ -127,7 +127,7 @@ export const JournalVoucherCardActions = ({
                                 JOURNAL_VOUCHER_PRINT_TEMPLATES,
                                 0
                             ),
-                            name: `journal_voucher_${toReadableDate(journalVoucher.created_at, 'MMddyy_mmss')}.pdf`,
+                            name: `journal_voucher_${toReadableDate(journalVoucher.created_at, 'MMddyy_mmss')}`,
                             module: 'JournalVoucher',
                         } as TGeneratedReportSchema,
                     },

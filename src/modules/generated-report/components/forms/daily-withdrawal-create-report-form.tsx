@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import EmployeePicker from '@/modules/employee/components/employee-picker'
 import {
@@ -17,6 +18,7 @@ import { getTemplateAt } from '@/modules/generated-report/generated-report-templ
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -80,32 +82,34 @@ const DailyWithdrawalCreateReportForm = ({
 }: IDailyWithdrawalFormProps) => {
     const form = useForm<TDailyWithdrawalSchema>({
         resolver: standardSchemaResolver(DailyWithdrawalSchema),
-        defaultValues: {
-            start_date: undefined,
-            end_date: undefined,
+        defaultValues: async () =>
+            buildFormDefaults<TDailyWithdrawalSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    start_date: undefined,
+                    end_date: undefined,
 
-            start_ref_no: '',
-            end_ref_no: '',
+                    start_ref_no: '',
+                    end_ref_no: '',
 
-            teller_id: undefined,
-            teller: undefined,
+                    teller_id: undefined,
+                    teller: undefined,
 
-            sort_by: 'teller',
-            option_type: 'option_1',
-            print_type: 'summary',
+                    sort_by: 'teller',
+                    option_type: 'option_1',
+                    print_type: 'summary',
 
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `daily_withdrawal_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `daily_withdrawal_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -135,6 +139,10 @@ const DailyWithdrawalCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

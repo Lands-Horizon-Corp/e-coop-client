@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import { AccountCategoryComboBox } from '@/modules/account-category'
@@ -24,6 +25,7 @@ import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import {
     CalendarNumberIcon,
     SwitchArrowIcon,
@@ -175,62 +177,64 @@ const PortfolioAtRiskCreateReportForm = ({
 }: IPortfolioAtRiskFormProps) => {
     const form = useForm<TPortfolioAtRiskSchema>({
         resolver: standardSchemaResolver(PortfolioAtRiskSchema),
-        defaultValues: {
-            as_of_date: undefined,
+        defaultValues: async () =>
+            buildFormDefaults<TPortfolioAtRiskSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    as_of_date: undefined,
 
-            over_12_mos_format: false,
-            fail_to_current_if_1_30_days_only: false,
-            investment: false,
+                    over_12_mos_format: false,
+                    fail_to_current_if_1_30_days_only: false,
+                    investment: false,
 
-            exclude_account_ids: [],
-            exclude_accounts: [],
+                    exclude_account_ids: [],
+                    exclude_accounts: [],
 
-            loan_balance_amount_ranges: [],
-            terms_action: [],
+                    loan_balance_amount_ranges: [],
+                    terms_action: [],
 
-            filter_by_date_release_from: undefined,
-            filter_by_date_release_to: undefined,
+                    filter_by_date_release_from: undefined,
+                    filter_by_date_release_to: undefined,
 
-            current_cmkr_colla_amount: false,
-            current_no_exposed_amt: false,
-            renewal_only: false,
+                    current_cmkr_colla_amount: false,
+                    current_no_exposed_amt: false,
+                    renewal_only: false,
 
-            filter_by_amount_granted_from: 0,
-            filter_by_amount_granted_to: 0,
+                    filter_by_amount_granted_from: 0,
+                    filter_by_amount_granted_to: 0,
 
-            exclude_litigation: false,
-            exclude_zero_expose_amount: false,
-            current_if_interest_paid: false,
+                    exclude_litigation: false,
+                    exclude_zero_expose_amount: false,
+                    current_if_interest_paid: false,
 
-            filter_by_dq_mos: 0,
-            filter_by_mos_length: 0,
+                    filter_by_dq_mos: 0,
+                    filter_by_mos_length: 0,
 
-            loan_amount_type: 'loan_balance',
-            include_excluded_account: 'no',
-            include_amount: 'all',
+                    loan_amount_type: 'loan_balance',
+                    include_excluded_account: 'no',
+                    include_amount: 'all',
 
-            groupings: 'no_group',
-            filtered_by: 'by_amortization',
+                    groupings: 'no_group',
+                    filtered_by: 'by_amortization',
 
-            print_type: 'summary',
-            report_type: 'all',
+                    print_type: 'summary',
+                    report_type: 'all',
 
-            sex: 'all',
-            paper_type: 'standard',
-            include_share_cap: false,
+                    sex: 'all',
+                    paper_type: 'standard',
+                    include_share_cap: false,
 
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `portfolio_at_risk_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `portfolio_at_risk_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -260,6 +264,10 @@ const PortfolioAtRiskCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

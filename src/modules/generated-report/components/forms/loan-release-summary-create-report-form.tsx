@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import EmployeePicker from '@/modules/employee/components/employee-picker'
 import {
@@ -18,6 +19,7 @@ import { LOAN_MODE_OF_PAYMENT } from '@/modules/loan-transaction/loan.constants'
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import { XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -111,25 +113,29 @@ const LoanReleaseSummaryCreateReportForm = ({
         resolver: standardSchemaResolver(LoanReleaseSummarySchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
-        defaultValues: {
-            start_date: undefined,
-            end_date: undefined,
-            loan_amount_type: 'granted',
-            loan_type: 'all',
-            format: 'format_1',
-            mode_of_payment: 'all',
-            groupings: 'by_class_cat',
-            ...formProps.defaultValues,
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `loan_release_summary_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+        defaultValues: async () =>
+            buildFormDefaults<TLoanReleaseSummarySchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    start_date: undefined,
+                    end_date: undefined,
+                    loan_amount_type: 'granted',
+                    loan_type: 'all',
+                    format: 'format_1',
+                    mode_of_payment: 'all',
+                    groupings: 'by_class_cat',
+
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `loan_release_summary_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -158,6 +164,10 @@ const LoanReleaseSummaryCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

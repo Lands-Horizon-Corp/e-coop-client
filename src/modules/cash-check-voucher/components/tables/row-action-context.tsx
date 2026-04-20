@@ -296,7 +296,7 @@ export const CashCheckVoucherTableActionManager = () => {
                                     CASH_CHECK_VOUCHER_PRINT_TEMPLATES,
                                     0
                                 ),
-                                name: `cash_check_voucher_${toReadableDate(state.defaultValues.created_at, 'MMddyy_mmss')}.pdf`,
+                                name: `cash_check_voucher_${toReadableDate(state.defaultValues.created_at, 'MMddyy_mmss')}`,
                                 module: 'CashCheckVoucher',
                             } as TGeneratedReportSchema,
                         },
@@ -320,7 +320,7 @@ export const CashCheckVoucherTableActionManager = () => {
                                     CASH_CHECK_VOUCHER_PRINT_TEMPLATES,
                                     0
                                 ),
-                                name: `cash_check_voucher_${toReadableDate(state.defaultValues.created_at, 'MMddyy_mmss')}.pdf`,
+                                name: `cash_check_voucher_${toReadableDate(state.defaultValues.created_at, 'MMddyy_mmss')}`,
                                 module: 'CashCheckVoucher',
                             } as TGeneratedReportSchema,
                         },

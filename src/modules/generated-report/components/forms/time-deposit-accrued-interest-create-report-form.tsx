@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import {
     IGeneratedReport,
@@ -17,6 +18,7 @@ import MemberTypeCombobox from '@/modules/member-type/components/member-type-com
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -63,25 +65,27 @@ const TimeDepositAccruedInterestCreateReportForm = ({
 }: ITimeDepositAccruedInterestFormProps) => {
     const form = useForm<TTimeDepositAccruedInterestSchema>({
         resolver: standardSchemaResolver(TimeDepositAccruedInterestSchema),
-        defaultValues: {
-            from_date: undefined,
-            to_date: undefined,
-            member_type_id: undefined,
-            groupings: 'no_grouping',
-            sort_by: 'by_td_no',
+        defaultValues: async () =>
+            buildFormDefaults<TTimeDepositAccruedInterestSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    from_date: undefined,
+                    to_date: undefined,
+                    member_type_id: undefined,
+                    groupings: 'no_grouping',
+                    sort_by: 'by_td_no',
 
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `time_deposit_accrued_interest_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `time_deposit_accrued_interest_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -110,6 +114,10 @@ const TimeDepositAccruedInterestCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

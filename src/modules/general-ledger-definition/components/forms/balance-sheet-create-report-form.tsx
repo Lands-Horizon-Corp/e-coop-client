@@ -65,7 +65,7 @@ export const BalanceSheetReportCreateForm = ({
                 name: `balance_sheet_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'
-                )}.pdf`,
+                )}`,
                 ...defaultValues?.report_config,
             },
         },

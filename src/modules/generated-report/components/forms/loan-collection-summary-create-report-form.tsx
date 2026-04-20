@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import { AccountMultiPickerModal } from '@/modules/account/components/picker/account-multi-picker'
 import {
@@ -23,7 +24,7 @@ import {
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
-import { getFormPersistedData } from '@/components/form-components/form-idb-persist-headless'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import { ListOrderedIcon, TrashIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -122,40 +123,33 @@ export interface ILoanCollectionSummaryFormProps
 
 const LoanCollectionSummaryCreateReportForm = ({
     className,
-    persistKey = 'form-report-loan-collection-summary-report',
     ...formProps
 }: ILoanCollectionSummaryFormProps) => {
     const form = useForm<TLoanCollectionSummarySchema>({
         resolver: standardSchemaResolver(LoanCollectionSummarySchema),
-        defaultValues: async () => {
-            const persistedData =
-                await getFormPersistedData<TLoanCollectionSummarySchema>(
-                    persistKey
-                )
-
-            const baseDefaults = {
-                start_date: '',
-                end_date: '',
-                group_by: 'by_class',
-                mode_of_payment: 'all',
-                report_type: 'standard',
-                payment_type: 'all',
-                past_due_below_starting_date: false,
-            }
-
-            return {
-                ...baseDefaults,
-                ...persistedData,
-                ...formProps.defaultValues,
-                report_config: {
-                    ...getTemplateAt(undefined, 0),
-                    ...formProps.defaultValues?.report_config,
-                    ...persistedData?.report_config,
-                    module: 'GeneratedReport',
-                    name: `loan_collection_summary_${toReadableDate(new Date(), 'MMddyy_mmss')}.pdf`,
+        defaultValues: async () =>
+            buildFormDefaults<TLoanCollectionSummarySchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    start_date: '',
+                    end_date: '',
+                    group_by: 'by_class',
+                    mode_of_payment: 'all',
+                    report_type: 'standard',
+                    payment_type: 'all',
+                    past_due_below_starting_date: false,
+                    loan_collections: [],
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `loan_collection_summary_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
                 },
-            }
-        },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -184,6 +178,14 @@ const LoanCollectionSummaryCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

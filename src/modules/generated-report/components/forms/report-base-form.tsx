@@ -57,7 +57,7 @@ export function ReportFormBase<TSchema extends z.ZodObject<any, any>>({
             report_config: {
                 // @ts-expect-error TS type mismatch due to RHF + Zod merge
                 ...defaultValues?.report_config,
-                name: `report_${toReadableDate(new Date(), 'MMddyy_mmss')}.pdf`,
+                name: `report_${toReadableDate(new Date(), 'MMddyy_mmss')}`,
             },
         } as Partial<TForm>,
     })
@@ -86,6 +86,10 @@ export function ReportFormBase<TSchema extends z.ZodObject<any, any>>({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

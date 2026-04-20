@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import AreaCombobox from '@/modules/area/components/area-combobox'
 import { CurrencyInput } from '@/modules/currency'
@@ -22,6 +23,7 @@ import { entityIdSchema } from '@/validation'
 
 import YearCombobox from '@/components/comboboxes/year-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormLabel } from '@/components/ui/form'
@@ -88,34 +90,39 @@ export interface IICPRFormProps
 const ICPRCreateReportForm = ({ className, ...formProps }: IICPRFormProps) => {
     const form = useForm<TICPRSchema>({
         resolver: standardSchemaResolver(ICPRSchema),
-        defaultValues: {
-            year: new Date().getFullYear(),
+        defaultValues: async () =>
+            buildFormDefaults<TICPRSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    year: new Date().getFullYear(),
 
-            deduct_amount_on_pr: undefined,
+                    deduct_amount_on_pr: undefined,
 
-            detail_type: 'icpr_summary',
-            groupings: 'no_grouping',
-            sort_by: 'by_passbook',
+                    detail_type: 'icpr_summary',
+                    groupings: 'no_grouping',
+                    sort_by: 'by_passbook',
 
-            barangay: '',
+                    barangay: '',
 
-            member_occupation_id: undefined,
-            member_classification_id: undefined,
-            member_group_id: undefined,
-            member_address_area_id: undefined,
+                    member_occupation_id: undefined,
+                    member_classification_id: undefined,
+                    member_group_id: undefined,
+                    member_address_area_id: undefined,
 
-            include_closed_acct: false,
-            print_zero_share_cap: false,
+                    include_closed_acct: false,
+                    print_zero_share_cap: false,
 
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `icpr_${toReadableDate(new Date(), 'MMddyy_mmss')}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `icpr_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -143,6 +150,10 @@ const ICPRCreateReportForm = ({ className, ...formProps }: IICPRFormProps) => {
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

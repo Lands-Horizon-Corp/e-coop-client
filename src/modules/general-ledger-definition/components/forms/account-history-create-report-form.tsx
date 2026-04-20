@@ -61,7 +61,7 @@ export const AccountHistoryReportCreateForm = ({
                 name: `account_history_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'
-                )}.pdf`,
+                )}`,
                 ...formProps.defaultValues?.report_config,
             },
         },

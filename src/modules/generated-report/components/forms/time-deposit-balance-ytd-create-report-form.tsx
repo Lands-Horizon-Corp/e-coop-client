@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import {
     IGeneratedReport,
@@ -17,6 +18,7 @@ import MemberTypeCombobox from '@/modules/member-type/components/member-type-com
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormLabel } from '@/components/ui/form'
@@ -73,24 +75,28 @@ const TimeDepositBalanceYTDCreateReportForm = ({
         resolver: standardSchemaResolver(TDThisMonthYTDReportSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
-        defaultValues: {
-            title: 'TIME DEPOSIT BALANCE',
-            date: undefined,
-            exclude_zero_balance: false,
-            filter_by_maturity: false,
-            groupings: 'no_grouping',
-            sort_by: 'by_td_no',
-            ...formProps.defaultValues,
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'Account',
-                name: `td_balance_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+        defaultValues: async () =>
+            buildFormDefaults<TTDThisMonthYTDReportSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    title: 'TIME DEPOSIT BALANCE',
+                    date: undefined,
+                    exclude_zero_balance: false,
+                    filter_by_maturity: false,
+                    groupings: 'no_grouping',
+                    sort_by: 'by_td_no',
+
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'Account',
+                        name: `td_balance_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -119,6 +125,10 @@ const TimeDepositBalanceYTDCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

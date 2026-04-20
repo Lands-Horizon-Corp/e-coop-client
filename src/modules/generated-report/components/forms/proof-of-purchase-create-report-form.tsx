@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import AreaCombobox from '@/modules/area/components/area-combobox'
@@ -21,6 +22,7 @@ import MemberTypeCombobox from '@/modules/member-type/components/member-type-com
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormLabel } from '@/components/ui/form'
@@ -91,39 +93,41 @@ const ProofOfPurchaseCreateReportForm = ({
 }: IProofOfPurchaseFormProps) => {
     const form = useForm<TProofOfPurchaseSchema>({
         resolver: standardSchemaResolver(ProofOfPurchaseSchema),
-        defaultValues: {
-            start_date: undefined,
-            end_date: undefined,
+        defaultValues: async () =>
+            buildFormDefaults<TProofOfPurchaseSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    start_date: undefined,
+                    end_date: undefined,
 
-            account_id: undefined,
-            account: undefined,
+                    account_id: undefined,
+                    account: undefined,
 
-            group_by: 'no_group',
-            sort_by: 'by_passbook_no',
+                    group_by: 'no_group',
+                    sort_by: 'by_passbook_no',
 
-            rate: undefined,
+                    rate: undefined,
 
-            member_type_id: undefined,
-            barangay: '',
-            member_occupation_id: undefined,
-            member_address_area_id: undefined,
-            member_group_id: undefined,
+                    member_type_id: undefined,
+                    barangay: '',
+                    member_occupation_id: undefined,
+                    member_address_area_id: undefined,
+                    member_group_id: undefined,
 
-            consolidate: false,
-            get_from_history: false,
+                    consolidate: false,
+                    get_from_history: false,
 
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `proof_of_purchase_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `proof_of_purchase_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -153,6 +157,10 @@ const ProofOfPurchaseCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

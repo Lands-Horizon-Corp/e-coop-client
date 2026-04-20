@@ -3,6 +3,9 @@ import { JOURNAL_VOUCHER_PRINT_TEMPLATES } from '../journal-voucher/reports/jorn
 import { LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES } from '../loan-transaction/reports/loan-transaction-templates'
 import { OTHER_FUND_PRINT_TEMPLATES } from '../other-fund/reports/other-fund-templates'
 import NO_TEMPLATE from './defaults/no-template.njk?raw'
+import { IGeneratedReportRequest } from './generated-report.types'
+
+// import { IGeneratedReportRequest } from './generated-report.types'
 
 export const REPORT_REGISTRY = {
     loan_transaction_print_voucher: LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES,
@@ -23,7 +26,12 @@ export const getTemplateAt = <T>(
             width: '8.5in',
             height: '11in',
             orientation: 'portrait',
-        } as unknown as T)
+            module: 'GeneratedReport',
+            filters: {},
+            generated_report_type: 'pdf',
+            name: 'unknown-report',
+            unit: 'in',
+        } as IGeneratedReportRequest as T)
     )
 }
 

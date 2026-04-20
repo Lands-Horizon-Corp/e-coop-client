@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import { AccountCategoryComboBox } from '@/modules/account-category'
@@ -23,6 +24,7 @@ import MemberTypeCombobox from '@/modules/member-type/components/member-type-com
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import { XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -116,48 +118,53 @@ const LoanCollectionDueCreateReportForm = ({
 }: ILoanCollectionDueFormProps) => {
     const form = useForm<TLoanCollectionDueSchema>({
         resolver: standardSchemaResolver(LoanCollectionDueSchema),
-        defaultValues: {
-            start_date: undefined,
-            end_date: undefined,
+        defaultValues: async () =>
+            buildFormDefaults<TLoanCollectionDueSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    start_date: undefined,
+                    end_date: undefined,
 
-            member_type_id: undefined,
-            barangay: '',
+                    member_type_id: undefined,
+                    barangay: '',
 
-            account_id: undefined,
-            account: undefined,
+                    account_id: undefined,
+                    account: undefined,
 
-            account_category_id: undefined,
-            collector_id: undefined,
+                    account_category_id: undefined,
+                    collector_id: undefined,
 
-            member_group_id: undefined,
-            member_department_id: undefined,
+                    member_group_id: undefined,
+                    member_department_id: undefined,
 
-            filter_by_date_release_start_date: undefined,
-            filter_by_date_release_end_date: undefined,
+                    filter_by_date_release_start_date: undefined,
+                    filter_by_date_release_end_date: undefined,
 
-            include_interest: false,
-            include_arrears: false,
-            group_by_loan_category: false,
+                    include_interest: false,
+                    include_arrears: false,
+                    group_by_loan_category: false,
 
-            sort_by: 'by_pb_no',
-            payment_type: 'all',
-            mode_of_payment: 'all',
-            group_by: 'barangay',
-            loan_type: 'all',
-            amount_type: 'actual',
-
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `loan_collection_due_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+                    sort_by: 'by_pb_no',
+                    payment_type: 'all',
+                    mode_of_payment: 'all',
+                    group_by: 'barangay',
+                    loan_type: 'all',
+                    amount_type: 'actual',
+                },
+                overrideDefaults: formProps.defaultValues,
+                transform: (data) => ({
+                    ...data,
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        ...data.report_config,
+                        module: 'GeneratedReport',
+                        name: `loan_collection_due_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                }),
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -186,6 +193,10 @@ const LoanCollectionDueCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

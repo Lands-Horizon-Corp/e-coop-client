@@ -90,7 +90,7 @@ function GeneratedReports() {
         const dimensions = PAPER_SIZES[selectedSize]
         const requestPayload: ICreateReportRequest = {
             module: 'LoanTransaction',
-            name: `Member_Report_${today}.pdf`,
+            name: `Member_Report_${today}`,
             width: dimensions.width,
             height: dimensions.height,
             filters: {

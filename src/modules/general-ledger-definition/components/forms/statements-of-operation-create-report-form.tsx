@@ -66,7 +66,7 @@ export const StatementOfOperationsReportCreateForm = ({
                 name: `statement_of_operations_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'
-                )}.pdf`,
+                )}`,
                 ...defaultValues?.report_config,
             },
         },

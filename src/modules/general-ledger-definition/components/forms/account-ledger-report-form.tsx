@@ -64,7 +64,7 @@ const AccountLedgerReportCreateForm = ({
                 ...getTemplateAt(undefined, 0),
                 ...formProps.defaultValues?.report_config,
                 module: 'Account',
-                name: `account_ledger_report_${toReadableDate(new Date(), 'MMddyy_mmss')}.pdf`,
+                name: `account_ledger_report_${toReadableDate(new Date(), 'MMddyy_mmss')}`,
             },
         },
     })

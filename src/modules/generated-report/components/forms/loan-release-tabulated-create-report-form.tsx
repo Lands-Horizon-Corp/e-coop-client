@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import { AccountCategoryComboBox } from '@/modules/account-category'
@@ -17,6 +18,7 @@ import { PrintSettingsSection } from '@/modules/generated-report/components/form
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormLabel } from '@/components/ui/form'
@@ -91,38 +93,42 @@ export interface ILoanReleasesReportFormProps
 
 const LoanReleaseCreateReportForm = ({
     className,
-    defaultValues,
     readOnly,
     onSuccess,
     onError,
+    ...formProps
 }: ILoanReleasesReportFormProps) => {
     const form = useForm<TLoanReleasesReportSchema>({
         resolver: standardSchemaResolver(LoanReleasesReportSchema),
         mode: 'onSubmit',
-        defaultValues: {
-            start_date: undefined,
-            end_date: undefined,
-            entry_type: 'all',
-            loan_type: 'all',
-            report_type: 'tabulated',
-            account: undefined,
-            account_id: undefined,
-            account_category_id: undefined,
-            start_cv: '',
-            end_cv: '',
-            include_excluded_to_gl: false,
-            include_sundries_detail: false,
-            ...defaultValues,
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                module: 'LoanTransaction',
-                name: `loan_releases_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-                ...defaultValues?.report_config,
-            },
-        },
+        defaultValues: async () =>
+            buildFormDefaults<TLoanReleasesReportSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    start_date: undefined,
+                    end_date: undefined,
+                    entry_type: 'all',
+                    loan_type: 'all',
+                    report_type: 'tabulated',
+                    account: undefined,
+                    account_id: undefined,
+                    account_category_id: undefined,
+                    start_cv: '',
+                    end_cv: '',
+                    include_excluded_to_gl: false,
+                    include_sundries_detail: false,
+
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'LoanTransaction',
+                        name: `loan_releases_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -144,6 +150,10 @@ const LoanReleaseCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}
@@ -456,7 +466,7 @@ const LoanReleaseCreateReportForm = ({
                     error={error}
                     isLoading={generateMutation.isPending}
                     onReset={() => {
-                        form.reset(defaultValues)
+                        form.reset(formProps.defaultValues)
                         generateMutation.reset()
                     }}
                     readOnly={readOnly}

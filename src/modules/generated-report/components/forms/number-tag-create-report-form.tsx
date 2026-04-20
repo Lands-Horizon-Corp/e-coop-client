@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import {
     IGeneratedReport,
@@ -14,6 +15,7 @@ import {
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import { ArrowRightIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
@@ -72,19 +74,23 @@ const PrintNumberTagForm = ({
     const form = useForm<TPrintNumberTagSchema>({
         resolver: standardSchemaResolver(PrintNumberTagSchema),
         mode: 'onSubmit',
-        defaultValues: {
-            start_number: 0,
-            end_number: 1,
-            ...formProps.defaultValues,
-            report_config: {
-                module: 'GeneratedReport',
-                name: `print_tag_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-                ...formProps.defaultValues?.report_config,
-            },
-        },
+        defaultValues: async () =>
+            buildFormDefaults<TPrintNumberTagSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    start_number: 0,
+                    end_number: 1,
+
+                    report_config: {
+                        module: 'GeneratedReport',
+                        name: `print_tag_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -108,6 +114,10 @@ const PrintNumberTagForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

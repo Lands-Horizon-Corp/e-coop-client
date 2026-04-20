@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import EmployeePicker from '@/modules/employee/components/employee-picker'
@@ -21,6 +22,7 @@ import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 import { XIcon } from 'lucide-react'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -90,23 +92,27 @@ const LoanMaturityCreateReportForm = ({
 }: ILoanMaturityFormProps) => {
     const form = useForm<TLoanMaturitySchema>({
         resolver: standardSchemaResolver(LoanMaturitySchema),
-        defaultValues: {
-            start_date: undefined,
-            end_date: undefined,
-            sort_by: 'passbook_number',
-            grouping: 'no_grouping',
-            mode_of_payment: 'all',
-            ...formProps.defaultValues,
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `loan_maturity_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+        defaultValues: async () =>
+            buildFormDefaults<TLoanMaturitySchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    start_date: undefined,
+                    end_date: undefined,
+                    sort_by: 'passbook_number',
+                    grouping: 'no_grouping',
+                    mode_of_payment: 'all',
+
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `loan_maturity_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -134,6 +140,10 @@ const LoanMaturityCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

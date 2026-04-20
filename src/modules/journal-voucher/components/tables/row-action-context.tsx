@@ -276,7 +276,7 @@ export const JournalVoucherTableActionManager = () => {
                                     JOURNAL_VOUCHER_PRINT_TEMPLATES,
                                     0
                                 ),
-                                name: `journal_voucher_${toReadableDate(journalVoucher.created_at, 'MMddyy_mmss')}.pdf`,
+                                name: `journal_voucher_${toReadableDate(journalVoucher.created_at, 'MMddyy_mmss')}`,
                                 module: 'JournalVoucher',
                             } as TGeneratedReportSchema,
                         },
@@ -304,7 +304,7 @@ export const JournalVoucherTableActionManager = () => {
                                 name: `journal_voucher_${toReadableDate(
                                     state.defaultValues.created_at,
                                     'MMddyy_mmss'
-                                )}.pdf`,
+                                )}`,
                                 module: 'JournalVoucher',
                             } as TGeneratedReportSchema,
                         },

@@ -7,6 +7,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import { AccountMultiPickerModal } from '@/modules/account/components/picker/account-multi-picker'
@@ -23,6 +24,7 @@ import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import {
     ListBulletsBoldIcon,
     ListOrderedIcon,
@@ -163,56 +165,57 @@ const StatementOfDepositsCreateReportForm = ({
 }: IStatementOfDepositsFormProps) => {
     const form = useForm<TStatementOfDepositsSchema>({
         resolver: standardSchemaResolver(StatementOfDepositsSchema),
-        defaultValues: {
-            as_of_date: undefined,
+        defaultValues: async () =>
+            buildFormDefaults<TStatementOfDepositsSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    as_of_date: undefined,
 
-            start_pb_no: '',
-            end_pb_no: '',
+                    start_pb_no: '',
+                    end_pb_no: '',
 
-            member_type_id: undefined,
-            member_address_area_id: undefined,
+                    member_type_id: undefined,
+                    member_address_area_id: undefined,
 
-            exclude_account_action: false,
-            acct_order_action: false,
+                    exclude_account_action: false,
+                    acct_order_action: false,
 
-            style: 'statement',
+                    style: 'statement',
 
-            exclude_account_ids: [],
-            exclude_accounts: [],
+                    exclude_account_ids: [],
+                    exclude_accounts: [],
 
-            accounts_order: [],
+                    accounts_order: [],
 
-            member_fields: [
-                'birthday',
-                'age',
-                'sex',
-                'civil_status',
-                'income_range',
-                'spouse',
-                'dependents',
-                'beneficiaries',
-                'share_capital',
-                'savings_deposit',
-                'special_savings',
-                'time_deposits',
-                'map_deposit',
-                'loans',
-            ],
+                    member_fields: [
+                        'birthday',
+                        'age',
+                        'sex',
+                        'civil_status',
+                        'income_range',
+                        'spouse',
+                        'dependents',
+                        'beneficiaries',
+                        'share_capital',
+                        'savings_deposit',
+                        'special_savings',
+                        'time_deposits',
+                        'map_deposit',
+                        'loans',
+                    ],
 
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `statement_of_deposits_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `statement_of_deposits_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
-
     const generateMutation = useCreateGeneratedReport({
         options: {
             onSuccess: formProps.onSuccess,
@@ -239,6 +242,10 @@ const StatementOfDepositsCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

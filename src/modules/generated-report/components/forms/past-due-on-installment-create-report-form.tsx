@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import { AccountCategoryComboBox } from '@/modules/account-category'
@@ -23,6 +24,7 @@ import MemberTypeCombobox from '@/modules/member-type/components/member-type-com
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import { XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -99,39 +101,41 @@ const PastDueOnInstallmentCreateReportForm = ({
 }: IPastDueOnInstallmentFormProps) => {
     const form = useForm<TPastDueOnInstallmentSchema>({
         resolver: standardSchemaResolver(PastDueOnInstallmentSchema),
-        defaultValues: {
-            as_of_date: undefined,
+        defaultValues: async () =>
+            buildFormDefaults<TPastDueOnInstallmentSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    as_of_date: undefined,
 
-            group_by_loan_category: false,
+                    group_by_loan_category: false,
 
-            group_by: 'no_group',
-            sort_by: 'by_pb_no',
+                    group_by: 'no_group',
+                    sort_by: 'by_pb_no',
 
-            member_type_id: undefined,
+                    member_type_id: undefined,
 
-            account_id: undefined,
-            account: undefined,
+                    account_id: undefined,
+                    account: undefined,
 
-            barangay: '',
-            member_occupation_id: undefined,
-            area_id: undefined,
-            member_group_id: undefined,
+                    barangay: '',
+                    member_occupation_id: undefined,
+                    area_id: undefined,
+                    member_group_id: undefined,
 
-            account_category_id: undefined,
-            collector_id: undefined,
+                    account_category_id: undefined,
+                    collector_id: undefined,
 
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `past_due_on_installment_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `past_due_on_installment_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -162,6 +166,10 @@ const PastDueOnInstallmentCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

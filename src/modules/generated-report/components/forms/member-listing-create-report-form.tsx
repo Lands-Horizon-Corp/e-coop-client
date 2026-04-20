@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import AreaCombobox from '@/modules/area/components/area-combobox'
 import { CurrencyInput } from '@/modules/currency'
@@ -25,6 +26,7 @@ import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import {
     CakeIcon,
     MoneyBagIcon,
@@ -160,44 +162,45 @@ const MemberListingCreateReportForm = ({
 }: IMemberListingFormProps) => {
     const form = useForm<TMemberListingSchema>({
         resolver: standardSchemaResolver(MemberListingSchema),
-        defaultValues: {
-            date_filter_mode: 'membership_date',
-            from_date: undefined,
-            to_date: undefined,
+        defaultValues: async () =>
+            buildFormDefaults<TMemberListingSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    date_filter_mode: 'membership_date',
+                    from_date: undefined,
+                    to_date: undefined,
 
-            with_mem_fee: false,
-            exclude_other_info: false,
-            include_closed_acct: false,
-            damayan_only: false,
+                    with_mem_fee: false,
+                    exclude_other_info: false,
+                    include_closed_acct: false,
+                    damayan_only: false,
 
-            group_by: 'no_grouping',
-            header_groupings: 'by_member_type',
-            sort_by: 'member_name',
-            report_type: 'summary',
-            loan_balance_filter: 'all',
+                    group_by: 'no_grouping',
+                    header_groupings: 'by_member_type',
+                    sort_by: 'member_name',
+                    report_type: 'summary',
+                    loan_balance_filter: 'all',
 
-            member_type_id: undefined,
-            barangay: '',
-            member_occupation_id: undefined,
-            member_classification_id: undefined,
-            member_group_id: undefined,
-            area_id: undefined,
-            collector_id: undefined,
+                    member_type_id: undefined,
+                    barangay: '',
+                    member_occupation_id: undefined,
+                    member_classification_id: undefined,
+                    member_group_id: undefined,
+                    area_id: undefined,
+                    collector_id: undefined,
 
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `member_listing_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `member_listing_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
-
     const generateMutation = useCreateGeneratedReport({
         options: {
             onSuccess: formProps.onSuccess,
@@ -223,6 +226,10 @@ const MemberListingCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

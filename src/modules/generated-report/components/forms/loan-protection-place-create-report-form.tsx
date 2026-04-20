@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import { CurrencyInput } from '@/modules/currency'
@@ -17,6 +18,7 @@ import { PrintSettingsSection } from '@/modules/generated-report/components/form
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -88,23 +90,27 @@ const LoanProtectionPlanCreateReportForm = ({
     const form = useForm<TLoanProtectionPlanReportSchema>({
         resolver: standardSchemaResolver(LoanProtectionPlanReportSchema),
         mode: 'onSubmit',
-        defaultValues: {
-            start_date: undefined,
-            end_date: undefined,
-            amount_covered: '',
-            start_terms: '',
-            end_terms: '',
-            sort_by: 'name',
-            ...formProps.defaultValues,
-            report_config: {
-                module: 'GeneratedReport',
-                name: `loan_protection_plan_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-                ...formProps.defaultValues?.report_config,
-            },
-        },
+        defaultValues: async () =>
+            buildFormDefaults<TLoanProtectionPlanReportSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    start_date: undefined,
+                    end_date: undefined,
+                    amount_covered: '',
+                    start_terms: '',
+                    end_terms: '',
+                    sort_by: 'name',
+
+                    report_config: {
+                        module: 'GeneratedReport',
+                        name: `loan_protection_plan_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -134,6 +140,10 @@ const LoanProtectionPlanCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

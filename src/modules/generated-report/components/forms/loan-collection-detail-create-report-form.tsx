@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import EmployeePicker from '@/modules/employee/components/employee-picker'
@@ -22,6 +23,7 @@ import MemberTypeCombobox from '@/modules/member-type/components/member-type-com
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import { XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -105,47 +107,48 @@ const LoanCollectionDetailCreateReportForm = ({
 }: ILoanCollectionDetailFormProps) => {
     const form = useForm<TLoanCollectionDetailSchema>({
         resolver: standardSchemaResolver(LoanCollectionDetailSchema),
-        defaultValues: {
-            start_date: undefined,
-            end_date: undefined,
+        defaultValues: async () =>
+            buildFormDefaults<TLoanCollectionDetailSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    start_date: undefined,
+                    end_date: undefined,
 
-            filter_by_date_release_start_date: undefined,
-            filter_by_date_release_end_date: undefined,
+                    filter_by_date_release_start_date: undefined,
+                    filter_by_date_release_end_date: undefined,
 
-            mode_of_payment: 'all',
-            payment_type: 'all',
-            grouping: 'by_account',
+                    mode_of_payment: 'all',
+                    payment_type: 'all',
+                    grouping: 'by_account',
 
-            member_type_id: undefined,
-            barangay: '',
+                    member_type_id: undefined,
+                    barangay: '',
 
-            member_group_id: undefined,
-            member_department_id: undefined,
+                    member_group_id: undefined,
+                    member_department_id: undefined,
 
-            account_id: undefined,
-            account: undefined,
+                    account_id: undefined,
+                    account: undefined,
 
-            collector_id: undefined,
-            collector: undefined,
+                    collector_id: undefined,
+                    collector: undefined,
 
-            past_due_below_starting_date: false,
-            filter_by_teller_based_on_ledger: false,
-            export_to_excel: false,
+                    past_due_below_starting_date: false,
+                    filter_by_teller_based_on_ledger: false,
+                    export_to_excel: false,
 
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `loan_collection_detail_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `loan_collection_detail_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
-
     const generateMutation = useCreateGeneratedReport({
         options: {
             onSuccess: formProps.onSuccess,
@@ -172,6 +175,10 @@ const LoanCollectionDetailCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

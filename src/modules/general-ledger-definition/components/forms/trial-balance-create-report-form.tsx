@@ -63,7 +63,7 @@ const TrialBalanceReportCreateForm = ({
                 name: `trial_balance_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'
-                )}.pdf`,
+                )}`,
             },
         },
     })

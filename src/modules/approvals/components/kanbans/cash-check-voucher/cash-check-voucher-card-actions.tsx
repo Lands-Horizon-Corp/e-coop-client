@@ -162,7 +162,7 @@ export const CashCheckVoucherCardActions = ({
                                 CASH_CHECK_VOUCHER_PRINT_TEMPLATES,
                                 0
                             ),
-                            name: `cash_check_voucher_${toReadableDate(cashCheckVoucher.created_at, 'MMddyy_mmss')}.pdf`,
+                            name: `cash_check_voucher_${toReadableDate(cashCheckVoucher.created_at, 'MMddyy_mmss')}`,
                             module: 'CashCheckVoucher',
                         } as TGeneratedReportSchema,
                     },

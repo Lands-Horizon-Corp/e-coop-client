@@ -61,7 +61,7 @@ export const CashFlowReportCreateForm = ({
                 name: `cash_flow_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'
-                )}.pdf`,
+                )}`,
                 ...defaultValues?.report_config,
             },
         },

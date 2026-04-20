@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import {
     IGeneratedReport,
@@ -15,6 +16,7 @@ import { PrintSettingsSection } from '@/modules/generated-report/components/form
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormLabel } from '@/components/ui/form'
@@ -68,28 +70,32 @@ const OtherFundsEntryCreateReportForm = ({
 }: IOtherFundsEntryFormProps) => {
     const form = useForm<TOtherFundsEntrySchema>({
         resolver: standardSchemaResolver(OtherFundsEntrySchema),
-        defaultValues: {
-            start_date: undefined,
-            end_date: undefined,
-            start_cv: undefined,
-            end_cv: undefined,
-            code: '',
-            filter_type: 'date_release',
-            print_type: 'summary',
-            sort_by: 'cv_no',
-            report_type: 'standard',
-            include_cancelled_cv: false,
-            ...formProps.defaultValues,
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `other_funds_entry_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+        defaultValues: async () =>
+            buildFormDefaults<TOtherFundsEntrySchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    start_date: undefined,
+                    end_date: undefined,
+                    start_cv: undefined,
+                    end_cv: undefined,
+                    code: '',
+                    filter_type: 'date_release',
+                    print_type: 'summary',
+                    sort_by: 'cv_no',
+                    report_type: 'standard',
+                    include_cancelled_cv: false,
+
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `other_funds_entry_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -119,6 +125,10 @@ const OtherFundsEntryCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import AreaCombobox from '@/modules/area/components/area-combobox'
 import {
@@ -20,6 +21,7 @@ import MemberTypeCombobox from '@/modules/member-type/components/member-type-com
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -85,32 +87,34 @@ const ShareCapitalWithdrawalCreateReportForm = ({
 }: IShareCapitalWithdrawalFormProps) => {
     const form = useForm<TShareCapitalWithdrawalSchema>({
         resolver: standardSchemaResolver(ShareCapitalWithdrawalSchema),
-        defaultValues: {
-            start_date: undefined,
-            end_date: undefined,
+        defaultValues: async () =>
+            buildFormDefaults<TShareCapitalWithdrawalSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    start_date: undefined,
+                    end_date: undefined,
 
-            group_by: 'no_group',
-            sort_by: 'by_passbook_no',
-            filter_by: 'all',
+                    group_by: 'no_group',
+                    sort_by: 'by_passbook_no',
+                    filter_by: 'all',
 
-            member_type_id: undefined,
-            barangay: '',
-            member_occupation_id: undefined,
-            area_id: undefined,
-            member_group_id: undefined,
+                    member_type_id: undefined,
+                    barangay: '',
+                    member_occupation_id: undefined,
+                    area_id: undefined,
+                    member_group_id: undefined,
 
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `share_capital_withdrawal_${toReadableDate(
-                    new Date(),
-                    'MMddyy_mmss'
-                )}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `share_capital_withdrawal_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -141,6 +145,10 @@ const ShareCapitalWithdrawalCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

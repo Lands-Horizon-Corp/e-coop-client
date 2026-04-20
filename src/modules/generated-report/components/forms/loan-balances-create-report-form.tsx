@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import {
     IGeneratedReport,
@@ -17,6 +18,7 @@ import { LOAN_MODE_OF_PAYMENT } from '@/modules/loan-transaction/loan.constants'
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormLabel } from '@/components/ui/form'
@@ -125,52 +127,57 @@ const LoanBalancesCreateReportForm = ({
 }: ILoanBalancesFormProps) => {
     const form = useForm<TLoanBalancesSchema>({
         resolver: standardSchemaResolver(LoanBalancesSchema),
-        defaultValues: {
-            title: 'Schedule of Loan Receivable',
+        defaultValues: async () =>
+            buildFormDefaults<TLoanBalancesSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    title: 'Schedule of Loan Receivable',
 
-            start_date: undefined,
-            end_date: undefined,
+                    start_date: undefined,
+                    end_date: undefined,
 
-            adj_by_date_of_entry: false,
-            jv_by_date_of_entry: false,
-            filtered_by_close_loan: false,
-            exclude_renewal: false,
-            print_summary_of_acct: false,
-            group_by_loan_category: false,
-            investment: false,
-            litigation: false,
+                    adj_by_date_of_entry: false,
+                    jv_by_date_of_entry: false,
+                    filtered_by_close_loan: false,
+                    exclude_renewal: false,
+                    print_summary_of_acct: false,
+                    group_by_loan_category: false,
+                    investment: false,
+                    litigation: false,
 
-            group_by: 'no_group',
-            include_amount: 'all',
-            type: 'all',
-            gender: 'all',
-            sort_by: 'by_amount',
+                    group_by: 'no_group',
+                    include_amount: 'all',
+                    type: 'all',
+                    gender: 'all',
+                    sort_by: 'by_amount',
 
-            member_type_id: undefined,
-            account_id: undefined,
-            account: undefined,
+                    member_type_id: undefined,
+                    account_id: undefined,
+                    account: undefined,
 
-            barangay: '',
+                    barangay: '',
 
-            member_occupation_id: undefined,
-            member_address_area_id: undefined,
-            member_group_id: undefined,
-            member_classification_id: undefined,
+                    member_occupation_id: undefined,
+                    member_address_area_id: undefined,
+                    member_group_id: undefined,
+                    member_classification_id: undefined,
 
-            category: '',
+                    category: '',
 
-            mode_of_payment: 'all',
-            print_type: 'summary',
+                    mode_of_payment: 'all',
+                    print_type: 'summary',
 
-            ...formProps.defaultValues,
-
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `loan_balances_${toReadableDate(new Date(), 'MMddyy_mmss')}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `loan_balances_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -198,6 +205,10 @@ const LoanBalancesCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

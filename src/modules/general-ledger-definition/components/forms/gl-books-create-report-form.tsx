@@ -67,7 +67,7 @@ const GLBooksReportCreateForm = ({
                 ...getTemplateAt(undefined, 0),
                 ...formProps.defaultValues?.report_config,
                 module: 'GeneralLedger',
-                name: `gl_books_report_${toReadableDate(new Date(), 'MMddyy_mmss')}.pdf`,
+                name: `gl_books_report_${toReadableDate(new Date(), 'MMddyy_mmss')}`,
             },
         },
     })

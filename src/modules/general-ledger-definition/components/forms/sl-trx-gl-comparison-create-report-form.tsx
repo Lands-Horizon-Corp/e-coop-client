@@ -57,7 +57,7 @@ export const SLTRXGLComparisonReportCreateForm = ({
                 name: `sl_trx_gl_comparison_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'
-                )}.pdf`,
+                )}`,
                 ...defaultValues?.report_config,
             },
         },

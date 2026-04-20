@@ -67,7 +67,7 @@ export const FinancialStatementConditionReportCreateForm = ({
                 name: `portfolio_at_risk_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'
-                )}.pdf`,
+                )}`,
                 ...defaultValues?.report_config,
             },
         },

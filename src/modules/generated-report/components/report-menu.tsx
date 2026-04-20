@@ -97,7 +97,11 @@ import { TransactionBatchCreateReportFormModal } from './forms/transaction-batch
 interface ReportItem {
     label: string
     icon: React.ElementType
-    component?: React.ElementType<{ trigger: React.ReactNode }>
+    component?: React.ElementType<{
+        trigger: React.ReactNode
+        formProps?: object
+    }>
+    persistKey?: string
 }
 
 interface ReportGroup {
@@ -115,26 +119,31 @@ const reportGroups: ReportGroup[] = [
                 label: 'Daily Coll. Detail',
                 icon: FileText,
                 component: DailyCollectionDetailCreateReportFormModal,
+                persistKey: 'form-report-collections-daily-coll-detail',
             },
             {
                 label: 'Daily Coll. Summary',
                 icon: ClipboardList,
                 component: DailyCollectionSummaryCreateReportFormModal,
+                persistKey: 'form-report-collections-daily-coll-summary',
             },
             {
                 label: 'Loan Collection Detail',
                 icon: ScrollText,
                 component: LoanCollectionDetailCreateReportFormModal,
+                persistKey: 'form-report-collections-loan-collection-detail',
             },
             {
                 label: 'Loan Collection Summary',
                 icon: FileBarChart,
                 component: LoanCollectionSummaryCreateReportFormModal,
+                persistKey: 'form-report-collections-loan-collection-summary',
             },
             {
                 label: 'Loan Collection Due',
                 icon: Clock,
                 component: LoanCollectionDueCreateReportFormModal,
+                persistKey: 'form-report-collections-loan-collection-due',
             },
         ],
     },
@@ -146,61 +155,73 @@ const reportGroups: ReportGroup[] = [
                 label: 'Loan Release Tabulated',
                 icon: BarChart3,
                 component: LoanReleaseCreateReportFormModal,
+                persistKey: 'form-report-loans-loan-release-tabulated',
             },
             {
                 label: 'Loan Release Summary',
                 icon: FileText,
                 component: LoanReleaseSummaryCreateReportFormModal,
+                persistKey: 'form-report-loans-loan-release-summary',
             },
             {
                 label: 'Loan Release Detail',
                 icon: ScrollText,
                 component: LoanReleaseDetailCreateReportFormModal,
+                persistKey: 'form-report-loans-loan-release-detail',
             },
             {
                 label: 'Loan Balances',
                 icon: Scale,
                 component: LoanBalancesCreateReportFormModal,
+                persistKey: 'form-report-loans-loan-balances',
             },
             {
                 label: 'Loan Protection Plan',
                 icon: FileText,
                 component: LoanProtectionPlanCreateReportFormModal,
+                persistKey: 'form-report-loans-loan-protection-plan',
             },
             {
                 label: 'Loan Receivable',
                 icon: Receipt,
                 component: LoanReceivableCreateReportFormModal,
+                persistKey: 'form-report-loans-loan-receivable',
             },
             {
                 label: 'Loan Maturity',
                 icon: FileClock,
                 component: LoanMaturityCreateReportFormModal,
+                persistKey: 'form-report-loans-loan-maturity',
             },
             {
                 label: 'Loan Statement',
                 icon: FileBarChart,
                 component: LoanStatementCreateReportFormModal,
+                persistKey: 'form-report-loans-loan-statement',
             },
             {
                 label: 'Grocery Loan Release',
                 icon: ShoppingCart,
                 component: GroceryLoanReleaseCreateReportFormModal,
+                persistKey: 'form-report-loans-grocery-loan-release',
             },
             {
                 label: 'Past Due on Installment',
                 icon: TrendingDown,
                 component: PastDueOnInstallmentCreateReportFormModal,
+                persistKey: 'form-report-loans-past-due-installment',
             },
             {
                 label: 'Portfolio at Risk',
                 icon: Shield,
                 component: PortfolioAtRiskCreateReportFormModal,
+                persistKey: 'form-report-loans-portfolio-at-risk',
             },
             {
                 label: 'Comaker',
                 icon: UserCheck,
                 component: ComakerCreateReportFormModal,
+                persistKey: 'form-report-loans-comaker',
             },
         ],
     },
@@ -212,31 +233,37 @@ const reportGroups: ReportGroup[] = [
                 label: 'Daily Withdrawal',
                 icon: ArrowLeftRight,
                 component: DailyWithdrawalCreateReportFormModal,
+                persistKey: 'form-report-deposits-daily-withdrawal',
             },
             {
                 label: 'Deposit Balances',
                 icon: Coins,
                 component: DepositBalancesCreateReportFormModal,
+                persistKey: 'form-report-deposits-deposit-balances',
             },
             {
                 label: 'Time Deposit',
                 icon: Clock,
                 component: TimeDepositCreateReportFormModal,
+                persistKey: 'form-report-deposits-time-deposit',
             },
             {
                 label: 'TD Balance',
                 icon: DollarSign,
                 component: TimeDepositBalanceCreateReportFormModal,
+                persistKey: 'form-report-deposits-td-balance',
             },
             {
                 label: 'TD Bal / YTD',
                 icon: BarChart3,
                 component: TimeDepositBalanceYTDCreateReportFormModal,
+                persistKey: 'form-report-deposits-td-bal-ytd',
             },
             {
                 label: 'TD Accrued',
                 icon: Percent,
                 component: TimeDepositAccruedInterestCreateReportFormModal,
+                persistKey: 'form-report-deposits-td-accrued',
             },
         ],
     },
@@ -248,30 +275,36 @@ const reportGroups: ReportGroup[] = [
                 label: 'Member Listing',
                 icon: ListChecks,
                 component: MemberListingCreateReportFormModal,
+                persistKey: 'form-report-member-listing',
             },
             {
                 label: 'Statement of Account',
                 icon: ReceiptText,
                 component: StatementOfDepositsCreateReportFormModal,
+                persistKey: 'form-report-statement-of-account',
             },
             {
                 label: 'Account Balance',
                 icon: Wallet,
                 component: AccountBalanceCreateReportFormModal,
+                persistKey: 'form-report-account-balance',
             },
             {
                 label: 'Account Hold Out',
                 icon: FileX,
                 component: AccountHoldOutCreateReportFormModal,
+                persistKey: 'form-report-account-hold-out',
             },
             {
                 label: 'Close Account',
                 icon: FileX,
                 component: CloseAccountCreateReportFormModal,
+                persistKey: 'form-report-close-account',
             },
             {
                 label: 'Voters List (ACE) - Comming soon',
                 icon: Vote,
+                persistKey: 'form-report-voters-list',
             },
         ],
     },
@@ -283,37 +316,44 @@ const reportGroups: ReportGroup[] = [
                 label: 'Cash Disbursement',
                 icon: CreditCard,
                 component: CashCheckDisbursementCreateReportFormModal,
+                persistKey: 'form-report-accounting-cash-disbursement',
             },
             {
                 label: 'Cash Receipt Journal',
                 icon: Receipt,
                 component:
                     DailyCashCollectionReceiptJournalCreateReportFormModal,
+                persistKey: 'form-report-accounting-cash-receipt-journal',
             },
             {
                 label: 'Journal Voucher',
                 icon: FileText,
                 component: JournalVoucherCreateReportFormModal,
+                persistKey: 'form-report-accounting-journal-voucher',
             },
             {
                 label: 'Adjustment',
                 icon: Calculator,
                 component: AdjustmentCreateReportFormModal,
+                persistKey: 'form-report-accounting-adjustment',
             },
             {
                 label: 'Direct Adjustment',
                 icon: Calculator,
                 component: DirectAdjustmentCreateReportFormModal,
+                persistKey: 'form-report-accounting-direct-adjustment',
             },
             {
                 label: 'Transaction Batch',
                 icon: ClipboardList,
                 component: TransactionBatchCreateReportFormModal,
+                persistKey: 'form-report-accounting-transaction-batch',
             },
             {
                 label: 'Ledger',
                 icon: BookOpen,
                 component: LedgerCreateReportFormModal,
+                persistKey: 'form-report-accounting-ledger',
             },
         ],
     },
@@ -325,21 +365,25 @@ const reportGroups: ReportGroup[] = [
                 label: 'Subscription Fee',
                 icon: BadgeDollarSign,
                 component: SubscriptionFeeCreateReportFormModal,
+                persistKey: 'form-report-share-capital-subscription-fee',
             },
             {
                 label: 'Share Capital Withdrawal',
                 icon: ArrowLeftRight,
                 component: ShareCapitalWithdrawalCreateReportFormModal,
+                persistKey: 'form-report-share-capital-withdrawal',
             },
             {
                 label: 'Interest Share Capital',
                 icon: CircleDollarSign,
                 component: InterestOnShareCapitalCreateReportFormModal,
+                persistKey: 'form-report-share-capital-interest',
             },
             {
                 label: 'Earned / Unearned',
                 icon: Layers,
                 component: EarnedUnearnedCreateReportFormModal,
+                persistKey: 'form-report-share-capital-earned-unearned',
             },
         ],
     },
@@ -351,36 +395,43 @@ const reportGroups: ReportGroup[] = [
                 label: 'Number Tag',
                 icon: Hash,
                 component: PrintNumberTagCreateReportFormModal,
+                persistKey: 'form-report-other-number-tag',
             },
             {
                 label: 'Other Funds Entry',
                 icon: Coins,
                 component: OtherFundsEntryCreateReportFormModal,
+                persistKey: 'form-report-other-funds-entry',
             },
             {
                 label: 'ICPR',
                 icon: FileText,
                 component: ICPRCreateReportFormModal,
+                persistKey: 'form-report-other-icpr',
             },
             {
                 label: 'Supposed / Actual',
                 icon: Scale,
                 component: SupposedActualCollectionCreateReportFormModal,
+                persistKey: 'form-report-other-supposed-actual',
             },
             {
                 label: 'Teller Monitor',
                 icon: Monitor,
                 component: TellerMonitoringCreateReportFormModal,
+                persistKey: 'form-report-other-teller-monitor',
             },
             {
                 label: 'Rebates',
                 icon: DollarSign,
                 component: RebateCreateReportFormModal,
+                persistKey: 'form-report-other-rebates',
             },
             {
                 label: 'Proof of Purchase',
                 icon: ShoppingCart,
                 component: ProofOfPurchaseCreateReportFormModal,
+                persistKey: 'form-report-other-proof-of-purchase',
             },
         ],
     },
@@ -426,6 +477,7 @@ function ReportsMenu() {
                 label: item.label,
                 icon: item.icon,
                 component: item.component,
+                persistKey: item.persistKey,
             })
         })
 
@@ -519,6 +571,9 @@ function ReportsMenu() {
 
                                     return (
                                         <Component
+                                            formProps={{
+                                                persistKey: report.persistKey,
+                                            }}
                                             key={report.label}
                                             trigger={
                                                 <Button

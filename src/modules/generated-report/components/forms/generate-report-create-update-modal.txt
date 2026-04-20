@@ -157,6 +157,7 @@ const GenerateCreateReportForm = <TData,>({
 
     return (
         <Form {...form}>
+           <PersistFormHeadless form={form} persistKey={formProps.persistKey} />
             <form
                 className={cn('flex w-full flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

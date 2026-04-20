@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toInputDateString, toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import { GeneralLedgerSourceSchema } from '@/modules/general-ledger'
@@ -20,6 +21,7 @@ import { WithGeneratedReportSchema } from '@/modules/generated-report/generated-
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import { ChatBubbleIcon, TrashIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -113,23 +115,29 @@ const LedgerCreateReportForm = ({
         resolver: standardSchemaResolver(LedgerCreateReportSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
-        defaultValues: {
-            pb_no_from: '',
-            pb_no_to: '',
-            start_date: undefined,
-            end_date: undefined,
-            all_accounts: 'none',
-            remarks: [],
-            include_prev_ledger: false,
+        defaultValues: async () =>
+            buildFormDefaults<TLedgerCreateReportSchema>({
+                persistKey: formProps.persistKey,
+                baseDefaults: {
+                    pb_no_from: '',
+                    pb_no_to: '',
+                    start_date: undefined,
+                    end_date: undefined,
+                    all_accounts: 'none',
+                    remarks: [],
+                    include_prev_ledger: false,
 
-            ...formProps.defaultValues,
-            report_config: {
-                ...getTemplateAt(undefined, 0),
-                ...formProps.defaultValues?.report_config,
-                module: 'GeneratedReport',
-                name: `ledger_${toReadableDate(new Date(), 'MMddyy_mmss')}.pdf`,
-            },
-        },
+                    report_config: {
+                        ...getTemplateAt(undefined, 0),
+                        module: 'GeneratedReport',
+                        name: `ledger_${toReadableDate(
+                            new Date(),
+                            'MMddyy_mmss'
+                        )}`,
+                    },
+                },
+                overrideDefaults: formProps.defaultValues,
+            }),
     })
 
     const generateMutation = useCreateGeneratedReport({
@@ -158,6 +166,10 @@ const LedgerCreateReportForm = ({
 
     return (
         <Form {...form}>
+            <PersistFormHeadless
+                form={form}
+                persistKey={formProps.persistKey}
+            />
             <form
                 className={cn('flex flex-col gap-y-4', className)}
                 onSubmit={onSubmit}

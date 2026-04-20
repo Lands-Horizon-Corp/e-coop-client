@@ -64,7 +64,7 @@ export const SLGLComparisonReportCreateForm = ({
                 name: `sl_gl_comparison_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'
-                )}.pdf`,
+                )}`,
                 ...formProps.defaultValues?.report_config,
             },
         },
