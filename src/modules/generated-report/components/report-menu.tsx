@@ -1,15 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-
-import Fuse from 'fuse.js'
-
+import { cn } from '@/helpers'
 import {
     ArrowLeftRight,
     BadgeDollarSign,
-    Banknote,
     BarChart3,
     BookOpen,
     Calculator,
-    CircleDollarSign,
     ClipboardList,
     Clock,
     Coins,
@@ -19,33 +14,24 @@ import {
     FileClock,
     FileText,
     FileX,
-    FolderOpen,
-    HandCoins,
     Hash,
-    Landmark,
     Layers,
     ListChecks,
     Monitor,
     Percent,
-    PiggyBank,
     Receipt,
     ReceiptText,
     Scale,
     ScrollText,
-    Search,
     Shield,
     ShoppingCart,
     TrendingDown,
     UserCheck,
-    UserSearch,
-    Users,
     Vote,
     Wallet,
 } from 'lucide-react'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 
 import { AccountBalanceCreateReportFormModal } from './forms/account-balance-create-report-form'
 import { AccountHoldOutCreateReportFormModal } from './forms/account-holdout-create-report-form'
@@ -104,409 +90,485 @@ interface ReportItem {
     persistKey?: string
 }
 
-interface ReportGroup {
-    title: string
-    icon: React.ElementType
-    reports: ReportItem[]
-}
-
-const reportGroups: ReportGroup[] = [
+const COLLECTION_GROUP: ReportItem[] = [
     {
-        title: 'Collections',
-        icon: HandCoins,
-        reports: [
-            {
-                label: 'Daily Coll. Detail',
-                icon: FileText,
-                component: DailyCollectionDetailCreateReportFormModal,
-                persistKey: 'form-report-collections-daily-coll-detail',
-            },
-            {
-                label: 'Daily Coll. Summary',
-                icon: ClipboardList,
-                component: DailyCollectionSummaryCreateReportFormModal,
-                persistKey: 'form-report-collections-daily-coll-summary',
-            },
-            {
-                label: 'Loan Collection Detail',
-                icon: ScrollText,
-                component: LoanCollectionDetailCreateReportFormModal,
-                persistKey: 'form-report-collections-loan-collection-detail',
-            },
-            {
-                label: 'Loan Collection Summary',
-                icon: FileBarChart,
-                component: LoanCollectionSummaryCreateReportFormModal,
-                persistKey: 'form-report-collections-loan-collection-summary',
-            },
-            {
-                label: 'Loan Collection Due',
-                icon: Clock,
-                component: LoanCollectionDueCreateReportFormModal,
-                persistKey: 'form-report-collections-loan-collection-due',
-            },
-        ],
+        label: 'Daily Collection Detail',
+        icon: FileText,
+        component: DailyCollectionDetailCreateReportFormModal,
+        persistKey: 'form-report-collections-daily-coll-detail',
     },
     {
-        title: 'Loans',
-        icon: Banknote,
-        reports: [
-            {
-                label: 'Loan Release Tabulated',
-                icon: BarChart3,
-                component: LoanReleaseCreateReportFormModal,
-                persistKey: 'form-report-loans-loan-release-tabulated',
-            },
-            {
-                label: 'Loan Release Summary',
-                icon: FileText,
-                component: LoanReleaseSummaryCreateReportFormModal,
-                persistKey: 'form-report-loans-loan-release-summary',
-            },
-            {
-                label: 'Loan Release Detail',
-                icon: ScrollText,
-                component: LoanReleaseDetailCreateReportFormModal,
-                persistKey: 'form-report-loans-loan-release-detail',
-            },
-            {
-                label: 'Loan Balances',
-                icon: Scale,
-                component: LoanBalancesCreateReportFormModal,
-                persistKey: 'form-report-loans-loan-balances',
-            },
-            {
-                label: 'Loan Protection Plan',
-                icon: FileText,
-                component: LoanProtectionPlanCreateReportFormModal,
-                persistKey: 'form-report-loans-loan-protection-plan',
-            },
-            {
-                label: 'Loan Receivable',
-                icon: Receipt,
-                component: LoanReceivableCreateReportFormModal,
-                persistKey: 'form-report-loans-loan-receivable',
-            },
-            {
-                label: 'Loan Maturity',
-                icon: FileClock,
-                component: LoanMaturityCreateReportFormModal,
-                persistKey: 'form-report-loans-loan-maturity',
-            },
-            {
-                label: 'Loan Statement',
-                icon: FileBarChart,
-                component: LoanStatementCreateReportFormModal,
-                persistKey: 'form-report-loans-loan-statement',
-            },
-            {
-                label: 'Grocery Loan Release',
-                icon: ShoppingCart,
-                component: GroceryLoanReleaseCreateReportFormModal,
-                persistKey: 'form-report-loans-grocery-loan-release',
-            },
-            {
-                label: 'Past Due on Installment',
-                icon: TrendingDown,
-                component: PastDueOnInstallmentCreateReportFormModal,
-                persistKey: 'form-report-loans-past-due-installment',
-            },
-            {
-                label: 'Portfolio at Risk',
-                icon: Shield,
-                component: PortfolioAtRiskCreateReportFormModal,
-                persistKey: 'form-report-loans-portfolio-at-risk',
-            },
-            {
-                label: 'Comaker',
-                icon: UserCheck,
-                component: ComakerCreateReportFormModal,
-                persistKey: 'form-report-loans-comaker',
-            },
-        ],
+        label: 'Daily Collection Summary',
+        icon: ClipboardList,
+        component: DailyCollectionSummaryCreateReportFormModal,
+        persistKey: 'form-report-collections-daily-coll-summary',
     },
     {
-        title: 'Deposits & Withdrawals',
-        icon: PiggyBank,
-        reports: [
-            {
-                label: 'Daily Withdrawal',
-                icon: ArrowLeftRight,
-                component: DailyWithdrawalCreateReportFormModal,
-                persistKey: 'form-report-deposits-daily-withdrawal',
-            },
-            {
-                label: 'Deposit Balances',
-                icon: Coins,
-                component: DepositBalancesCreateReportFormModal,
-                persistKey: 'form-report-deposits-deposit-balances',
-            },
-            {
-                label: 'Time Deposit',
-                icon: Clock,
-                component: TimeDepositCreateReportFormModal,
-                persistKey: 'form-report-deposits-time-deposit',
-            },
-            {
-                label: 'TD Balance',
-                icon: DollarSign,
-                component: TimeDepositBalanceCreateReportFormModal,
-                persistKey: 'form-report-deposits-td-balance',
-            },
-            {
-                label: 'TD Bal / YTD',
-                icon: BarChart3,
-                component: TimeDepositBalanceYTDCreateReportFormModal,
-                persistKey: 'form-report-deposits-td-bal-ytd',
-            },
-            {
-                label: 'TD Accrued',
-                icon: Percent,
-                component: TimeDepositAccruedInterestCreateReportFormModal,
-                persistKey: 'form-report-deposits-td-accrued',
-            },
-        ],
-    },
-    {
-        title: 'Member Accounts',
-        icon: Users,
-        reports: [
-            {
-                label: 'Member Listing',
-                icon: ListChecks,
-                component: MemberListingCreateReportFormModal,
-                persistKey: 'form-report-member-listing',
-            },
-            {
-                label: 'Statement of Account',
-                icon: ReceiptText,
-                component: StatementOfDepositsCreateReportFormModal,
-                persistKey: 'form-report-statement-of-account',
-            },
-            {
-                label: 'Account Balance',
-                icon: Wallet,
-                component: AccountBalanceCreateReportFormModal,
-                persistKey: 'form-report-account-balance',
-            },
-            {
-                label: 'Account Hold Out',
-                icon: FileX,
-                component: AccountHoldOutCreateReportFormModal,
-                persistKey: 'form-report-account-hold-out',
-            },
-            {
-                label: 'Close Account',
-                icon: FileX,
-                component: CloseAccountCreateReportFormModal,
-                persistKey: 'form-report-close-account',
-            },
-            {
-                label: 'Voters List (ACE) - Comming soon',
-                icon: Vote,
-                persistKey: 'form-report-voters-list',
-            },
-        ],
-    },
-    {
-        title: 'Accounting & Journals',
-        icon: BookOpen,
-        reports: [
-            {
-                label: 'Cash Disbursement',
-                icon: CreditCard,
-                component: CashCheckDisbursementCreateReportFormModal,
-                persistKey: 'form-report-accounting-cash-disbursement',
-            },
-            {
-                label: 'Cash Receipt Journal',
-                icon: Receipt,
-                component:
-                    DailyCashCollectionReceiptJournalCreateReportFormModal,
-                persistKey: 'form-report-accounting-cash-receipt-journal',
-            },
-            {
-                label: 'Journal Voucher',
-                icon: FileText,
-                component: JournalVoucherCreateReportFormModal,
-                persistKey: 'form-report-accounting-journal-voucher',
-            },
-            {
-                label: 'Adjustment',
-                icon: Calculator,
-                component: AdjustmentCreateReportFormModal,
-                persistKey: 'form-report-accounting-adjustment',
-            },
-            {
-                label: 'Direct Adjustment',
-                icon: Calculator,
-                component: DirectAdjustmentCreateReportFormModal,
-                persistKey: 'form-report-accounting-direct-adjustment',
-            },
-            {
-                label: 'Transaction Batch',
-                icon: ClipboardList,
-                component: TransactionBatchCreateReportFormModal,
-                persistKey: 'form-report-accounting-transaction-batch',
-            },
-            {
-                label: 'Ledger',
-                icon: BookOpen,
-                component: LedgerCreateReportFormModal,
-                persistKey: 'form-report-accounting-ledger',
-            },
-        ],
-    },
-    {
-        title: 'Share Capital & Interest',
-        icon: Landmark,
-        reports: [
-            {
-                label: 'Subscription Fee',
-                icon: BadgeDollarSign,
-                component: SubscriptionFeeCreateReportFormModal,
-                persistKey: 'form-report-share-capital-subscription-fee',
-            },
-            {
-                label: 'Share Capital Withdrawal',
-                icon: ArrowLeftRight,
-                component: ShareCapitalWithdrawalCreateReportFormModal,
-                persistKey: 'form-report-share-capital-withdrawal',
-            },
-            {
-                label: 'Interest Share Capital',
-                icon: CircleDollarSign,
-                component: InterestOnShareCapitalCreateReportFormModal,
-                persistKey: 'form-report-share-capital-interest',
-            },
-            {
-                label: 'Earned / Unearned',
-                icon: Layers,
-                component: EarnedUnearnedCreateReportFormModal,
-                persistKey: 'form-report-share-capital-earned-unearned',
-            },
-        ],
-    },
-    {
-        title: 'Other Reports',
-        icon: FolderOpen,
-        reports: [
-            {
-                label: 'Number Tag',
-                icon: Hash,
-                component: PrintNumberTagCreateReportFormModal,
-                persistKey: 'form-report-other-number-tag',
-            },
-            {
-                label: 'Other Funds Entry',
-                icon: Coins,
-                component: OtherFundsEntryCreateReportFormModal,
-                persistKey: 'form-report-other-funds-entry',
-            },
-            {
-                label: 'ICPR',
-                icon: FileText,
-                component: ICPRCreateReportFormModal,
-                persistKey: 'form-report-other-icpr',
-            },
-            {
-                label: 'Supposed / Actual',
-                icon: Scale,
-                component: SupposedActualCollectionCreateReportFormModal,
-                persistKey: 'form-report-other-supposed-actual',
-            },
-            {
-                label: 'Teller Monitor',
-                icon: Monitor,
-                component: TellerMonitoringCreateReportFormModal,
-                persistKey: 'form-report-other-teller-monitor',
-            },
-            {
-                label: 'Rebates',
-                icon: DollarSign,
-                component: RebateCreateReportFormModal,
-                persistKey: 'form-report-other-rebates',
-            },
-            {
-                label: 'Proof of Purchase',
-                icon: ShoppingCart,
-                component: ProofOfPurchaseCreateReportFormModal,
-                persistKey: 'form-report-other-proof-of-purchase',
-            },
-        ],
+        label: 'Cash Receipt Journal',
+        icon: Receipt,
+        component: DailyCashCollectionReceiptJournalCreateReportFormModal,
+        persistKey: 'form-report-accounting-cash-receipt-journal',
     },
 ]
 
-function ReportsMenu() {
-    const [search, setSearch] = useState('')
+const DISBURSEMENT_GROUP: ReportItem[] = [
+    {
+        label: 'Daily Withdrawal',
+        icon: ArrowLeftRight,
+        component: DailyWithdrawalCreateReportFormModal,
+        persistKey: 'form-report-deposits-daily-withdrawal',
+    },
+    {
+        label: 'Time Deposit',
+        icon: Clock,
+        component: TimeDepositCreateReportFormModal,
+        persistKey: 'form-report-deposits-time-deposit',
+    },
+]
 
-    const flatReports = useMemo(() => {
-        return reportGroups.flatMap((group) =>
-            group.reports.map((r) => ({
-                ...r,
-                groupTitle: group.title,
-                groupIcon: group.icon,
-            }))
+const CASH_CHECK_VOUCHER_GROUP: ReportItem[] = [
+    {
+        label: 'Cash Disbursement',
+        icon: CreditCard,
+        component: CashCheckDisbursementCreateReportFormModal,
+        persistKey: 'form-report-accounting-cash-disbursement',
+    },
+]
+
+const LOAN_RELEASES_GROUP: ReportItem[] = [
+    {
+        label: 'Loan Release Tabulated',
+        icon: BarChart3,
+        component: LoanReleaseCreateReportFormModal,
+        persistKey: 'form-report-loans-loan-release-tabulated',
+    },
+    {
+        label: 'Loan Release Detail',
+        icon: ScrollText,
+        component: LoanReleaseDetailCreateReportFormModal,
+        persistKey: 'form-report-loans-loan-release-detail',
+    },
+    {
+        label: 'Loan Release Summary',
+        icon: FileText,
+        component: LoanReleaseSummaryCreateReportFormModal,
+        persistKey: 'form-report-loans-loan-release-summary',
+    },
+    {
+        label: 'Grocery Loan Release',
+        icon: ShoppingCart,
+        component: GroceryLoanReleaseCreateReportFormModal,
+        persistKey: 'form-report-loans-grocery-loan-release',
+    },
+]
+
+const JOURNAL_GROUP: ReportItem[] = [
+    {
+        label: 'Journal Voucher',
+        icon: FileText,
+        component: JournalVoucherCreateReportFormModal,
+        persistKey: 'form-report-accounting-journal-voucher',
+    },
+    {
+        label: 'Adjustment',
+        icon: Calculator,
+        component: AdjustmentCreateReportFormModal,
+        persistKey: 'form-report-accounting-adjustment',
+    },
+    {
+        label: 'Rebates',
+        icon: DollarSign,
+        component: RebateCreateReportFormModal,
+        persistKey: 'form-report-other-rebates',
+    },
+    {
+        label: 'ICPR',
+        icon: ReceiptText,
+        component: ICPRCreateReportFormModal,
+        persistKey: 'form-report-accounting-icpr',
+    },
+]
+
+const FUNDS_GROUP: ReportItem[] = [
+    {
+        label: 'Transaction Batch',
+        icon: ClipboardList,
+        component: TransactionBatchCreateReportFormModal,
+        persistKey: 'form-report-accounting-transaction-batch',
+    },
+    {
+        label: 'Cash Position Report',
+        icon: ClipboardList,
+    },
+    {
+        label: 'Revolving Fund',
+        icon: ClipboardList,
+    },
+    {
+        label: 'Other Funds Entry / Petty Cash',
+        icon: Coins,
+        component: OtherFundsEntryCreateReportFormModal,
+        persistKey: 'form-report-other-funds-entry',
+    },
+]
+
+const MEMBERS_GROUP: ReportItem[] = [
+    {
+        label: 'Member Listing',
+        icon: ListChecks,
+        component: MemberListingCreateReportFormModal,
+        persistKey: 'form-report-member-listing',
+    },
+    {
+        label: 'Statement of Account',
+        icon: ReceiptText,
+        component: StatementOfDepositsCreateReportFormModal,
+        persistKey: 'form-report-statement-of-account',
+    },
+    {
+        label: 'Ledger',
+        icon: BookOpen,
+        component: LedgerCreateReportFormModal,
+        persistKey: 'form-report-accounting-ledger',
+    },
+    {
+        label: 'Voters List',
+        icon: Vote,
+        persistKey: 'form-report-voters-list',
+    },
+    {
+        label: 'Close Account',
+        icon: FileX,
+        component: CloseAccountCreateReportFormModal,
+        persistKey: 'form-report-close-account',
+    },
+]
+
+const LOAN_COLLECTION_GROUP: ReportItem[] = [
+    {
+        label: 'Loan Collection Detail',
+        icon: ScrollText,
+        component: LoanCollectionDetailCreateReportFormModal,
+        persistKey: 'form-report-collections-loan-collection-detail',
+    },
+    {
+        label: 'Loan Collection Summary',
+        icon: FileBarChart,
+        component: LoanCollectionSummaryCreateReportFormModal,
+        persistKey: 'form-report-collections-loan-collection-summary',
+    },
+    {
+        label: 'Loan Collection Due',
+        icon: Clock,
+        component: LoanCollectionDueCreateReportFormModal,
+        persistKey: 'form-report-collections-loan-collection-due',
+    },
+]
+
+const TIME_DEPOSIT_GROUP: ReportItem[] = [
+    {
+        label: 'TD Balance',
+        icon: DollarSign,
+        component: TimeDepositBalanceCreateReportFormModal,
+        persistKey: 'form-report-deposits-td-balance',
+    },
+    {
+        label: 'TD Bal / YTD',
+        icon: BarChart3,
+        component: TimeDepositBalanceYTDCreateReportFormModal,
+        persistKey: 'form-report-deposits-td-bal-ytd',
+    },
+    {
+        label: 'TD Accrued',
+        icon: Percent,
+        component: TimeDepositAccruedInterestCreateReportFormModal,
+        persistKey: 'form-report-deposits-td-accrued',
+    },
+]
+
+const SCHEDULE_BALANCES_GROUP: ReportItem[] = [
+    {
+        label: 'Account Balance',
+        icon: Wallet,
+        component: AccountBalanceCreateReportFormModal,
+        persistKey: 'form-report-account-balance',
+    },
+    {
+        label: 'Deposit Balances',
+        icon: Coins,
+        component: DepositBalancesCreateReportFormModal,
+        persistKey: 'form-report-deposits-deposit-balances',
+    },
+    {
+        label: 'Subscription Fee',
+        icon: BadgeDollarSign,
+        component: SubscriptionFeeCreateReportFormModal,
+        persistKey: 'form-report-share-capital-subscription-fee',
+    },
+    {
+        label: 'Share Capital Withdrawal',
+        icon: ArrowLeftRight,
+        component: ShareCapitalWithdrawalCreateReportFormModal,
+        persistKey: 'form-report-share-capital-withdrawal',
+    },
+    {
+        label: 'Loan Balances',
+        icon: Scale,
+        component: LoanBalancesCreateReportFormModal,
+        persistKey: 'form-report-loans-loan-balances',
+    },
+    {
+        label: 'Loan Statement',
+        icon: FileBarChart,
+        component: LoanStatementCreateReportFormModal,
+        persistKey: 'form-report-loans-loan-statement',
+    },
+    {
+        label: 'Loan Maturity',
+        icon: FileClock,
+        component: LoanMaturityCreateReportFormModal,
+        persistKey: 'form-report-loans-loan-maturity',
+    },
+    {
+        label: 'Portfolio at Risk',
+        icon: Shield,
+        component: PortfolioAtRiskCreateReportFormModal,
+        persistKey: 'form-report-loans-portfolio-at-risk',
+    },
+    {
+        label: 'Past Due on Installment',
+        icon: TrendingDown,
+        component: PastDueOnInstallmentCreateReportFormModal,
+        persistKey: 'form-report-loans-past-due-installment',
+    },
+    {
+        label: 'Loan Receivable',
+        icon: Receipt,
+        component: LoanReceivableCreateReportFormModal,
+        persistKey: 'form-report-loans-loan-receivable',
+    },
+    {
+        label: 'Supposed / Actual',
+        icon: Scale,
+        component: SupposedActualCollectionCreateReportFormModal,
+        persistKey: 'form-report-other-supposed-actual',
+    },
+    {
+        label: 'Earned / Unearned',
+        icon: Layers,
+        component: EarnedUnearnedCreateReportFormModal,
+        persistKey: 'form-report-share-capital-earned-unearned',
+    },
+    {
+        label: 'Comaker',
+        icon: UserCheck,
+        component: ComakerCreateReportFormModal,
+        persistKey: 'form-report-loans-comaker',
+    },
+    {
+        label: 'CLPP',
+        icon: FileText,
+        component: LoanProtectionPlanCreateReportFormModal,
+        persistKey: 'form-report-loans-loan-protection-plan',
+    },
+    {
+        label: 'Grocery Loan',
+        icon: ShoppingCart,
+        component: GroceryLoanReleaseCreateReportFormModal,
+        persistKey: 'form-report-loans-grocery-loan-release',
+    },
+    {
+        label: 'Proof of Purchase',
+        icon: ShoppingCart,
+        component: ProofOfPurchaseCreateReportFormModal,
+        persistKey: 'form-report-other-proof-of-purchase',
+    },
+    {
+        label: 'Interest on Share Capital',
+        icon: Percent,
+        component: InterestOnShareCapitalCreateReportFormModal,
+        persistKey: 'form-report-share-capital-interest',
+    },
+]
+
+const OTHER_REPORTS_GROUP: ReportItem[] = [
+    {
+        label: 'Direct Adjustment',
+        icon: Calculator,
+        component: DirectAdjustmentCreateReportFormModal,
+        persistKey: 'form-report-accounting-direct-adjustment',
+    },
+    {
+        label: 'Account Hold Out',
+        icon: FileX,
+        component: AccountHoldOutCreateReportFormModal,
+        persistKey: 'form-report-account-hold-out',
+    },
+    {
+        label: 'Teller Monitor',
+        icon: Monitor,
+        component: TellerMonitoringCreateReportFormModal,
+        persistKey: 'form-report-other-teller-monitor',
+    },
+    {
+        label: 'Print Number Tag',
+        icon: Hash,
+        component: PrintNumberTagCreateReportFormModal,
+        persistKey: 'form-report-number-tag',
+    },
+]
+
+const ReportGroupContainer = ({
+    title,
+    description,
+    className,
+    children,
+    containerClassName,
+    titleClassName,
+    titleAccentClassName,
+    descriptionClassName,
+}: {
+    title: string
+    description?: string
+    className?: string
+    titleAccentClassName?: string
+    titleClassName?: string
+    descriptionClassName?: string
+    children?: React.ReactNode
+    containerClassName?: string
+}) => {
+    return (
+        <div
+            className={cn(
+                'space-y-3 break-inside-avoid border border-muted bg-popover/40 shadow-2xs rounded-xl p-4',
+                className
+            )}
+        >
+            <header className="mb-5 flex items-stretch gap-3">
+                <div
+                    className={cn(
+                        'w-1.5 self-stretch rounded-full bg-primary/70',
+                        titleAccentClassName
+                    )}
+                />
+
+                <div className="space-y-0.5">
+                    <h3
+                        className={cn(
+                            'text-sm font-semibold tracking-wide text-foreground',
+                            titleClassName
+                        )}
+                    >
+                        {title}
+                    </h3>
+
+                    {description && (
+                        <p
+                            className={cn(
+                                'text-xs text-muted-foreground',
+                                descriptionClassName
+                            )}
+                        >
+                            {description}
+                        </p>
+                    )}
+                </div>
+            </header>
+            <div className={cn('space-3 gap-3', containerClassName)}>
+                {children}
+            </div>
+        </div>
+    )
+}
+
+const ReportItemButton = ({
+    report,
+    variant = 'ghost',
+}: {
+    report: ReportItem
+    variant?: 'ghost' | 'secondary'
+}) => {
+    const Component = report.component
+
+    if (!Component) {
+        return (
+            <Button
+                className="group relative flex w-full bg-muted items-center justify-start gap-3 rounded-xl border border-muted-foreground/80 p-3 h-fit text-left cursor-not-allowed shadow-[var(--shadow-sm)]"
+                disabled
+                size="nostyle"
+                variant="ghost"
+            >
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted border border-muted-foreground/30 text-muted-foreground">
+                    <report.icon className="size-4" strokeWidth={2} />
+                </span>
+                <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-medium tracking-tight text-muted-foreground line-through">
+                        {report.label}
+                    </span>
+                    <span className="mt-0.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                        Coming soon
+                    </span>
+                </span>
+            </Button>
         )
-    }, [])
-
-    const fuse = useMemo(() => {
-        return new Fuse(flatReports, {
-            keys: ['label', 'groupTitle'],
-            threshold: 0.3,
-        })
-    }, [flatReports])
-
-    const filteredGroups = useMemo(() => {
-        const results = search.trim()
-            ? fuse.search(search).map((r) => r.item)
-            : flatReports
-
-        const grouped: Record<string, ReportGroup> = {}
-
-        results.forEach((item) => {
-            if (!grouped[item.groupTitle]) {
-                grouped[item.groupTitle] = {
-                    title: item.groupTitle,
-                    icon: item.groupIcon,
-                    reports: [],
-                }
-            }
-
-            grouped[item.groupTitle].reports.push({
-                label: item.label,
-                icon: item.icon,
-                component: item.component,
-                persistKey: item.persistKey,
-            })
-        })
-
-        return Object.values(grouped)
-    }, [search, fuse, flatReports])
-
-    // const totalReports = reportGroups.reduce(
-    //     (sum, g) => sum + g.reports.length,
-    //     0
-    // )
-
-    const inputRef = useRef<HTMLInputElement>(null)
-
-    useEffect(() => {
-        inputRef.current?.focus()
-    }, [])
+    }
 
     return (
-        <div className="min-h-screen min-w-6xl">
-            <div className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="mx-auto max-w-7xl px-7 py-4 flex items-center justify-center gap-6">
-                    {/* <div className="shrink-0">
-                        <h1 className="text-lg font-semibold tracking-tight text-foreground">
-                            Reports Menu
-                        </h1>
-                        <p className="text-xs text-muted-foreground">
-                            {totalReports} reports
-                        </p>
-                    </div> */}
+        <Component
+            formProps={{
+                persistKey: report.persistKey,
+            }}
+            trigger={
+                <Button
+                    className="group justify-start cursor-pointer border border-muted-foreground/40 rounded-xl gap-3 px-3 h-fit py-3"
+                    size="nostyle"
+                    variant={variant}
+                >
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-popover/60 dark:text-primary/70 transition-colors duration-200 group-hover:bg-popover group-hover:text-primary">
+                        <report.icon className="size-4" strokeWidth={2} />
+                    </span>
+                    <span className="text-sm font-medium truncate tracking-tight">
+                        {report.label}
+                    </span>
+                </Button>
+            }
+        />
+    )
+}
+
+const ReportList = ({
+    reports,
+    variant = 'secondary',
+}: {
+    reports: ReportItem[]
+    variant?: 'ghost' | 'secondary'
+}) => {
+    return (
+        <>
+            {reports.map((report) => (
+                <ReportItemButton
+                    key={report.label}
+                    report={report}
+                    variant={variant}
+                />
+            ))}
+        </>
+    )
+}
+
+function ReportsMenu() {
+    // const [search, setSearch] = useState('')
+    // const inputRef = useRef<HTMLInputElement>(null)
+
+    // useEffect(() => { inputRef.current?.focus() }, [])
+
+    return (
+        <div className="min-h-screen w-full">
+            <div className="border-b border-border bg-background/40/95 backdrop-blur p-4 supports-[backdrop-filter]:bg-background/60">
+                <p className="text-xl font-medium mx-auto text-center">
+                    REPORT MENU
+                </p>
+                {/* <div className="mx-auto max-w-7xl px-7 py-4 flex items-center justify-center gap-6">
                     <div className="relative max-w-xs w-full">
                         <Search className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
                         <Input
@@ -517,83 +579,155 @@ function ReportsMenu() {
                             value={search}
                         />
                     </div>
-                </div>
+                </div> */}
             </div>
 
-            <div className="mx-auto px-6 py-6">
-                {filteredGroups.length === 0 && (
-                    <div className="flex flex-col items-center justify-center py-12 text-center">
-                        <UserSearch className="size-10 text-muted-foreground/50 mb-3" />
-                        <p className="text-sm font-medium text-muted-foreground">
-                            No reports found
-                        </p>
-                        <p className="text-xs text-muted-foreground/70">
-                            Try a different search term
-                        </p>
-                    </div>
-                )}
+            <div className="mx-auto px-6 py-6 grid grid-cols-1 gap-6">
+                <ReportGroupContainer
+                    className="rounded-2xl bg-gradient-to-br from-emerald-500/15 via-emerald-500/5 to-transparent shadow-md border border-emerald-500/15"
+                    containerClassName="space-y-6"
+                    description="Core financial operations covering daily transactions, cash flow processing, and accounting summaries."
+                    descriptionClassName="text-sm text-muted-foreground"
+                    title="Transactions"
+                    titleAccentClassName="bg-emerald-500/50"
+                >
+                    <ReportGroupContainer
+                        className="rounded-xl bg-popover/70 ring-2 ring-muted-foreground/20"
+                        containerClassName="grid grid-cols-3 gap-4"
+                        // titleClassName="uppercase"
+                        description="Daily collection records, summaries, and cash receipt journal entries for reconciliation."
+                        title="Collections"
+                        titleAccentClassName="bg-teal-500/40"
+                    >
+                        <ReportList reports={COLLECTION_GROUP} />
+                    </ReportGroupContainer>
 
-                <div className="columns-2 md:columns-3 lg:columns-4 gap-6 space-y-5">
-                    {filteredGroups.map((group) => (
-                        <div
-                            className="break-inside-avoid space-y-2.5"
-                            key={group.title}
+                    <ReportGroupContainer
+                        className="rounded-xl  bg-popover/70  ring-2 ring-muted-foreground/20"
+                        containerClassName="grid grid-cols-2 gap-4 space-y-2"
+                        description="Disbursements, loan releases, vouchers, journal entries, and fund tracking."
+                        // titleClassName="uppercase"
+                        title="Disbursements"
+                        titleAccentClassName="bg-indigo-500/50"
+                    >
+                        <ReportList reports={DISBURSEMENT_GROUP} />
+
+                        <ReportGroupContainer
+                            className="rounded-lg bg-popover/70 ring-2 ring-muted-foreground/20"
+                            containerClassName="grid grid-cols-3"
+                            title="Loan Releases"
+                            titleAccentClassName="bg-violet-500/50"
+                            // description="Loan release tracking including tabulated, detailed, and summary reports."
+                            titleClassName="uppercase"
                         >
-                            <div className="flex items-center gap-3 mb-3">
-                                <group.icon className="size-6 text-muted-foreground" />
-                                <Badge
-                                    className="px-3 py-1.5 text-sm font-semibold uppercase tracking-wide"
-                                    variant="secondary"
-                                >
-                                    {group.title}
-                                </Badge>
-                            </div>
-                            <div className="flex flex-col">
-                                {group.reports.map((report) => {
-                                    const Component = report.component
+                            <ReportList reports={LOAN_RELEASES_GROUP} />
+                        </ReportGroupContainer>
 
-                                    if (!Component) {
-                                        return (
-                                            <Button
-                                                className="h-9 justify-start gap-2.5 px-3 text-left w-full opacity-50 cursor-not-allowed"
-                                                disabled
-                                                key={report.label}
-                                                size="sm"
-                                                variant="ghost"
-                                            >
-                                                <report.icon className="size-4 shrink-0 text-muted-foreground" />
-                                                <span className="text-sm font-medium truncate">
-                                                    {report.label}
-                                                </span>
-                                            </Button>
-                                        )
-                                    }
+                        <ReportGroupContainer
+                            className="rounded-lg from-violet-500/10 via-violet-500/5 to-transparent ring-2 ring-muted-foreground/20"
+                            containerClassName="grid grid-cols-3"
+                            // description="Journal entries for accounting adjustments and balancing."
+                            title="Journal Entries"
+                            titleAccentClassName="bg-sky-500/50"
+                            titleClassName="uppercase"
+                        >
+                            <ReportList reports={JOURNAL_GROUP} />
+                        </ReportGroupContainer>
 
-                                    return (
-                                        <Component
-                                            formProps={{
-                                                persistKey: report.persistKey,
-                                            }}
-                                            key={report.label}
-                                            trigger={
-                                                <Button
-                                                    className="h-9 justify-start gap-2.5 px-3 text-left w-full"
-                                                    size="sm"
-                                                    variant="ghost"
-                                                >
-                                                    <report.icon className="size-4 shrink-0 text-muted-foreground" />
-                                                    <span className="text-sm font-medium truncate">
-                                                        {report.label}
-                                                    </span>
-                                                </Button>
-                                            }
-                                        />
-                                    )
-                                })}
-                            </div>
+                        <div className="col-span-full flex gap-x-4">
+                            <ReportGroupContainer
+                                className="rounded-lg bg-popover/70 ring-2 ring-muted-foreground/20"
+                                containerClassName="grid grid-cols-4"
+                                // description="Internal fund tracking including batches and petty cash."
+                                title="Funds Reports"
+                                titleAccentClassName="bg-rose-400/50"
+                                titleClassName="uppercase"
+                            >
+                                <ReportList reports={FUNDS_GROUP} />
+                            </ReportGroupContainer>
+
+                            <ReportGroupContainer
+                                className="rounded-lg flex-1 bg-popover/70 ring-2 ring-muted-foreground/20"
+                                containerClassName="grid grid-cols-1"
+                                title="Cash Check Vouchers"
+                                titleAccentClassName="bg-orange-500/60"
+                                // description="Cash disbursement and voucher processing."
+                                titleClassName="uppercase"
+                            >
+                                <ReportList
+                                    reports={CASH_CHECK_VOUCHER_GROUP}
+                                />
+                            </ReportGroupContainer>
                         </div>
-                    ))}
-                </div>
+                    </ReportGroupContainer>
+                </ReportGroupContainer>
+
+                <ReportGroupContainer
+                    className="rounded-2xl bg-gradient-to-br from-blue-400/10 to-transparent shadow-md border border-blue-500/10"
+                    containerClassName="grid grid-cols-3 space-y-2"
+                    description="Member data, loan tracking, deposits, capital movements, and schedules."
+                    descriptionClassName="text-sm text-muted-foreground"
+                    title="Schedule & Listing"
+                    titleAccentClassName="bg-blue-500/30"
+                >
+                    <div className="flex gap-x-4 col-span-full">
+                        <ReportGroupContainer
+                            className="col-span-full rounded-xl bg-popover/70 ring-2 ring-muted-foreground/20"
+                            containerClassName="grid grid-cols-5 gap-4"
+                            // description="Member profiles, listings, ledger records, and account closure tracking."
+                            title="Member"
+                            titleAccentClassName="bg-cyan-500/30"
+                            titleClassName="uppercase"
+                        >
+                            <ReportList reports={MEMBERS_GROUP} />
+                        </ReportGroupContainer>
+                        <ReportGroupContainer
+                            className="rounded-xl flex-1 bg-popover/70 ring-2 ring-muted-foreground/20"
+                            containerClassName="grid grid-cols-3 gap-4"
+                            // description="Time deposit balances, accruals, and year-to-date tracking."
+                            title="Time Deposits"
+                            titleAccentClassName="bg-slate-500/30"
+                            titleClassName="uppercase"
+                        >
+                            <ReportList reports={TIME_DEPOSIT_GROUP} />
+                        </ReportGroupContainer>
+                    </div>
+
+                    <ReportGroupContainer
+                        className="col-span-full rounded-xl bg-popover/70 ring-2 ring-muted-foreground/20"
+                        containerClassName="grid grid-cols-5 gap-4"
+                        // description="Balances across loans, deposits, capital shares, and interest."
+                        title="Schedule of Balances"
+                        titleAccentClassName="bg-fuchsia-500/70"
+                        titleClassName="uppercase"
+                    >
+                        <ReportList reports={SCHEDULE_BALANCES_GROUP} />
+                    </ReportGroupContainer>
+
+                    <div className="flex col-span-full gap-x-4">
+                        <ReportGroupContainer
+                            className="rounded-xl bg-popover/70 ring-2 ring-muted-foreground/20"
+                            containerClassName="grid grid-cols-3 gap-4"
+                            // description="Loan lifecycle monitoring including risk, maturity, and receivables."
+                            title="Loan Monitoring"
+                            titleAccentClassName="bg-lime-500/30"
+                            titleClassName="uppercase"
+                        >
+                            <ReportList reports={LOAN_COLLECTION_GROUP} />
+                        </ReportGroupContainer>
+
+                        <ReportGroupContainer
+                            className="flex-1 rounded-xl bg-popover/70 ring-2 ring-muted-foreground/20"
+                            containerClassName="grid grid-cols-4 gap-4"
+                            // description="System utilities, adjustments, monitoring tools, and operational reports."
+                            title="Other Reports"
+                            titleAccentClassName="bg-amber-500/30"
+                            titleClassName="uppercase"
+                        >
+                            <ReportList reports={OTHER_REPORTS_GROUP} />
+                        </ReportGroupContainer>
+                    </div>
+                </ReportGroupContainer>
             </div>
         </div>
     )

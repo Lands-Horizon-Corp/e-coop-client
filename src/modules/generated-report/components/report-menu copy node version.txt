@@ -1,0 +1,740 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+
+import Fuse from 'fuse.js'
+
+import {
+    ArrowDownToLine,
+    ArrowLeftRight,
+    ArrowUpFromLine,
+    BadgeDollarSign,
+    Banknote,
+    BarChart3,
+    BookOpen,
+    Calculator,
+    CircleDollarSign,
+    ClipboardList,
+    Clock,
+    Coins,
+    CreditCard,
+    DollarSign,
+    FileBarChart,
+    FileClock,
+    FileSpreadsheet,
+    FileText,
+    FileX,
+    FolderOpen,
+    HandCoins,
+    Hash,
+    Landmark,
+    Layers,
+    LayoutGrid,
+    ListChecks,
+    Monitor,
+    Percent,
+    PiggyBank,
+    Receipt,
+    ReceiptText,
+    Scale,
+    ScrollText,
+    Search,
+    Shield,
+    ShoppingBasket,
+    ShoppingCart,
+    TrendingDown,
+    UserCheck,
+    Users,
+    Vote,
+    Wallet,
+} from 'lucide-react'
+
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+
+import { AccountBalanceCreateReportFormModal } from './forms/account-balance-create-report-form'
+import { AccountHoldOutCreateReportFormModal } from './forms/account-holdout-create-report-form'
+import { AdjustmentCreateReportFormModal } from './forms/adjustment-create-report-form'
+import { CashCheckDisbursementCreateReportFormModal } from './forms/cash-check-disbursement-create-report-form'
+import { CloseAccountCreateReportFormModal } from './forms/close-account-create-report-form'
+import { ComakerCreateReportFormModal } from './forms/comaker-create-report-form'
+import { DailyCashCollectionReceiptJournalCreateReportFormModal } from './forms/daily-cash-receipt-create-report-form'
+import { DailyCollectionDetailCreateReportFormModal } from './forms/daily-collection-detail-create-report-form'
+import { DailyCollectionSummaryCreateReportFormModal } from './forms/daily-collection-summary-create-report-fom'
+import { DailyWithdrawalCreateReportFormModal } from './forms/daily-withdrawal-create-report-form'
+import { DepositBalancesCreateReportFormModal } from './forms/deposit-balances-create-report-form'
+import { DirectAdjustmentCreateReportFormModal } from './forms/direct-adjustment-create-report-form'
+import { EarnedUnearnedCreateReportFormModal } from './forms/earned-unearned-create-report-form'
+import { GroceryLoanReleaseCreateReportFormModal } from './forms/grocery-loan-release-create-report-form'
+import { ICPRCreateReportFormModal } from './forms/icpr-create-report-form'
+import { InterestOnShareCapitalCreateReportFormModal } from './forms/interest-share-capital-create-report-form'
+import { JournalVoucherCreateReportFormModal } from './forms/journal-voucher-create-report-form'
+import { LedgerCreateReportFormModal } from './forms/ledger-create-report-form'
+import { LoanBalancesCreateReportFormModal } from './forms/loan-balances-create-report-form'
+import { LoanCollectionDetailCreateReportFormModal } from './forms/loan-collection-detail-create-report-form'
+import { LoanCollectionDueCreateReportFormModal } from './forms/loan-collection-due-create-report-form'
+import { LoanCollectionSummaryCreateReportFormModal } from './forms/loan-collection-summary-create-report-form'
+import { LoanMaturityCreateReportFormModal } from './forms/loan-maturity-create-report-form'
+import { LoanProtectionPlanCreateReportFormModal } from './forms/loan-protection-place-create-report-form'
+import { LoanReceivableCreateReportFormModal } from './forms/loan-receivable-create-report-form'
+import { LoanReleaseDetailCreateReportFormModal } from './forms/loan-release-detail-create-report-form'
+import { LoanReleaseSummaryCreateReportFormModal } from './forms/loan-release-summary-create-report-form'
+import { LoanReleaseCreateReportFormModal } from './forms/loan-release-tabulated-create-report-form'
+import { LoanStatementCreateReportFormModal } from './forms/loan-statement-create-report-form'
+import { MemberListingCreateReportFormModal } from './forms/member-listing-create-report-form'
+import { PrintNumberTagCreateReportFormModal } from './forms/number-tag-create-report-form'
+import { OtherFundsEntryCreateReportFormModal } from './forms/other-funds-entry-create-report-form'
+import { PastDueOnInstallmentCreateReportFormModal } from './forms/past-due-on-installment-create-report-form'
+import { PortfolioAtRiskCreateReportFormModal } from './forms/portfolio-at-risk-create-report-form'
+import { ProofOfPurchaseCreateReportFormModal } from './forms/proof-of-purchase-create-report-form'
+import { RebateCreateReportFormModal } from './forms/rebate-create-report-form'
+import { ShareCapitalWithdrawalCreateReportFormModal } from './forms/share-capital-withdrawal-create-report-form'
+import { StatementOfDepositsCreateReportFormModal } from './forms/statement-of-account-create-report-form'
+import { SubscriptionFeeCreateReportFormModal } from './forms/subscription-fee-create-report-form'
+import { SupposedActualCollectionCreateReportFormModal } from './forms/supposed-actual-colleaction-create-report-form'
+import { TellerMonitoringCreateReportFormModal } from './forms/teller-monitoring-create-report-form'
+import { TimeDepositAccruedInterestCreateReportFormModal } from './forms/time-deposit-accrued-interest-create-report-form'
+import { TimeDepositBalanceCreateReportFormModal } from './forms/time-deposit-balance-create-report-form'
+import { TimeDepositBalanceYTDCreateReportFormModal } from './forms/time-deposit-balance-ytd-create-report-form'
+import { TimeDepositCreateReportFormModal } from './forms/time-deposit-create-report-form'
+import { TransactionBatchCreateReportFormModal } from './forms/transaction-batch-create-report-form'
+
+interface ReportItem {
+    type: 'report'
+    label: string
+    icon: React.ElementType
+    component?: React.ElementType<{
+        trigger: React.ReactNode
+        formProps?: object
+    }>
+    persistKey?: string
+}
+
+interface ReportGroup {
+    type: 'group'
+    label: string
+    icon: React.ElementType
+    children: ReportNode[]
+}
+
+type ReportNode = ReportItem | ReportGroup
+
+const tree: ReportGroup[] = [
+    {
+        type: 'group',
+        label: 'Transactions',
+        icon: Receipt,
+        children: [
+            {
+                type: 'group',
+                label: 'Collection',
+                icon: HandCoins,
+                children: [
+                    {
+                        type: 'report',
+                        label: 'Daily Coll. Detail',
+                        icon: FileText,
+                        component: DailyCollectionDetailCreateReportFormModal,
+                        persistKey: 'form-report-collections-daily-coll-detail',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Daily Coll. Summary',
+                        icon: ClipboardList,
+                        component: DailyCollectionSummaryCreateReportFormModal,
+                        persistKey: 'form-report-collections-daily-coll-summary',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Cash Receipt Journal',
+                        icon: Receipt,
+                        component: DailyCashCollectionReceiptJournalCreateReportFormModal,
+                        persistKey: 'form-report-accounting-cash-receipt-journal',
+                    },
+                ],
+            },
+            {
+                type: 'group',
+                label: 'Disbursements',
+                icon: ArrowUpFromLine,
+                children: [
+                    {
+                        type: 'report',
+                        label: 'Daily Withdrawal',
+                        icon: ArrowDownToLine,
+                        component: DailyWithdrawalCreateReportFormModal,
+                        persistKey: 'form-report-deposits-daily-withdrawal',
+                    },
+                    {
+                        type: 'group',
+                        label: 'Loan Releases',
+                        icon: Banknote,
+                        children: [
+                            {
+                                type: 'report',
+                                label: 'Loan Release Tabulated',
+                                icon: BarChart3,
+                                component: LoanReleaseCreateReportFormModal,
+                                persistKey: 'form-report-loans-loan-release-tabulated',
+                            },
+                            {
+                                type: 'report',
+                                label: 'Loan Release Detail',
+                                icon: ScrollText,
+                                component: LoanReleaseDetailCreateReportFormModal,
+                                persistKey: 'form-report-loans-loan-release-detail',
+                            },
+                            {
+                                type: 'report',
+                                label: 'Loan Release Summary',
+                                icon: FileBarChart,
+                                component: LoanReleaseSummaryCreateReportFormModal,
+                                persistKey: 'form-report-loans-loan-release-summary',
+                            },
+                        ],
+                    },
+                    {
+                        type: 'group',
+                        label: 'Cash Check Voucher',
+                        icon: CreditCard,
+                        children: [
+                            {
+                                type: 'report',
+                                label: 'Cash Disbursement',
+                                icon: CreditCard,
+                                component: CashCheckDisbursementCreateReportFormModal,
+                                persistKey: 'form-report-accounting-cash-disbursement',
+                            },
+                        ],
+                    },
+                    {
+                        type: 'group',
+                        label: 'Journal',
+                        icon: BookOpen,
+                        children: [
+                            {
+                                type: 'report',
+                                label: 'Journal Voucher',
+                                icon: FileText,
+                                component: JournalVoucherCreateReportFormModal,
+                                persistKey: 'form-report-accounting-journal-voucher',
+                            },
+                            {
+                                type: 'report',
+                                label: 'Adjustment',
+                                icon: Calculator,
+                                component: AdjustmentCreateReportFormModal,
+                                persistKey: 'form-report-accounting-adjustment',
+                            },
+                            {
+                                type: 'report',
+                                label: 'Rebates',
+                                icon: DollarSign,
+                                component: RebateCreateReportFormModal,
+                                persistKey: 'form-report-other-rebates',
+                            },
+                        ],
+                    },
+                    {
+                        type: 'report',
+                        label: 'Time Deposit',
+                        icon: Clock,
+                        component: TimeDepositCreateReportFormModal,
+                        persistKey: 'form-report-deposits-time-deposit',
+                    },
+                    {
+                        type: 'group',
+                        label: 'Funds Reports',
+                        icon: Landmark,
+                        children: [
+                            {
+                                type: 'report',
+                                label: 'Transaction Batch',
+                                icon: ClipboardList,
+                                component: TransactionBatchCreateReportFormModal,
+                                persistKey: 'form-report-accounting-transaction-batch',
+                            },
+                            {
+                                type: 'report',
+                                label: 'Other Funds Entry',
+                                icon: Coins,
+                                component: OtherFundsEntryCreateReportFormModal,
+                                persistKey: 'form-report-other-funds-entry',
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        type: 'group',
+        label: 'Schedule and Listing',
+        icon: ListChecks,
+        children: [
+            {
+                type: 'group',
+                label: 'Members',
+                icon: Users,
+                children: [
+                    {
+                        type: 'report',
+                        label: 'Member Listing',
+                        icon: ListChecks,
+                        component: MemberListingCreateReportFormModal,
+                        persistKey: 'form-report-member-listing',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Statement of Account',
+                        icon: ReceiptText,
+                        component: StatementOfDepositsCreateReportFormModal,
+                        persistKey: 'form-report-statement-of-account',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Ledger',
+                        icon: BookOpen,
+                        component: LedgerCreateReportFormModal,
+                        persistKey: 'form-report-accounting-ledger',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Voters List (ACE) - Comming soon',
+                        icon: Vote,
+                        persistKey: 'form-report-voters-list',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Closed Account',
+                        icon: FileX,
+                        component: CloseAccountCreateReportFormModal,
+                        persistKey: 'form-report-close-account',
+                    },
+                ],
+            },
+            {
+                type: 'group',
+                label: 'Schedule of Balances',
+                icon: FileSpreadsheet,
+                children: [
+                    {
+                        type: 'report',
+                        label: 'Account Balance',
+                        icon: Wallet,
+                        component: AccountBalanceCreateReportFormModal,
+                        persistKey: 'form-report-account-balance',
+                    },
+                    {
+                        type: 'report',
+                        label: 'TD Balance',
+                        icon: PiggyBank,
+                        component: TimeDepositBalanceCreateReportFormModal,
+                        persistKey: 'form-report-deposits-td-balance',
+                    },
+                    {
+                        type: 'report',
+                        label: 'TD Bal / YTD',
+                        icon: BarChart3,
+                        component: TimeDepositBalanceYTDCreateReportFormModal,
+                        persistKey: 'form-report-deposits-td-bal-ytd',
+                    },
+                    {
+                        type: 'report',
+                        label: 'TD Accrued',
+                        icon: Percent,
+                        component: TimeDepositAccruedInterestCreateReportFormModal,
+                        persistKey: 'form-report-deposits-td-accrued',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Deposit Balances',
+                        icon: Coins,
+                        component: DepositBalancesCreateReportFormModal,
+                        persistKey: 'form-report-deposits-deposit-balances',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Subscription Fee',
+                        icon: BadgeDollarSign,
+                        component: SubscriptionFeeCreateReportFormModal,
+                        persistKey: 'form-report-share-capital-subscription-fee',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Share Capital Withdrawal',
+                        icon: ArrowLeftRight,
+                        component: ShareCapitalWithdrawalCreateReportFormModal,
+                        persistKey: 'form-report-share-capital-withdrawal',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Interest Share Capital',
+                        icon: CircleDollarSign,
+                        component: InterestOnShareCapitalCreateReportFormModal,
+                        persistKey: 'form-report-share-capital-interest',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Loan Balances',
+                        icon: Scale,
+                        component: LoanBalancesCreateReportFormModal,
+                        persistKey: 'form-report-loans-loan-balances',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Loan Statement',
+                        icon: FileBarChart,
+                        component: LoanStatementCreateReportFormModal,
+                        persistKey: 'form-report-loans-loan-statement',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Loan Maturity',
+                        icon: FileClock,
+                        component: LoanMaturityCreateReportFormModal,
+                        persistKey: 'form-report-loans-loan-maturity',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Portfolio at Risk',
+                        icon: Shield,
+                        component: PortfolioAtRiskCreateReportFormModal,
+                        persistKey: 'form-report-loans-portfolio-at-risk',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Past Due on Installment',
+                        icon: TrendingDown,
+                        component: PastDueOnInstallmentCreateReportFormModal,
+                        persistKey: 'form-report-loans-past-due-installment',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Loan Receivable',
+                        icon: Receipt,
+                        component: LoanReceivableCreateReportFormModal,
+                        persistKey: 'form-report-loans-loan-receivable',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Loan Collection Detail',
+                        icon: ScrollText,
+                        component: LoanCollectionDetailCreateReportFormModal,
+                        persistKey: 'form-report-collections-loan-collection-detail',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Loan Collection Summary',
+                        icon: FileBarChart,
+                        component: LoanCollectionSummaryCreateReportFormModal,
+                        persistKey: 'form-report-collections-loan-collection-summary',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Loan Collection Due',
+                        icon: Clock,
+                        component: LoanCollectionDueCreateReportFormModal,
+                        persistKey: 'form-report-collections-loan-collection-due',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Supposed / Actual',
+                        icon: Calculator,
+                        component: SupposedActualCollectionCreateReportFormModal,
+                        persistKey: 'form-report-other-supposed-actual',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Earned / Unearned',
+                        icon: Layers,
+                        component: EarnedUnearnedCreateReportFormModal,
+                        persistKey: 'form-report-share-capital-earned-unearned',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Comaker',
+                        icon: UserCheck,
+                        component: ComakerCreateReportFormModal,
+                        persistKey: 'form-report-loans-comaker',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Loan Protection Plan',
+                        icon: FileText,
+                        component: LoanProtectionPlanCreateReportFormModal,
+                        persistKey: 'form-report-loans-loan-protection-plan',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Grocery Loan Release',
+                        icon: ShoppingBasket,
+                        component: GroceryLoanReleaseCreateReportFormModal,
+                        persistKey: 'form-report-loans-grocery-loan-release',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Proof of Purchase',
+                        icon: ShoppingCart,
+                        component: ProofOfPurchaseCreateReportFormModal,
+                        persistKey: 'form-report-other-proof-of-purchase',
+                    },
+                ],
+            },
+            {
+                type: 'group',
+                label: 'Other Reports',
+                icon: FolderOpen,
+                children: [
+                    {
+                        type: 'report',
+                        label: 'Direct Adjustment',
+                        icon: Calculator,
+                        component: DirectAdjustmentCreateReportFormModal,
+                        persistKey: 'form-report-accounting-direct-adjustment',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Account Hold Out',
+                        icon: FileX,
+                        component: AccountHoldOutCreateReportFormModal,
+                        persistKey: 'form-report-account-hold-out',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Teller Monitor',
+                        icon: Monitor,
+                        component: TellerMonitoringCreateReportFormModal,
+                        persistKey: 'form-report-other-teller-monitor',
+                    },
+                    {
+                        type: 'report',
+                        label: 'Number Tag',
+                        icon: Hash,
+                        component: PrintNumberTagCreateReportFormModal,
+                        persistKey: 'form-report-other-number-tag',
+                    },
+                    {
+                        type: 'report',
+                        label: 'ICPR',
+                        icon: FileText,
+                        component: ICPRCreateReportFormModal,
+                        persistKey: 'form-report-other-icpr',
+                    },
+                ],
+            },
+        ],
+    },
+]
+
+const renderTrigger = (item: ReportItem) => {
+    const Icon = item.icon
+    return (
+        <Button
+            className="group h-8 w-full justify-start gap-2 rounded border-border/60 bg-card px-2 text-left hover:border-primary/50 hover:bg-accent"
+            size="sm"
+            variant="outline"
+        >
+            <Icon className="size-3.5 shrink-0 text-primary" />
+            <span className="truncate text-xs font-medium">{item.label}</span>
+        </Button>
+    )
+}
+
+const ReportTile = ({ item }: { item: ReportItem }) => {
+    const Component = item.component
+    const trigger = renderTrigger(item)
+    if (!Component) return <div>{trigger}</div>
+    return <Component trigger={trigger} />
+}
+
+const countLeaves = (node: ReportNode): number =>
+    node.type === 'report'
+        ? 1
+        : node.children.reduce((s, c) => s + countLeaves(c), 0)
+
+const NestedGroup = ({ group, depth }: { group: ReportGroup; depth: number }) => {
+    const Icon = group.icon
+    const leaves = group.children.filter((c): c is ReportItem => c.type === 'report')
+    const subs = group.children.filter((c): c is ReportGroup => c.type === 'group')
+    const total = countLeaves(group)
+
+    return (
+        <div
+            className="rounded-md border border-border/60 bg-muted/30 p-2"
+            style={{ marginLeft: depth > 1 ? 4 : 0 }}
+        >
+            <div className="mb-1.5 flex items-center gap-1.5">
+                <Icon className="size-3 text-muted-foreground" />
+                <h3 className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    {group.label}
+                </h3>
+                <div className="ml-auto h-px flex-1 bg-border" />
+                <span className="font-mono text-[10px] text-muted-foreground">{total}</span>
+            </div>
+
+            {leaves.length > 0 && (
+                <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+                    {leaves.map((r) => (
+                        <ReportTile item={r} key={r.persistKey ?? r.label} />
+                    ))}
+                </div>
+            )}
+
+            {subs.length > 0 && (
+                <div className={`grid ${leaves.length > 0 ? 'mt-2' : ''}`}>
+                    {subs.map((s) => (
+                        <NestedGroup depth={depth + 1} group={s} key={s.label} />
+                    ))}
+                </div>
+            )}
+        </div>
+    )
+}
+
+type FlatLeaf = {
+    item: ReportItem
+    path: string[]
+    pathIcons: React.ElementType[]
+}
+
+const flatten = (
+    nodes: ReportNode[],
+    path: string[] = [],
+    pathIcons: React.ElementType[] = []
+): FlatLeaf[] =>
+    nodes.flatMap((n) =>
+        n.type === 'report'
+            ? [{ item: n, path, pathIcons }]
+            : flatten(n.children, [...path, n.label], [...pathIcons, n.icon])
+    )
+
+const rebuildTree = (leaves: FlatLeaf[]): ReportGroup[] => {
+    const roots: ReportGroup[] = []
+    for (const leaf of leaves) {
+        let currentChildren: ReportNode[] = roots as unknown as ReportNode[]
+        for (let i = 0; i < leaf.path.length; i++) {
+            const label = leaf.path[i]
+            let node = currentChildren.find(
+                (c): c is ReportGroup => c.type === 'group' && c.label === label
+            )
+            if (!node) {
+                node = {
+                    type: 'group',
+                    label,
+                    icon: leaf.pathIcons[i],
+                    children: [],
+                }
+                currentChildren.push(node)
+            }
+            currentChildren = node.children
+        }
+        currentChildren.push(leaf.item)
+    }
+    return roots
+}
+
+function ReportsMenu() {
+    const [search, setSearch] = useState('')
+    const inputRef = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+        inputRef.current?.focus()
+    }, [])
+
+    const flatLeaves = useMemo(() => flatten(tree), [])
+
+    const fuse = useMemo(
+        () =>
+            new Fuse(flatLeaves, {
+                keys: ['item.label', 'path'],
+                threshold: 0.3,
+            }),
+        [flatLeaves]
+    )
+
+    const filteredTree = useMemo<ReportGroup[]>(() => {
+        if (!search.trim()) return tree
+        const matched = fuse.search(search).map((r) => r.item)
+        return rebuildTree(matched)
+    }, [search, fuse])
+
+    const total = flatLeaves.length
+
+    return (
+        <div className="min-h-screen w-fit  bg-background">
+            <header className="sticky top-0 z-10 border-b">
+                <div className="container flex flex-col gap-3 py-4 md:flex-row md:items-center md:justify-between">
+                    <div className="flex items-center gap-3">
+                        <span className="flex size-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                            <LayoutGrid className="size-4" />
+                        </span>
+                        <div>
+                            <h1 className="text-lg font-bold leading-tight">Reports Menu</h1>
+                            <p className="text-xs text-muted-foreground">{total} reports available</p>
+                        </div>
+                    </div>
+                    <div className="relative w-full md:w-72">
+                        <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                        <Input
+                            className="h-9 pl-9"
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Search reports..."
+                            ref={inputRef}
+                            value={search}
+                        />
+                    </div>
+                </div>
+            </header>
+
+            <main className="container py-4">
+                {filteredTree.length === 0 && (
+                    <Card>
+                        <CardContent className="py-12 text-center text-sm text-muted-foreground">
+                            No reports match "{search}"
+                        </CardContent>
+                    </Card>
+                )}
+                <div className="grid gap-4 lg:grid-cols-2">
+                    {filteredTree.map((group) => {
+                        const GroupIcon = group.icon
+                        const groupTotal = countLeaves(group)
+                        const leaves = group.children.filter(
+                            (c): c is ReportItem => c.type === 'report'
+                        )
+                        const subs = group.children.filter(
+                            (c): c is ReportGroup => c.type === 'group'
+                        )
+                        return (
+                            <Card className="overflow-hidden" key={group.label}>
+                                <CardHeader className="flex-row items-center gap-3 space-y-0 border-b bg-muted/40 py-2.5">
+                                    <span className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                                        <GroupIcon className="size-3.5" />
+                                    </span>
+                                    <CardTitle className="text-sm">{group.label}</CardTitle>
+                                    <Badge className="ml-auto font-mono text-[10px]" variant="secondary">
+                                        {groupTotal}
+                                    </Badge>
+                                </CardHeader>
+                                <CardContent className="space-y-4 p-2 gap-4 grid h-fit grid-cols-2">
+                                    {leaves.length > 0 && (
+                                        <div className="grid grid-cols-2 h-fit gap-1">
+                                            {leaves.map((r) => (
+                                                <ReportTile item={r} key={r.persistKey ?? r.label} />
+                                            ))}
+                                        </div>
+                                    )}
+                                    {subs.map((sub) => (
+                                        <NestedGroup depth={1} group={sub} key={sub.label} />
+                                    ))}
+                                </CardContent>
+                            </Card>
+                        )
+                    })}
+                </div>
+            </main>
+        </div>
+    )
+}
+
+export default ReportsMenu
