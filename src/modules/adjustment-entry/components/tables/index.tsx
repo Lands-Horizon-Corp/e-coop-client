@@ -2,7 +2,6 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
@@ -189,14 +188,14 @@ const AdjustmentEntryTable = ({
         getSortedRowModel: getSortedRowModel(),
         defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
-    const exportfilter = qs.stringify(
+    /* const exportfilter = qs.stringify(
         {
             ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },
         { skipNull: true }
-    )
+    ) */
     return (
         <TableRowActionStoreProvider>
             <FilterContext.Provider value={filterState}>
@@ -220,13 +219,7 @@ const AdjustmentEntryTable = ({
                                 }),
                         }}
                         // --- Export Action Props (Placeholder) ---
-                        exportActionProps={{
-                            ...toolbarProps,
-                            isLoading: isPending,
-                            filters: exportfilter,
-                            model: 'AdjustmentEntry',
-                            url: 'api/v1/adjustment-entry/search',
-                        }}
+
                         // --- Filter Logic Props ---
                         filterLogicProps={{
                             filterLogic: filterState.filterLogic,

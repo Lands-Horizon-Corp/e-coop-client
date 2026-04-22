@@ -5,9 +5,7 @@ import {
     useAuthUserWithOrgBranch,
 } from '@/modules/authentication/authgentication.store'
 import { MemberTypeCreateUpdateFormModal } from '@/modules/member-type/components/forms/member-type-create-update-form'
-import MemberTypeTable, {
-    MemberTypeTableProps,
-} from '@/modules/member-type/components/member-type-table'
+import MemberTypeTable from '@/modules/member-type/components/member-type-table'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
@@ -56,14 +54,14 @@ const MemberTypePage = () => {
                                 resourceType: 'MemberProfile',
                             }),
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'MemberProfile',
                             }),
                         } as NonNullable<
                             MemberTypeTableProps['toolbarProps']
-                        >['exportActionProps'],
+                        >['exportActionProps'], */
                     }}
                 />
             </PermissionGuard>

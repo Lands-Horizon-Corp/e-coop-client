@@ -41,7 +41,7 @@ import { useGetFilteredPaginatedGeneratedReport } from '../../generated-report.s
 import {
     IGeneratedReport,
     TModeGeneratedReport,
-    TModelName,
+    TReportName,
 } from '../../generated-report.types'
 import { GeneratedReportCard } from './generated-report-card'
 import { ReportFilter } from './generated-reports-filter'
@@ -69,12 +69,12 @@ const GeneratedReportTabOptions: {
     },
 ]
 
-export const DEFAULT_MODEL: TModelName = 'none'
+export const DEFAULT_MODEL: TReportName = 'none'
 
 const GeneratedReportListContent = () => {
     const [activeTab, setActiveTab] = useState<TModeGeneratedReport>('search')
     const [selectedModelAccount, setSelectedModel] =
-        useState<TModelName>(DEFAULT_MODEL)
+        useState<TReportName>(DEFAULT_MODEL)
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
         pageSize: 50,
@@ -101,7 +101,7 @@ const GeneratedReportListContent = () => {
         refetch,
     } = useGetFilteredPaginatedGeneratedReport({
         mode: activeTab,
-        model: (selectedModelAccount || DEFAULT_MODEL) as TModelName,
+        model: (selectedModelAccount || DEFAULT_MODEL) as TReportName,
         query: {
             ...pagination,
             sort: sortingStateBase64,

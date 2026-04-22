@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
@@ -150,14 +149,14 @@ const InventoryCategoryTable = ({
         defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
 
-    const filter = qs.stringify(
-        {
-            ...pagination,
-            sort: sortingStateBase64,
-            filter: filterState.finalFilterPayloadBase64,
-        },
-        { skipNull: true }
-    )
+    // const filter = qs.stringify(
+    //     {
+    //         ...pagination,
+    //         sort: sortingStateBase64,
+    //         filter: filterState.finalFilterPayloadBase64,
+    //     },
+    //     { skipNull: true }
+    // )
 
     return (
         <TableRowActionStoreProvider>
@@ -182,15 +181,6 @@ const InventoryCategoryTable = ({
                                 deleteManyInventoryCategory({
                                     ids: selectedData.map((d) => d.id),
                                 }),
-                        }}
-                        exportActionProps={{
-                            ...toolbarProps?.exportActionProps,
-                            isLoading: isPending,
-                            filters: filter,
-                            disabled: isPending || isRefetching,
-                            url: 'api/v1/inventory-category/search',
-                            hbsDataPath:
-                                '/reports/inventory-category/default-inventory-category.hbs',
                         }}
                         filterLogicProps={{
                             filterLogic: filterState.filterLogic,

@@ -192,7 +192,7 @@ export const LoanTransactionCardActions = ({
                     defaultValues: {
                         name: 'Loan Release Voucher',
                         description: 'Generated Loan Release Voucher',
-                        model: 'LoanTransaction',
+                        model: 'LoanReleaseVoucher',
                         generated_report_type: 'pdf',
                         url: `/api/v1/loan-transaction/${loanTransaction.id}`,
                     },
@@ -220,7 +220,7 @@ export const LoanTransactionCardActions = ({
                             ),
                             name: `loan_release_${toReadableDate(loanTransaction.created_at, 'MMddyy_mmss')}`,
                             filters: {},
-                            module: 'LoanTransaction',
+                            report_name: 'LoanReleaseVoucher',
                         } as TGeneratedReportSchema,
                     },
                     loanTransactionId: loanTransaction.id,

@@ -297,7 +297,7 @@ export const CashCheckVoucherTableActionManager = () => {
                                     0
                                 ),
                                 name: `cash_check_voucher_${toReadableDate(state.defaultValues.created_at, 'MMddyy_mmss')}`,
-                                module: 'CashCheckVoucher',
+                                report_name: 'CashCheckVoucher',
                             } as TGeneratedReportSchema,
                         },
                         orSettings: resolvedOrSettings,
@@ -321,7 +321,7 @@ export const CashCheckVoucherTableActionManager = () => {
                                     0
                                 ),
                                 name: `cash_check_voucher_${toReadableDate(state.defaultValues.created_at, 'MMddyy_mmss')}`,
-                                module: 'CashCheckVoucher',
+                                report_name: 'CashCheckVoucher',
                             } as TGeneratedReportSchema,
                         },
                         cashCheckVoucherId: state.defaultValues.id,

@@ -12,7 +12,7 @@ import PageContainer from '@/components/containers/page-container'
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
-import BankTable, { BankTableProps } from '../bank-table'
+import BankTable from '../bank-table'
 
 const BankPage = () => {
     const queryClient = useQueryClient()
@@ -55,14 +55,14 @@ const BankPage = () => {
                                 resourceType: 'Bank',
                             }),
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'Account',
                             }),
                         } as NonNullable<
                             BankTableProps['toolbarProps']
-                        >['exportActionProps'],
+                        >['exportActionProps'], */
                     }}
                 />
             </PermissionGuard>

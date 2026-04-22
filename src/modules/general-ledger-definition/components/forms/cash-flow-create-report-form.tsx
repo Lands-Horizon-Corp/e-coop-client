@@ -57,7 +57,7 @@ export const CashFlowReportCreateForm = ({
             comparative_type: 'yearly',
             ...defaultValues,
             report_config: {
-                module: 'FinancialStatementDefinition',
+                report_name: 'FSCashFlowReport',
                 name: `cash_flow_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'

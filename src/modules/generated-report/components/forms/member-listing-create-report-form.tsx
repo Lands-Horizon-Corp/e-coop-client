@@ -191,7 +191,7 @@ const MemberListingCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'MemberListingReport',
                         name: `member_listing_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

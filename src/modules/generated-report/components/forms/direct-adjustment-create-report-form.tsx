@@ -88,7 +88,7 @@ const DirectAdjustmentCreateReportForm = ({
                     account_id: undefined,
 
                     report_config: {
-                        module: 'Account',
+                        report_name: 'DirectAdjustmentReport',
                         name: `direct_adjustment_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

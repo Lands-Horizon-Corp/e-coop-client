@@ -163,7 +163,7 @@ export const CashCheckVoucherCardActions = ({
                                 0
                             ),
                             name: `cash_check_voucher_${toReadableDate(cashCheckVoucher.created_at, 'MMddyy_mmss')}`,
-                            module: 'CashCheckVoucher',
+                            report_name: 'CashCheckVoucher',
                         } as TGeneratedReportSchema,
                     },
                     onSuccess: (data) => {

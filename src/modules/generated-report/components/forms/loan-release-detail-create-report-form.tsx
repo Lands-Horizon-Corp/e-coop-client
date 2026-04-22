@@ -155,7 +155,7 @@ const LoanReleaseDetailCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'LoanReleaseDetailReport',
                         name: `loan_release_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

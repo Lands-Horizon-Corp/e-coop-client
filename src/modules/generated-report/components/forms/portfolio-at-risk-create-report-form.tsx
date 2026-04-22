@@ -226,7 +226,7 @@ const PortfolioAtRiskCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'PortfolioAtRiskReport',
                         name: `portfolio_at_risk_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

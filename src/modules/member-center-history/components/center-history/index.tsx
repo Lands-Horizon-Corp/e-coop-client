@@ -1,7 +1,5 @@
 import { useMemo } from 'react'
 
-import qs from 'query-string'
-
 import { PAGE_SIZES_SMALL } from '@/constants'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
@@ -136,14 +134,14 @@ const MemberCenterHistoryTable = ({
         onRowSelectionChange: handleRowSelectionChange,
     })
 
-    const exportfilter = qs.stringify(
+    /* const exportfilter = qs.stringify(
         {
             ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },
         { skipNull: true }
-    )
+    ) */
     return (
         <FilterContext.Provider value={filterState}>
             <div
@@ -154,12 +152,6 @@ const MemberCenterHistoryTable = ({
                 )}
             >
                 <DataTableToolbar
-                    exportActionProps={{
-                        isLoading: isPending,
-                        filters: exportfilter,
-                        model: 'MemberCenterHistory',
-                        url: 'api/v1/member-center-history/search',
-                    }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,

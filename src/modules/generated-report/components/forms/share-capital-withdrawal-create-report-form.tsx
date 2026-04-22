@@ -106,7 +106,7 @@ const ShareCapitalWithdrawalCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'ShareCapitalWithdrawalReport',
                         name: `share_capital_withdrawal_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

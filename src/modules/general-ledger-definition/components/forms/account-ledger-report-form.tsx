@@ -63,7 +63,7 @@ const AccountLedgerReportCreateForm = ({
                 // TODO: Jervx - add real template array list pick
                 ...getTemplateAt(undefined, 0),
                 ...formProps.defaultValues?.report_config,
-                module: 'Account',
+                report_name: 'AccountLedgerReport',
                 name: `account_ledger_report_${toReadableDate(new Date(), 'MMddyy_mmss')}`,
             },
         },

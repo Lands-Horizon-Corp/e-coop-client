@@ -9,7 +9,7 @@ import PageContainer from '@/components/containers/page-container'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import OtherFundCreateUpdateFormModal from '../components/forms/create-update-other-fund-modal'
-import OtherFundTable, { OtherFundTableProps } from '../components/tables'
+import OtherFundTable from '../components/tables'
 
 const OtherFundPage = () => {
     const {
@@ -47,14 +47,14 @@ const OtherFundPage = () => {
                                     createModal.onOpenChange(true)
                                 },
                             },
-                            exportActionProps: {
+                            /* exportActionProps: {
                                 disabled: !hasPermissionFromAuth({
                                     action: 'Export',
                                     resourceType: 'OtherFund',
                                 }),
                             } as NonNullable<
                                 OtherFundTableProps['toolbarProps']
-                            >['exportActionProps'],
+                            >['exportActionProps'], */
                         }}
                     />
                 </PermissionGuard>

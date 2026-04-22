@@ -119,7 +119,7 @@ const ProofOfPurchaseCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'ProofOfPurchaseReport',
                         name: `proof_of_purchase_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

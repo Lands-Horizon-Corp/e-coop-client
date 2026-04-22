@@ -65,7 +65,7 @@ const GroceryLoanReleaseCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'GroceryLoanReport',
                         name: `grocery_loan_release_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

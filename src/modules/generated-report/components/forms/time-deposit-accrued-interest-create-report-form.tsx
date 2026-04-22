@@ -77,7 +77,7 @@ const TimeDepositAccruedInterestCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'TimeDepositAccuredInterestReport',
                         name: `time_deposit_accrued_interest_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

@@ -102,7 +102,7 @@ const LoanProtectionPlanCreateReportForm = ({
                     sort_by: 'name',
 
                     report_config: {
-                        module: 'GeneratedReport',
+                        report_name: 'LoanProtectionReport',
                         name: `loan_protection_plan_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

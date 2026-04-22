@@ -127,7 +127,7 @@ const PastDueOnInstallmentCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'PastDueOnInstallmentReport',
                         name: `past_due_on_installment_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

@@ -82,7 +82,7 @@ const DailyCollectionSummaryCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'DailyCollectionSummaryReport',
                         name: `daily_collection_summary_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

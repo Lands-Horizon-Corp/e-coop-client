@@ -85,7 +85,7 @@ const CloseAccountCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'Account',
+                        report_name: 'CloseAccountReport',
                         name: `close_account_report_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

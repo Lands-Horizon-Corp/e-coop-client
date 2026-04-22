@@ -146,7 +146,7 @@ const SupposedActualCollectionCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'SupposedActualReport',
                         name: `supposed_actual_collection_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

@@ -62,7 +62,7 @@ export const IncomeStatementReportCreateForm = ({
             report_config: {
                 // TODO: Report Template - Jervx
                 ...getTemplateAt(undefined, 0),
-                module: 'FinancialStatementDefinition',
+                report_name: 'FSIncomeStatement',
                 name: `income_statement_report_${toReadableDate(new Date(), 'MMddyy_mmss')}`,
                 ...defaultValues?.report_config,
             },

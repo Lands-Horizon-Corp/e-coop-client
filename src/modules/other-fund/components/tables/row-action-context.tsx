@@ -258,7 +258,7 @@ export const OtherFundTableActionManager = () => {
                             report_config: {
                                 ...getTemplateAt(OTHER_FUND_PRINT_TEMPLATES, 0),
                                 name: `other_fund_${toReadableDate(otherFund.created_at, 'MMddyy_mmss')}`,
-                                module: 'OtherFund',
+                                report_name: 'OtherFundRelease',
                             } as TGeneratedReportSchema,
                         },
                         onSuccess: (data) => {
@@ -282,7 +282,7 @@ export const OtherFundTableActionManager = () => {
                             report_config: {
                                 ...getTemplateAt(OTHER_FUND_PRINT_TEMPLATES, 0),
                                 name: `other_fund_${toReadableDate(otherFund.created_at, 'MMddyy_mmss')}`,
-                                module: 'OtherFund',
+                                report_name: 'OtherFundRelease',
                             } as TGeneratedReportSchema,
                         },
                         onSuccess: (data) => {

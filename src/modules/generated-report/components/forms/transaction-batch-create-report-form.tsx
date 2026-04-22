@@ -74,7 +74,7 @@ const TransactionBatchCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'TransactionBatchReport',
                         name: `transaction_batch_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

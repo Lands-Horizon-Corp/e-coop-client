@@ -12,9 +12,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { PermissionTemplateCreateUpdateFormModal } from '../permission-template-create-update-form'
-import PermissionTemplateTable, {
-    PermissionTemplateTableProps,
-} from '../permission-template-table'
+import PermissionTemplateTable from '../permission-template-table'
 
 const PermissionTemplatePage = () => {
     const createModal = useModalState()
@@ -58,14 +56,14 @@ const PermissionTemplatePage = () => {
                                 resourceType: 'PermissionTemplate',
                             }),
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'PermissionTemplate',
                             }),
                         } as NonNullable<
                             PermissionTemplateTableProps['toolbarProps']
-                        >['exportActionProps'],
+                        >['exportActionProps'], */
                     }}
                 />
             </PermissionGuard>

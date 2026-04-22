@@ -88,7 +88,7 @@ const TimeDepositBalanceYTDCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'Account',
+                        report_name: 'TimeDepositBalanceReport',
                         name: `td_balance_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
@@ -150,14 +149,14 @@ const InvitationCodeTable = ({
         onRowSelectionChange: handleRowSelectionChange,
         defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
-    const exportfilter = qs.stringify(
+    /* const exportfilter = qs.stringify(
         {
             ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },
         { skipNull: true }
-    )
+    ) */
     return (
         <FilterContext.Provider value={filterState}>
             <TableRowActionStoreProvider>
@@ -178,12 +177,6 @@ const InvitationCodeTable = ({
                                 deleteMany({
                                     ids: selectedData.map((data) => data.id),
                                 }),
-                        }}
-                        exportActionProps={{
-                            isLoading: isPending,
-                            filters: exportfilter,
-                            model: 'InvitationCode',
-                            url: 'api/v1/invitation-code/search',
                         }}
                         filterLogicProps={{
                             filterLogic: filterState.filterLogic,

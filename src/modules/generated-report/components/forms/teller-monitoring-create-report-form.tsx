@@ -87,7 +87,7 @@ const TellerMonitoringCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'Account',
+                        report_name: 'TellerMonitoringReport',
                         name: `teller_monitoring_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

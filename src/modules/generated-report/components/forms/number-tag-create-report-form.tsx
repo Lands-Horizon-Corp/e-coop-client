@@ -82,7 +82,7 @@ const PrintNumberTagForm = ({
                     end_number: 1,
 
                     report_config: {
-                        module: 'GeneratedReport',
+                        report_name: 'NumberTagReport',
                         name: `print_tag_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

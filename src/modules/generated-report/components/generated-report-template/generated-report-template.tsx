@@ -7,7 +7,12 @@ import { cn } from '@/helpers'
 import nunjucks from 'nunjucks'
 import { useHotkeys } from 'react-hotkeys-hook'
 
-import { CheckIcon, RotateLeftIcon, UserCogIcon } from '@/components/icons'
+import {
+    CheckIcon,
+    RotateLeftIcon,
+    TextAaIcon,
+    UserCogIcon,
+} from '@/components/icons'
 import { IModalProps } from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Badge } from '@/components/ui/badge'
@@ -30,6 +35,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Kbd } from '@/components/ui/kbd'
 import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
     Select,
     SelectContent,
@@ -47,9 +53,11 @@ import {
 } from '../../generated-report-template-registry'
 import {
     GeneratedReportTemplate,
+    TDisplayDensity,
     TPaperSizeUnit,
 } from '../../generated-report.types'
 import {
+    DISPLAY_DENSITY,
     PAPER_SIZES,
     PAPER_SIZE_GROUPS,
 } from '../../generated-reports.constants'
@@ -92,6 +100,8 @@ export function GenerateReportTemplatePicker<T = unknown>({
     const [inputW, setInputW] = useState('800')
     const [inputH, setInputH] = useState('1100')
     const [unit, setUnit] = useState<TPaperSizeUnit>('px')
+    const [displayDensity, setDisplayDensity] =
+        useState<TDisplayDensity>('normal')
 
     const renderTemplate = useCallback(
         async (item: GeneratedReportTemplate) => {
@@ -356,6 +366,52 @@ export function GenerateReportTemplatePicker<T = unknown>({
                                 </SelectContent>
                             </Select>
                         </div>
+                        <div className="space-y-1">
+                            <Label className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                                Display Density
+                            </Label>
+                            <RadioGroup
+                                className="mt-1 flex items-center gap-2"
+                                onValueChange={(v) =>
+                                    setDisplayDensity(v as TDisplayDensity)
+                                }
+                                value={displayDensity}
+                            >
+                                {DISPLAY_DENSITY.map((density, i) => {
+                                    const isActive = displayDensity === density
+
+                                    return (
+                                        <label
+                                            className={cn(
+                                                'flex cursor-pointer flex-col items-center gap-2 rounded-xl px-2 py-1.5 text-xs font-medium border',
+                                                isActive
+                                                    ? 'text-primary border-primary/40 bg-primary/5'
+                                                    : 'text-muted-foreground hover:bg-primary/5 hover:border-primary/20'
+                                            )}
+                                            key={density}
+                                        >
+                                            <RadioGroupItem
+                                                className="sr-only"
+                                                value={density}
+                                            />
+
+                                            <span className="size-6 inline-flex items-center justify-center">
+                                                <TextAaIcon
+                                                    style={{
+                                                        width: `${60 + i * 20}%`,
+                                                        height: `${60 + i * 20}%`,
+                                                    }}
+                                                />
+                                            </span>
+
+                                            <span className="capitalize leading-none">
+                                                {density}
+                                            </span>
+                                        </label>
+                                    )
+                                })}
+                            </RadioGroup>
+                        </div>
                     </div>
                     <div className="flex gap-2">
                         <Button
@@ -371,6 +427,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
                             className="h-8 flex-1 text-xs"
                             onClick={handleApplyDimensions}
                             size="xs"
+                            variant="secondary"
                         >
                             Apply
                         </Button>
@@ -436,7 +493,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
                             disabled={!selected || loading}
                             onClick={handleConfirm}
                             size="xs"
-                            variant="secondary"
+                            variant="default"
                         >
                             Use Template
                         </Button>

@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
@@ -148,14 +147,14 @@ const OtherFundTable = ({
         defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
 
-    const exportFilter = qs.stringify(
+    /* const exportFilter = qs.stringify(
         {
             ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },
         { skipNull: true }
-    )
+    ) */
 
     return (
         <FilterContext.Provider value={filterState}>
@@ -179,12 +178,6 @@ const OtherFundTable = ({
                                 deleteManyOtherFund({
                                     ids: selectedData.map((d) => d.id),
                                 }),
-                        }}
-                        exportActionProps={{
-                            ...toolbarProps?.exportActionProps,
-                            isLoading: isPending,
-                            filters: exportFilter,
-                            url: 'api/v1/other-fund/search',
                         }}
                         filterLogicProps={{
                             filterLogic: filterState.filterLogic,

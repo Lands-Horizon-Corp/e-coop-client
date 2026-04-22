@@ -169,7 +169,7 @@ const LoanBalancesCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'LoanBalancesReport',
                         name: `loan_balances_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

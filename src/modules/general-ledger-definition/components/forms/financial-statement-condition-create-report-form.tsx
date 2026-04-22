@@ -63,7 +63,7 @@ export const FinancialStatementConditionReportCreateForm = ({
             par_calculation_method: 'by_amortization_loan_balance',
             fall_to_current_if_1_30_days: false,
             report_config: {
-                module: 'FinancialStatementDefinition',
+                report_name: 'FSConditionReport',
                 name: `portfolio_at_risk_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'

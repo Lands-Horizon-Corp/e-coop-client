@@ -12,9 +12,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { JournalVoucherCreateUpdateFormModal } from '../components/forms/journal-voucher-create-update-modal'
-import JournalVoucherTable, {
-    JournalVoucherTableProps,
-} from '../components/tables'
+import JournalVoucherTable from '../components/tables'
 
 const JournalVoucherPage = () => {
     const queryClient = useQueryClient()
@@ -90,14 +88,14 @@ const JournalVoucherPage = () => {
                                 createModal.onOpenChange(true)
                             },
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
-                                resourceType: 'JournalVoucher',
+                                resourceType: 'JournalVoucherRelease',
                             }),
                         } as NonNullable<
                             JournalVoucherTableProps['toolbarProps']
-                        >['exportActionProps'],
+                        >['exportActionProps'], */
                     }}
                 />
             </PermissionGuard>

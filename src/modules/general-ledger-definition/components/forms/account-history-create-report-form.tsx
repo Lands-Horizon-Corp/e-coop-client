@@ -32,6 +32,7 @@ import {
     AccountHistoryReportSchema,
     TAccountHistoryReportSchema,
 } from '../../general-ledger-definition.validation'
+import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 
 export interface IAccountHistoryReportFormProps
     extends
@@ -57,7 +58,8 @@ export const AccountHistoryReportCreateForm = ({
             source: 'payment',
             ...formProps.defaultValues,
             report_config: {
-                module: 'Account',
+                ...getTemplateAt(undefined, 0),
+                report_name: 'FSAccountHistory',
                 name: `account_history_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'

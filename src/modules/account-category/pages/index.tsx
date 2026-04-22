@@ -12,7 +12,6 @@ import PermissionGuard from '@/modules/permission/components/permission-guard'
 import PageContainer from '@/components/containers/page-container'
 
 import { AccountCategoryFormModal, AccountCategoryTable } from '..'
-import { AccountCategoryTableProps } from '../components/tables'
 import AccountCategoryAction from '../components/tables/row-action-context'
 
 export const AccountCategoryPage = () => {
@@ -81,14 +80,14 @@ export const AccountCategoryPage = () => {
                                     userOrg: user_organization,
                                 }),
                             },
-                            exportActionProps: {
+                            /* exportActionProps: {
                                 disabled: !hasPermissionFromAuth({
                                     action: 'Export',
                                     resourceType: 'Account',
                                 }),
                             } as NonNullable<
                                 AccountCategoryTableProps['toolbarProps']
-                            >['exportActionProps'],
+                            >['exportActionProps'], */
                         }}
                     />
                 </>

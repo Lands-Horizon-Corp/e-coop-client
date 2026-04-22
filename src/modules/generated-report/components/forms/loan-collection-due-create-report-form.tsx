@@ -157,7 +157,7 @@ const LoanCollectionDueCreateReportForm = ({
                     report_config: {
                         ...getTemplateAt(undefined, 0),
                         ...data.report_config,
-                        module: 'GeneratedReport',
+                        report_name: 'LoanCollectionDueReport',
                         name: `loan_collection_due_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

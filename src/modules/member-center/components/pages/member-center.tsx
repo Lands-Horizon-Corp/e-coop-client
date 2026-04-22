@@ -12,9 +12,7 @@ import PageContainer from '@/components/containers/page-container'
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
-import MemberCenterTable, {
-    MemberCenterTableProps,
-} from '../member-center-table'
+import MemberCenterTable from '../member-center-table'
 
 const MemberCenterPage = () => {
     const createModal = useModalState()
@@ -58,14 +56,14 @@ const MemberCenterPage = () => {
                                 resourceType: 'Account',
                             }),
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'Account',
                             }),
                         } as NonNullable<
                             MemberCenterTableProps['toolbarProps']
-                        >['exportActionProps'],
+                        >['exportActionProps'], */
                     }}
                 />
             </PermissionGuard>

@@ -141,7 +141,7 @@ const LoanCollectionSummaryCreateReportForm = ({
                     loan_collections: [],
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'LoanCollectionSummaryReport',
                         name: `loan_collection_summary_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

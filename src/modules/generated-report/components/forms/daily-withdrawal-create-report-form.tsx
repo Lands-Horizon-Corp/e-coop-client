@@ -101,7 +101,7 @@ const DailyWithdrawalCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'DailyWithdrawalReport',
                         name: `daily_withdrawal_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

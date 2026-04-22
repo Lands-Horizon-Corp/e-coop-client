@@ -16,9 +16,7 @@ import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { TORCashCheckSettings } from '../cash-check-voucher.types'
 import CashCheckVoucherCreateUpdateFormModal from '../components/forms/cash-check-voucher-create-udate-form-modal'
-import CashCheckJournalVoucherTable, {
-    CashCheckJournalVoucherTableProps,
-} from '../components/tables'
+import CashCheckJournalVoucherTable from '../components/tables'
 
 const CashCheckJournalVoucherPage = () => {
     const queryClient = useQueryClient()
@@ -121,15 +119,16 @@ const CashCheckJournalVoucherPage = () => {
                                 createModal.onOpenChange(true)
                             },
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'CashCheckVoucher',
                             }),
                         } as NonNullable<
                             CashCheckJournalVoucherTableProps['toolbarProps']
-                        >['exportActionProps'],
-                        otherActionLeft: <CancelledCashCheckVoucherButton />,
+                        >['exportActionProps'], */ otherActionLeft: (
+                            <CancelledCashCheckVoucherButton />
+                        ),
                     }}
                 />
             </PermissionGuard>

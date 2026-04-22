@@ -62,7 +62,7 @@ export const StatementOfOperationsReportCreateForm = ({
             report_config: {
                 // TODO: Report Template - Jervx
                 ...getTemplateAt(undefined, 0),
-                module: 'FinancialStatementDefinition',
+                report_name: 'FSDefinitionReport',
                 name: `statement_of_operations_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'

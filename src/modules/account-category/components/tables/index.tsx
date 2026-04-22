@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import qs from 'query-string'
+
+// import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
@@ -162,14 +163,14 @@ const AccountCategoryTable = ({
     useSubscribe('account_category', `delete.branch.${branch_id}`, refetch)
     useSubscribe('account_category', `create.branch.${branch_id}`, refetch)
 
-    const filter = qs.stringify(
-        {
-            ...pagination,
-            sort: sortingStateBase64,
-            filter: filterState.finalFilterPayloadBase64,
-        },
-        { skipNull: true }
-    )
+    // const filter = qs.stringify(
+    //     {
+    //         ...pagination,
+    //         sort: sortingStateBase64,
+    //         filter: filterState.finalFilterPayloadBase64,
+    //     },
+    //     { skipNull: true }
+    // )
     return (
         <TableRowActionStoreProvider>
             <FilterContext.Provider value={filterState}>
@@ -188,14 +189,6 @@ const AccountCategoryTable = ({
                                 }),
                             onDelete: (selectedData) =>
                                 deleteMany(selectedData.map((data) => data.id)),
-                        }}
-                        exportActionProps={{
-                            ...toolbarProps,
-                            isLoading: isPending,
-                            filters: filter,
-                            disabled: isPending || isRefetching,
-                            model: 'AccountCategory',
-                            url: 'api/v1/account-category/Search',
                         }}
                         filterLogicProps={{
                             filterLogic: filterState.filterLogic,

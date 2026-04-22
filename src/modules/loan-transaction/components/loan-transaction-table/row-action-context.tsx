@@ -666,7 +666,7 @@ export const LoanTransactionTableActionManager = () => {
                                     0
                                 ),
                                 name: `loan_release_${toReadableDate(loanTransaction.created_at, 'MMddyy_mmss')}`,
-                                module: 'LoanTransaction',
+                                report_name: 'LoanReleaseVoucher',
                             } as TGeneratedReportSchema,
                             check_date: loanTransaction.check_date,
                             check_number: loanTransaction.check_number,
@@ -695,7 +695,7 @@ export const LoanTransactionTableActionManager = () => {
                                     0
                                 ),
                                 name: `loan_release_${toReadableDate(loanTransaction.created_at, 'MMddyy_mmss')}`,
-                                module: 'LoanTransaction',
+                                report_name: 'LoanReleaseVoucher',
                             } as TGeneratedReportSchema,
                         },
                         loanTransactionId: loanTransaction.id,

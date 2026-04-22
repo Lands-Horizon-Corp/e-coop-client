@@ -106,7 +106,7 @@ const TimeDepositCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'Account',
+                        report_name: 'TimeDepositReport',
                         name: `time_deposit_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

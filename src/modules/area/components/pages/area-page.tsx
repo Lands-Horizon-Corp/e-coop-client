@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import AreaTable, { AreaTableProps } from '@/modules/area/components/area-table'
+import AreaTable from '@/modules/area/components/area-table'
 import {
     hasPermissionFromAuth,
     useAuthUserWithOrgBranch,
@@ -56,14 +56,14 @@ const AreaPage = () => {
                                 resourceType: 'Area',
                             }),
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'Area',
                             }),
                         } as NonNullable<
                             AreaTableProps['toolbarProps']
-                        >['exportActionProps'],
+                        >['exportActionProps'], */
                     }}
                 />
             </PermissionGuard>

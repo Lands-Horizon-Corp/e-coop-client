@@ -24,13 +24,13 @@ import {
 
 import { TSortingState } from '@/types'
 
-import { TModelName } from '../../generated-report.types'
+import { TReportName } from '../../generated-report.types'
 import { DEFAULT_MODEL } from './generated-reports-list'
 import ModelCombobox from './model-combobox'
 
 type ReportFilterProps = {
-    onModelChange: (model: TModelName) => void
-    selectedModel: TModelName
+    onModelChange: (model: TReportName) => void
+    selectedModel: TReportName
     setFilter: (
         field: string,
         filter?: TSearchFilter<unknown, unknown> | undefined

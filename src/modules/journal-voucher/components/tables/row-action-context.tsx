@@ -277,7 +277,7 @@ export const JournalVoucherTableActionManager = () => {
                                     0
                                 ),
                                 name: `journal_voucher_${toReadableDate(journalVoucher.created_at, 'MMddyy_mmss')}`,
-                                module: 'JournalVoucher',
+                                report_name: 'JournalVoucherRelease',
                             } as TGeneratedReportSchema,
                         },
                         journalVoucherId: journalVoucher.id,
@@ -305,7 +305,7 @@ export const JournalVoucherTableActionManager = () => {
                                     state.defaultValues.created_at,
                                     'MMddyy_mmss'
                                 )}`,
-                                module: 'JournalVoucher',
+                                report_name: 'JournalVoucherRelease',
                             } as TGeneratedReportSchema,
                         },
                         journalVoucherId: state.defaultValues.id,

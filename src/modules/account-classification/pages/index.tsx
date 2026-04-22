@@ -16,8 +16,6 @@ import PageContainer from '@/components/containers/page-container'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { AccountClassificationTableProps } from '../components/tables'
-
 export const AccountClassificationPage = () => {
     const { currentAuth } = useAuthUserWithOrgBranch()
     const queryClient = useQueryClient()
@@ -79,14 +77,14 @@ export const AccountClassificationPage = () => {
                                     userOrg: user_organization,
                                 }),
                             },
-                            exportActionProps: {
+                            /* exportActionProps: {
                                 disabled: !hasPermissionFromAuth({
                                     action: 'Export',
                                     resourceType: 'Account',
                                 }),
                             } as NonNullable<
                                 AccountClassificationTableProps['toolbarProps']
-                            >['exportActionProps'],
+                            >['exportActionProps'], */
                         }}
                     />
                 </>

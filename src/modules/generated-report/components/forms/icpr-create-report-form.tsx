@@ -114,7 +114,7 @@ const ICPRCreateReportForm = ({ className, ...formProps }: IICPRFormProps) => {
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'ICPRReport',
                         name: `icpr_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

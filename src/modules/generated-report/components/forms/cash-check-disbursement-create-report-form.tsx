@@ -125,7 +125,7 @@ const CashCheckDisbursementCreateReportForm = ({
                     include_cancelled_cv: false,
 
                     report_config: {
-                        module: 'Disbursement',
+                        report_name: 'CashCheckDisbursementReport',
                         name: `cash_check_disbursement_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

@@ -85,7 +85,7 @@ const AdjustmentCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'Account',
+                        report_name: 'AdjustmentReport',
                         name: `adjustment_report_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

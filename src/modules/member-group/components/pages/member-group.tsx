@@ -5,9 +5,7 @@ import {
     useAuthUserWithOrgBranch,
 } from '@/modules/authentication/authgentication.store'
 import { MemberGroupCreateUpdateFormModal } from '@/modules/member-group/components/member-group-create-update-form'
-import MemberGroupTable, {
-    MemberGroupTableProps,
-} from '@/modules/member-group/components/member-group-table'
+import MemberGroupTable from '@/modules/member-group/components/member-group-table'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
@@ -56,14 +54,14 @@ const MemberGroupPage = () => {
                                 resourceType: 'Account',
                             }),
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'Account',
                             }),
                         } as NonNullable<
                             MemberGroupTableProps['toolbarProps']
-                        >['exportActionProps'],
+                        >['exportActionProps'], */
                     }}
                 />
             </PermissionGuard>

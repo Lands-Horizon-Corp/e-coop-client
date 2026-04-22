@@ -292,7 +292,7 @@ export const SLGLComparisonReportSchema = z
         as_of_date: stringDateWithTransformSchema,
         exclude_write_off: z.boolean().optional().default(false),
     })
-    .and(z.object({ report_config: z.any() }))
+    .and(WithGeneratedReportSchema)
 
 export type TSLGLComparisonReportSchema = z.infer<
     typeof SLGLComparisonReportSchema
@@ -303,7 +303,7 @@ export const SLTRXGLComparisonReportSchema = z
     .object({
         as_of_date: z.string(),
     })
-    .and(z.object({ report_config: z.any() }))
+    .and(WithGeneratedReportSchema)
 
 export type TSLTRXGLComparisonReportSchema = z.infer<
     typeof SLTRXGLComparisonReportSchema

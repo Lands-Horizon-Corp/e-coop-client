@@ -106,7 +106,7 @@ const InterestOnShareCapitalCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'InterestShareCapitalReport',
                         name: `interest_on_share_capital_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

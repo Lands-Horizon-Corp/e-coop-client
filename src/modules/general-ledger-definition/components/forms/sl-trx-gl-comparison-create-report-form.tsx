@@ -11,6 +11,7 @@ import {
     useCreateGeneratedReport,
 } from '@/modules/generated-report'
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
+import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -53,7 +54,8 @@ export const SLTRXGLComparisonReportCreateForm = ({
             as_of_date: new Date().toISOString().split('T')[0],
             ...defaultValues,
             report_config: {
-                module: 'SLTRXGLComparisonDefinition',
+                ...getTemplateAt(undefined, 0),
+                report_name: 'SLTRXGLComparisonDefinition',
                 name: `sl_trx_gl_comparison_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'

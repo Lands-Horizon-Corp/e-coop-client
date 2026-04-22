@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 
 import { keepPreviousData } from '@tanstack/react-query'
-import qs from 'query-string'
 import { toast } from 'sonner'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
@@ -173,14 +172,14 @@ const MemberProfileTable = ({
         onRowSelectionChange: handleRowSelectionChange,
     })
 
-    const exportfilter = qs.stringify(
+    /* const exportfilter = qs.stringify(
         {
             ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },
         { skipNull: true }
-    )
+    ) */
     return (
         <TableRowActionStoreProvider<IMemberProfile>>
             <FilterContext.Provider value={filterState}>
@@ -202,13 +201,7 @@ const MemberProfileTable = ({
                         //             ids: selectedData.map((data) => data.id),
                         //         }),
                         // }}
-                        exportActionProps={{
-                            ...toolbarProps?.exportActionProps,
-                            isLoading: isPending,
-                            filters: exportfilter,
-                            model: 'MemberProfile',
-                            url: 'api/v1/member-profile/search',
-                        }}
+
                         filterLogicProps={{
                             filterLogic: filterState.filterLogic,
                             setFilterLogic: filterState.setFilterLogic,

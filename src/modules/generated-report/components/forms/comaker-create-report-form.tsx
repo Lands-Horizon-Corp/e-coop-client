@@ -121,7 +121,7 @@ const ComakerCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'Account',
+                        report_name: 'ComakerReport',
                         name: `comaker_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

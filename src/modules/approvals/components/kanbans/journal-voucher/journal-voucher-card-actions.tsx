@@ -128,7 +128,7 @@ export const JournalVoucherCardActions = ({
                                 0
                             ),
                             name: `journal_voucher_${toReadableDate(journalVoucher.created_at, 'MMddyy_mmss')}`,
-                            module: 'JournalVoucher',
+                            report_name: 'JournalVoucherRelease',
                         } as TGeneratedReportSchema,
                     },
                     orSettings: resolvedOrSettings,
@@ -148,7 +148,7 @@ export const JournalVoucherCardActions = ({
                     defaultValues: {
                         name: 'Journal Voucher ',
                         description: 'Generated Journal Voucher',
-                        model: 'JournalVoucher',
+                        model: 'JournalVoucherRelease',
                         generated_report_type: 'pdf',
                         url: `/api/v1/journal-voucher/${journalVoucher.id}`,
                     },

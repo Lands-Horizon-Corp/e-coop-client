@@ -24,15 +24,15 @@ import {
 import { useGetGeneratedReportAvailableModels } from '../../generated-report.service'
 import {
     IGeneratedReportAvailableModalResponse,
-    TModelName,
+    TReportName,
 } from '../../generated-report.types'
 
 interface Props {
-    value?: TModelName
+    value?: TReportName
     disabled?: boolean
     className?: string
     placeholder?: string
-    onChange?: (selected: TModelName) => void
+    onChange?: (selected: TReportName) => void
 }
 
 const ModelCombobox = ({
@@ -45,7 +45,7 @@ const ModelCombobox = ({
     const [open, setOpen] = React.useState(false)
     const [searchInput, setSearchInput] = React.useState('')
     const [selectedModel, setSelectedModel] = React.useState<
-        TModelName | undefined
+        TReportName | undefined
     >(value)
 
     const { data: AccountModels } = useGetGeneratedReportAvailableModels({

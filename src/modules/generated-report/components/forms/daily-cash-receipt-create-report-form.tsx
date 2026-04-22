@@ -97,7 +97,7 @@ const DailyCashCollectionReceiptJournalCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'Account',
+                        report_name: 'DailyCashReceiptReport',
                         name: `daily_cash_collection_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

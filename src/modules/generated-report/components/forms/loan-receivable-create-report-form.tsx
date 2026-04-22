@@ -140,7 +140,7 @@ const LoanReceivableCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'LoanReceivableReport',
                         name: `loan_receivable_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

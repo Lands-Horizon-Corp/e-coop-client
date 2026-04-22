@@ -93,7 +93,7 @@ const TimeDepositBalanceCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'TimeDepositBalanceReport',
                         name: `time_deposit_balance_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

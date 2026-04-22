@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import qs from 'query-string'
+
+/* import qs from 'query-string' */
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
@@ -151,14 +152,14 @@ const MemberGroupTable = ({
         onRowSelectionChange: handleRowSelectionChange,
     })
 
-    const exportfilter = qs.stringify(
+    /* const exportfilter = qs.stringify(
         {
             ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },
         { skipNull: true }
-    )
+    ) */
     return (
         <FilterContext.Provider value={filterState}>
             <TableRowActionStoreProvider>
@@ -179,13 +180,6 @@ const MemberGroupTable = ({
                                 MemberGroupAPI.deleteMany({
                                     ids: selectedData.map((data) => data.id),
                                 }),
-                        }}
-                        exportActionProps={{
-                            ...toolbarProps?.exportActionProps,
-                            isLoading: isPending,
-                            filters: exportfilter,
-                            model: 'MemberGroup',
-                            url: 'api/v1/member-group/search',
                         }}
                         filterLogicProps={{
                             filterLogic: filterState.filterLogic,

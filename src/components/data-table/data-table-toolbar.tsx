@@ -8,7 +8,7 @@ import DataTableActiveFilters from '@/components/data-table/data-table-actions/d
 import DataTableDeleteSelected from '@/components/data-table/data-table-actions/data-table-delete-selected'
 import { type IDataTableDeleteSelectedProps } from '@/components/data-table/data-table-actions/data-table-delete-selected'
 // import DataTableExportButton from '@/components/data-table/data-table-actions/data-table-generate-report'
-import { type IDataTableExportProps } from '@/components/data-table/data-table-actions/data-table-generate-report'
+// import { type IDataTableExportProps } from '@/components/data-table/data-table-actions/data-table-generate-report'
 import DataTableOptionsMenu from '@/components/data-table/data-table-actions/data-table-options-menu'
 import { type IDataTableScrollableOptionProps } from '@/components/data-table/data-table-actions/data-table-options-menu/scroll-option'
 
@@ -33,7 +33,7 @@ export interface IDataTableToolbarProps<TData> extends IClassProps {
     globalSearchProps?: IGlobalSearchProps<TData>
     scrollableProps?: IDataTableScrollableOptionProps
     filterLogicProps?: IDataTableFilterLogicOptionProps
-    exportActionProps?: Omit<IDataTableExportProps<TData>, 'table'>
+    // exportActionProps?: Omit<IDataTableExportProps<TData>, 'table'>
     deleteActionProps?: Omit<IDataTableDeleteSelectedProps<TData>, 'table'>
     createActionProps?: IDataTableCreateActionProps
     otherActionRight?: ReactNode

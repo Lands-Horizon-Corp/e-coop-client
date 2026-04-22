@@ -2,9 +2,7 @@ import { forwardRef } from 'react'
 
 import { cn } from '@/helpers'
 import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
-import BrowseExcludeIncludeAccountTable, {
-    BrowseExcludeIncludeAccountTableProps,
-} from '@/modules/browse-exclude-include-accounts/components/browse-exclude-include-accounts-table'
+import BrowseExcludeIncludeAccountTable from '@/modules/browse-exclude-include-accounts/components/browse-exclude-include-accounts-table'
 import { BrowseExcludeIncludeAccountsCreateUpdateFormModal } from '@/modules/browse-exclude-include-accounts/components/forms/browse-exclude-include-account-create-update-form'
 import { IncludeNegativeAccountCreateUpdateFormModal } from '@/modules/include-negative-accounts/components/forms/include-negative-account-create-update-form'
 import IncludeNegativeAccountTable from '@/modules/include-negative-accounts/components/include-negative-accounts-table'
@@ -77,7 +75,7 @@ const NegativeIncludeExclude = forwardRef<HTMLDivElement, Props>(
                                         'LoanSchemeBrowseExcludedIncludedAccounts',
                                 }),
                             },
-                            exportActionProps: {
+                            /* exportActionProps: {
                                 disabled: !hasPermissionFromAuth({
                                     action: 'Export',
                                     resourceType:
@@ -85,7 +83,7 @@ const NegativeIncludeExclude = forwardRef<HTMLDivElement, Props>(
                                 }),
                             } as NonNullable<
                                 BrowseExcludeIncludeAccountTableProps['toolbarProps']
-                            >['exportActionProps'],
+                            >['exportActionProps'], */
                         }}
                     />
                 </div>

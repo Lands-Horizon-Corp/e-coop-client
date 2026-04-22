@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import qs from 'query-string'
+
+/* import qs from 'query-string' */
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
@@ -160,14 +161,14 @@ const PermissionTemplateTable = ({
         onRowSelectionChange: handleRowSelectionChange,
     })
 
-    const exportfilter = qs.stringify(
+    /* const exportfilter = qs.stringify(
         {
             ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },
         { skipNull: true }
-    )
+    ) */
 
     return (
         <FilterContext.Provider value={filterState}>
@@ -192,13 +193,6 @@ const PermissionTemplateTable = ({
                                 deleteManyPermissionTemplates({
                                     ids: selectedData.map((data) => data.id),
                                 }),
-                        }}
-                        exportActionProps={{
-                            ...toolbarProps?.exportActionProps,
-                            isLoading: isPending,
-                            filters: exportfilter,
-                            model: 'PermissionTemplate',
-                            url: 'api/v1/permission-template/search',
                         }}
                         filterLogicProps={{
                             filterLogic: filterState.filterLogic,

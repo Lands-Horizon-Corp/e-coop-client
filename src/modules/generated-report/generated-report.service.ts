@@ -19,7 +19,7 @@ import type {
     IGeneratedReportPaginated,
     IGeneratedReportRequest,
     TModeGeneratedReport,
-    TModelName,
+    TReportName,
 } from '../generated-report'
 import { IMedia } from '../media'
 
@@ -147,7 +147,7 @@ export const useGetFilteredPaginatedGeneratedReport = ({
 }: {
     options?: HookQueryOptions<IGeneratedReportPaginated>
     mode: TModeGeneratedReport
-    model: TModelName
+    model: TReportName
     query?: Record<string, unknown>
 }) => {
     return useQuery<IGeneratedReportPaginated>({

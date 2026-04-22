@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
@@ -149,14 +148,14 @@ const CashCheckJournalVoucherTable = ({
         onRowSelectionChange: handleRowSelectionChange,
         defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
-    const exportfilter = qs.stringify(
+    /* const exportfilter = qs.stringify(
         {
             ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },
         { skipNull: true }
-    )
+    ) */
     return (
         <FilterContext.Provider value={filterState}>
             <TableRowActionStoreProvider>
@@ -180,13 +179,6 @@ const CashCheckJournalVoucherTable = ({
                                 deleteManyCashCheckVoucher({
                                     ids: selectedData.map((data) => data.id),
                                 }),
-                        }}
-                        exportActionProps={{
-                            ...toolbarProps?.exportActionProps,
-                            isLoading: isPending,
-                            filters: exportfilter,
-                            model: 'CashCheckVoucher',
-                            url: '/api/v1/cash-check-voucher/search',
                         }}
                         filterLogicProps={{
                             filterLogic: filterState.filterLogic,

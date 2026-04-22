@@ -157,7 +157,7 @@ const DailyCollectionDetailCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'DailyCollectionReport',
                         name: `daily_collection_detail_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

@@ -119,7 +119,7 @@ const EarnedUnearnedCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'EarnedUnearnedReport',
                         name: `earned_unearned_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

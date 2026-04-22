@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import qs from 'query-string'
+
+// import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
@@ -176,14 +177,14 @@ const AccountClassificationTable = ({
         refetch
     )
 
-    const exportfilter = qs.stringify(
-        {
-            ...pagination,
-            sort: sortingStateBase64,
-            filter: filterState.finalFilterPayloadBase64,
-        },
-        { skipNull: true }
-    )
+    // const exportfilter = qs.stringify(
+    //     {
+    //         ...pagination,
+    //         sort: sortingStateBase64,
+    //         filter: filterState.finalFilterPayloadBase64,
+    //     },
+    //     { skipNull: true }
+    // )
 
     return (
         <TableRowActionStoreProvider>
@@ -207,13 +208,6 @@ const AccountClassificationTable = ({
                             },
                             onDelete: (selectedData) =>
                                 deleteMany(selectedData.map((data) => data.id)),
-                        }}
-                        exportActionProps={{
-                            ...toolbarProps,
-                            isLoading: isPending,
-                            filters: exportfilter,
-                            model: 'AccountClassification',
-                            url: 'api/v1/account-classification/search',
                         }}
                         filterLogicProps={{
                             filterLogic: filterState.filterLogic,

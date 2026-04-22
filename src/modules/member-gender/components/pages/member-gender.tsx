@@ -5,9 +5,7 @@ import {
     useAuthUserWithOrgBranch,
 } from '@/modules/authentication/authgentication.store'
 import { MemberGenderCreateUpdateFormModal } from '@/modules/member-gender/components/member-gender-create-update-form'
-import MemberGenderTable, {
-    MemberGenderTableProps,
-} from '@/modules/member-gender/components/member-genders-table'
+import MemberGenderTable from '@/modules/member-gender/components/member-genders-table'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
@@ -57,14 +55,14 @@ const MemberGenderPage = () => {
                                 resourceType: 'MemberGender',
                             }),
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'MemberGender',
                             }),
                         } as NonNullable<
                             MemberGenderTableProps['toolbarProps']
-                        >['exportActionProps'],
+                        >['exportActionProps'], */
                     }}
                 />
             </PermissionGuard>

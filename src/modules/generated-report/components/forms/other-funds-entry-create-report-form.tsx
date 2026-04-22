@@ -87,7 +87,7 @@ const OtherFundsEntryCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'OtherFundEntryReport',
                         name: `other_funds_entry_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

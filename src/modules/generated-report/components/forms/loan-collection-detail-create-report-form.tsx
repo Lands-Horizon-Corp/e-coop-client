@@ -139,7 +139,7 @@ const LoanCollectionDetailCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'LoanCollectionDetailReport',
                         name: `loan_collection_detail_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

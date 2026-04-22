@@ -6,7 +6,7 @@ import PageContainer from '@/components/containers/page-container'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { LoanStatusCreateUpdateFormModal } from '../forms/loan-status-create-update-form'
-import LoanStatusTable, { LoanStatusTableProps } from '../loan-status-table'
+import LoanStatusTable from '../loan-status-table'
 import LoanStatusAction from '../loan-status-table/row-action-context'
 
 const LoanStatusPage = () => {
@@ -29,14 +29,14 @@ const LoanStatusPage = () => {
                                 createModal.onOpenChange(true)
                             },
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'LoanStatus',
                             }),
                         } as NonNullable<
                             LoanStatusTableProps['toolbarProps']
-                        >['exportActionProps'],
+                        >['exportActionProps'], */
                     }}
                 />
             </PermissionGuard>

@@ -13,7 +13,7 @@ import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
-import { PaymentTypeTableProps } from '../components/tables'
+// import { PaymentTypeTableProps } from '../components/tables'
 
 const PaymentType = () => {
     const [createModal, setCreateModal] = useState(false)
@@ -62,14 +62,14 @@ const PaymentType = () => {
                                     resourceType: 'PaymentType',
                                 }),
                             },
-                            exportActionProps: {
+                            /* exportActionProps: {
                                 disabled: !hasPermissionFromAuth({
                                     action: 'Export',
                                     resourceType: 'PaymentType',
                                 }),
                             } as NonNullable<
                                 PaymentTypeTableProps['toolbarProps']
-                            >['exportActionProps'],
+                            >['exportActionProps'], */
                         }}
                     />
                 </>

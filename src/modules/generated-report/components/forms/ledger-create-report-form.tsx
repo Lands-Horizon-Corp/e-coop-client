@@ -129,7 +129,7 @@ const LedgerCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'LedgerReport',
                         name: `ledger_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

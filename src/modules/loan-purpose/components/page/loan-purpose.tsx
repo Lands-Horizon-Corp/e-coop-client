@@ -6,7 +6,7 @@ import PageContainer from '@/components/containers/page-container'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { LoanPurposeCreateUpdateFormModal } from '../forms/loan-purpose-create-update-form'
-import LoanPurposeTable, { LoanPurposeTableProps } from '../loan-purpose-table'
+import LoanPurposeTable from '../loan-purpose-table'
 import LoanPurposeAction from '../loan-purpose-table/row-action-context'
 
 const LoanPurposePage = () => {
@@ -29,14 +29,14 @@ const LoanPurposePage = () => {
                                 createModal.onOpenChange(true)
                             },
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'LoanPurpose',
                             }),
                         } as NonNullable<
                             LoanPurposeTableProps['toolbarProps']
-                        >['exportActionProps'],
+                        >['exportActionProps'], */
                     }}
                 />
             </PermissionGuard>

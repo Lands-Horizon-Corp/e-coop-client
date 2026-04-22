@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import qs from 'query-string'
+
+// import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
@@ -160,14 +161,14 @@ export const PaymentTypeTable = ({
         onRowSelectionChange: handleRowSelectionChange,
     })
 
-    const exportfilter = qs.stringify(
+    /* const exportfilter = qs.stringify(
         {
             ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },
         { skipNull: true }
-    )
+    ) */
 
     return (
         <FilterContext.Provider value={filterState}>
@@ -194,13 +195,6 @@ export const PaymentTypeTable = ({
                                 resourceType: 'PaymentType',
                                 conditionLogic: 'some',
                             }),
-                        }}
-                        exportActionProps={{
-                            ...toolbarProps?.exportActionProps,
-                            isLoading: isPending,
-                            filters: exportfilter,
-                            model: 'PaymentType',
-                            url: 'api/v1/payment-type/search',
                         }}
                         filterLogicProps={{
                             filterLogic: filterState.filterLogic,

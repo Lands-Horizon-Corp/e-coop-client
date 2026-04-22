@@ -92,7 +92,7 @@ const JournalVoucherCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'Account',
+                        report_name: 'JournalVoucherReport',
                         name: `journal_voucher_report_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

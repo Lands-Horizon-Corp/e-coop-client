@@ -1,18 +1,13 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import {
-    hasPermissionFromAuth,
-    useAuthUserWithOrgBranch,
-} from '@/modules/authentication/authgentication.store'
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 
-import TransactionBatchTable, {
-    TransactionBatchTableProps,
-} from '../transaction-batch-table'
+import TransactionBatchTable from '../transaction-batch-table'
 
 const TransactionBatchPage = () => {
     const {
@@ -47,16 +42,18 @@ const TransactionBatchPage = () => {
                 <TransactionBatchTable
                     className="max-h-[90vh] min-h-[90vh] w-full"
                     mode="all"
-                    toolbarProps={{
-                        exportActionProps: {
+                    toolbarProps={
+                        {
+                            /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'Account',
                             }),
                         } as NonNullable<
                             TransactionBatchTableProps['toolbarProps']
-                        >['exportActionProps'],
-                    }}
+                        >['exportActionProps'], */
+                        }
+                    }
                 />
             </PermissionGuard>
         </PageContainer>

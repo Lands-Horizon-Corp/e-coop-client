@@ -6,9 +6,7 @@ import { cn } from '@/helpers'
 import { useAuthContext } from '@/modules/authentication'
 import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { automaticLoanDeductionBaseKey } from '@/modules/automatic-loan-deduction'
-import AutomaticLoanDeductionTable, {
-    AutomaticLoanDeductionTableProps,
-} from '@/modules/automatic-loan-deduction/components/automatic-loan-deductions-table'
+import AutomaticLoanDeductionTable from '@/modules/automatic-loan-deduction/components/automatic-loan-deductions-table'
 import { AutomaticLoanDeductionCreateUpdateFormModal } from '@/modules/automatic-loan-deduction/components/forms/automatic-loan-deduction-entry-create-update-form'
 import { ICurrency } from '@/modules/currency'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
@@ -101,14 +99,14 @@ const ComputationSheetSchemeDeductionEntries = forwardRef<
                                 resourceType: 'Account',
                             }),
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'Account',
                             }),
                         } as NonNullable<
                             AutomaticLoanDeductionTableProps['toolbarProps']
-                        >['exportActionProps'],
+                        >['exportActionProps'], */
                     }}
                 />
             </PermissionGuard>

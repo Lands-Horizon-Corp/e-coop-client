@@ -2,8 +2,9 @@ import z from 'zod'
 
 import { GENERATE_REPORT_TYPE } from './generated-report.types'
 import {
-    ACCOUNT_MODEL_NAMES,
+    DISPLAY_DENSITY,
     PAPER_SIZE_UNIT,
+    REPORT_NAMES,
 } from './generated-reports.constants'
 
 const SIZE_REGEX = new RegExp(`^\\d+(\\.\\d+)?(${PAPER_SIZE_UNIT.join('|')})$`)
@@ -20,7 +21,7 @@ export const GeneratedReportSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     password: z.string().min(1, 'Password is required').optional(),
 
-    module: z.enum(ACCOUNT_MODEL_NAMES),
+    report_name: z.enum(REPORT_NAMES), // old name -> module
 
     template: z.string().min(1, 'Template path is required'),
     width: SizeWithUnitSchema.default('0in'),
@@ -30,6 +31,8 @@ export const GeneratedReportSchema = z.object({
 
     orientation: z.enum(['portrait', 'landscape']).default('portrait'),
     unit: z.enum(PAPER_SIZE_UNIT).optional(),
+
+    display_density: z.enum(DISPLAY_DENSITY).default('normal'), // Newly added -> 'compact', 'normal', 'loose' -> pass mo lagi kasi sa css stying to
 
     generated_report_type: z.enum(GENERATE_REPORT_TYPE).default('pdf'),
 })

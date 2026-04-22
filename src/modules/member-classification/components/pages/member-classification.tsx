@@ -5,9 +5,7 @@ import {
     useAuthUserWithOrgBranch,
 } from '@/modules/authentication/authgentication.store'
 import { MemberClassificationCreateUpdateFormModal } from '@/modules/member-classification/components/member-classification-create-update-form'
-import MemberClassificationTable, {
-    MemberClassificationTableProps,
-} from '@/modules/member-classification/components/tables/member-classification-table'
+import MemberClassificationTable from '@/modules/member-classification/components/tables/member-classification-table'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
@@ -57,14 +55,14 @@ const MemberClassificationPage = () => {
                                 resourceType: 'MemberOccupation',
                             }),
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'MemberOccupation',
                             }),
                         } as NonNullable<
                             MemberClassificationTableProps['toolbarProps']
-                        >['exportActionProps'],
+                        >['exportActionProps'], */
                     }}
                 />
             </PermissionGuard>

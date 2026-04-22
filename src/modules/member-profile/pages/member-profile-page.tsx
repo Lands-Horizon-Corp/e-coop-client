@@ -5,9 +5,7 @@ import {
     useAuthUserWithOrgBranch,
 } from '@/modules/authentication/authgentication.store'
 import { MemberProfileQuickCreateFormModal } from '@/modules/member-profile/components/forms/member-profile-quick-create-form'
-import MemberProfileTable, {
-    MemberProfileTableProps,
-} from '@/modules/member-profile/components/tables/members-profile-table'
+import MemberProfileTable from '@/modules/member-profile/components/tables/members-profile-table'
 import { MemberProfileRowContext } from '@/modules/member-profile/components/tables/members-profile-table/row-action-context'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
 
@@ -83,14 +81,14 @@ function ViewMemberProfilePage() {
                                 resourceType: 'MemberProfile',
                             }),
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'MemberProfile',
                             }),
                         } as NonNullable<
                             MemberProfileTableProps['toolbarProps']
-                        >['exportActionProps'],
+                        >['exportActionProps'], */
                     }}
                 />
             </PermissionGuard>

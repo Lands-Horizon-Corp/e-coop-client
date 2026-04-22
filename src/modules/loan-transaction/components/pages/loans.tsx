@@ -15,9 +15,7 @@ import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { TORLoanVoucherSettings } from '../../loan-transaction.types'
 import { LoanTransactionCreateUpdateFormModal } from '../forms/loan-transaction-create-update-form'
-import LoanTransactionTable, {
-    LoanTransactionTableProps,
-} from '../loan-transaction-table'
+import LoanTransactionTable from '../loan-transaction-table'
 import LoanTransactionAction, {
     LoanTransactionRowContext,
 } from '../loan-transaction-table/row-action-context'
@@ -79,14 +77,14 @@ const LoansPage = () => {
                                 createModal.onOpenChange(true)
                             },
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'Loan',
                             }),
                         } as NonNullable<
                             LoanTransactionTableProps['toolbarProps']
-                        >['exportActionProps'],
+                        >['exportActionProps'], */
                     }}
                 />
             </PermissionGuard>

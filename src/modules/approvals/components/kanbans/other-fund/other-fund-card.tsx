@@ -242,7 +242,7 @@ export const OtherFundCardCreatorInfo = ({
           ? `Approved by`
           : isPrinted
             ? `Printed by`
-            : otherFund.created_by // Changed from employee_user to match common OtherFund schema
+            : otherFund.created_by // Changed from employee_user to match common OtherFundRelease schema
               ? `Created by`
               : 'No Creator Info'
 

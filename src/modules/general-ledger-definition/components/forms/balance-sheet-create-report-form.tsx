@@ -61,7 +61,7 @@ export const BalanceSheetReportCreateForm = ({
             sort_by_link_code: false,
             ...defaultValues,
             report_config: {
-                module: 'FinancialStatementDefinition',
+                report_name: 'FSBalanceSheet',
                 name: `balance_sheet_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'

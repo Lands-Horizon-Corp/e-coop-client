@@ -58,7 +58,7 @@ const AccountHoldOutCreateReportForm = ({
                 baseDefaults: {
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'AccountHoldOutReport',
                         name: `account_hold_out_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

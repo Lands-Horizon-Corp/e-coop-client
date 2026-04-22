@@ -206,7 +206,7 @@ const StatementOfDepositsCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'GeneratedReport',
+                        report_name: 'StatementOfAccountReport',
                         name: `statement_of_deposits_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

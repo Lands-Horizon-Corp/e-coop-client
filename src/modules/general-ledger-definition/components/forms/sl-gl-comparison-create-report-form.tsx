@@ -60,7 +60,7 @@ export const SLGLComparisonReportCreateForm = ({
             report_config: {
                 // TODO: Report Template - Jervx
                 ...getTemplateAt(undefined, 0),
-                module: 'SLGLComparisonDefinition',
+                report_name: 'SLGLComparisonDefinition',
                 name: `sl_gl_comparison_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'

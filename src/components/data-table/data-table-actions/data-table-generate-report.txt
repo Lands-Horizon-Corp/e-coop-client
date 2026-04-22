@@ -1,6 +1,5 @@
 import { TFinalFilter } from '@/contexts/filter-context'
 // import { toReadableDate } from '@/helpers/date-utils'
-import { TModelName } from '@/modules/generated-report'
 // import GeneratedReportCreateFormModal from '@/modules/generated-report/components/forms/generate-report-create-update-modal'
 import { Table } from '@tanstack/react-table'
 import { useHotkeys } from 'react-hotkeys-hook'

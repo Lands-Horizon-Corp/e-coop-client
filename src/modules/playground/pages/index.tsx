@@ -10,7 +10,7 @@ import AuthGuard from '@/components/wrappers/auth-guard'
 import UserOrgGuard from '@/components/wrappers/user-org-guard'
 
 import Broadcaster from '../components/broadcaster'
-import GeneratedReports from '../components/generated-reports'
+// import GeneratedReports from '../components/generated-reports'
 import PDFUploader from '../components/pdf-uploader'
 
 function PlaygroundPage() {
@@ -23,7 +23,7 @@ function PlaygroundPage() {
                     />
                     <Broadcaster />
                     <PDFUploader />
-                    <GeneratedReports />
+                    {/* <GeneratedReports /> */}
                     <DailyCashCollectionReceiptJournalCreateReportFormModal
                         trigger={<p>HITLER A</p>}
                     />

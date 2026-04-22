@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import qs from 'query-string'
+/* import qs from 'query-string' */
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
@@ -140,14 +140,14 @@ const LoanLedgerTable = ({
         onRowSelectionChange: handleRowSelectionChange,
         defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
-    const exportfilter = qs.stringify(
+    /* const exportfilter = qs.stringify(
         {
             ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },
         { skipNull: true }
-    )
+    ) */
     return (
         <FilterContext.Provider value={filterState}>
             <TableRowActionStoreProvider>
@@ -159,12 +159,6 @@ const LoanLedgerTable = ({
                     )}
                 >
                     <DataTableToolbar
-                        exportActionProps={{
-                            isLoading: isPending,
-                            filters: exportfilter,
-                            model: 'LoanLedger',
-                            url: 'api/v1/loan-ledger/search',
-                        }}
                         filterLogicProps={{
                             filterLogic: filterState.filterLogic,
                             setFilterLogic: filterState.setFilterLogic,

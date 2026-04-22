@@ -29,9 +29,7 @@ import {
 } from '../adjustment-entry.types'
 import { AdjustmentEntryTotal } from '../components/adjustment-entry-total'
 import { AdjustmentEntryCreateUpdateFormModal } from '../components/forms/adjustment-entry-form-modal'
-import AdjustmentEntryTable, {
-    BaseAdjustmentEntryTableProps,
-} from '../components/tables'
+import AdjustmentEntryTable from '../components/tables'
 
 const AdjustmentEntryPage = () => {
     const {
@@ -151,14 +149,14 @@ const AdjustmentEntryPage = () => {
                                 createModal.onOpenChange(true)
                             },
                         },
-                        exportActionProps: {
+                        /* exportActionProps: {
                             disabled: !hasPermissionFromAuth({
                                 action: 'Export',
                                 resourceType: 'AdjustmentEntry',
                             }),
                         } as NonNullable<
                             BaseAdjustmentEntryTableProps['toolbarProps']
-                        >['exportActionProps'],
+                        >['exportActionProps'], */
                     }}
                     userOrganizationId={userOrganization?.id as TEntityId}
                 />

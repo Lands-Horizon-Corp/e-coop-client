@@ -6,12 +6,13 @@ import { IUser } from '../user'
 import { TPaperSizeName } from './components/forms/paper-size-selector'
 import { TGeneratedReportSchema } from './generated-report.validation'
 import {
-    ACCOUNT_MODEL_NAMES,
+    DISPLAY_DENSITY,
     PAPER_SIZES,
     PAPER_SIZE_UNIT,
+    REPORT_NAMES,
 } from './generated-reports.constants'
 
-export type TModelName = (typeof ACCOUNT_MODEL_NAMES)[number]
+export type TReportName = (typeof REPORT_NAMES)[number]
 
 export type TModeGeneratedReport =
     | 'me-search'
@@ -51,7 +52,7 @@ export interface IGeneratedReport extends IBaseEntityMeta {
 
     filter_search: string
     is_favorite: boolean
-    model: TModelName
+    model: TReportName
     url: string
     generated_report_type: TGeneratedReportType
     paper_size?: string
@@ -83,7 +84,7 @@ export interface IGeneratedReportUpdateRequest {
 }
 
 export interface IGeneratedReportAvailableModalResponse {
-    model: TModelName
+    model: TReportName
     count: number
 }
 
@@ -115,7 +116,7 @@ export interface GeneratedReportTemplate<T = unknown> {
     // min_height: number
 
     default_unit: TPaperSizeUnit
-    model: TModelName
+    model: TReportName
 
     width: string // combined ng value sa default sizing unit 18in
     height: string // combined ng value sa default sizing unit 14in
@@ -145,3 +146,5 @@ export interface IBaseReportTemplateCheck {
     check_number?: string
     check_date?: string
 }
+
+export type TDisplayDensity = (typeof DISPLAY_DENSITY)[number]

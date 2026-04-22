@@ -5,7 +5,11 @@ import { UseFormReturn } from 'react-hook-form'
 import { cn } from '@/helpers'
 import { useHotkeys } from 'react-hotkeys-hook'
 
-import { ChevronDownIcon, PrinterFillIcon } from '@/components/icons'
+import {
+    ChevronDownIcon,
+    PrinterFillIcon,
+    TextAaIcon,
+} from '@/components/icons'
 import { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 import {
@@ -19,6 +23,7 @@ import {
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Kbd } from '@/components/ui/kbd'
+import { Label } from '@/components/ui/label'
 import PasswordInput from '@/components/ui/password-input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
@@ -26,6 +31,7 @@ import { Separator } from '@/components/ui/separator'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { TWithReportConfigSchema } from '../../generated-report.validation'
+import { DISPLAY_DENSITY } from '../../generated-reports.constants'
 import {
     GenerateReportTemplatePickerModal,
     GenerateReportTemplatePickerProps,
@@ -176,6 +182,55 @@ export function PrintSettingsSection({
                                         {opt.label}
                                     </span>
                                 </label>
+                            )
+                        })}
+                    </RadioGroup>
+                )}
+            />
+
+            <FormFieldWrapper
+                control={form.control}
+                label="Display Density"
+                name="report_config.display_density"
+                render={({ field }) => (
+                    <RadioGroup
+                        aria-label="Density"
+                        className="mt-1 flex items-center gap-2"
+                        onValueChange={(v) => field.onChange(v)}
+                        value={field.value}
+                    >
+                        {DISPLAY_DENSITY.map((density, i) => {
+                            const isActive = field.value === density
+                            const id = `density-${density}`
+
+                            return (
+                                <Label
+                                    className={cn(
+                                        'flex cursor-pointer flex-col border border-muted-foreground/20 items-center gap-1 gap-y-2 rounded-xl px-2 py-1.5 text-xs font-medium transition-colors',
+                                        'hover:text-foreground',
+                                        isActive
+                                            ? 'text-primary border-primary/40 bg-primary/5 border'
+                                            : 'text-muted-foreground hover:bg-primary/5 hover:border hover:border-primary/20'
+                                    )}
+                                    htmlFor={id}
+                                >
+                                    <RadioGroupItem
+                                        className="sr-only"
+                                        id={id}
+                                        value={density}
+                                    />
+                                    <span className="size-6 inline-flex items-center justify-center">
+                                        <TextAaIcon
+                                            style={{
+                                                width: `${60 + i * 20}%`,
+                                                height: `${60 + i * 20}%`,
+                                            }}
+                                        />
+                                    </span>
+                                    <span className="capitalize leading-none">
+                                        {density}
+                                    </span>
+                                </Label>
                             )
                         })}
                     </RadioGroup>

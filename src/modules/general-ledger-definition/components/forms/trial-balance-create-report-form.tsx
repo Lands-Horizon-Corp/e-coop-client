@@ -59,7 +59,7 @@ const TrialBalanceReportCreateForm = ({
                 // TODO: Report Template - Jervx
                 ...getTemplateAt(undefined, 0),
                 ...formProps.defaultValues?.report_config,
-                module: 'GeneralLedger',
+                report_name: 'GLFSTrialBalanceReport',
                 name: `trial_balance_report_${toReadableDate(
                     new Date(),
                     'MMddyy_mmss'

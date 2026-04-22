@@ -113,7 +113,7 @@ const AccountBalanceCreateReportForm = ({
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
-                        module: 'Account',
+                        report_name: 'AccountBalanceReport',
                         name: `account_balance_${toReadableDate(
                             new Date(),
                             'MMddyy_mmss'

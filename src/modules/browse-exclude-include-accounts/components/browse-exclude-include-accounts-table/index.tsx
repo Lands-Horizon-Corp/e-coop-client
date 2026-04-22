@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import qs from 'query-string'
+
+/* import qs from 'query-string' */
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
@@ -138,14 +139,14 @@ const BrowseExcludeIncludeAccountTable = ({
         getSortedRowModel: getSortedRowModel(),
         columnResizeMode: 'onChange',
     })
-    const exportfilter = qs.stringify(
+    /* const exportfilter = qs.stringify(
         {
             ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },
         { skipNull: true }
-    )
+    ) */
     return (
         <FilterContext.Provider value={filterState}>
             <div className={cn('flex h-full flex-col gap-y-2', className)}>
@@ -159,13 +160,6 @@ const BrowseExcludeIncludeAccountTable = ({
                             deleteManyBrowseExcludeIncludeAccounts({
                                 ids: selected.map((item) => item.id),
                             }),
-                    }}
-                    exportActionProps={{
-                        ...toolbarProps?.exportActionProps,
-                        isLoading: isPending,
-                        filters: exportfilter,
-                        model: 'BrowseExcludeIncludeAccounts',
-                        url: '/api/v1/browse-exclude-include-accounts',
                     }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
