@@ -10,7 +10,10 @@ export const TimeMachineLogSchema = z.object({
         .min(1, 'time zone is required')
         .max(255, 'timezone max length is 255 characters only!'),
     frozen_at: z.string().min(1, 'frozen at is required!'),
-    frozen_until_seconds: z.coerce.number().min(0),
+    frozen_until_seconds: z.coerce
+        .number()
+        .min(300, 'frozen until must be at least 5 minutes from now!')
+        .default(3600),
     description: z
         .string()
         .max(1000, 'max length is 1000 charaters only!')

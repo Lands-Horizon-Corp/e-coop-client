@@ -90,9 +90,7 @@ const TimeMachineForm = ({
     useSubscribe(
         'time_machine_log',
         `update.${userOrganization?.time_machine_log_id}`,
-        (data) => {
-            console.log('Received pubsub for time machine log update', data)
-        }
+        () => {}
     )
 
     const form = useForm<TTimeMachineFormValues>({
@@ -104,7 +102,9 @@ const TimeMachineForm = ({
             reason: reason,
             frozen_until_seconds: 3600,
             description: description,
-            frozen_at: frozen_at,
+            frozen_at: new Date(frozen_at || Date.now())
+                .toISOString()
+                .slice(0, 16),
             ...formProps.defaultValues,
         },
     })
@@ -187,7 +187,7 @@ const TimeMachineForm = ({
 
                     <form
                         className={cn(
-                            'flex bg-background rounded-2xl p-5 w-full flex-col gap-y-4',
+                            'flex bg-background border rounded-2xl p-5 w-full flex-col gap-y-4',
                             className
                         )}
                         onSubmit={onSubmit}
@@ -302,13 +302,12 @@ const TimeMachineForm = ({
                                                 field.value?.toString() || ''
                                             }
                                         >
-                                            <SelectTrigger className="h-11 w-full bg-card">
-                                                <div className="flex min-w-0 items-center gap-2">
+                                            <SelectTrigger className="h-11 min-w-full max-w-[460px]! bg-card overflow-hidden">
+                                                <div className="flex min-w-0 items-center gap-2 overflow-hidden">
                                                     <InfoFillCircleIcon className="size-4 shrink-0 text-muted-foreground" />
-                                                    <SelectValue
-                                                        className="min-w-0 flex-1 truncate text-left"
-                                                        placeholder="Select reason"
-                                                    />
+                                                    <div className="min-w-0 flex-1 overflow-hidden text-ellipsis">
+                                                        <SelectValue placeholder="Select reason" />
+                                                    </div>
                                                 </div>
                                             </SelectTrigger>
                                             <SelectContent>

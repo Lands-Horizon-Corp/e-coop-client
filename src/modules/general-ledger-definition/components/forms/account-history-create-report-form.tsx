@@ -13,6 +13,7 @@ import {
     useCreateGeneratedReport,
 } from '@/modules/generated-report'
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
+import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -32,7 +33,6 @@ import {
     AccountHistoryReportSchema,
     TAccountHistoryReportSchema,
 } from '../../general-ledger-definition.validation'
-import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 
 export interface IAccountHistoryReportFormProps
     extends

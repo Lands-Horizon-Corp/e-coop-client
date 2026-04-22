@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
-
 import { toReadableDate } from '@/helpers/date-utils'
 import { cn } from '@/helpers/tw-utils'
 
 import { Kbd, KbdGroup } from '@/components/ui/kbd'
 
+import { TEntityId } from '@/types'
+
+import { useTimeLeft } from '../index'
 import { formatTime } from '../time-machine-log.utils'
 
 interface ITimeLeftProps {
@@ -13,6 +14,13 @@ interface ITimeLeftProps {
     frozenUntilSeconds?: number
     frozenAtValue?: string
     timezone?: string
+    userOrganizationId?: TEntityId
+    // Display options
+    showFrozeAt?: boolean
+    showTimeFormats?: boolean
+    showLabel?: boolean
+    showAnimation?: boolean
+    compact?: boolean
 }
 
 const TimeLeft = ({
@@ -21,40 +29,17 @@ const TimeLeft = ({
     frozenUntilSeconds,
     frozenAtValue,
     timezone = 'UTC',
+    showFrozeAt = true,
+    showTimeFormats = true,
+    showLabel = true,
+    showAnimation = true,
+    compact = false,
 }: ITimeLeftProps) => {
-    const [remainingTime, setRemainingTime] = useState<number>(0)
-    const [now, setNow] = useState(new Date())
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setNow(new Date())
-        }, 1000)
-
-        return () => clearInterval(interval)
-    }, [])
-
-    useEffect(() => {
-        if (serverFrozenUntil) {
-            const end = new Date(serverFrozenUntil).getTime()
-            const current = now.getTime()
-
-            const left = Math.max(0, Math.floor((end - current) / 1000))
-            setRemainingTime(left)
-            return
-        }
-
-        if (frozenAtInput && frozenUntilSeconds) {
-            const start = new Date(frozenAtInput).getTime()
-            const total = Number(frozenUntilSeconds)
-
-            if (!total || total <= 0) return
-
-            const elapsed = (now.getTime() - start) / 1000
-            const left = Math.max(0, Math.floor(total - elapsed))
-
-            setRemainingTime(left)
-        }
-        setRemainingTime(0)
-    }, [now, serverFrozenUntil, frozenAtInput, frozenUntilSeconds])
+    const { remainingTime, now } = useTimeLeft({
+        serverFrozenUntil,
+        frozenAtInput,
+        frozenUntilSeconds,
+    })
 
     const T12Hour = now.toLocaleString('en-US', {
         timeZone: timezone,
@@ -72,36 +57,72 @@ const TimeLeft = ({
         hour12: false,
     })
 
+    const isLowTime = remainingTime <= 30 && remainingTime > 0
+    const timeLeftDisplay = (
+        <Kbd
+            className={cn(
+                '',
+                showAnimation && isLowTime
+                    ? 'animate-pulse text-destructive self-center'
+                    : ''
+            )}
+        >
+            {showLabel && (
+                <>{frozenAtInput ? 'Preview:' : 'Active:'} Time left: </>
+            )}
+            <span
+                className={cn(
+                    '',
+                    showAnimation && isLowTime
+                        ? 'animate-pulse text-destructive self-center'
+                        : ''
+                )}
+            >
+                {formatTime(remainingTime)}s{isLowTime && ' - Expiring soon!'}
+            </span>
+        </Kbd>
+    )
+
+    // Compact display - just the time left
+    if (compact) {
+        return timeLeftDisplay
+    }
+
+    // Full display
     return (
         <div className="flex flex-col space-y-2">
-            <div className="flex justify-end">
-                <Kbd
-                    className={cn('', remainingTime > 0 ? 'text-primary' : '')}
-                >
-                    {frozenAtInput ? 'Preview:' : 'Active:'} Time left:{' '}
-                    <span
-                        className={cn(
-                            '',
-                            remainingTime > 0 ? 'animate-pulse' : ''
-                        )}
-                    >
-                        {formatTime(remainingTime)}s
-                    </span>
-                </Kbd>
-            </div>
-            <KbdGroup className="space-y-1 flex-col items-start bg-card p-4 rounded">
-                {frozenAtValue ? (
-                    <>
-                        <Kbd className="text-sm">
-                            Froze at: {toReadableDate(frozenAtValue)}
-                        </Kbd>
-                    </>
-                ) : (
-                    'Froze at: N/A'
-                )}
-                {T12Hour && <Kbd className="text-sm">12-hour: {T12Hour}</Kbd>}
-                {T24Hour && <Kbd className="text-sm">24-hour: {T24Hour}</Kbd>}
-            </KbdGroup>
+            <div className="flex justify-end">{timeLeftDisplay}</div>
+            {(showFrozeAt || showTimeFormats) && (
+                <KbdGroup className="space-y-1 flex-col items-start bg-card p-4 rounded">
+                    {showFrozeAt && (
+                        <>
+                            {frozenAtValue ? (
+                                <Kbd className="text-sm">
+                                    Froze at: {toReadableDate(frozenAtValue)}
+                                </Kbd>
+                            ) : (
+                                <div className="text-sm text-muted-foreground">
+                                    Froze at: N/A
+                                </div>
+                            )}
+                        </>
+                    )}
+                    {showTimeFormats && (
+                        <>
+                            {T12Hour && (
+                                <Kbd className="text-sm">
+                                    12-hour: {T12Hour}
+                                </Kbd>
+                            )}
+                            {T24Hour && (
+                                <Kbd className="text-sm">
+                                    24-hour: {T24Hour}
+                                </Kbd>
+                            )}
+                        </>
+                    )}
+                </KbdGroup>
+            )}
         </div>
     )
 }

@@ -110,8 +110,6 @@ const MemberPersonalInfoForm = ({
 
     const handleSubmit = useCallback(
         (formData: TMemberProfilePersonalInfoFormValues) => {
-            console.log('submitting', formData)
-
             mutate(
                 {
                     memberId: memberProfileId,
