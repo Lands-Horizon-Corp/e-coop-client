@@ -519,7 +519,6 @@ export const CheckWarehousingCreateUpdateFormModal = ({
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    props.onOpenChange?.(false)
                 }}
             />
         </Modal>
