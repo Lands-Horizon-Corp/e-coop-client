@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
+import { injectIdempotency } from '@/helpers/indempotency-helpers'
 import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
@@ -161,13 +162,24 @@ export const useOtherFundActions = createMutationFactory<
     {
         other_fund_id: TEntityId
         mode: TOtherFundActionMode
+        idempotencyKey?: string
     }
 >({
-    mutationFn: async ({ other_fund_id, mode = 'print-only' }) => {
+    mutationFn: async ({
+        other_fund_id,
+        mode = 'print-only',
+        idempotencyKey,
+    }) => {
+        const isRelase = mode === 'release'
         const response = await API.post<
             { other_fund_id?: TEntityId },
             IOtherFund
-        >(`${otherFundAPIRoute}/${other_fund_id}/${mode}`)
+        >(
+            `${otherFundAPIRoute}/${other_fund_id}/${mode}`,
+            {},
+            {},
+            isRelase ? injectIdempotency({ idempotencyKey }) : undefined
+        )
         return response.data
     },
     invalidationFn: (args) =>

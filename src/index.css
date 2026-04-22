@@ -55,6 +55,7 @@ html {
     * {
         @apply border-border;
     }
+
     body {
         @apply bg-background text-foreground;
     }
@@ -269,6 +270,7 @@ html {
     * {
         @apply border-border outline-ring/50;
     }
+
     body {
         @apply bg-background text-foreground;
     }
@@ -276,17 +278,14 @@ html {
 
 :root {
     --scrollbar-thumb-color: rgba(168, 172, 190, 0.4);
-    --scrollbar-thumb-hover-color: rgba(
-        168,
-        172,
-        190,
-        0.6
-    ); /* Add hover color */
+    --scrollbar-thumb-hover-color: rgba(168, 172, 190, 0.6);
+    /* Add hover color */
 }
 
 .dark {
     --scrollbar-thumb-color: rgba(59, 61, 80, 0.4);
-    --scrollbar-thumb-hover-color: rgba(59, 61, 80, 0.6); /* Add hover color */
+    --scrollbar-thumb-hover-color: rgba(59, 61, 80, 0.6);
+    /* Add hover color */
 }
 
 .scale-effects {
@@ -294,17 +293,19 @@ html {
 }
 
 .footer-link {
-    @apply text-[min(14px,2.5vw)] text-[#727272];
+    font-size: min(14px, 2.5vw);
+    @apply text-[#727272];
 }
 
 .nav-links {
-    @apply text-[min(15px,2.5vw)];
+    font-size: min(15px, 2.5vw);
 }
 
 @keyframes fadeIn {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 0.7;
     }
@@ -361,6 +362,7 @@ html {
     overflow: hidden !important;
     padding-right: 2px !important;
 }
+
 body[data-scroll-locked] {
     overflow: hidden !important;
     overscroll-behavior: contain;
@@ -394,7 +396,8 @@ body[data-scroll-locked] {
 }
 
 .PopoverContent {
-    z-index: 1000; /* Ensure it’s above other elements */
+    z-index: 1000;
+    /* Ensure it’s above other elements */
 }
 
 /* Added gradient animation keyframes */
@@ -402,6 +405,7 @@ body[data-scroll-locked] {
     0% {
         background-position: -200% 0;
     }
+
     100% {
         background-position: 200% 0;
     }
@@ -412,6 +416,7 @@ body[data-scroll-locked] {
     100% {
         opacity: 1;
     }
+
     50% {
         opacity: 0.7;
     }
@@ -421,9 +426,11 @@ body[data-scroll-locked] {
     0% {
         background-position: 0% 50%;
     }
+
     50% {
         background-position: 100% 50%;
     }
+
     100% {
         background-position: 0% 50%;
     }
@@ -437,32 +444,37 @@ body[data-scroll-locked] {
     100% {
         transform: translateY(0);
     }
+
     40% {
         transform: translateY(-4px);
     }
+
     60% {
         transform: translateY(-2px);
     }
 }
 
 .r1 {
-    @apply border-1 border-red-500;
+    @apply border border-red-500;
 }
+
 .g1 {
-    @apply border-1 border-green-500;
+    @apply border border-green-500;
 }
 
 .v1 {
-    @apply border-1 border-violet-500;
+    @apply border border-violet-500;
 }
 
 .flex-center {
     @apply flex w-full items-center justify-center;
 }
+
 @keyframes scroll-left {
     0% {
         transform: translateX(0);
     }
+
     100% {
         transform: translateX(-50%);
     }
@@ -472,6 +484,7 @@ body[data-scroll-locked] {
     0% {
         transform: translateX(0);
     }
+
     100% {
         transform: translateX(50%);
     }
@@ -489,6 +502,7 @@ body[data-scroll-locked] {
     0% {
         transform: translateX(0);
     }
+
     100% {
         transform: translateX(-50%);
     }
@@ -502,6 +516,7 @@ body[data-scroll-locked] {
     0% {
         stroke-dashoffset: 20;
     }
+
     100% {
         stroke-dashoffset: 0;
     }
@@ -512,14 +527,17 @@ body[data-scroll-locked] {
         opacity: 0;
         transform: scale(0.5);
     }
+
     10% {
         opacity: 1;
         transform: scale(1);
     }
+
     90% {
         opacity: 1;
         transform: scale(1);
     }
+
     100% {
         opacity: 0;
         transform: scale(0.5);
@@ -533,19 +551,23 @@ body[data-scroll-locked] {
 .animate-electric-particle {
     animation: electric-particle linear infinite;
 }
+
 @keyframes code-slide-up {
     0% {
         opacity: 0;
         transform: translateY(20px);
     }
+
     20% {
         opacity: 1;
         transform: translateY(0);
     }
+
     80% {
         opacity: 1;
         transform: translateY(0);
     }
+
     100% {
         opacity: 0;
         transform: translateY(-20px);
@@ -565,6 +587,7 @@ body[data-scroll-locked] {
     0% {
         transform: translateY(0);
     }
+
     100% {
         transform: translateY(-50%);
     }
@@ -574,6 +597,7 @@ body[data-scroll-locked] {
     0% {
         transform: translateY(0);
     }
+
     100% {
         transform: translateY(50%);
     }
@@ -613,12 +637,14 @@ body[data-scroll-locked] {
             0 0 0 0 rgba(239, 68, 68, 0.7),
             0 0 20px 4px rgba(239, 68, 68, 0.5);
     }
+
     50% {
         opacity: 0.9;
         box-shadow:
             0 0 0 10px rgba(239, 68, 68, 0),
             0 0 30px 8px rgba(239, 68, 68, 0.3);
     }
+
     100% {
         opacity: 1;
         box-shadow:
@@ -631,4 +657,55 @@ body[data-scroll-locked] {
     .animate-pulse-alert {
         animation: pulse-alert 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
+}
+
+@keyframes snake-border {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+.snake-border {
+    position: relative;
+    border-radius: var(--radius);
+    z-index: 0;
+}
+
+.snake-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    /* thickness of border */
+    border-radius: inherit;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--ring),
+        var(--primary),
+        var(--ring),
+        transparent
+    );
+
+    background-size: 200% 100%;
+    animation: snake-border 2s linear infinite;
+
+    /* THIS is the key */
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+
+    /* fallback for other browsers */
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+
+    pointer-events: none;
 }

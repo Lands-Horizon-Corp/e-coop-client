@@ -64,6 +64,7 @@ const TransactionBatchNavButton = (_props: Props) => {
         isError,
         error,
     } = useCurrentTransactionBatch()
+
     const { onOpen } = useInfoModalStore()
 
     const handleSuccess = useCallback(
@@ -184,7 +185,7 @@ const TransactionBatchNavButton = (_props: Props) => {
                         variant="outline-ghost"
                     >
                         <PlusIcon className="duration-300 group-hover:text-inherit" />
-                        {!currentBatchData && 'Start Transaction Batch'}
+                        {!transactionBatch && 'Start Transaction Batch'}
                     </Button>
                 </ButtonGroup>
                 <ButtonGroup>

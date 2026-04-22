@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
+import { injectIdempotency } from '@/helpers/indempotency-helpers'
 import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
@@ -364,11 +365,14 @@ export const useUndoApproveLoanTransaction = createMutationFactory<
 export const useReleaseLoanTransaction = createMutationFactory<
     ILoanTransaction,
     Error,
-    { loanTransactionId: TEntityId }
+    { loanTransactionId: TEntityId; idempotencyKey: string }
 >({
-    mutationFn: async (data) => {
-        const response = await API.put<void, ILoanTransaction>(
-            `${loanTransactionAPIRoute}/${data.loanTransactionId}/release`
+    mutationFn: async ({ loanTransactionId, idempotencyKey }) => {
+        const response = await API.post<void, ILoanTransaction>(
+            `${loanTransactionAPIRoute}/${loanTransactionId}/release`,
+            undefined,
+            {},
+            injectIdempotency({ idempotencyKey })
         )
         return response.data
     },

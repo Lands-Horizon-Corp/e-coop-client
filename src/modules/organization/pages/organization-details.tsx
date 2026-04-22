@@ -82,7 +82,7 @@ export const OrganizationHeader = ({
             <div className="flex min-h-44 cursor-pointer flex-col justify-center gap-y-3 rounded-2xl border-0 p-4 py-5 hover:bg-secondary/50 hover:no-underline">
                 <div className="flex w-full gap-x-4">
                     <ImageDisplay
-                        className="size-16 !rounded-2xl"
+                        className="size-16 rounded-2xl!"
                         src={mediaUrl}
                     />
                     <div className="grow">

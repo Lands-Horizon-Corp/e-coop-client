@@ -57,6 +57,7 @@ import { Route as landingPolicyAmlCtfPolicyRouteImport } from './routes/(landing
 import { Route as landingExploreOrganization_idRouteImport } from './routes/(landing)/explore/$organization_id'
 import { Route as OrgOrgnameBranchBranchnameRouteRouteImport } from './routes/org/$orgname/branch.$branchname/route'
 import { Route as OrgOrgnameBranchBranchnameIndexRouteImport } from './routes/org/$orgname/branch.$branchname/index'
+import { Route as OrgOrgnameBranchBranchnameSystemReportRouteImport } from './routes/org/$orgname/branch.$branchname/system/report'
 import { Route as OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRouteImport } from './routes/org/$orgname/branch.$branchname/system/generate-savings-interest'
 import { Route as OrgOrgnameBranchBranchnameSystemGenerateMutualAidRouteImport } from './routes/org/$orgname/branch.$branchname/system/generate-mutual-aid'
 import { Route as OrgOrgnameBranchBranchnameSystemAccountTransactionRouteImport } from './routes/org/$orgname/branch.$branchname/system/account-transaction'
@@ -383,6 +384,12 @@ const OrgOrgnameBranchBranchnameIndexRoute =
   OrgOrgnameBranchBranchnameIndexRouteImport.update({
     id: '/',
     path: '/',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameSystemReportRoute =
+  OrgOrgnameBranchBranchnameSystemReportRouteImport.update({
+    id: '/system/report',
+    path: '/system/report',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
 const OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute =
@@ -919,6 +926,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/system/account-transaction': typeof OrgOrgnameBranchBranchnameSystemAccountTransactionRoute
   '/org/$orgname/branch/$branchname/system/generate-mutual-aid': typeof OrgOrgnameBranchBranchnameSystemGenerateMutualAidRoute
   '/org/$orgname/branch/$branchname/system/generate-savings-interest': typeof OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute
+  '/org/$orgname/branch/$branchname/system/report': typeof OrgOrgnameBranchBranchnameSystemReportRoute
   '/org/$orgname/branch/$branchname/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
   '/org/$orgname/branch/$branchname/member-settings/member-center': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRoute
   '/org/$orgname/branch/$branchname/member-settings/member-classification': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRoute
@@ -1030,6 +1038,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/system/account-transaction': typeof OrgOrgnameBranchBranchnameSystemAccountTransactionRoute
   '/org/$orgname/branch/$branchname/system/generate-mutual-aid': typeof OrgOrgnameBranchBranchnameSystemGenerateMutualAidRoute
   '/org/$orgname/branch/$branchname/system/generate-savings-interest': typeof OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute
+  '/org/$orgname/branch/$branchname/system/report': typeof OrgOrgnameBranchBranchnameSystemReportRoute
   '/org/$orgname/branch/$branchname/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
   '/org/$orgname/branch/$branchname/member-settings/member-center': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRoute
   '/org/$orgname/branch/$branchname/member-settings/member-classification': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRoute
@@ -1147,6 +1156,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/system/account-transaction': typeof OrgOrgnameBranchBranchnameSystemAccountTransactionRoute
   '/org/$orgname/branch/$branchname/system/generate-mutual-aid': typeof OrgOrgnameBranchBranchnameSystemGenerateMutualAidRoute
   '/org/$orgname/branch/$branchname/system/generate-savings-interest': typeof OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute
+  '/org/$orgname/branch/$branchname/system/report': typeof OrgOrgnameBranchBranchnameSystemReportRoute
   '/org/$orgname/branch/$branchname/(common)/(settings)/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
   '/org/$orgname/branch/$branchname/(members)/member-settings/member-center': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRoute
   '/org/$orgname/branch/$branchname/(members)/member-settings/member-classification': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRoute
@@ -1264,6 +1274,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/system/account-transaction'
     | '/org/$orgname/branch/$branchname/system/generate-mutual-aid'
     | '/org/$orgname/branch/$branchname/system/generate-savings-interest'
+    | '/org/$orgname/branch/$branchname/system/report'
     | '/org/$orgname/branch/$branchname/settings'
     | '/org/$orgname/branch/$branchname/member-settings/member-center'
     | '/org/$orgname/branch/$branchname/member-settings/member-classification'
@@ -1375,6 +1386,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/system/account-transaction'
     | '/org/$orgname/branch/$branchname/system/generate-mutual-aid'
     | '/org/$orgname/branch/$branchname/system/generate-savings-interest'
+    | '/org/$orgname/branch/$branchname/system/report'
     | '/org/$orgname/branch/$branchname/settings'
     | '/org/$orgname/branch/$branchname/member-settings/member-center'
     | '/org/$orgname/branch/$branchname/member-settings/member-classification'
@@ -1491,6 +1503,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/system/account-transaction'
     | '/org/$orgname/branch/$branchname/system/generate-mutual-aid'
     | '/org/$orgname/branch/$branchname/system/generate-savings-interest'
+    | '/org/$orgname/branch/$branchname/system/report'
     | '/org/$orgname/branch/$branchname/(common)/(settings)/settings'
     | '/org/$orgname/branch/$branchname/(members)/member-settings/member-center'
     | '/org/$orgname/branch/$branchname/(members)/member-settings/member-classification'
@@ -1854,6 +1867,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/org/$orgname/branch/$branchname/'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameIndexRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/system/report': {
+      id: '/org/$orgname/branch/$branchname/system/report'
+      path: '/system/report'
+      fullPath: '/org/$orgname/branch/$branchname/system/report'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameSystemReportRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/system/generate-savings-interest': {
@@ -2528,6 +2548,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameSystemAccountTransactionRoute: typeof OrgOrgnameBranchBranchnameSystemAccountTransactionRoute
   OrgOrgnameBranchBranchnameSystemGenerateMutualAidRoute: typeof OrgOrgnameBranchBranchnameSystemGenerateMutualAidRoute
   OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute: typeof OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute
+  OrgOrgnameBranchBranchnameSystemReportRoute: typeof OrgOrgnameBranchBranchnameSystemReportRoute
   OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute: typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
   OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRoute
   OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRoute
@@ -2644,6 +2665,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameSystemGenerateMutualAidRoute,
     OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute:
       OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute,
+    OrgOrgnameBranchBranchnameSystemReportRoute:
+      OrgOrgnameBranchBranchnameSystemReportRoute,
     OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute:
       OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute,
     OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRoute:

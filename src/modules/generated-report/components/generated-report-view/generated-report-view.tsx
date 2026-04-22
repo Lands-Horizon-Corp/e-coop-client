@@ -202,7 +202,12 @@ export function ReportViewer({
                     {report && (
                         <p className="text-xs text-muted-foreground">
                             Created{' '}
-                            {format(new Date(report.created_at), 'MMM d, yyyy')}
+                            {report.created_at
+                                ? format(
+                                      new Date(report.created_at),
+                                      'MMM d, yyyy'
+                                  )
+                                : 'unknown date'}
                             {report.updated_at !== report.created_at &&
                                 report.updated_at && (
                                     <>

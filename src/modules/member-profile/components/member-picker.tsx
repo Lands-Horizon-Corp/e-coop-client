@@ -360,13 +360,15 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                         <Button
                             onClick={(e) => {
                                 e.stopPropagation()
-                                onSelect?.({} as IMemberProfile)
+                                onSelect?.(
+                                    undefined as unknown as IMemberProfile
+                                )
                             }}
                             size="sm"
                             type="button"
-                            variant="ghost"
+                            variant="secondary"
                         >
-                            <XIcon className="h-4 w-4" />
+                            <XIcon className="size-4" />
                         </Button>
                     )}
                 </div>

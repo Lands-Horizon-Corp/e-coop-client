@@ -6,7 +6,7 @@ import {
     hasPermissionFromAuth,
     useAuthStore,
 } from '@/modules/authentication/authgentication.store'
-import { TReportConfigSchema } from '@/modules/generated-report'
+import { TGeneratedReportSchema } from '@/modules/generated-report'
 import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import useConfirmModalStore from '@/store/confirm-modal-store'
@@ -298,7 +298,7 @@ export const CashCheckVoucherTableActionManager = () => {
                                 ),
                                 name: `cash_check_voucher_${toReadableDate(state.defaultValues.created_at, 'MMddyy_mmss')}.pdf`,
                                 module: 'CashCheckVoucher',
-                            } as TReportConfigSchema,
+                            } as TGeneratedReportSchema,
                         },
                         orSettings: resolvedOrSettings,
                         onSuccess(data) {
@@ -322,7 +322,7 @@ export const CashCheckVoucherTableActionManager = () => {
                                 ),
                                 name: `cash_check_voucher_${toReadableDate(state.defaultValues.created_at, 'MMddyy_mmss')}.pdf`,
                                 module: 'CashCheckVoucher',
-                            } as TReportConfigSchema,
+                            } as TGeneratedReportSchema,
                         },
                         cashCheckVoucherId: state.defaultValues.id,
                         onSuccess(data) {

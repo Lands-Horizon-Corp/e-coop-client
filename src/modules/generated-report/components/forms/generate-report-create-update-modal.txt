@@ -152,7 +152,7 @@ const GenerateReportCreateForm = <TData,>({
     const filterColumns = extractColumnMetadata(columns ?? [], table)
 
     useEffect(() => {
-        form.setValue('filter_search', finalFilterPayloadBase64)
+        // form.setValue('filter_search', finalFilterPayloadBase64)
     }, [finalFilterPayloadBase64, form])
 
     return (

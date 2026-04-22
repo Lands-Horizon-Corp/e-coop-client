@@ -18,6 +18,8 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
+import { useIdempotency } from '@/hooks/use-idempotency'
+
 import { IClassProps } from '@/types'
 
 import {
@@ -56,12 +58,13 @@ const JournalVoucherApproveReleaseDisplayModal = ({
     const { onOpen } = useConfirmModalStore()
     const { data: currentTransactionBatch } = useTransactionBatchStore()
     const { onOpen: onOpenInfoModal } = useInfoModalStore()
-
+    const { idempotencyKey, resetIdempotencyKey } = useIdempotency()
     const handleJournalAction = useJournalVoucherActions({
         options: {
             onSuccess: (data) => {
                 onSuccess?.(data)
                 props.onOpenChange?.(false)
+                resetIdempotencyKey()
             },
         },
     })
@@ -83,6 +86,7 @@ const JournalVoucherApproveReleaseDisplayModal = ({
                     handleJournalAction.mutateAsync({
                         journal_voucher_id: journalVoucher.id,
                         mode: 'approve-undo',
+                        idempotencyKey,
                     }),
                     {
                         loading: 'Unapproving voucher...',

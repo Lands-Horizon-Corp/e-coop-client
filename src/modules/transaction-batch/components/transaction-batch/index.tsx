@@ -1,5 +1,4 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
 import { toReadableDate, toReadableDateTime } from '@/helpers/date-utils'
@@ -10,8 +9,8 @@ import {
 import { ICurrency } from '@/modules/currency'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import { ChangeORFormModal } from '@/modules/general-ledger/components/change-or-form'
-import { useTimeMachine } from '@/modules/user-organization'
-import useActionSecurityStore from '@/store/action-security-store'
+import TimeMachineCancelFormModal from '@/modules/time-machine-log/components/cancel-time-machine-modal'
+import TimeMachineFormModal from '@/modules/time-machine-log/components/time-machine-modal'
 
 import {
     ClockIcon,
@@ -21,9 +20,10 @@ import {
     LayersSharpDotIcon,
     RefreshIcon,
 } from '@/components/icons'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+// import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Kbd } from '@/components/ui/kbd'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
 import { useModalState } from '@/hooks/use-modal-state'
@@ -58,7 +58,8 @@ const TransactionBatch = ({
     const historyModal = useModalState()
     const endModal = useModalState()
 
-    const { onOpenSecurityAction } = useActionSecurityStore()
+    const timeMachineCancel = useModalState()
+    const timeMachineForm = useModalState()
 
     const {
         currentAuth: { user, user_organization },
@@ -74,21 +75,24 @@ const TransactionBatch = ({
         })
     }
 
-    const { mutate: timeMachine, isPending: isPendingTimeMachine } =
-        useTimeMachine({
-            options: {
-                onSuccess: () => {
-                    toast.success(
-                        `Successfully Changed to  ${toReadableDate(transactionBatch.created_at)}`
-                    )
-                },
-                onError: () => {
-                    toast.error(
-                        `Something went wrong with time machine ${toReadableDate(transactionBatch.created_at)}`
-                    )
-                },
-            },
-        })
+    const hasCurrentTimeMachineSession = !!user_organization?.time_machine_time
+
+    const notToday = !transactionBatch.created_at
+        ? false
+        : toReadableDate(transactionBatch.created_at, 'yyyy-MM-dd') !==
+          toReadableDate(new Date(), 'yyyy-MM-dd')
+
+    // will show cancel time machine button if the transaction batch is not from today,
+    // or if the transaction batch is from today but the current date is not today (time machine is active)
+    //  and it will not show if no current time machine session is active
+    const showCancelTimeMachine =
+        (!transactionBatch.is_today || notToday) && hasCurrentTimeMachineSession
+
+    //show time machine only if not exisiting time machine session,
+    const showTimeMachineButton = notToday && !showCancelTimeMachine
+
+    const showButtonRed =
+        notToday && hasCurrentTimeMachineSession && !transactionBatch.is_today
 
     return (
         <div
@@ -99,6 +103,19 @@ const TransactionBatch = ({
                 !transactionBatch.is_today && 'ring-destructive! ring'
             )}
         >
+            <TimeMachineCancelFormModal {...timeMachineCancel} />
+            {user_organization.id && (
+                <TimeMachineFormModal
+                    userOrganizationId={user_organization.id}
+                    {...timeMachineForm}
+                    formProps={{
+                        frozen_at: transactionBatch.created_at,
+                        reason: 'Blotter balancing verification is in progress',
+                        description:
+                            'Unabalanced blotter detected during review, requiring time machine to verify transactions under current batch date',
+                    }}
+                />
+            )}
             <TransactionBatchHistoriesModal
                 {...historyModal}
                 title={`${transactionBatch?.batch_name ?? 'Transaction Batch'} History`}
@@ -171,6 +188,14 @@ const TransactionBatch = ({
                     </div>
                 </div>
                 <div className="flex items-center gap-x-2">
+                    {showTimeMachineButton && (
+                        <Button
+                            onClick={() => timeMachineForm.openModal()}
+                            size={'sm'}
+                        >
+                            <ClockIcon className="inline" /> Time Machine
+                        </Button>
+                    )}
                     <Button
                         hoverVariant="primary"
                         onClick={() => invalidateTransactionBatch()}
@@ -196,40 +221,34 @@ const TransactionBatch = ({
                     </Button>
 
                     <DotMediumIcon className="text-primary animate-pulse" />
+
                     <ChangeORFormModal
                         buttonProps={{
                             variant: 'secondary',
                             size: 'sm',
                         }}
                     />
-                    {!transactionBatch.is_today && (
+                    {showCancelTimeMachine && (
                         <Button
-                            disabled={isPendingTimeMachine}
+                            className={cn('', showButtonRed && 'animate-pulse')}
                             onClick={(e) => {
                                 e.preventDefault()
-                                onOpenSecurityAction({
-                                    title: 'Time Machine Confirmation',
-                                    description:
-                                        'Type password to implement time machine.',
-                                    onSuccess: () =>
-                                        timeMachine({
-                                            time_machine_time: new Date(
-                                                transactionBatch.created_at
-                                            ),
-                                        }),
-                                })
+                                timeMachineCancel.openModal()
                             }}
+                            variant={showButtonRed ? 'destructive' : 'default'}
                         >
-                            {isPendingTimeMachine ? (
-                                <LoadingSpinner />
-                            ) : (
-                                'Time Machine'
-                            )}
+                            Cancel Time Machine
                             <ClockIcon />
                         </Button>
                     )}
                 </div>
             </div>
+            {showButtonRed && (
+                <Kbd className=" self-end italic text-xs text-destructive">
+                    To proceed with this blotter date, please cancel the active
+                    Time Machine session first.
+                </Kbd>
+            )}
             <div className="flex min-h-[40vh] w-full max-w-7xl shrink-0 gap-x-2">
                 <div className="flex-1 space-y-2 rounded-2xl border bg-background p-4">
                     <div className="flex gap-x-2">

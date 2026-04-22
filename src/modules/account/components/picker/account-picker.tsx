@@ -267,14 +267,14 @@ const AccountPicker = ({
                     </Button>
                     {allowClear && value && (
                         <Button
-                            className="cursor-pointer shrink-0 rounded-full p-0! px-0!"
+                            className="cursor-pointer shrink-0 p-0! px-0!"
                             onClick={(e) => {
                                 e.preventDefault()
                                 e.stopPropagation()
                                 onSelect?.(undefined as unknown as IAccount)
                             }}
-                            size={'sm'}
-                            variant={'ghost'}
+                            size={'icon-sm'}
+                            variant={'secondary'}
                         >
                             <XIcon className="inline" />
                         </Button>

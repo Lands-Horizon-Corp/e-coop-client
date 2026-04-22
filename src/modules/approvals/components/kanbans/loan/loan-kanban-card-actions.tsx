@@ -6,7 +6,9 @@ import {
     hasPermissionFromAuth,
     useAuthStore,
 } from '@/modules/authentication/authgentication.store'
+import { TGeneratedReportSchema } from '@/modules/generated-report'
 import { useReportViewerStore } from '@/modules/generated-report/components/generated-report-view/global-generate-report-viewer.store'
+import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 // import { useGenerateReport } from '@/modules/generated-report/components/generate-report-hooks/use-report-generate'
 import {
     ILoanTransaction,
@@ -212,11 +214,14 @@ export const LoanTransactionCardActions = ({
                     defaultValues: {
                         ...loanTransaction,
                         report_config: {
+                            ...getTemplateAt(
+                                LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES,
+                                0
+                            ),
                             name: `loan_release_${toReadableDate(loanTransaction.created_at, 'MMddyy_mmss')}.pdf`,
-                            ...LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES[0],
                             filters: {},
                             module: 'LoanTransaction',
-                        },
+                        } as TGeneratedReportSchema,
                     },
                     loanTransactionId: loanTransaction.id,
                     onSuccess: (data) => {

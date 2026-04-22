@@ -266,7 +266,6 @@ const OtherFundCreateUpdateForm = ({
     const handleReset = () => {
         if (isEditMode) {
             if (otherFund) {
-                console.log(otherFund.date)
                 form.reset({
                     date: otherFund?.date
                         ? new Date(otherFund.date).toISOString()

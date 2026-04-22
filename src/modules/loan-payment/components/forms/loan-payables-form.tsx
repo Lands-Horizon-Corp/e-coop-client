@@ -57,6 +57,7 @@ import SignatureField from '@/components/ui/signature-field'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useIdempotency } from '@/hooks/use-idempotency'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { IForm, TEntityId } from '@/types'
@@ -101,6 +102,7 @@ const LoanPayablesForm = ({
     } = useAuthUserWithOrgBranch()
 
     const { onOpen } = usePaymentOnSuccessStore()
+    const { idempotencyKey, resetIdempotencyKey } = useIdempotency()
 
     const form = useForm<TLoanPayablePaymentSchema>({
         mode: 'onChange',
@@ -163,7 +165,9 @@ const LoanPayablesForm = ({
     }
 
     const createTransaction = useCreateTransactionStandalone()
-    const multiPaymentMutation = useCreateMultiTransactionPayment()
+    const multiPaymentMutation = useCreateMultiTransactionPayment({
+        options: { onSuccess: () => resetIdempotencyKey() },
+    })
 
     const onSubmit = form.handleSubmit(async (data) => {
         const toastId = 'loan-payment-process'
@@ -202,6 +206,7 @@ const LoanPayablesForm = ({
                                 currency.id || entry.account?.currency_id,
                             transaction_id: focusedTransaction.id,
                         })),
+                    idempotencyId: idempotencyKey,
                 })
                 toast.success('Payment complete!', { id: toastId })
 

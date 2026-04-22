@@ -24,6 +24,7 @@ import { useDataTableSorting } from '@/components/data-table/use-datatable-sorti
 import useDataTableState, {
     useResolvedColumnOrder,
 } from '@/components/data-table/use-datatable-state'
+import { useLoadingColumns } from '@/components/data-table/use-loading-columns'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -161,8 +162,13 @@ const TransactionsTable = ({
 
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
-    const table = useReactTable({
+    const tableColumns = useLoadingColumns({
         columns,
+        isLoading: isPending || isRefetching,
+    })
+
+    const table = useReactTable({
+        columns: tableColumns,
         data: data,
         initialState: {
             columnPinning: { left: ['select'] },

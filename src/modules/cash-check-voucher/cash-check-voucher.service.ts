@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
+import { injectIdempotency } from '@/helpers/indempotency-helpers'
 import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
@@ -175,13 +176,25 @@ export const useCashCheckVoucherActions = createMutationFactory<
     {
         cash_check_voucher_id: TEntityId
         mode: TCashCheckVoucherActionMode
+        idempotencyKey?: string
     }
 >({
-    mutationFn: async ({ cash_check_voucher_id, mode = 'print-only' }) => {
+    mutationFn: async ({
+        cash_check_voucher_id,
+        mode = 'print-only',
+        idempotencyKey,
+    }) => {
+        const isReleaseAction = mode === 'release'
+
         const response = await API.post<
             { cash_check_voucher_id?: TEntityId },
             ICashCheckVoucher
-        >(`${cashCheckVoucherAPIRoute}/${cash_check_voucher_id}/${mode}`)
+        >(
+            `${cashCheckVoucherAPIRoute}/${cash_check_voucher_id}/${mode}`,
+            {},
+            {},
+            isReleaseAction ? injectIdempotency({ idempotencyKey }) : undefined
+        )
         return response.data
     },
     invalidationFn: (args) => {

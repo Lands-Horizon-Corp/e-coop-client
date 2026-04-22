@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 
+import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 
@@ -54,6 +55,8 @@ const TransactionBatchCreateForm = ({
     className,
     ...formProps
 }: ITransactionBatchCreateFormProps) => {
+    const queryClient = useQueryClient()
+
     const form = useForm<TTransactionBatchFormValues>({
         resolver: standardSchemaResolver(TransactionBatchCreateSchema),
         reValidateMode: 'onChange',
@@ -73,7 +76,12 @@ const TransactionBatchCreateForm = ({
         reset,
     } = useCreateTransactionBatch({
         options: {
-            onSuccess: formProps.onSuccess,
+            onSuccess: (data) => {
+                formProps.onSuccess?.(data)
+                queryClient.invalidateQueries({
+                    queryKey: ['transaction-batch', 'unclosed', 'me'],
+                })
+            },
             onError: formProps.onError,
         },
     })

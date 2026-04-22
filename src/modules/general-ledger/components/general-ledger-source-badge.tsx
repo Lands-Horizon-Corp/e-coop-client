@@ -53,6 +53,36 @@ const generalLedgerSourceStyles: Record<
         bgColor: 'bg-slate-700',
         textColor: 'text-slate-50',
     },
+    loan: {
+        label: 'Loan',
+        bgColor: 'bg-cyan-700',
+        textColor: 'text-cyan-50',
+    },
+    'savings interest': {
+        label: 'Savings Interest',
+        bgColor: 'bg-sky-600',
+        textColor: 'text-sky-50',
+    },
+    'mutual contribution': {
+        label: 'Mutual Contribution',
+        bgColor: 'bg-fuchsia-700',
+        textColor: 'text-fuchsia-50',
+    },
+    disbursement: {
+        label: 'Disbursement',
+        bgColor: 'bg-teal-700',
+        textColor: 'text-teal-50',
+    },
+    blotter: {
+        label: 'Blotter',
+        bgColor: 'bg-orange-700',
+        textColor: 'text-orange-50',
+    },
+    'other fund': {
+        label: 'Other Fund',
+        bgColor: 'bg-zinc-700',
+        textColor: 'text-zinc-50',
+    },
 }
 
 export const GeneralLedgerSourceBadge = ({

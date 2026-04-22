@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form'
-import z from 'zod'
+import { z } from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useIdempotency } from '@/hooks/use-idempotency'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -45,6 +46,7 @@ const BankCreateUpdateForm = ({ className, ...formProps }: IBankFormProps) => {
         },
     })
 
+    const { idempotencyKey } = useIdempotency()
     const createMutation = useCreateBank({
         options: {
             ...withToastCallbacks({
@@ -78,7 +80,10 @@ const BankCreateUpdateForm = ({ className, ...formProps }: IBankFormProps) => {
         if (formProps.bankId) {
             updateMutation.mutate({ id: formProps.bankId, payload: formData })
         } else {
-            createMutation.mutate(formData)
+            createMutation.mutate({
+                payload: formData,
+                idempotencyKey,
+            })
         }
     }, handleFocusError)
 

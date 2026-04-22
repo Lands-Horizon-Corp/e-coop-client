@@ -2,6 +2,7 @@ import { CASH_CHECK_VOUCHER_PRINT_TEMPLATES } from '../cash-check-voucher/report
 import { JOURNAL_VOUCHER_PRINT_TEMPLATES } from '../journal-voucher/reports/jornal-voucher-template'
 import { LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES } from '../loan-transaction/reports/loan-transaction-templates'
 import { OTHER_FUND_PRINT_TEMPLATES } from '../other-fund/reports/other-fund-templates'
+import NO_TEMPLATE from './defaults/no-template.njk?raw'
 
 export const REPORT_REGISTRY = {
     loan_transaction_print_voucher: LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES,
@@ -14,7 +15,16 @@ export const getTemplateAt = <T>(
     arr: T[] | undefined,
     index: number
 ): Partial<T> => {
-    return arr?.[index] ?? {}
+    return (
+        arr?.[index] ??
+        ({
+            template: NO_TEMPLATE,
+            default_unit: 'in',
+            width: '8.5in',
+            height: '11in',
+            orientation: 'portrait',
+        } as unknown as T)
+    )
 }
 
 export type GeneratedReportRegistryKey = keyof typeof REPORT_REGISTRY

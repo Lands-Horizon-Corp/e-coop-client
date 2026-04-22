@@ -1,7 +1,7 @@
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { ICurrency } from '../currency'
-import { TReportConfigSchema } from '../generated-report'
+import { TGeneratedReportSchema } from '../generated-report'
 import { IMemberProfile } from '../member-profile'
 import { IOtherFundEntry, IOtherFundEntryRequest } from '../other-fund-entry'
 import { IOtherFundTag } from '../other-fund-tag'
@@ -62,7 +62,7 @@ export interface IOtherFundRequest {
 export interface IOtherFundPrintRequest {
     cash_voucher_number: string
     or_auto_generated?: boolean
-    reportConfig?: TReportConfigSchema
+    reportConfig?: TGeneratedReportSchema
 }
 
 export enum EOtherFundStatus {

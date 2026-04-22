@@ -10,12 +10,12 @@ import {
 } from '@/modules/user-organization'
 
 import MapPicker from '@/components/map/map-picker'
+import Modal, { IModalProps } from '@/components/modals/modal'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { TEntityId } from '@/types'
 
-import Modal, { IModalProps } from '../../../../components/modals/modal'
 import ListOfBranches from '../list-of-branches'
 
 interface OrganizationBranchesModalProps extends IModalProps {
@@ -24,12 +24,14 @@ interface OrganizationBranchesModalProps extends IModalProps {
         userOrganization: IUserOrganization<IUserBase>
     ) => Promise<void>
     switchingOrgId: TEntityId | null
+    isLoading?: boolean
 }
 
 const OrganizationBranchesModal = ({
     organization: org,
     handleVisit,
     switchingOrgId,
+    isLoading,
     ...props
 }: OrganizationBranchesModalProps) => {
     const {
@@ -62,7 +64,9 @@ const OrganizationBranchesModal = ({
                     return (
                         <ListOfBranches
                             isCurrent={isCurrentOrg}
-                            isLoading={switchingOrgId === userOrg.id}
+                            isLoading={
+                                isLoading && switchingOrgId === userOrg.id
+                            }
                             key={userOrg.id}
                             onClick={() =>
                                 toast.promise(handleVisit(userOrg), {

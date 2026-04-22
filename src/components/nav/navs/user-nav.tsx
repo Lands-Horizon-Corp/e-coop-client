@@ -9,9 +9,11 @@ import {
 } from '@/modules/authentication/authgentication.store'
 import GeneratedReportsListSheet from '@/modules/generated-report/components/generated-reports/generated-reports-list'
 import { NotificationNav } from '@/modules/notification/components/notification'
+import TimeMachineCancelFormModal from '@/modules/time-machine-log/components/cancel-time-machine-modal'
+import TimeMachineFormModal from '@/modules/time-machine-log/components/time-machine-modal'
 import TransactionBatchNavButton from '@/modules/transaction-batch/components/batch-nav-button'
 import NavProfileMenu from '@/modules/user-profile/components/nav/nav-profile-menu'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, XIcon } from 'lucide-react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import Clock from '@/components/clock'
@@ -24,6 +26,13 @@ import PageBreadCrumb from '@/components/pages-breadcrumbs'
 import GeneralButtonShortcuts from '@/components/shorcuts/general-button-shorcuts'
 import AppSidebarToggle from '@/components/ui/app-sidebar/app-sidebar-toggle'
 import { Button } from '@/components/ui/button'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip'
+
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps } from '@/types'
 
@@ -39,6 +48,9 @@ const UserNav = ({
 
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(true)
+
+    const timeMachine = useModalState()
+    const cancelTimeMachine = useModalState(false)
 
     useHotkeys(
         'alt+a',
@@ -132,7 +144,36 @@ const UserNav = ({
                 />
             </NavContainer>
 
-            <Clock />
+            {user_organization?.id && (
+                <TimeMachineFormModal
+                    {...timeMachine}
+                    userOrganizationId={user_organization.id}
+                />
+            )}
+            <TimeMachineCancelFormModal {...cancelTimeMachine} />
+            <div className="flex  pointer-events-auto">
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Clock onClick={() => timeMachine.openModal()} />
+                    </TooltipTrigger>
+                    <TooltipContent
+                        className="bg-transparent!"
+                        side="right"
+                        sideOffset={-10}
+                    >
+                        {user_organization?.time_machine_time && (
+                            <Button
+                                className=" hover:scale-105"
+                                onClick={() => cancelTimeMachine.openModal()}
+                                size="sm"
+                                variant="destructive"
+                            >
+                                <XIcon />
+                            </Button>
+                        )}
+                    </TooltipContent>
+                </Tooltip>
+            </div>
 
             <NavContainer className="pointer-events-auto">
                 <div className="flex items-center">

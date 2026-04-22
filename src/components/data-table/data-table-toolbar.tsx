@@ -7,11 +7,12 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import DataTableActiveFilters from '@/components/data-table/data-table-actions/data-table-active-filters'
 import DataTableDeleteSelected from '@/components/data-table/data-table-actions/data-table-delete-selected'
 import { type IDataTableDeleteSelectedProps } from '@/components/data-table/data-table-actions/data-table-delete-selected'
-import DataTableExportButton from '@/components/data-table/data-table-actions/data-table-generate-report'
+// import DataTableExportButton from '@/components/data-table/data-table-actions/data-table-generate-report'
 import { type IDataTableExportProps } from '@/components/data-table/data-table-actions/data-table-generate-report'
 import DataTableOptionsMenu from '@/components/data-table/data-table-actions/data-table-options-menu'
 import { type IDataTableScrollableOptionProps } from '@/components/data-table/data-table-actions/data-table-options-menu/scroll-option'
-import { Separator } from '@/components/ui/separator'
+
+// import { Separator } from '@/components/ui/separator'
 
 import { IClassProps } from '@/types'
 
@@ -48,13 +49,13 @@ const DataTableToolbar = <TData,>({
     scrollableProps,
     hideCreateButton,
     hideDeleteButton,
-    hideExportButton,
+    // hideExportButton,
     hideRefreshButton,
     otherActionRight,
     filterLogicProps,
     globalSearchProps,
     deleteActionProps,
-    exportActionProps,
+    // exportActionProps,
     createActionProps,
     refreshActionProps,
     otherActionLeft,
@@ -125,7 +126,7 @@ const DataTableToolbar = <TData,>({
                     />
                 </div>
 
-                {exportActionProps && !hideExportButton && (
+                {/* {exportActionProps && !hideExportButton && (
                     <>
                         <Separator
                             className="h-full min-h-7"
@@ -136,7 +137,7 @@ const DataTableToolbar = <TData,>({
                             {...exportActionProps}
                         />
                     </>
-                )}
+                )} */}
                 {createActionProps && !hideCreateButton && (
                     <DataTableCreateAction {...createActionProps} />
                 )}

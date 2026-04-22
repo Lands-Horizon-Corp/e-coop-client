@@ -439,6 +439,7 @@ import {
 } from 'react-icons/si'
 import { SlOptions as OptionsIcon } from 'react-icons/sl'
 import {
+    TbActivityHeartbeat as ActivityBeatIcon,
     TbBlockquote as BlockQuoteIcon,
     TbClockDollar as CashClockIcon,
     TbClockCancel as ClockCancelIcon,
@@ -906,6 +907,7 @@ export {
     MaleIcon,
     FemaleIcon,
     MergeIcon,
+    ActivityBeatIcon,
 }
 
 export const IconMap = {
@@ -954,6 +956,7 @@ export const IconMap = {
     Copy: CopyIcon,
     Bank: BankIcon,
     Plus: PlusIcon,
+    'Activity Beat': ActivityBeatIcon,
     Bill: BillIcon,
     Undo: UndoIcon,
     Redo: RedoIcon,

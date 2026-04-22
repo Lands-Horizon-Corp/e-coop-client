@@ -14,6 +14,7 @@ import {
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
+import { TUserLocation } from '../area'
 import type {
     IMemberProfile,
     IMemberProfileDashboardSummaryResponse,
@@ -355,6 +356,29 @@ export const useGetMemberProfileQuickSearch = ({
         queryFn: () => getMemberProfileQuickSearch(search),
         enabled: search.length >= 2,
         staleTime: 1000 * 30,
+        ...options,
+    })
+}
+
+export const getMemberByAreaId = async (areaId: TEntityId) => {
+    const url = qs.stringifyUrl({
+        url: `${memberProfileAPIRoute}/area/${areaId}`,
+    })
+    const response = await API.get<TUserLocation[]>(url)
+    return response.data
+}
+
+export const useGetMemberProfileByAreaId = ({
+    areaId,
+    options,
+}: {
+    areaId: TEntityId
+    options?: HookQueryOptions<TUserLocation[], Error>
+}) => {
+    return useQuery<TUserLocation[], Error>({
+        queryKey: [memberProfileBaseKey, 'area'],
+        queryFn: () => getMemberByAreaId(areaId),
+        enabled: !!areaId,
         ...options,
     })
 }
