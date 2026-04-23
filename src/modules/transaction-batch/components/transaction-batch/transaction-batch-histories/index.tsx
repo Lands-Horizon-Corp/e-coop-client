@@ -254,9 +254,9 @@ const TotalCard = ({
     currency: ICurrency
 }) => {
     const variantStyles = {
-        debit: 'border-debit/30',
-        credit: 'border-credit/30',
-        total: 'border-border',
+        debit: 'ring-primary/40 bg-gradient border-primary/20 bg-gradient-to-br from-primary/20 via-background to-background',
+        credit: 'ring-orange-400/30 border-orange-400/25 bg-gradient-to-br from-orange-400/20 via-background to-background',
+        total: 'border-border bg-gradient bg-gradient-to-br from-primary/20 via-background to-background',
     }
 
     const iconStyles = {
@@ -272,11 +272,16 @@ const TotalCard = ({
     }
 
     return (
-        <Card className={cn('border', variantStyles[variant])}>
+        <Card
+            className={cn(
+                'rounded-2xl border ring-2 ring-muted/80 transition-colors',
+                variantStyles[variant]
+            )}
+        >
             <CardContent className="flex items-center gap-4 p-5">
                 <div
                     className={cn(
-                        'flex h-10 w-10 items-center justify-center rounded-md bg-secondary',
+                        'flex h-10 w-10 items-center ring justify-center rounded-md bg-secondary',
                         iconStyles[variant]
                     )}
                 >
@@ -334,7 +339,6 @@ export const TotalsSummary = ({
         )
     }
 
-    // No data state - show error message
     if (!totals) {
         return (
             <div className="mb-4">
@@ -358,9 +362,12 @@ export const TotalsSummary = ({
         )
     }
 
-    if (activeTab === 'batch_funding') {
+    if (activeTab === 'batch-funding') {
         return (
-            <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div
+                className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2"
+                dir="rtl"
+            >
                 <TotalCard
                     amount={totals.batch_funding_total}
                     currency={totals.currency}
@@ -372,9 +379,12 @@ export const TotalsSummary = ({
         )
     }
 
-    if (activeTab === 'disbursement_transaction') {
+    if (activeTab === 'disbursement-transaction') {
         return (
-            <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div
+                className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2"
+                dir="rtl"
+            >
                 <TotalCard
                     amount={totals.disbursement_transaction_total}
                     currency={totals.currency}
@@ -431,7 +441,7 @@ export const TotalsSummary = ({
     const { debit, credit } = getTotalsForTab()
 
     return (
-        <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <TotalCard
                 amount={debit}
                 currency={totals.currency}
@@ -445,13 +455,6 @@ export const TotalsSummary = ({
                 icon={<ArrowDownLeftIcon className="h-5 w-5" />}
                 label="Total Credit"
                 variant="credit"
-            />
-            <TotalCard
-                amount={debit - credit}
-                currency={totals.currency}
-                icon={<WalletIcon className="h-5 w-5" />}
-                label="Net Balance"
-                variant="total"
             />
         </div>
     )
