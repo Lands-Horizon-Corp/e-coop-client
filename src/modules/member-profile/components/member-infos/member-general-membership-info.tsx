@@ -669,8 +669,6 @@ const UserQr = ({ memberProfile }: { memberProfile?: IMemberProfile }) => {
 
     const qrValue = memberProfile?.qr_code
 
-    console.log(memberProfile?.qr_code)
-
     return (
         <>
             <div className="flex items-center gap-x-2">

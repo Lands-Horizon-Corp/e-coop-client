@@ -495,7 +495,7 @@ export const LoanTransactionRowContext = ({
                     <ContextMenuItem
                         disabled={
                             loanTransaction.printed_date === undefined ||
-                            loanApplicationStatus === 'released' ||
+                            // loanApplicationStatus === 'released' || - pwede daw reprint kahit released
                             isPrintingProcess ||
                             !hasPermissionFromAuth({
                                 action: ['Update', 'OwnUpdate'],
