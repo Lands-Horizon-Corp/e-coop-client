@@ -162,6 +162,7 @@ export const AccountActions = ({
                 formProps={{
                     defaultValues: account,
                     readOnly: true,
+                    accountId: account.id,
                 }}
             />
             <div className="flex flex-col gap-1">
