@@ -113,7 +113,7 @@ const MemberProfileTableColumns = (
                     <ImageNameDisplay
                         className={cn(
                             'mx-auto',
-                            is_closed && '!text-destructive'
+                            is_closed && 'text-destructive!'
                         )}
                         name={full_name}
                         src={media?.download_url}
