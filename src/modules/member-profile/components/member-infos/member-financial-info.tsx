@@ -132,7 +132,7 @@ const IncomeCard = ({ income }: { income: IMemberIncome }) => {
                     className="border-green-500/30 text-green-400"
                     variant="outline"
                 >
-                    {currencyFormat(income.amount)}
+                    {currencyFormat(income.amount, { showSymbol: false })}
                 </Badge>
             </div>
 
@@ -156,7 +156,9 @@ const IncomeCard = ({ income }: { income: IMemberIncome }) => {
                     <InfoItem
                         icon={DollarSign}
                         label="Amount"
-                        value={currencyFormat(income.amount)}
+                        value={currencyFormat(income.amount, {
+                            showSymbol: false,
+                        })}
                     />
                     {income.release_date && (
                         <InfoItem
@@ -195,7 +197,7 @@ const AssetCard = ({ asset }: { asset: IMemberAsset }) => {
                     className="border-blue-500/30 text-blue-400"
                     variant="outline"
                 >
-                    {currencyFormat(asset.cost)}
+                    {currencyFormat(asset.cost, { showSymbol: false })}
                 </Badge>
             </div>
 
@@ -219,7 +221,9 @@ const AssetCard = ({ asset }: { asset: IMemberAsset }) => {
                     <InfoItem
                         icon={DollarSign}
                         label="Cost"
-                        value={currencyFormat(asset.cost)}
+                        value={currencyFormat(asset.cost, {
+                            showSymbol: false,
+                        })}
                     />
                     <InfoItem
                         icon={Calendar}
@@ -271,7 +275,7 @@ const ExpenseCard = ({ expense }: { expense: IMemberExpense }) => {
                     className="border-red-500/30 text-red-400"
                     variant="outline"
                 >
-                    {currencyFormat(expense.amount)}
+                    {currencyFormat(expense.amount, { showSymbol: false })}
                 </Badge>
             </div>
 
@@ -280,7 +284,9 @@ const ExpenseCard = ({ expense }: { expense: IMemberExpense }) => {
                     <InfoItem
                         icon={DollarSign}
                         label="Amount"
-                        value={currencyFormat(expense.amount)}
+                        value={currencyFormat(expense.amount, {
+                            showSymbol: false,
+                        })}
                     />
                     <InfoItem
                         icon={Calendar}
@@ -357,7 +363,9 @@ export function SummarySidebar({
                                     {asset.name}
                                 </span>
                                 <span className="text-sidebar-foreground">
-                                    {currencyFormat(asset.cost)}
+                                    {currencyFormat(asset.cost, {
+                                        showSymbol: false,
+                                    })}
                                 </span>
                             </div>
                         ))}
@@ -367,7 +375,7 @@ export function SummarySidebar({
                             Total Assets
                         </span>
                         <span className="text-asset">
-                            {currencyFormat(totalAssets)}
+                            {currencyFormat(totalAssets, { showSymbol: false })}
                         </span>
                     </div>
                 </div>
@@ -392,7 +400,9 @@ export function SummarySidebar({
                                     {income.name}
                                 </span>
                                 <span className="text-sidebar-foreground">
-                                    {currencyFormat(income.amount)}
+                                    {currencyFormat(income.amount, {
+                                        showSymbol: false,
+                                    })}
                                 </span>
                             </div>
                         ))}
@@ -402,7 +412,7 @@ export function SummarySidebar({
                             Total Income
                         </span>
                         <span className="text-income">
-                            {currencyFormat(totalIncome)}
+                            {currencyFormat(totalIncome, { showSymbol: false })}
                         </span>
                     </div>
                 </div>
@@ -427,7 +437,9 @@ export function SummarySidebar({
                                     {expense.name}
                                 </span>
                                 <span className="text-sidebar-foreground">
-                                    {currencyFormat(expense.amount)}
+                                    {currencyFormat(expense.amount, {
+                                        showSymbol: false,
+                                    })}
                                 </span>
                             </div>
                         ))}
@@ -437,7 +449,9 @@ export function SummarySidebar({
                             Total Expenses
                         </span>
                         <span className="text-expense">
-                            {currencyFormat(totalExpenses)}
+                            {currencyFormat(totalExpenses, {
+                                showSymbol: false,
+                            })}
                         </span>
                     </div>
                 </div>
@@ -455,7 +469,7 @@ export function SummarySidebar({
                             Net Balance
                         </span>
                         <span className="text-xl font-bold">
-                            {currencyFormat(netBalance)}
+                            {currencyFormat(netBalance, { showSymbol: false })}
                         </span>
                     </div>
                 </div>
