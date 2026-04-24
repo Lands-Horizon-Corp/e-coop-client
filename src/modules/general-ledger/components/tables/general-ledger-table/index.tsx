@@ -87,6 +87,10 @@ export type TGeneralLedgerTableProps =
           transactionBatchId: TEntityId
       })
     | (GeneralLedgerTableProps & {
+          mode: 'transaction-batch-loan-entry'
+          transactionBatchId: TEntityId
+      })
+    | (GeneralLedgerTableProps & {
           mode: 'transaction'
           transactionId: TEntityId
       })

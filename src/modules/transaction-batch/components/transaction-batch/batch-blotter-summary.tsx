@@ -190,6 +190,20 @@ export const BatchBlotterSummaryView = ({
                     </div>
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
                         <p className="text-muted-foreground">
+                            Total Online Remittance
+                        </p>
+                        <p>
+                            {currencyFormat(
+                                transBatch.total_online_remittance,
+                                {
+                                    currency,
+                                    showSymbol: !!currency,
+                                }
+                            )}
+                        </p>
+                    </div>
+                    <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
+                        <p className="text-muted-foreground">
                             Total Cash on Hand
                         </p>
 
