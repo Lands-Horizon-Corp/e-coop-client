@@ -12,6 +12,7 @@ import UserOrgGuard from '@/components/wrappers/user-org-guard'
 import Broadcaster from '../components/broadcaster'
 // import GeneratedReports from '../components/generated-reports'
 import PDFUploader from '../components/pdf-uploader'
+import TanstackVirtualPinningSample from '../components/tanstack-virtual-pinning-sample'
 
 function PlaygroundPage() {
     return (
@@ -23,6 +24,7 @@ function PlaygroundPage() {
                     />
                     <Broadcaster />
                     <PDFUploader />
+                    <TanstackVirtualPinningSample />
                     {/* <GeneratedReports /> */}
                     <DailyCashCollectionReceiptJournalCreateReportFormModal
                         trigger={<p>HITLER A</p>}
