@@ -8,7 +8,7 @@ import useDebounce from '@/hooks/use-debounce'
 import { MagnifyingGlassIcon } from '../icons'
 import { Input } from '../ui/input'
 
-type GenericSearchInputProps = {
+type SearchInputProps = {
     setSearchTerm: (term: string) => void
     placeholder?: string
     inputClassName?: string
@@ -16,13 +16,13 @@ type GenericSearchInputProps = {
     debounce?: number
 }
 
-const GenericSearchInput = ({
+const SearchInput = ({
     setSearchTerm,
     placeholder,
     className,
     inputClassName,
     debounce = 200,
-}: GenericSearchInputProps) => {
+}: SearchInputProps) => {
     const [inputValue, setInputValue] = useState('')
 
     const debounceSearchTerm = useDebounce(inputValue, debounce)
@@ -64,4 +64,4 @@ const GenericSearchInput = ({
     )
 }
 
-export default GenericSearchInput
+export default SearchInput

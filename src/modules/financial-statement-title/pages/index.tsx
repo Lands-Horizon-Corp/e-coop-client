@@ -22,7 +22,7 @@ import { AutoSizer, List } from 'react-virtualized'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import { FilesIcon, PlusIcon } from '@/components/icons'
-import GenericSearchInput from '@/components/search/generic-search-input'
+import SearchInput from '@/components/search/generic-search-input'
 import { Button } from '@/components/ui/button'
 import {
     Empty,
@@ -170,7 +170,7 @@ export const FinancialStatementTitleList = () => {
                 open={onOpenState.open}
             />
             <div className="flex justify-between gap-x-2 items-center">
-                <GenericSearchInput
+                <SearchInput
                     debounce={500}
                     inputClassName="pl-10 !bg-card border-border"
                     placeholder="search financial statement title"

@@ -12,6 +12,7 @@ import {
     AccountActionType,
 } from '../components/account-actions'
 import ViewAccountTransactionLedger from '../components/account-transaction-ledger'
+import { AccountViewerModal } from '../components/account-viewer/account-viewer'
 import { getModalTitle } from '../components/tables/row-actions'
 
 export const AccountTableActionManager = () => {
@@ -40,6 +41,15 @@ export const AccountTableActionManager = () => {
                     onOpenChange={close}
                     open={state.isOpen}
                     title="Update Account"
+                />
+            )}
+            {state.action === 'view' && state.id && (
+                <AccountViewerModal
+                    accountViewerProps={{
+                        accountId: state.id,
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
                 />
             )}
             {state.action === 'view-ledger' && state.defaultValues && (
