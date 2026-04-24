@@ -3,8 +3,8 @@ import { Column, Table } from '@tanstack/react-table'
 import {
     ArrowDownIcon,
     ArrowUpIcon,
-    DotsVerticalIcon,
     EyeNoneIcon,
+    MenuIcon,
     PushPinIcon,
     PushPinSlashIcon,
     ResetIcon,
@@ -47,7 +47,7 @@ const ColumnActions = <TData, TValue>({
                             ) : column.getIsSorted() === 'asc' ? (
                                 <ArrowDownIcon className="size-3 opacity-55 group-hover:opacity-100" />
                             ) : (
-                                <DotsVerticalIcon className="size-3 opacity-55 group-hover:opacity-100" />
+                                <MenuIcon className="size-4 text-accent-foreground group-hover:opacity-100" />
                             )}
                         </>
                     }

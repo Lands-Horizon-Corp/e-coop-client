@@ -670,28 +670,26 @@ function ReportsMenu() {
                     title="Schedule & Listing"
                     titleAccentClassName="bg-blue-500/30"
                 >
-                    <div className="flex gap-x-4 col-span-full">
-                        <ReportGroupContainer
-                            className="col-span-full rounded-xl bg-popover/70 ring-2 ring-muted-foreground/20"
-                            containerClassName="grid grid-cols-5 gap-4"
-                            // description="Member profiles, listings, ledger records, and account closure tracking."
-                            title="Member"
-                            titleAccentClassName="bg-cyan-500/30"
-                            titleClassName="uppercase"
-                        >
-                            <ReportList reports={MEMBERS_GROUP} />
-                        </ReportGroupContainer>
-                        <ReportGroupContainer
-                            className="rounded-xl flex-1 bg-popover/70 ring-2 ring-muted-foreground/20"
-                            containerClassName="grid grid-cols-3 gap-4"
-                            // description="Time deposit balances, accruals, and year-to-date tracking."
-                            title="Time Deposits"
-                            titleAccentClassName="bg-slate-500/30"
-                            titleClassName="uppercase"
-                        >
-                            <ReportList reports={TIME_DEPOSIT_GROUP} />
-                        </ReportGroupContainer>
-                    </div>
+                    <ReportGroupContainer
+                        className="col-span-full rounded-xl bg-popover/70 ring-2 ring-muted-foreground/20"
+                        containerClassName="grid grid-cols-5 gap-4"
+                        // description="Member profiles, listings, ledger records, and account closure tracking."
+                        title="Member"
+                        titleAccentClassName="bg-cyan-500/30"
+                        titleClassName="uppercase"
+                    >
+                        <ReportList reports={MEMBERS_GROUP} />
+                    </ReportGroupContainer>
+                    <ReportGroupContainer
+                        className="rounded-xl col-span-full bg-popover/70 ring-2 ring-muted-foreground/20"
+                        containerClassName="grid grid-cols-3 gap-4"
+                        // description="Time deposit balances, accruals, and year-to-date tracking."
+                        title="Time Deposits"
+                        titleAccentClassName="bg-slate-500/30"
+                        titleClassName="uppercase"
+                    >
+                        <ReportList reports={TIME_DEPOSIT_GROUP} />
+                    </ReportGroupContainer>
 
                     <ReportGroupContainer
                         className="col-span-full rounded-xl bg-popover/70 ring-2 ring-muted-foreground/20"

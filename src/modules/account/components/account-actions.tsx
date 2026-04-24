@@ -7,6 +7,7 @@ import {
 } from '@radix-ui/react-dropdown-menu'
 
 import {
+    AccountCreateUpdateFormModal,
     IAccount,
     useDeleteById,
     useMoveAccountOrderIndex,
@@ -25,6 +26,7 @@ import {
     BookStackIcon,
     BookThickIcon,
     ChevronRightIcon,
+    EyeIcon,
     HandCoinsIcon,
     MoneyCheckIcon,
     PencilFillIcon,
@@ -34,6 +36,8 @@ import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { PopoverContent } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
+
+import { useModalState } from '@/hooks/use-modal-state'
 
 export type AccountActionType =
     | 'edit'
@@ -149,11 +153,27 @@ export const AccountActions = ({
         onDeleteSuccess,
         onEditSuccess,
     })
+    const accountModal = useModalState()
 
     return (
         <PopoverContent className="w-64 p-2 rounded-2xl bg-background/80">
+            <AccountCreateUpdateFormModal
+                {...accountModal}
+                formProps={{
+                    defaultValues: account,
+                    readOnly: true,
+                    accountId: account.id,
+                }}
+            />
             <div className="flex flex-col gap-1">
                 {/* Edit */}
+                <button
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition"
+                    onClick={() => accountModal.openModal()}
+                >
+                    <EyeIcon className="size-4" />
+                    view
+                </button>
                 <button
                     className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition"
                     onClick={handleEdit}

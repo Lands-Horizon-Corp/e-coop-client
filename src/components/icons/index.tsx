@@ -286,6 +286,7 @@ import {
     IoLogoLinkedin as LinkedInIcon,
     IoLocationSharp as LocationPinIcon,
     IoMale as MaleIcon,
+    IoMenu as MenuIcon,
     IoLocation as PinLocationIcon,
     IoPricetag as PriceTagIcon,
     IoPrintOutline as PrinterIcon,
@@ -910,6 +911,7 @@ export {
     FemaleIcon,
     MergeIcon,
     ActivityBeatIcon,
+    MenuIcon,
 }
 
 export const IconMap = {
@@ -1329,6 +1331,7 @@ export const IconMap = {
     'Merge Icon': MergeIcon,
     'Fa Tag Icon': FaTagIcon,
     'Truck Icon': TruckIcon,
+    'Menu Icon': MenuIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

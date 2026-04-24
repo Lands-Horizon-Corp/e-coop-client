@@ -696,7 +696,7 @@ const UserQr = ({ memberProfile }: { memberProfile?: IMemberProfile }) => {
                     className="size-80 p-3"
                     containerClassName="mx-auto"
                     fileName={`member_profile_${memberProfile?.first_name}_${memberProfile?.last_name}_${memberProfile?.passbook}`}
-                    value={memberProfile?.qr_code?.data as string}
+                    value={JSON.stringify(memberProfile?.qr_code)}
                 />
             </Modal>
         </>
