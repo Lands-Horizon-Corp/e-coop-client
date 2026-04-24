@@ -24,14 +24,21 @@ export const AccountTableActionManager = () => {
         AccountActionExtra
     >()
 
+    const isCreate = state.action === 'create'
+
     return (
         <>
-            {state.action === 'edit' && state.defaultValues && (
+            {state.action && ['create', 'edit'].includes(state.action) && (
                 <AccountCreateUpdateFormModal
-                    description="Modify/Update account..."
+                    description={`${isCreate ? 'Create' : 'Modify/Update'} account...`}
                     formProps={{
-                        accountId: state.id,
-                        defaultValues: state.defaultValues,
+                        accountId: isCreate ? undefined : state.id,
+                        defaultValues: {
+                            ...state.defaultValues,
+                            index: isCreate
+                                ? state.extra?.index
+                                : state.defaultValues?.index,
+                        },
                         onSuccess: () => {
                             queryClient.invalidateQueries({
                                 queryKey: ['account', 'all', 'all'],
@@ -40,7 +47,7 @@ export const AccountTableActionManager = () => {
                     }}
                     onOpenChange={close}
                     open={state.isOpen}
-                    title="Update Account"
+                    title={`${isCreate ? 'Create' : 'Update'} Account`}
                 />
             )}
             {state.action === 'view' && state.id && (
@@ -79,9 +86,6 @@ export const AccountTableActionManager = () => {
                     >
                         <ViewAccountTransactionLedger
                             accountId={state.defaultValues.id}
-                            // className="min-h-[90vh] !max-w-[90vw] min-w-0 max-h-[90vh]"
-                            // entryType={state.extra?.entryType || ''}
-                            // mode="account"
                         />
                     </Modal>
                 )}

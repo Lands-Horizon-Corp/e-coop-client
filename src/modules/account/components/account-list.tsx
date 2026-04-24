@@ -26,6 +26,7 @@ import {
 import debounce from 'lodash-es/debounce'
 import { AutoSizer, List } from 'react-virtualized'
 
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 import { ChevronDownIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -33,6 +34,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useReorderAccounts } from '../account.service'
 import { IAccount } from '../account.types'
 import { useAccountContext } from '../context/account-provider'
+import { AccountActionType } from './account-actions'
 import { AccountCard, TAccountModalState } from './account-card'
 import AccountListHeader from './account-list-header'
 
@@ -58,19 +60,20 @@ export type TModalState = {
 }
 
 export const AccountList = () => {
-    const { accountsQuery, createModal, setAccounts, accounts } =
-        useAccountContext()
+    const { accountsQuery, accounts, setAccounts } = useAccountContext()
 
-    const parentRef = useRef<List>(null)
+    const { open } = useTableRowActionStore<AccountActionType>()
 
     const accountIds = useMemo(() => accounts.map((a) => a.id), [accounts])
 
+    const parentRef = useRef<List>(null)
+
     const { mutate: reorderAccounts } = useReorderAccounts()
 
-    const [modalState, setModalState] = useState<TModalState>({
-        account: null,
-        index: 0,
-    })
+    // const [modalState, setModalState] = useState<TModalState>({
+    //     account: null,
+    //     index: 0,
+    // })
 
     const [search, setSearch] = useState('')
 
@@ -155,9 +158,11 @@ export const AccountList = () => {
         // Clamp index within bounds
         newIndex = Math.max(0, Math.min(newIndex, lastIndex))
 
-        setModalState({
-            account,
-            index: newIndex,
+        open('create', {
+            ...account,
+            extra: {
+                index: newIndex,
+            },
         })
     }
 
@@ -180,16 +185,11 @@ export const AccountList = () => {
     return (
         <div className="mx-auto w-full max-w-3xl space-y-4 p-6">
             <AccountListHeader
-                createModal={createModal}
                 filteredLength={filtered.length}
-                isFetching={accountsQuery.isFetching}
-                modalState={modalState}
-                onRefetch={() => accountsQuery.refetch()}
-                onRefresh={() => accountsQuery.refetch()}
                 setSearch={setSearch}
             />
             {/* List */}
-            {accountsQuery.isLoading ? (
+            {accountsQuery.isLoading || accountsQuery.isRefetching ? (
                 <div className="p-2 w-full flex flex-col space-y-2">
                     {Array.from({ length: 5 }).map((_, idx) => (
                         <div className="p-2 flex gap-x-2 w-full" key={idx}>

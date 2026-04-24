@@ -1,30 +1,25 @@
 import { ArrowUpDown, Plus } from 'lucide-react'
 
 import RefreshButton from '@/components/buttons/refresh-button'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 import SearchInput from '@/components/search/generic-search-input'
 import { Button } from '@/components/ui/button'
 
-import { useModalState } from '@/hooks/use-modal-state'
-
-import { TModalState } from './account-list'
+import { useAccountContext } from '../context/account-provider'
+import { AccountActionType } from './account-actions'
 
 type AccountListHeader = {
-    createModal: ReturnType<typeof useModalState>
-    onRefresh: () => void
-    isFetching: boolean
     setSearch: (value: string) => void
     filteredLength: number
-    onRefetch: () => void
-    modalState: TModalState
 }
 
 const AccountListHeader = ({
-    createModal,
-    isFetching,
     setSearch,
-    onRefetch,
     filteredLength,
 }: AccountListHeader) => {
+    const { open } = useTableRowActionStore<AccountActionType>()
+    const { accountsQuery } = useAccountContext()
+
     return (
         <>
             <div className="sticky top-0 z-40 bg-background pb-4 space-y-4">
@@ -36,14 +31,14 @@ const AccountListHeader = ({
                     <div>
                         <Button
                             className="gap-2 mr-1"
-                            onClick={() => createModal.openModal()}
+                            onClick={() => open('create')}
                         >
                             <Plus className="h-4 w-4" />
                             Create
                         </Button>
                         <RefreshButton
-                            isLoading={isFetching}
-                            onClick={onRefetch}
+                            isLoading={accountsQuery.isFetching}
+                            onClick={accountsQuery.refetch}
                         />
                     </div>
                 </div>

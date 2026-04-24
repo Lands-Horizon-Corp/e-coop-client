@@ -36,17 +36,18 @@ import { DropdownMenu, DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { PopoverContent } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
 
+import { TActions } from '@/types'
+
 export type AccountActionType =
-    | 'edit'
-    | 'delete'
     | 'view-ledger'
     | 'view-accounting-ledger-transaction'
-    | 'view'
+    | TActions
 
 export interface AccountActionExtra {
     onDeleteSuccess?: () => void
     entryType?: TEntryType
     onEditSuccess?: () => void
+    index?: number
 }
 
 interface UseAccountActionsProps {
