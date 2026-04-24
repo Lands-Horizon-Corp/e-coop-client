@@ -126,6 +126,18 @@ const HistoryTabs: {
         ),
     },
     {
+        value: 'loan-entry',
+        title: 'Loan Entry',
+        Icon: BillIcon,
+        Component: ({ transactionBatchId }) => (
+            <GeneralLedgerAllTable
+                className="grow p-0"
+                mode="transaction-batch-loan-entry"
+                transactionBatchId={transactionBatchId}
+            />
+        ),
+    },
+    {
         value: 'withdraw-entry',
         title: 'Withdraw Entry',
         Icon: HandCoinsIcon,
@@ -404,6 +416,11 @@ export const TotalsSummary = ({
                     credit: totals.general_ledger_credit_total,
                 }
             case 'check-entry':
+                return {
+                    debit: totals.check_entry_debit_total,
+                    credit: totals.check_entry_credit_total,
+                }
+            case 'loan-entry':
                 return {
                     debit: totals.check_entry_debit_total,
                     credit: totals.check_entry_credit_total,

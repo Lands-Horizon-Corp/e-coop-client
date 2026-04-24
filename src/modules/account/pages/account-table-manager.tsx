@@ -12,6 +12,7 @@ import {
     AccountActionType,
 } from '../components/account-actions'
 import ViewAccountTransactionLedger from '../components/account-transaction-ledger'
+import { AccountViewerModal } from '../components/account-viewer/account-viewer'
 import { getModalTitle } from '../components/tables/row-actions'
 
 export const AccountTableActionManager = () => {
@@ -23,14 +24,21 @@ export const AccountTableActionManager = () => {
         AccountActionExtra
     >()
 
+    const isCreate = state.action === 'create'
+
     return (
         <>
-            {state.action === 'edit' && state.defaultValues && (
+            {state.action && ['create', 'edit'].includes(state.action) && (
                 <AccountCreateUpdateFormModal
-                    description="Modify/Update account..."
+                    description={`${isCreate ? 'Create' : 'Modify/Update'} account...`}
                     formProps={{
-                        accountId: state.id,
-                        defaultValues: state.defaultValues,
+                        accountId: isCreate ? undefined : state.id,
+                        defaultValues: {
+                            ...state.defaultValues,
+                            index: isCreate
+                                ? state.extra?.index
+                                : state.defaultValues?.index,
+                        },
                         onSuccess: () => {
                             queryClient.invalidateQueries({
                                 queryKey: ['account', 'all', 'all'],
@@ -39,7 +47,16 @@ export const AccountTableActionManager = () => {
                     }}
                     onOpenChange={close}
                     open={state.isOpen}
-                    title="Update Account"
+                    title={`${isCreate ? 'Create' : 'Update'} Account`}
+                />
+            )}
+            {state.action === 'view' && state.id && (
+                <AccountViewerModal
+                    accountViewerProps={{
+                        accountId: state.id,
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
                 />
             )}
             {state.action === 'view-ledger' && state.defaultValues && (
@@ -69,9 +86,6 @@ export const AccountTableActionManager = () => {
                     >
                         <ViewAccountTransactionLedger
                             accountId={state.defaultValues.id}
-                            // className="min-h-[90vh] !max-w-[90vw] min-w-0 max-h-[90vh]"
-                            // entryType={state.extra?.entryType || ''}
-                            // mode="account"
                         />
                     </Modal>
                 )}

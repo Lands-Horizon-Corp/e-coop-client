@@ -185,6 +185,9 @@ export interface ITransactionBatchHistoryTotal {
     deposit_entry_debit_total: number
     deposit_entry_credit_total: number
 
+    loan_entry_debit_total: number
+    loan_entry_credit_total: number
+
     currency_id: TEntityId
     currency: ICurrency
 }

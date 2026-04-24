@@ -7,7 +7,6 @@ import {
 } from '@radix-ui/react-dropdown-menu'
 
 import {
-    AccountCreateUpdateFormModal,
     IAccount,
     useDeleteById,
     useMoveAccountOrderIndex,
@@ -37,18 +36,18 @@ import { DropdownMenu, DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { PopoverContent } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
 
-import { useModalState } from '@/hooks/use-modal-state'
+import { TActions } from '@/types'
 
 export type AccountActionType =
-    | 'edit'
-    | 'delete'
     | 'view-ledger'
     | 'view-accounting-ledger-transaction'
+    | TActions
 
 export interface AccountActionExtra {
     onDeleteSuccess?: () => void
     entryType?: TEntryType
     onEditSuccess?: () => void
+    index?: number
 }
 
 interface UseAccountActionsProps {
@@ -70,6 +69,7 @@ export const useAccountActions = ({
 
     const { onOpen } = useConfirmModalStore()
     const queryClient = useQueryClient()
+
     const accountCrudPerms = getCrudPermissionFromAuthStore({
         resourceType: 'Account',
         resource: account,
@@ -121,6 +121,13 @@ export const useAccountActions = ({
         })
     }
 
+    const openAccountModal = () => {
+        open('view', {
+            id: account.id,
+            defaultValues: account,
+        })
+    }
+
     return {
         account,
         accountCrudPerms,
@@ -130,6 +137,7 @@ export const useAccountActions = ({
         handleDelete,
         openLedgerModal,
         handleViewAccountingLedger,
+        openAccountModal,
     }
 }
 
@@ -141,35 +149,24 @@ export const AccountActions = ({
     onEditSuccess,
 }: AccountActionProps) => {
     const {
-        // account,
-        // isDeletingAccount,
-        // moveAccountIndexMutation,
         handleEdit,
         handleDelete,
         openLedgerModal,
         handleViewAccountingLedger,
+        openAccountModal,
     } = useAccountActions({
         account,
         onDeleteSuccess,
         onEditSuccess,
     })
-    const accountModal = useModalState()
 
     return (
         <PopoverContent className="w-64 p-2 rounded-2xl bg-background/80">
-            <AccountCreateUpdateFormModal
-                {...accountModal}
-                formProps={{
-                    defaultValues: account,
-                    readOnly: true,
-                    accountId: account.id,
-                }}
-            />
             <div className="flex flex-col gap-1">
                 {/* Edit */}
                 <button
                     className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition"
-                    onClick={() => accountModal.openModal()}
+                    onClick={() => openAccountModal()}
                 >
                     <EyeIcon className="size-4" />
                     view

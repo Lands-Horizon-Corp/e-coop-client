@@ -10,7 +10,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 
 import { MagnifyingGlassIcon, PlusIcon } from '@/components/icons'
 import Modal from '@/components/modals/modal'
-import GenericSearchInput from '@/components/search/generic-search-input'
+import SearchInput from '@/components/search/generic-search-input'
 import { Button } from '@/components/ui/button'
 
 import { useGeneralLedgerDefinitionContext } from '../ context/general-ledger-context-provider'
@@ -106,7 +106,7 @@ const GeneralLedgerDefinitionHeaderSearch = () => {
                     <PlusIcon className="mr-2" size={15} />
                     Add GL
                 </Button>
-                <GenericSearchInput
+                <SearchInput
                     placeholder="search GL and Account"
                     setSearchTerm={states.setSearchTerm}
                 />

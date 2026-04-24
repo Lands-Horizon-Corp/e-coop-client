@@ -10,6 +10,8 @@ import { createMutationFactory } from '@/providers/repositories/mutation-factory
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
+import { loanTransactionBaseKey } from '../loan-transaction'
+import { transactionBaseQueryKey } from '../transaction'
 import {
     IGeneralLedger,
     IGeneralLedgerPaginated,
@@ -76,6 +78,7 @@ export type TGeneralLedgerEndpointMode =
     | 'member'
     | 'member-account'
     | 'transaction-batch'
+    | 'transaction-batch-loan-entry'
     | 'account'
 
 type TGeneralLedgerIdProps = {
@@ -167,6 +170,12 @@ export const buildGeneralLedgerEndpoint = ({
             if (!transactionBatchId)
                 throw new Error('transactionBatchId is required')
             path = `/transaction-batch/${transactionBatchId}`
+            break
+
+        case 'transaction-batch-loan-entry':
+            if (!transactionBatchId)
+                throw new Error('transactionBatchId is required')
+            path = `/transaction-batch/${transactionBatchId}/loan-entry`
             break
 
         case 'account':
@@ -317,6 +326,14 @@ export const useChangeOR = createMutationFactory<
     unknown,
     Error,
     IChangeORRequest
->({ mutationFn: changeOR })
+>({
+    mutationFn: changeOR,
+    defaultInvalidates: [
+        [transactionBaseQueryKey],
+        [loanTransactionBaseKey],
+        [generalLedgerBaseKey],
+        [transactionBaseQueryKey],
+    ],
+})
 
 export const logger = Logger.getInstance('general-ledger')

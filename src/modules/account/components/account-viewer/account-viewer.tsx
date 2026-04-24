@@ -304,7 +304,7 @@ export const AccountViewerModal = ({
     return (
         <Modal
             className={cn(
-                'w-fit p-4 !rounded-3xl !max-w-none',
+                'w-fit p-4 rounded-3xl! max-w-none!',
                 className,
                 accountViewerProps.isHistoryAccount && 'saturate-50'
             )}

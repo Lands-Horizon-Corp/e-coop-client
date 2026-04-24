@@ -14,7 +14,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { highlightMatch } from '../hightlight-match'
 import Modal from '../modals/modal'
-import GenericSearchInput from '../search/generic-search-input'
+import SearchInput from '../search/generic-search-input'
 import {
     Empty,
     EmptyDescription,
@@ -46,7 +46,7 @@ const ShortcutItem = ({
             className={cn(
                 'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
                 'aria-selected:bg-accent aria-selected:text-accent-foreground',
-                'hover:!bg-transparent' // Custom styling to disable hover
+                'hover:bg-transparent!' // Custom styling to disable hover
             )}
         >
             <div className="flex-none w-5 h-5 mr-2">{icon}</div>
@@ -137,7 +137,7 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
                 <div className="">
                     {/* Main Content Area - Columns */}
                     <div className="flex-1 bg-sidebar/50 mt-3 px-5 rounded-xl grid grid-cols-1 lg:grid-cols-3 gap-3 ecoop-scroll overflow-y-auto">
-                        <GenericSearchInput
+                        <SearchInput
                             className=" col-span-3 w-full"
                             placeholder="search command key"
                             setSearchTerm={setSearchTerm}

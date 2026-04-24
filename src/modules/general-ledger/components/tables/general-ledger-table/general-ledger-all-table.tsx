@@ -66,36 +66,40 @@ export type TGeneralLedgerAllTableProps =
       })
     | (GeneralLedgerAllTableBaseProps & {
           mode: 'employee'
-          userOrganizationId: string
+          userOrganizationId: TEntityId
       })
     | (GeneralLedgerAllTableBaseProps & {
           mode: 'member'
-          memberProfileId: string
+          memberProfileId: TEntityId
       })
     | (GeneralLedgerAllTableBaseProps & {
           mode: 'member-account'
-          memberProfileId: string
-          accountId: string
+          memberProfileId: TEntityId
+          accountId: TEntityId
       })
     | (GeneralLedgerAllTableBaseProps & {
           mode: 'transaction-batch'
-          transactionBatchId: string
+          transactionBatchId: TEntityId
+      })
+    | (GeneralLedgerAllTableBaseProps & {
+          mode: 'transaction-batch-loan-entry'
+          transactionBatchId: TEntityId
       })
     | (GeneralLedgerAllTableBaseProps & {
           mode: 'transaction'
-          transactionId: string
+          transactionId: TEntityId
       })
     | (GeneralLedgerAllTableBaseProps & {
           mode: 'loan-transaction'
-          loanTransactionId: string
+          loanTransactionId: TEntityId
       })
     | (GeneralLedgerAllTableBaseProps & {
           mode: 'member-accounting-ledger'
-          memberAccountingLedgerId: string
+          memberAccountingLedgerId: TEntityId
       })
     | (GeneralLedgerAllTableBaseProps & {
           mode: 'account'
-          accountId: string
+          accountId: TEntityId
       })
 
 const GeneralLedgerAllTable = ({
