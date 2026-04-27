@@ -272,7 +272,7 @@ const LoanTransactionTableColumns = (
         //     id: 'applied_2',
         //     accessorKey: 'applied_2',
         //     header: (props) => (
-        //         <DataTableColumnHeader {...props} title="Aplied 2">
+        //         <DataTable {...props} title="Aplied 2">
         //             <ColumnActions {...props}>
         //                 <TextFilter<ILoanTransaction>
         //                     displayText="Applied 2"

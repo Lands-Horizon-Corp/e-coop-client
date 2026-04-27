@@ -21,6 +21,7 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
+import { useDataTablePagination } from '@/components/data-table/use-datatable-pagination'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState, {
     useResolvedColumnOrder,
@@ -96,11 +97,10 @@ const MutualFundTable = ({
         defaultFilter,
         onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
     })
-
     const {
         isPending,
         isRefetching,
-        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
+        data: paginatedData,
         refetch,
     } = useGetPaginatedMutualFund({
         query: {
@@ -110,12 +110,19 @@ const MutualFundTable = ({
         },
     })
 
+    const { data, totalPage, totalSize } = useDataTablePagination(
+        paginatedData,
+        {
+            fallbackPageSize: pagination.pageSize,
+        }
+    )
+
     const handleRowSelectionChange =
         tableState.createHandleRowSelectionChange(data)
 
     const table = useReactTable({
         columns,
-        data: data,
+        data,
         initialState: {
             columnPinning: { left: ['select'] },
         },
@@ -126,10 +133,10 @@ const MutualFundTable = ({
             rowSelection: tableState.rowSelectionState.rowSelection,
             columnVisibility: tableState.columnVisibility,
         },
-        rowCount: pageSize,
-        manualSorting: true,
+        rowCount: totalSize,
         pageCount: totalPage,
         enableMultiSort: false,
+        manualSorting: true,
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
@@ -137,8 +144,8 @@ const MutualFundTable = ({
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
-        onColumnOrderChange: tableState.setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
+        onColumnOrderChange: tableState.setColumnOrder,
         onColumnVisibilityChange: tableState.setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
         defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
@@ -151,7 +158,7 @@ const MutualFundTable = ({
                     className={cn(
                         'flex h-full flex-col gap-y-2',
                         className,
-                        !tableState.isScrollable && 'h-fit !max-h-none'
+                        !tableState.isScrollable && 'h-fit max-h-none!'
                     )}
                 >
                     <DataTableToolbar
@@ -162,7 +169,7 @@ const MutualFundTable = ({
                                 }),
                             onDelete: (selectedData) =>
                                 deleteManyMutualFund({
-                                    ids: selectedData.map((data) => data.id),
+                                    ids: selectedData.map((d) => d.id),
                                 }),
                         }}
                         filterLogicProps={{
@@ -184,20 +191,24 @@ const MutualFundTable = ({
                         table={table}
                         {...toolbarProps}
                     />
+
                     <DataTable
                         className="mb-2"
+                        isLoading={isPending}
                         isScrollable={tableState.isScrollable}
                         isStickyFooter
                         isStickyHeader
                         onDoubleClick={onDoubleClick}
                         onRowClick={onRowClick}
                         RowContextComponent={RowContextComponent}
-                        setColumnOrder={tableState.setColumnOrder}
+                        skeletonRowCount={20}
                         table={table}
                     />
+
                     <DataTablePagination table={table} totalSize={totalSize} />
                 </div>
             </FilterContext.Provider>
+
             <MutualFundTableActionManager />
         </TableRowActionStoreProvider>
     )

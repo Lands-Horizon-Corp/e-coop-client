@@ -17,11 +17,11 @@ import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
 import { TableProps } from '@/components/data-table/table.type'
+import { useDataTablePagination } from '@/components/data-table/use-datatable-pagination'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState, {
     useResolvedColumnOrder,
 } from '@/components/data-table/use-datatable-state'
-import { useLoadingColumns } from '@/components/data-table/use-loading-columns'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -90,11 +90,10 @@ const MemberDepartmentHistoryTable = ({
     const filterState = useDatableFilterState({
         onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
     })
-
     const {
         isPending,
         isRefetching,
-        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
+        data: paginatedData,
         refetch,
     } = useMemberDepartmentHistory({
         profileId,
@@ -105,14 +104,17 @@ const MemberDepartmentHistoryTable = ({
         },
     })
 
+    const { data, totalPage, totalSize } = useDataTablePagination(
+        paginatedData,
+        {
+            fallbackPageSize: pagination.pageSize,
+        }
+    )
+
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
-    const tableColumns = useLoadingColumns({
-        columns,
-        isLoading: isPending || isRefetching,
-    })
     const table = useReactTable({
-        columns: tableColumns,
+        columns,
         data,
         initialState: {
             columnPinning: { left: ['select'] },
@@ -124,19 +126,19 @@ const MemberDepartmentHistoryTable = ({
             rowSelection: rowSelectionState.rowSelection,
             columnVisibility,
         },
-        rowCount: pageSize,
-        manualSorting: true,
+        rowCount: totalSize,
         pageCount: totalPage,
         getRowId: getRowIdFn,
+        manualSorting: true,
         manualFiltering: true,
-        enableMultiSort: false,
         manualPagination: true,
+        enableMultiSort: false,
         columnResizeMode: 'onChange',
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
-        onColumnOrderChange: setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
+        onColumnOrderChange: setColumnOrder,
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
     })
@@ -167,18 +169,17 @@ const MemberDepartmentHistoryTable = ({
                     table={table}
                     {...toolbarProps}
                 />
+
                 <DataTable
+                    isLoading={isPending}
                     isScrollable={isScrollable}
                     isStickyFooter
                     isStickyHeader
-                    setColumnOrder={setColumnOrder}
+                    skeletonRowCount={20}
                     table={table}
                 />
-                <DataTablePagination
-                    pageSizes={PAGE_SIZES_SMALL.slice(1)}
-                    table={table}
-                    totalSize={totalSize}
-                />
+
+                <DataTablePagination table={table} totalSize={totalSize} />
             </div>
         </FilterContext.Provider>
     )

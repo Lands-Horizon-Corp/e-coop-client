@@ -73,7 +73,9 @@ const TransactionTableColumns = (
         //     id: 'reference_number',
         //     accessorKey: 'reference_number',
         //     header: (props) => (
-        //         <DataTableColumnHeader {...props} title="Transaction Ref">
+        //         <DataTable
+        // isLoading={isPending}
+        // skeletonRowCount={20}ColumnHeader {...props} title="Transaction Ref">
         //             <ColumnActions {...props}>
         //                 <TextFilter<ITransaction>
         //                     displayText="Transaction Reference Number"

@@ -173,11 +173,12 @@ const IncludeNegativeAccountTable = ({
                     />
                     <DataTable
                         className="mb-2"
+                        isLoading={isPending}
                         isScrollable={isScrollable}
                         isStickyFooter
                         isStickyHeader
                         RowContextComponent={RowContextComponent}
-                        setColumnOrder={setColumnOrder}
+                        skeletonRowCount={20}
                         table={table}
                     />
                 </div>

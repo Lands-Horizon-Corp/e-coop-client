@@ -225,13 +225,14 @@ const GeneralLedgerAllTable = ({
                 />
                 <DataTable
                     className="mb-2"
+                    isLoading={isPending}
                     isScrollable={tableState.isScrollable}
                     isStickyFooter
                     isStickyHeader
                     onDoubleClick={onDoubleClick}
                     onRowClick={onRowClick}
                     RowContextComponent={RowContextComponent}
-                    setColumnOrder={tableState.setColumnOrder}
+                    skeletonRowCount={20}
                     table={table}
                 />
             </div>

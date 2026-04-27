@@ -4,11 +4,11 @@ import {
     Column,
     ColumnDef,
     ColumnPinningState,
-    RowSelectionState,
     ColumnSizingState,
+    OnChangeFn,
+    RowSelectionState,
     flexRender,
     getCoreRowModel,
-    OnChangeFn,
     useReactTable,
 } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -115,9 +115,12 @@ function getPinStyles<TData>(column: Column<TData>) {
         pinPosition === 'right' && column.getIsFirstColumn('right')
 
     return {
-        left: pinPosition === 'left' ? `${column.getStart('left')}px` : undefined,
+        left:
+            pinPosition === 'left' ? `${column.getStart('left')}px` : undefined,
         right:
-            pinPosition === 'right' ? `${column.getAfter('right')}px` : undefined,
+            pinPosition === 'right'
+                ? `${column.getAfter('right')}px`
+                : undefined,
         position: 'sticky' as const,
         zIndex: 2,
         boxShadow: isLastLeftPinnedColumn
@@ -192,14 +195,24 @@ export default function TanstackVirtualPinningSample() {
                 minSize: 160,
                 size: 220,
             },
-            { accessorKey: 'branch', header: 'Branch', minSize: 120, size: 150 },
+            {
+                accessorKey: 'branch',
+                header: 'Branch',
+                minSize: 120,
+                size: 150,
+            },
             {
                 accessorKey: 'product',
                 header: 'Product',
                 minSize: 130,
                 size: 170,
             },
-            { accessorKey: 'status', header: 'Status', minSize: 120, size: 140 },
+            {
+                accessorKey: 'status',
+                header: 'Status',
+                minSize: 120,
+                size: 140,
+            },
             {
                 accessorKey: 'balance',
                 header: 'Balance',
@@ -213,7 +226,12 @@ export default function TanstackVirtualPinningSample() {
                 minSize: 110,
                 size: 130,
             },
-            { accessorKey: 'dueDate', header: 'Due Date', minSize: 130, size: 150 },
+            {
+                accessorKey: 'dueDate',
+                header: 'Due Date',
+                minSize: 130,
+                size: 150,
+            },
             {
                 accessorKey: 'createdAt',
                 header: 'Created At',
@@ -224,7 +242,9 @@ export default function TanstackVirtualPinningSample() {
         []
     )
 
-    const handleColumnSizingChange: OnChangeFn<ColumnSizingState> = (updater) => {
+    const handleColumnSizingChange: OnChangeFn<ColumnSizingState> = (
+        updater
+    ) => {
         setColumnSizing((previousSizing) => {
             const nextSizing =
                 typeof updater === 'function'
@@ -294,7 +314,9 @@ export default function TanstackVirtualPinningSample() {
             {}
         )
 
-        const unchanged = leafColumns.every((col) => col.getSize() === nextSizing[col.id])
+        const unchanged = leafColumns.every(
+            (col) => col.getSize() === nextSizing[col.id]
+        )
 
         if (unchanged) return
 
@@ -352,8 +374,9 @@ export default function TanstackVirtualPinningSample() {
                     Stretch Columns
                 </button>
                 <p className="text-sm text-muted-foreground">
-                    Rows: {rows.length} | Cols: {table.getVisibleLeafColumns().length} |
-                    Selected: {table.getSelectedRowModel().rows.length}
+                    Rows: {rows.length} | Cols:{' '}
+                    {table.getVisibleLeafColumns().length} | Selected:{' '}
+                    {table.getSelectedRowModel().rows.length}
                 </p>
                 <p className="text-sm text-muted-foreground">{lastRowAction}</p>
             </div>
@@ -385,7 +408,9 @@ export default function TanstackVirtualPinningSample() {
                                 style={{ display: 'flex', width: '100%' }}
                             >
                                 {headerGroup.headers.map((header) => {
-                                    const pinStyles = getPinStyles(header.column)
+                                    const pinStyles = getPinStyles(
+                                        header.column
+                                    )
                                     return (
                                         <th
                                             key={header.id}
@@ -474,7 +499,11 @@ export default function TanstackVirtualPinningSample() {
                                             className="border-b border-border/70 odd:bg-background even:bg-muted/20 data-[selected=true]:bg-primary/10"
                                             data-index={virtualRow.index}
                                             data-selected={row.getIsSelected()}
-                                            ref={(node) => rowVirtualizer.measureElement(node)}
+                                            ref={(node) =>
+                                                rowVirtualizer.measureElement(
+                                                    node
+                                                )
+                                            }
                                             style={{
                                                 display: 'flex',
                                                 position: 'absolute',
@@ -482,37 +511,41 @@ export default function TanstackVirtualPinningSample() {
                                                 width: '100%',
                                             }}
                                         >
-                                            {row.getVisibleCells().map((cell) => {
-                                                const pinStyles = getPinStyles(
-                                                    cell.column
-                                                )
-
-                                                return (
-                                                    <td
-                                                        className="px-3 py-2 text-sm"
-                                                        key={cell.id}
-                                                        style={{
-                                                            display: 'flex',
-                                                            width: cell.column.getSize(),
-                                                            minWidth:
-                                                                cell.column.getSize(),
-                                                            maxWidth:
-                                                                cell.column.getSize(),
-                                                            background:
-                                                                cell.column.getIsPinned()
-                                                                    ? 'hsl(var(--background))'
-                                                                    : undefined,
-                                                            ...pinStyles,
-                                                        }}
-                                                    >
-                                                        {flexRender(
+                                            {row
+                                                .getVisibleCells()
+                                                .map((cell) => {
+                                                    const pinStyles =
+                                                        getPinStyles(
                                                             cell.column
-                                                                .columnDef.cell,
-                                                            cell.getContext()
-                                                        )}
-                                                    </td>
-                                                )
-                                            })}
+                                                        )
+
+                                                    return (
+                                                        <td
+                                                            className="px-3 py-2 text-sm"
+                                                            key={cell.id}
+                                                            style={{
+                                                                display: 'flex',
+                                                                width: cell.column.getSize(),
+                                                                minWidth:
+                                                                    cell.column.getSize(),
+                                                                maxWidth:
+                                                                    cell.column.getSize(),
+                                                                background:
+                                                                    cell.column.getIsPinned()
+                                                                        ? 'hsl(var(--background))'
+                                                                        : undefined,
+                                                                ...pinStyles,
+                                                            }}
+                                                        >
+                                                            {flexRender(
+                                                                cell.column
+                                                                    .columnDef
+                                                                    .cell,
+                                                                cell.getContext()
+                                                            )}
+                                                        </td>
+                                                    )
+                                                })}
                                         </tr>
                                     </ContextMenuTrigger>
                                     <ContextMenuContent className="w-56">

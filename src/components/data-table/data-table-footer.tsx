@@ -1,8 +1,6 @@
 import { cn } from '@/helpers/tw-utils'
 import { Table, flexRender } from '@tanstack/react-table'
 
-import { TableCell, TableFooter, TableRow } from '@/components/ui/table'
-
 import { getPinningStyles } from './data-table-utils'
 
 const DataTableFooter = <TData,>({
@@ -23,13 +21,11 @@ const DataTableFooter = <TData,>({
     if (!hasFooters) return null
 
     return (
-        <TableFooter
-            className={cn('', isStickyFooter && 'sticky bottom-0 z-50')}
-        >
+        <tfoot className={cn('', isStickyFooter && 'sticky bottom-0 z-50')}>
             {table.getFooterGroups().map((footerGroup) => (
-                <TableRow
+                <tr
                     className={cn(
-                        'text-nowrap bg-secondary hover:bg-popover dark:bg-popover',
+                        'flex w-full text-nowrap bg-secondary dark:bg-popover',
                         footerTrClassName
                     )}
                     data-footer-row-id={footerGroup.id}
@@ -46,8 +42,8 @@ const DataTableFooter = <TData,>({
                             column.getIsFirstColumn('right')
 
                         return (
-                            <TableCell
-                                className="size-fit text-nowrap font-medium data-[pinned]:bg-muted/60 data-[pinned]:backdrop-blur-sm [&[data-pinned=left][data-last-col=left]]:border-r [&[data-pinned=right][data-last-col=right]]:border-l [&[data-pinned][data-last-col]]:border-border"
+                            <td
+                                className="truncate border-t border-border bg-secondary px-3 py-2 text-nowrap text-sm font-medium dark:bg-popover data-[pinned]:bg-muted/60 [&[data-pinned=left][data-last-col=left]]:border-r [&[data-pinned=right][data-last-col=right]]:border-l [&[data-pinned][data-last-col]]:border-border"
                                 data-last-col={
                                     isLastLeftPinned
                                         ? 'left'
@@ -67,12 +63,12 @@ const DataTableFooter = <TData,>({
                                           header.column.columnDef.footer,
                                           header.getContext()
                                       )}
-                            </TableCell>
+                            </td>
                         )
                     })}
-                </TableRow>
+                </tr>
             ))}
-        </TableFooter>
+        </tfoot>
     )
 }
 

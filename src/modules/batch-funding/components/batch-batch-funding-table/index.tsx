@@ -162,13 +162,14 @@ const BatchBatchFundingTable = ({
                 />
                 <DataTable
                     className="mb-2"
+                    isLoading={isPending}
                     isScrollable={isScrollable}
                     isStickyFooter
                     isStickyHeader
                     onDoubleClick={onDoubleClick}
                     onRowClick={onRowClick}
                     RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
+                    skeletonRowCount={20}
                     table={table}
                 />
                 {/* <DataTablePagination table={table} totalSize={totalSize} /> */}

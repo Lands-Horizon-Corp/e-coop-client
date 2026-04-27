@@ -26,7 +26,6 @@ import { useDataTableSorting } from '@/components/data-table/use-datatable-sorti
 import useDataTableState, {
     useResolvedColumnOrder,
 } from '@/components/data-table/use-datatable-state'
-import { useLoadingColumns } from '@/components/data-table/use-loading-columns'
 
 import { usePagination } from '@/hooks/use-pagination'
 
@@ -141,13 +140,8 @@ const GeneralLedgerRunningTable = ({
         },
     })
 
-    const tableColumns = useLoadingColumns({
-        columns,
-        isLoading: isPending || isRefetching,
-    })
-
     const table = useReactTable({
-        columns: tableColumns,
+        columns,
         data,
         initialState: {
             columnPinning: { left: ['select'] },
@@ -201,13 +195,14 @@ const GeneralLedgerRunningTable = ({
                 />
                 <DataTable
                     className="mb-2"
+                    isLoading={isPending}
                     isScrollable={tableState.isScrollable}
                     isStickyFooter
                     isStickyHeader
                     onDoubleClick={onDoubleClick}
                     onRowClick={onRowClick}
                     RowContextComponent={RowContextComponent}
-                    setColumnOrder={tableState.setColumnOrder}
+                    skeletonRowCount={20}
                     table={table}
                 />
             </div>

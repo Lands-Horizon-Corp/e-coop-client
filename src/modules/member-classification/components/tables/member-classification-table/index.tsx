@@ -17,11 +17,11 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
+import { useDataTablePagination } from '@/components/data-table/use-datatable-pagination'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState, {
     useResolvedColumnOrder,
 } from '@/components/data-table/use-datatable-state'
-import { useLoadingColumns } from '@/components/data-table/use-loading-columns'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -106,11 +106,10 @@ const MemberClassificationTable = ({
         defaultFilter,
         onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
     })
-
     const {
         isPending,
         isRefetching,
-        data: { data = [], totalPage = 0, pageSize = 10, totalSize = 0 } = {},
+        data: paginatedData,
         refetch,
     } = useGetPaginated({
         query: {
@@ -120,15 +119,18 @@ const MemberClassificationTable = ({
         },
     })
 
+    const { data, totalPage, totalSize } = useDataTablePagination(
+        paginatedData,
+        {
+            fallbackPageSize: pagination.pageSize,
+        }
+    )
+
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
-    const tableColumns = useLoadingColumns({
-        columns,
-        isLoading: isPending || isRefetching,
-    })
     const table = useReactTable({
-        columns: tableColumns,
-        data: data,
+        columns,
+        data,
         initialState: {
             columnPinning: { left: ['select'] },
         },
@@ -139,10 +141,10 @@ const MemberClassificationTable = ({
             rowSelection: rowSelectionState.rowSelection,
             columnVisibility,
         },
-        rowCount: pageSize,
-        manualSorting: true,
+        rowCount: totalSize,
         pageCount: totalPage,
         enableMultiSort: false,
+        manualSorting: true,
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
@@ -150,23 +152,15 @@ const MemberClassificationTable = ({
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
-        onColumnOrderChange: setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
+        onColumnOrderChange: setColumnOrder,
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
     })
 
-    /* const exportfilter = qs.stringify(
-        {
-            ...pagination,
-            sort: sortingStateBase64,
-            filter: filterState.finalFilterPayloadBase64,
-        },
-        { skipNull: true }
-    ) */
     return (
-        <FilterContext.Provider value={filterState}>
-            <TableRowActionStoreProvider>
+        <TableRowActionStoreProvider>
+            <FilterContext.Provider value={filterState}>
                 <div
                     className={cn(
                         'flex h-full flex-col gap-y-2',
@@ -185,7 +179,7 @@ const MemberClassificationTable = ({
                                 }),
                             onDelete: (selectedData) =>
                                 MemberClassificationAPI.deleteMany({
-                                    ids: selectedData.map((data) => data.id),
+                                    ids: selectedData.map((d) => d.id),
                                 }),
                         }}
                         filterLogicProps={{
@@ -204,22 +198,25 @@ const MemberClassificationTable = ({
                         table={table}
                         {...toolbarProps}
                     />
+
                     <DataTable
                         className="mb-2"
+                        isLoading={isPending}
                         isScrollable={isScrollable}
                         isStickyFooter
                         isStickyHeader
                         onDoubleClick={onDoubleClick}
                         onRowClick={onRowClick}
                         RowContextComponent={RowContextComponent}
-                        setColumnOrder={setColumnOrder}
+                        skeletonRowCount={20}
                         table={table}
                     />
+
                     <DataTablePagination table={table} totalSize={totalSize} />
                     <MemberClassificationTableActionManager />
                 </div>
-            </TableRowActionStoreProvider>
-        </FilterContext.Provider>
+            </FilterContext.Provider>
+        </TableRowActionStoreProvider>
     )
 }
 

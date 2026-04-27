@@ -269,7 +269,7 @@ const GeneralLedgerRunningTableColumns = (
         //     id: 'member_profile',
         //     accessorKey: 'member_profile.full_name',
         //     header: (props) => (
-        //         <DataTableColumnHeader {...props} title="Member">
+        //         <DataTable {...props} title="Member">
         //             <ColumnActions {...props} />
         //         </DataTableColumnHeader>
         //     ),

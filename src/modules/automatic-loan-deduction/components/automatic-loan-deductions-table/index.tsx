@@ -2,8 +2,6 @@ import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 
-/* import qs from 'query-string' */
-
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
 import {
@@ -186,16 +184,19 @@ const AutomaticLoanDeductionTable = ({
                 />
                 <DataTable
                     className="mb-2"
+                    isLoading={isPending}
                     isScrollable={isScrollable}
                     isStickyFooter
                     isStickyHeader
                     onDoubleClick={onDoubleClick}
                     onRowClick={onRowClick}
                     RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
+                    skeletonRowCount={20}
                     table={table}
                 />
-                {/* <DataTablePagination table={table} totalSize={totalSize} /> */}
+                {/* <DataTable
+isLoading={isPending}
+skeletonRowCount={20}Pagination table={table} totalSize={totalSize} /> */}
             </div>
         </FilterContext.Provider>
     )

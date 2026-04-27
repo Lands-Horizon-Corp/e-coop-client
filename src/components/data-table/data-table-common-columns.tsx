@@ -36,7 +36,9 @@ export const createUpdateColumns = <T extends ITimeStamps = ITimeStamps>(
                 },
             }) => (
                 <div>
-                    <p>{created_at ? toReadableDate(created_at) : ''} </p>
+                    <p className="text-sm">
+                        {created_at ? toReadableDate(created_at) : ''}{' '}
+                    </p>
                     {created_at ? (
                         <p className="text-xs text-muted-foreground/60">
                             {toReadableDate(created_at, 'h:mm a -')}{' '}
@@ -73,7 +75,9 @@ export const createUpdateColumns = <T extends ITimeStamps = ITimeStamps>(
                 },
             }) => (
                 <div>
-                    <p>{updated_at ? toReadableDate(updated_at) : ''} </p>
+                    <p className="text-sm">
+                        {updated_at ? toReadableDate(updated_at) : ''}{' '}
+                    </p>
                     {updated_at ? (
                         <p className="text-xs text-muted-foreground/60">
                             {toReadableDate(updated_at, 'h:mm a -')}{' '}

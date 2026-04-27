@@ -32,7 +32,6 @@ import {
 import { Plus } from 'lucide-react'
 
 import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
-import { useLoadingColumns } from '@/components/data-table/use-loading-columns'
 import {
     MagnifyingGlassIcon,
     RefreshIcon,
@@ -247,7 +246,7 @@ export const MutualFundEntryTable = ({
     const tableContainerRef = useRef<HTMLDivElement>(null)
     const [searchQuery, setSearchQuery] = useState('')
 
-    const { data, isLoading, isFetching, refetch, isPending, isRefetching } =
+    const { data, isLoading, isFetching, refetch /*isPending, isRefetching*/ } =
         useGetMutualFundEntry({
             mutualFundId: mutualFundId,
             options: {
@@ -353,13 +352,9 @@ export const MutualFundEntryTable = ({
         [actionComponent, readOnly]
     )
 
-    const tableColumns = useLoadingColumns({
-        columns,
-        isLoading: isPending || isRefetching,
-    })
     const table = useReactTable({
         data: filteredEntries,
-        columns: tableColumns,
+        columns,
         getCoreRowModel: getCoreRowModel(),
     })
 

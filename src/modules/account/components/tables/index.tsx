@@ -15,12 +15,12 @@ import {
 } from '@tanstack/react-table'
 
 import DataTable from '@/components/data-table'
-import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
 import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
+import { useDataTablePagination } from '@/components/data-table/use-datatable-pagination'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState, {
     useResolvedColumnOrder,
@@ -127,12 +127,12 @@ const AccountsTable = ({
         },
     })
 
-    const {
-        data = [],
-        totalPage = 0,
-        pageSize = 0,
-        totalSize = 0,
-    } = paginatedData || {}
+    const { data, totalPage, totalSize } = useDataTablePagination(
+        paginatedData,
+        {
+            fallbackPageSize: pagination.pageSize,
+        }
+    )
 
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
@@ -149,7 +149,7 @@ const AccountsTable = ({
             rowSelection: rowSelectionState.rowSelection,
             columnVisibility,
         },
-        rowCount: pageSize,
+        rowCount: totalSize,
         manualSorting: true,
         pageCount: totalPage,
         enableMultiSort: false,
@@ -170,15 +170,6 @@ const AccountsTable = ({
     useSubscribe('account', `create.branch.${branch_id}`, refetch)
     useSubscribe('account', `update.branch.${branch_id}`, refetch)
     useSubscribe('account', `delete.branch.${branch_id}`, refetch)
-
-    // /* const exportfilter = qs.stringify(
-    //     {
-    //         ...pagination,
-    //         sort: sortingStateBase64,
-    //         filter: filterState.finalFilterPayloadBase64,
-    //     },
-    //     { skipNull: true }
-    // ) */
 
     return (
         <TableRowActionStoreProvider>
@@ -218,17 +209,17 @@ const AccountsTable = ({
                         {...toolbarProps}
                     />
                     <DataTable
-                        className="mb-2"
+                        className={cn('mb-2', isScrollable && 'flex-1')}
+                        isLoading={isPending}
                         isScrollable={isScrollable}
                         isStickyFooter
                         isStickyHeader
                         onDoubleClick={onDoubleClick}
                         onRowClick={onRowClick}
                         RowContextComponent={RowContextComponent}
-                        setColumnOrder={setColumnOrder}
+                        skeletonRowCount={20}
                         table={table}
                     />
-                    <DataTablePagination table={table} totalSize={totalSize} />
                 </div>
             </FilterContext.Provider>
             <AccountTableActionManager />

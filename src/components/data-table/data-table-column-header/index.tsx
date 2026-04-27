@@ -1,8 +1,6 @@
 import { CSSProperties } from 'react'
 
 import { cn } from '@/helpers/tw-utils'
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
 import { Column, Header, Table } from '@tanstack/react-table'
 
 import { PushPinSlashIcon } from '@/components/icons'
@@ -34,19 +32,13 @@ const DataTableColumnHeader = <TData, TValue>({
     containerClassName,
     disableSort = false,
 }: DataTableColumnHeaderProps<TData, TValue>) => {
-    const { attributes, isDragging, listeners, setNodeRef, transform } =
-        useSortable({
-            id: header.column.id,
-        })
-
     const style: CSSProperties = {
-        opacity: isDragging ? 0.8 : 1,
+        opacity: 1,
         position: 'relative',
-        transform: CSS.Translate.toString(transform),
-        transition: 'width transform 0.2s ease-in-out',
+        transition: 'width 0.2s ease-in-out',
         whiteSpace: 'nowrap',
         width: header.column.getSize(),
-        zIndex: isDragging ? 1 : 0,
+        zIndex: 0,
     }
 
     const finalTitle = tooltipDescription ? (
@@ -67,16 +59,11 @@ const DataTableColumnHeader = <TData, TValue>({
                     )}
                 >
                     <span
-                        // size="sm"
-                        style={style}
-                        {...listeners}
-                        // variant="ghost"
-                        {...attributes}
                         className={cn(
-                            '!size-fit cursor-ew-resize gap-x-2 self-start truncate p-1',
+                            '!size-fit gap-x-2 self-start truncate p-1',
                             disableSort && 'pointer-events-none'
                         )}
-                        ref={setNodeRef}
+                        style={style}
                     >
                         {finalTitle}
                     </span>

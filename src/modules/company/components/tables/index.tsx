@@ -22,9 +22,9 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
+import { useDataTablePagination } from '@/components/data-table/use-datatable-pagination'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState from '@/components/data-table/use-datatable-state'
-import { useLoadingColumns } from '@/components/data-table/use-loading-columns'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -77,6 +77,31 @@ const CompanyTable = ({
         [actionComponent]
     )
 
+    const filterState = useDatableFilterState({
+        defaultFilter,
+        onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
+    })
+
+    const {
+        isPending,
+        isRefetching,
+        data: paginatedData,
+        refetch,
+    } = useGetPaginatedCompany({
+        query: {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+    })
+
+    const { data, totalPage, totalSize } = useDataTablePagination(
+        paginatedData,
+        {
+            fallbackPageSize: pagination.pageSize,
+        }
+    )
+
     const {
         getRowIdFn,
         columnOrder,
@@ -92,34 +117,11 @@ const CompanyTable = ({
         onSelectData,
     })
 
-    const filterState = useDatableFilterState({
-        defaultFilter,
-        onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
-    })
-
-    const {
-        isPending,
-        isRefetching,
-        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
-        refetch,
-    } = useGetPaginatedCompany({
-        query: {
-            ...pagination,
-            sort: sortingStateBase64,
-            filter: filterState.finalFilterPayloadBase64,
-        },
-    })
-
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
-    const tableColumns = useLoadingColumns({
-        columns,
-        isLoading: isPending || isRefetching,
-    })
-
     const table = useReactTable({
-        columns: tableColumns,
-        data: data,
+        columns,
+        data,
         initialState: {
             columnPinning: { left: ['select'] },
         },
@@ -130,10 +132,10 @@ const CompanyTable = ({
             rowSelection: rowSelectionState.rowSelection,
             columnVisibility,
         },
-        rowCount: pageSize,
-        manualSorting: true,
+        rowCount: totalSize,
         pageCount: totalPage,
         enableMultiSort: false,
+        manualSorting: true,
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
@@ -141,19 +143,12 @@ const CompanyTable = ({
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
-        onColumnOrderChange: setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
+        onColumnOrderChange: setColumnOrder,
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
     })
-    /* const exportfilter = qs.stringify(
-        {
-            ...pagination,
-            sort: sortingStateBase64,
-            filter: filterState.finalFilterPayloadBase64,
-        },
-        { skipNull: true }
-    ) */
+
     return (
         <TableRowActionStoreProvider>
             <FilterContext.Provider value={filterState}>
@@ -172,7 +167,7 @@ const CompanyTable = ({
                                 }),
                             onDelete: (selectedData) =>
                                 deleteManyCompany({
-                                    ids: selectedData.map((data) => data.id),
+                                    ids: selectedData.map((d) => d.id),
                                 }),
                         }}
                         filterLogicProps={{
@@ -191,20 +186,24 @@ const CompanyTable = ({
                         table={table}
                         {...toolbarProps}
                     />
+
                     <DataTable
                         className="mb-2"
+                        isLoading={isPending}
                         isScrollable={isScrollable}
                         isStickyFooter
                         isStickyHeader
                         onDoubleClick={onDoubleClick}
                         onRowClick={onRowClick}
                         RowContextComponent={RowContextComponent}
-                        setColumnOrder={setColumnOrder}
+                        skeletonRowCount={20}
                         table={table}
                     />
+
                     <DataTablePagination table={table} totalSize={totalSize} />
                 </div>
             </FilterContext.Provider>
+
             <CompanyTableActionManager />
         </TableRowActionStoreProvider>
     )

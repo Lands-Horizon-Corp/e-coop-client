@@ -16,6 +16,7 @@ import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
 import { TableProps } from '@/components/data-table/table.type'
+import { useDataTablePagination } from '@/components/data-table/use-datatable-pagination'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState from '@/components/data-table/use-datatable-state'
 
@@ -95,11 +96,10 @@ const CancelledCashCheckVoucherTable = ({
         defaultFilter,
         onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
     })
-
     const {
         isPending,
         isRefetching,
-        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
+        data: paginatedData,
         refetch,
     } = useGetPaginatedCancelledCashCheckVoucher({
         query: {
@@ -109,11 +109,18 @@ const CancelledCashCheckVoucherTable = ({
         },
     })
 
+    const { data, totalPage, totalSize } = useDataTablePagination(
+        paginatedData,
+        {
+            fallbackPageSize: pagination.pageSize,
+        }
+    )
+
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
     const table = useReactTable({
         columns,
-        data: data,
+        data,
         initialState: {
             columnPinning: { left: ['select'] },
         },
@@ -124,12 +131,12 @@ const CancelledCashCheckVoucherTable = ({
             rowSelection: rowSelectionState.rowSelection,
             columnVisibility,
         },
-        rowCount: pageSize,
-        manualSorting: true,
+        rowCount: totalSize,
         pageCount: totalPage,
-        enableMultiSort: false,
+        manualSorting: true,
         manualFiltering: true,
         manualPagination: true,
+        enableMultiSort: false,
         columnResizeMode: 'onChange',
         getRowId: getRowIdFn,
         onSortingChange: setTableSorting,
@@ -161,10 +168,9 @@ const CancelledCashCheckVoucherTable = ({
                             }),
                         onDelete: (selectedData) =>
                             deleteManyCancelledCashCheckVoucher({
-                                ids: selectedData.map((data) => data.id),
+                                ids: selectedData.map((d) => d.id),
                             }),
                     }}
-                    // ... other toolbar props
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
@@ -177,21 +183,27 @@ const CancelledCashCheckVoucherTable = ({
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
                     }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
+                    scrollableProps={{
+                        isScrollable,
+                        setIsScrollable,
+                    }}
                     table={table}
                     {...toolbarProps}
                 />
+
                 <DataTable
                     className="mb-2"
+                    isLoading={isPending}
                     isScrollable={isScrollable}
                     isStickyFooter
                     isStickyHeader
                     onDoubleClick={onDoubleClick}
                     onRowClick={onRowClick}
                     RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
+                    skeletonRowCount={20}
                     table={table}
                 />
+
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>
         </FilterContext.Provider>

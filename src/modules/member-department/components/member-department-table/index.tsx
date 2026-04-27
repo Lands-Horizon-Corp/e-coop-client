@@ -2,8 +2,6 @@ import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 
-/* import qs from 'query-string' */
-
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
 import {
@@ -18,6 +16,7 @@ import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
 import { TableProps } from '@/components/data-table/table.type'
+import { useDataTablePagination } from '@/components/data-table/use-datatable-pagination'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState, {
     useResolvedColumnOrder,
@@ -109,7 +108,7 @@ const MemberDepartmentTable = ({
     const {
         isPending,
         isRefetching,
-        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
+        data: paginatedData,
         refetch,
     } = useGetPaginated({
         query: {
@@ -119,11 +118,18 @@ const MemberDepartmentTable = ({
         },
     })
 
+    const { data, totalPage, totalSize } = useDataTablePagination(
+        paginatedData,
+        {
+            fallbackPageSize: pagination.pageSize,
+        }
+    )
+
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
     const table = useReactTable({
         columns,
-        data: data,
+        data,
         initialState: {
             columnPinning: { left: ['select'] },
         },
@@ -134,10 +140,10 @@ const MemberDepartmentTable = ({
             rowSelection: rowSelectionState.rowSelection,
             columnVisibility,
         },
-        rowCount: pageSize,
-        manualSorting: true,
+        rowCount: totalSize,
         pageCount: totalPage,
         enableMultiSort: false,
+        manualSorting: true,
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
@@ -145,20 +151,12 @@ const MemberDepartmentTable = ({
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
-        onColumnOrderChange: setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
+        onColumnOrderChange: setColumnOrder,
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
     })
 
-    /* const exportfilter = qs.stringify(
-        {
-            ...pagination,
-            sort: sortingStateBase64,
-            filter: filterState.finalFilterPayloadBase64,
-        },
-        { skipNull: true }
-    ) */
     return (
         <FilterContext.Provider value={filterState}>
             <div
@@ -176,7 +174,7 @@ const MemberDepartmentTable = ({
                             }),
                         onDelete: (selectedData) =>
                             MemberDepartmentAPI.deleteMany({
-                                ids: selectedData.map((data) => data.id),
+                                ids: selectedData.map((d) => d.id),
                             }),
                     }}
                     filterLogicProps={{
@@ -195,17 +193,20 @@ const MemberDepartmentTable = ({
                     table={table}
                     {...toolbarProps}
                 />
+
                 <DataTable
                     className="mb-2"
+                    isLoading={isPending}
                     isScrollable={isScrollable}
                     isStickyFooter
                     isStickyHeader
                     onDoubleClick={onDoubleClick}
                     onRowClick={onRowClick}
                     RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
+                    skeletonRowCount={20}
                     table={table}
                 />
+
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>
         </FilterContext.Provider>

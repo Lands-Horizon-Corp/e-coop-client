@@ -15,6 +15,7 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
+import { useDataTablePagination } from '@/components/data-table/use-datatable-pagination'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState, {
     useResolvedColumnOrder,
@@ -89,11 +90,10 @@ const CashCountTable = ({
         defaultFilter,
         onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
     })
-
     const {
         isPending,
         isRefetching,
-        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
+        data: paginatedData,
         refetch,
     } = useGetPaginatedCashCounts({
         query: {
@@ -103,12 +103,19 @@ const CashCountTable = ({
         },
     })
 
+    const { data, totalPage, totalSize } = useDataTablePagination(
+        paginatedData,
+        {
+            fallbackPageSize: pagination.pageSize,
+        }
+    )
+
     const handleRowSelectionChange =
         tableState.createHandleRowSelectionChange(data)
 
     const table = useReactTable({
         columns,
-        data: data,
+        data,
         initialState: {
             columnPinning: { left: ['select'] },
         },
@@ -119,10 +126,10 @@ const CashCountTable = ({
             rowSelection: tableState.rowSelectionState.rowSelection,
             columnVisibility: tableState.columnVisibility,
         },
-        rowCount: pageSize,
-        manualSorting: true,
+        rowCount: totalSize,
         pageCount: totalPage,
         enableMultiSort: false,
+        manualSorting: true,
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
@@ -130,8 +137,8 @@ const CashCountTable = ({
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
-        onColumnOrderChange: tableState.setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
+        onColumnOrderChange: tableState.setColumnOrder,
         onColumnVisibilityChange: tableState.setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
         defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
@@ -167,18 +174,22 @@ const CashCountTable = ({
                         table={table}
                         {...toolbarProps}
                     />
+
                     <DataTable
                         className="mb-2"
+                        isLoading={isPending}
                         isScrollable={tableState.isScrollable}
                         isStickyFooter
                         isStickyHeader
                         onDoubleClick={onDoubleClick}
                         onRowClick={onRowClick}
                         RowContextComponent={RowContextComponent}
-                        setColumnOrder={tableState.setColumnOrder}
+                        skeletonRowCount={20}
                         table={table}
                     />
+
                     <DataTablePagination table={table} totalSize={totalSize} />
+
                     <CashCountTableActionManager />
                 </div>
             </TableRowActionStoreProvider>

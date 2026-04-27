@@ -17,6 +17,9 @@ import { type IDataTableScrollableOptionProps } from '@/components/data-table/da
 import { IClassProps } from '@/types'
 
 import RefreshButton, { IRefreshButtonProps } from '../buttons/refresh-button'
+import DataTableColumnReorder, {
+    DataTableColumnOrderProps,
+} from './data-table-actions/data-table-column-reorderer'
 import DatatableColumnVisibility from './data-table-actions/data-table-column-visibility'
 import DataTableCreateAction, {
     IDataTableCreateActionProps,
@@ -36,6 +39,8 @@ export interface IDataTableToolbarProps<TData> extends IClassProps {
     // exportActionProps?: Omit<IDataTableExportProps<TData>, 'table'>
     deleteActionProps?: Omit<IDataTableDeleteSelectedProps<TData>, 'table'>
     createActionProps?: IDataTableCreateActionProps
+    columnOrdererProps?: Omit<DataTableColumnOrderProps<TData>, 'table'>
+
     otherActionRight?: ReactNode
     hideRefreshButton?: boolean
     hideDeleteButton?: boolean
@@ -59,6 +64,7 @@ const DataTableToolbar = <TData,>({
     createActionProps,
     refreshActionProps,
     otherActionLeft,
+    columnOrdererProps,
 }: IDataTableToolbarProps<TData>) => {
     useHotkeys(
         'ctrl+Enter',
@@ -118,6 +124,11 @@ const DataTableToolbar = <TData,>({
                         className="rounded-none border first:rounded-l-md last:rounded-r-md"
                         table={table}
                     />
+                    <DataTableColumnReorder
+                        {...columnOrdererProps}
+                        className=" rounded-none border first:rounded-l-md last:rounded-r-md "
+                        table={table}
+                    />
                     <DataTableOptionsMenu
                         className="rounded-none border first:rounded-l-md last:rounded-r-md"
                         filterLogicOption={filterLogicProps}
@@ -132,7 +143,8 @@ const DataTableToolbar = <TData,>({
                             className="h-full min-h-7"
                             orientation="vertical"
                         />
-                        <DataTableExportButton
+                        <DataTable
+ExportButton
                             table={table}
                             {...exportActionProps}
                         />

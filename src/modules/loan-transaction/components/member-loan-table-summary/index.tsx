@@ -16,6 +16,7 @@ import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
 import { TableProps } from '@/components/data-table/table.type'
+import { useDataTablePagination } from '@/components/data-table/use-datatable-pagination'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState from '@/components/data-table/use-datatable-state'
 
@@ -94,11 +95,10 @@ const MemberLoanTableSummary = ({
         defaultFilter,
         onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
     })
-
     const {
         isPending,
         isRefetching,
-        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
+        data: paginatedData,
         refetch,
     } = useGetPaginatedLoanTransaction({
         mode: 'member-profile',
@@ -110,11 +110,18 @@ const MemberLoanTableSummary = ({
         },
     })
 
+    const { data, totalPage, totalSize } = useDataTablePagination(
+        paginatedData,
+        {
+            fallbackPageSize: pagination.pageSize,
+        }
+    )
+
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
     const table = useReactTable({
         columns,
-        data: data,
+        data,
         initialState: {
             columnPinning: { left: ['select'] },
         },
@@ -125,10 +132,10 @@ const MemberLoanTableSummary = ({
             rowSelection: rowSelectionState.rowSelection,
             columnVisibility,
         },
-        rowCount: pageSize,
-        manualSorting: true,
+        rowCount: totalSize,
         pageCount: totalPage,
         enableMultiSort: false,
+        manualSorting: true,
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
@@ -136,8 +143,8 @@ const MemberLoanTableSummary = ({
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
-        onColumnOrderChange: setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
+        onColumnOrderChange: setColumnOrder,
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
     })
@@ -159,10 +166,9 @@ const MemberLoanTableSummary = ({
                             }),
                         onDelete: (selectedData) =>
                             deleteManyLoanTransaction({
-                                ids: selectedData.map((data) => data.id),
+                                ids: selectedData.map((d) => d.id),
                             }),
                     }}
-                    //
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
@@ -179,16 +185,19 @@ const MemberLoanTableSummary = ({
                     table={table}
                     {...toolbarProps}
                 />
+
                 <DataTable
                     className="mb-2"
+                    isLoading={isPending}
                     isScrollable={isScrollable}
                     isStickyFooter
                     isStickyHeader
                     onRowClick={onRowClick}
                     RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
+                    skeletonRowCount={20}
                     table={table}
                 />
+
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>
         </FilterContext.Provider>

@@ -17,11 +17,11 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
+import { useDataTablePagination } from '@/components/data-table/use-datatable-pagination'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState, {
     useResolvedColumnOrder,
 } from '@/components/data-table/use-datatable-state'
-import { useLoadingColumns } from '@/components/data-table/use-loading-columns'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -100,7 +100,7 @@ const InventoryTagTable = ({
     const {
         isPending,
         isRefetching,
-        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
+        data: paginatedData,
         refetch,
     } = useGetPaginatedInventoryTag({
         query: {
@@ -110,16 +110,19 @@ const InventoryTagTable = ({
         },
     })
 
+    const { data, totalPage, totalSize } = useDataTablePagination(
+        paginatedData,
+        {
+            fallbackPageSize: pagination.pageSize,
+        }
+    )
+
     const handleRowSelectionChange =
         tableState.createHandleRowSelectionChange(data)
 
-    const tableColumns = useLoadingColumns({
-        columns,
-        isLoading: isPending || isRefetching,
-    })
     const table = useReactTable({
-        columns: tableColumns,
-        data: data,
+        columns,
+        data,
         initialState: {
             columnPinning: { left: ['select'] },
         },
@@ -130,10 +133,10 @@ const InventoryTagTable = ({
             rowSelection: tableState.rowSelectionState.rowSelection,
             columnVisibility: tableState.columnVisibility,
         },
-        rowCount: pageSize,
-        manualSorting: true,
+        rowCount: totalSize,
         pageCount: totalPage,
         enableMultiSort: false,
+        manualSorting: true,
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
@@ -141,21 +144,12 @@ const InventoryTagTable = ({
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
-        onColumnOrderChange: tableState.setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
+        onColumnOrderChange: tableState.setColumnOrder,
         onColumnVisibilityChange: tableState.setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
         defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
-
-    // const filter = qs.stringify(
-    //     {
-    //         ...pagination,
-    //         sort: sortingStateBase64,
-    //         filter: filterState.finalFilterPayloadBase64,
-    //     },
-    //     { skipNull: true }
-    // )
 
     return (
         <TableRowActionStoreProvider>
@@ -175,7 +169,7 @@ const InventoryTagTable = ({
                                 }),
                             onDelete: (selectedData) =>
                                 deleteManyInventoryTag({
-                                    ids: selectedData.map((data) => data.id),
+                                    ids: selectedData.map((d) => d.id),
                                 }),
                         }}
                         filterLogicProps={{
@@ -197,20 +191,24 @@ const InventoryTagTable = ({
                         table={table}
                         {...toolbarProps}
                     />
+
                     <DataTable
                         className="mb-2"
+                        isLoading={isPending}
                         isScrollable={tableState.isScrollable}
                         isStickyFooter
                         isStickyHeader
                         onDoubleClick={onDoubleClick}
                         onRowClick={onRowClick}
                         RowContextComponent={RowContextComponent}
-                        setColumnOrder={tableState.setColumnOrder}
+                        skeletonRowCount={20}
                         table={table}
                     />
+
                     <DataTablePagination table={table} totalSize={totalSize} />
                 </div>
             </FilterContext.Provider>
+
             <InventoryTagTableActionManager />
         </TableRowActionStoreProvider>
     )

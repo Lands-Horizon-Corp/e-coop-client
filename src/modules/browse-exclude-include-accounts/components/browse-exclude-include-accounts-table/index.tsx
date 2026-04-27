@@ -2,8 +2,6 @@ import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 
-/* import qs from 'query-string' */
-
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
 import {
@@ -180,11 +178,12 @@ const BrowseExcludeIncludeAccountTable = ({
                 />
                 <DataTable
                     className="mb-2"
+                    isLoading={isPending}
                     isScrollable={isScrollable}
                     isStickyFooter
                     isStickyHeader
                     RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
+                    skeletonRowCount={20}
                     table={table}
                 />
             </div>

@@ -171,10 +171,11 @@ const MemberOccupationHistoryTable = ({
                     {...toolbarProps}
                 />
                 <DataTable
+                    isLoading={isPending}
                     isScrollable={isScrollable}
                     isStickyFooter
                     isStickyHeader
-                    setColumnOrder={setColumnOrder}
+                    skeletonRowCount={20}
                     table={table}
                 />
                 <DataTablePagination

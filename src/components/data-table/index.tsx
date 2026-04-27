@@ -1,23 +1,14 @@
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 
 import { cn } from '@/helpers/tw-utils'
 import {
-    DndContext,
-    DragEndEvent,
-    KeyboardSensor,
-    MouseSensor,
-    TouchSensor,
-    closestCenter,
-    useSensor,
-    useSensors,
-} from '@dnd-kit/core'
-import { restrictToHorizontalAxis } from '@dnd-kit/modifiers'
-import { arrayMove } from '@dnd-kit/sortable'
-import { Row, Table as TableInstance } from '@tanstack/react-table'
+    ColumnSizingState,
+    Row,
+    Table as TableInstance,
+} from '@tanstack/react-table'
 
 import { IChildProps, IClassProps } from '@/types'
 
-import { Table } from '../ui/table'
 import DataTableBody from './data-table-body'
 import DataTableFooter from './data-table-footer'
 import DataTableHeader from './data-table-header'
@@ -30,6 +21,7 @@ interface ITableProps<TData> extends IClassProps {
     isStickyHeader?: boolean
     isStickyFooter?: boolean
     isLoading?: boolean
+    skeletonRowCount?: number
     onRowClick?: (
         row: Row<TData>,
         e: React.MouseEvent<HTMLTableRowElement, MouseEvent>
@@ -38,7 +30,7 @@ interface ITableProps<TData> extends IClassProps {
         row: Row<TData>,
         e: React.MouseEvent<HTMLTableRowElement, MouseEvent>
     ) => void
-    setColumnOrder?: React.Dispatch<React.SetStateAction<string[]>>
+    // setColumnOrder?: React.Dispatch<React.SetStateAction<string[]>>
     RowContextComponent?: (
         rowProps: { row: Row<TData> } & IChildProps
     ) => ReactNode
@@ -48,76 +40,123 @@ const DataTable = <TData,>({
     table,
     className,
     rowClassName,
-    isScrollable,
+    isScrollable = true,
     isStickyHeader,
     isStickyFooter,
     isStaticWidth = false,
+    isLoading = false,
+    skeletonRowCount = 20,
     onDoubleClick,
-    setColumnOrder,
     onRowClick,
     RowContextComponent,
 }: ITableProps<TData>) => {
-    const handleDragEnd = (event: DragEndEvent) => {
-        if (!setColumnOrder) return
+    const tableContainerRef = useRef<HTMLDivElement>(null)
+    const [containerWidth, setContainerWidth] = useState(0)
 
-        const { active, over } = event
+    useEffect(() => {
+        const tableContainer = tableContainerRef.current
 
-        if (active && over && active.id !== over.id) {
-            setColumnOrder((columnOrder) => {
-                const oldIndex = columnOrder.indexOf(active.id as string)
-                const newIndex = columnOrder.indexOf(over.id as string)
-                return arrayMove(columnOrder, oldIndex, newIndex)
-            })
-        }
-    }
+        if (!tableContainer) return
 
-    const sensors = useSensors(
-        useSensor(MouseSensor, {}),
-        useSensor(TouchSensor, {}),
-        useSensor(KeyboardSensor, {})
-    )
+        const resizeObserver = new ResizeObserver((entries) => {
+            const nextWidth = Math.floor(entries[0].contentRect.width)
+
+            setContainerWidth((previousWidth) =>
+                previousWidth === nextWidth ? previousWidth : nextWidth
+            )
+        })
+
+        resizeObserver.observe(tableContainer)
+
+        return () => resizeObserver.disconnect()
+    }, [])
+
+    const { columnSizing, columnVisibility } = table.getState()
+
+    useEffect(() => {
+        if (!containerWidth || isStaticWidth) return
+
+        const visibleLeafColumns = table.getVisibleLeafColumns()
+
+        if (!visibleLeafColumns.length) return
+
+        const currentTotalWidth = visibleLeafColumns.reduce(
+            (total, column) => total + column.getSize(),
+            0
+        )
+
+        if (currentTotalWidth >= containerWidth) return
+
+        const extraWidth = containerWidth - currentTotalWidth
+        const evenExtra = Math.floor(extraWidth / visibleLeafColumns.length)
+        const remainder = extraWidth % visibleLeafColumns.length
+
+        const nextSizing = visibleLeafColumns.reduce<ColumnSizingState>(
+            (sizing, column, index) => {
+                sizing[column.id] =
+                    column.getSize() + evenExtra + (index < remainder ? 1 : 0)
+                return sizing
+            },
+            {}
+        )
+
+        const hasSizingChanges = visibleLeafColumns.some(
+            (column) => column.getSize() !== nextSizing[column.id]
+        )
+
+        if (!hasSizingChanges) return
+
+        table.setColumnSizing((previousSizing) => ({
+            ...previousSizing,
+            ...nextSizing,
+        }))
+    }, [columnSizing, columnVisibility, containerWidth, isStaticWidth, table])
+
+    const tableTotalSize = table.getTotalSize()
+    const visibleLeafColumns = table.getVisibleLeafColumns()
+    const resolvedTableWidth =
+        isStaticWidth || !containerWidth
+            ? tableTotalSize
+            : Math.max(tableTotalSize, containerWidth)
 
     return (
-        <DndContext
-            collisionDetection={closestCenter}
-            modifiers={[restrictToHorizontalAxis]}
-            onDragEnd={handleDragEnd}
-            sensors={sensors}
+        <div
+            className={cn(
+                'bg-popover min-w-0 ring-offset-0 ring ring-muted-foreground/20 ecoop-scroll shadow dark:bg-secondary/10 rounded-xl -z-0',
+                className,
+                isScrollable
+                    ? 'h-full grow overflow-auto'
+                    : 'h-fit max-h-none min-h-fit overflow-x-scroll'
+            )}
+            ref={tableContainerRef}
         >
-            <Table
-                className="table-fixed border-separate border-spacing-0 [&_td]:border-border [&_tfoot_td]:border-t [&_th]:border-b [&_th]:border-border [&_tr:not(:last-child)_td]:border-b [&_tr]:border-none"
-                style={
-                    isStaticWidth
-                        ? {
-                              width: table.getTotalSize(),
-                          }
-                        : {}
-                }
-                wrapperClassName={cn(
-                    'ecoop-scroll bg-popover ring-offset-0 shadow dark:bg-secondary/10 rounded-lg -z-0',
-                    className,
-                    !isScrollable ? 'h-fit max-h-none min-h-fit' : 'h-full grow'
-                )}
+            <table
+                className="border-separate border-spacing-0"
+                style={{ minWidth: tableTotalSize, width: resolvedTableWidth }}
             >
                 <DataTableHeader
-                    columnOrder={table.getState().columnOrder}
                     headerGroups={table.getHeaderGroups()}
                     isStickyHeader={isStickyHeader}
                 />
                 <DataTableBody
-                    colCount={table.getVisibleLeafColumns().length}
+                    colCount={visibleLeafColumns.length}
+                    isLoading={isLoading}
+                    isScrollable={isScrollable}
                     onDoubleClick={onDoubleClick}
                     onRowClick={onRowClick}
                     rowClassName={rowClassName}
                     RowContextComponent={RowContextComponent}
                     rows={table.getRowModel().rows}
+                    skeletonRowCount={skeletonRowCount}
+                    tableContainerRef={tableContainerRef}
+                    visibleColumns={visibleLeafColumns}
                 />
                 <DataTableFooter
                     isStickyFooter={isStickyFooter && isScrollable}
                     table={table}
                 />
-            </Table>
-        </DndContext>
+            </table>
+        </div>
     )
 }
 

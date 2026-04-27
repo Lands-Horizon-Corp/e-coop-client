@@ -201,16 +201,19 @@ const DisbursementAllTransactionTable = ({
                     />
                     <DataTable
                         className="mb-2"
+                        isLoading={isPending}
                         isScrollable={tableState.isScrollable}
                         isStickyFooter
                         isStickyHeader
                         onDoubleClick={onDoubleClick}
                         onRowClick={onRowClick}
                         RowContextComponent={RowContextComponent}
-                        setColumnOrder={tableState.setColumnOrder}
+                        skeletonRowCount={20}
                         table={table}
                     />
-                    {/* <DataTablePagination table={table} totalSize={totalSize} /> */}
+                    {/* <DataTable
+isLoading={isPending}
+skeletonRowCount={20}Pagination table={table} totalSize={totalSize} /> */}
                     <DisbursementTransactionTableActionManager />
                 </div>
             </TableRowActionStoreProvider>

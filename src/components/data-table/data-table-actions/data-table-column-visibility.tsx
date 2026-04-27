@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { cn } from '@/helpers/tw-utils'
 import type { Table } from '@tanstack/react-table'
 
-import { ColumnOutlineIcon, EyeIcon, EyeNoneIcon } from '@/components/icons'
+import { EyeIcon, EyeNoneIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -46,7 +46,8 @@ const DatatableColumnVisibility = <TData,>({
                     size="icon"
                     variant="secondary"
                 >
-                    <ColumnOutlineIcon className="size-4" />
+                    {/* <ColumnOutlineIcon className="size-4" /> */}
+                    <EyeIcon className="size-4" />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -55,7 +56,7 @@ const DatatableColumnVisibility = <TData,>({
             >
                 <DropdownMenuGroup>
                     <DropdownMenuLabel className="flex items-center justify-between">
-                        Toggle columns <ColumnOutlineIcon />
+                        Toggle columns <EyeIcon />
                     </DropdownMenuLabel>
                     <DropdownMenuItem
                         disabled={hiddenColumnsLength <= 0}

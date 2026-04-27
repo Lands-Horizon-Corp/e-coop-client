@@ -195,7 +195,9 @@ const AccountsTableColumns = (
         //     id: 'accountCode',
         //     accessorKey: 'alternative_code',
         //     header: (props) => (
-        //         <DataTableColumnHeader {...props} title="Code">
+        //         <DataTable
+        // isLoading={isPending}
+        // skeletonRowCount={20}ColumnHeader {...props} title="Code">
         //             <ColumnActions {...props}>
         //                 <TextFilter
         //                     defaultMode="contains"
