@@ -97,6 +97,9 @@ export const useTimeMachineCancel = createMutationFactory<
         args.queryClient.invalidateQueries({
             queryKey: ['transaction-batch', 'paginated', 'all'],
         })
+        args.queryClient.invalidateQueries({
+            queryKey: ['transaction-batch', 'unclosed', 'me'],
+        })
     },
 })
 
@@ -136,6 +139,9 @@ export const useCreateTimeMachine = createMutationFactory<
         })
         args.queryClient.invalidateQueries({
             queryKey: ['transaction-batch', 'paginated', 'all'],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['transaction-batch', 'unclosed', 'me'],
         })
     },
 })
