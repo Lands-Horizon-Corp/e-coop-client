@@ -46,8 +46,8 @@ const TimeMachineLogsList = ({
             {timeMachine
                 ?.sort(
                     (a, b) =>
-                        new Date(b.frozen_at).getTime() -
-                        new Date(a.frozen_at).getTime()
+                        new Date(b.created_at).getTime() -
+                        new Date(a.created_at).getTime()
                 )
                 ?.map((log) => (
                     <TimeMachineListItem key={log.id} log={log} />
