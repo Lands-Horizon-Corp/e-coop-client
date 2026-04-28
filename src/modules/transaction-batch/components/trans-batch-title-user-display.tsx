@@ -49,7 +49,7 @@ const TransBatchTitleUserDisplay = ({ transBatch, className }: Props) => {
                         : 'not ended'}
                 </p>
             </div>
-            <p className="!mt-0 text-xs text-muted-foreground/60">
+            <p className="mt-0! text-xs text-muted-foreground/60">
                 <span className="text-muted-foreground/40">Batch ID: </span>
                 {transBatch.id ? (
                     <>

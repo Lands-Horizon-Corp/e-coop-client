@@ -178,7 +178,15 @@ const TimeMachineForm = ({
                             userOrganizationId: userOrgId,
                             onSuccess: () => {
                                 refetch()
-                                form.reset()
+                                form.reset({
+                                    frozen_at: new Date().toISOString(),
+                                    description: '',
+                                    frozen_until_seconds: 3600,
+                                    reason: undefined,
+                                    timezone:
+                                        Intl.DateTimeFormat().resolvedOptions()
+                                            .timeZone,
+                                })
                             },
                         }}
                     />
