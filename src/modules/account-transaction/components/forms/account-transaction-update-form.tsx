@@ -300,11 +300,15 @@ export function TransactionEntriesTable({
                         </TableCell>
 
                         <TableCell className="w-[150px] text-right font-mono font-bold tabular-nums text-totals-foreground">
-                            {currencyFormat(totalDebit)}
+                            {currencyFormat(totalDebit, {
+                                showSymbol: false,
+                            })}
                         </TableCell>
 
                         <TableCell className="w-[150px] text-right font-mono font-bold tabular-nums text-totals-foreground">
-                            {currencyFormat(totalCredit)}
+                            {currencyFormat(totalCredit, {
+                                showSymbol: false,
+                            })}
                         </TableCell>
                     </TableRow>
                 </TableFooter>
