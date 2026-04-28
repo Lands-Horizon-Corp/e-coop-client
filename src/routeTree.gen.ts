@@ -11,6 +11,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ReportTemplateMakerRouteImport } from './routes/report-template-maker'
 import { Route as PlaygroundRouteImport } from './routes/playground'
 import { Route as OnboardingRouteRouteImport } from './routes/onboarding/route'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
@@ -128,6 +129,11 @@ import { Route as OrgOrgnameBranchBranchnamemembersMemberProfileMemberIdSettings
 
 const AuthSignUpLazyRouteImport = createFileRoute('/auth/sign-up')()
 
+const ReportTemplateMakerRoute = ReportTemplateMakerRouteImport.update({
+  id: '/report-template-maker',
+  path: '/report-template-maker',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlaygroundRoute = PlaygroundRouteImport.update({
   id: '/playground',
   path: '/playground',
@@ -840,6 +846,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/playground': typeof PlaygroundRoute
+  '/report-template-maker': typeof ReportTemplateMakerRoute
   '/explore': typeof landingExploreRouteRouteWithChildren
   '/policy': typeof landingPolicyRouteRouteWithChildren
   '/onboarding/organization': typeof OnboardingOrganizationRouteRouteWithChildren
@@ -954,6 +961,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
   '/playground': typeof PlaygroundRoute
+  '/report-template-maker': typeof ReportTemplateMakerRoute
   '/explore': typeof landingExploreRouteRouteWithChildren
   '/policy': typeof landingPolicyRouteRouteWithChildren
   '/about': typeof landingAboutRoute
@@ -1070,6 +1078,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteRouteWithChildren
   '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/playground': typeof PlaygroundRoute
+  '/report-template-maker': typeof ReportTemplateMakerRoute
   '/(landing)/explore': typeof landingExploreRouteRouteWithChildren
   '/(landing)/policy': typeof landingPolicyRouteRouteWithChildren
   '/onboarding/organization': typeof OnboardingOrganizationRouteRouteWithChildren
@@ -1188,6 +1197,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/onboarding'
     | '/playground'
+    | '/report-template-maker'
     | '/explore'
     | '/policy'
     | '/onboarding/organization'
@@ -1302,6 +1312,7 @@ export interface FileRouteTypes {
   to:
     | '/auth'
     | '/playground'
+    | '/report-template-maker'
     | '/explore'
     | '/policy'
     | '/about'
@@ -1417,6 +1428,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/onboarding'
     | '/playground'
+    | '/report-template-maker'
     | '/(landing)/explore'
     | '/(landing)/policy'
     | '/onboarding/organization'
@@ -1535,11 +1547,19 @@ export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   OnboardingRouteRoute: typeof OnboardingRouteRouteWithChildren
   PlaygroundRoute: typeof PlaygroundRoute
+  ReportTemplateMakerRoute: typeof ReportTemplateMakerRoute
   OrgOrgnameRoute: typeof OrgOrgnameRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/report-template-maker': {
+      id: '/report-template-maker'
+      path: '/report-template-maker'
+      fullPath: '/report-template-maker'
+      preLoaderRoute: typeof ReportTemplateMakerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/playground': {
       id: '/playground'
       path: '/playground'
@@ -2739,6 +2759,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
   OnboardingRouteRoute: OnboardingRouteRouteWithChildren,
   PlaygroundRoute: PlaygroundRoute,
+  ReportTemplateMakerRoute: ReportTemplateMakerRoute,
   OrgOrgnameRoute: OrgOrgnameRouteWithChildren,
 }
 export const routeTree = rootRouteImport
