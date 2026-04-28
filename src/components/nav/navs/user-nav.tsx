@@ -147,6 +147,9 @@ const UserNav = ({
             {user_organization?.id && (
                 <TimeMachineFormModal
                     {...timeMachine}
+                    formProps={{
+                        frozenAt: user_organization.time_machine_time,
+                    }}
                     userOrganizationId={user_organization.id}
                 />
             )}

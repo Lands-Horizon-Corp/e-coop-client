@@ -59,17 +59,17 @@ export interface ITimeMachineCancelFormProps
             Error,
             TTimeMachineFormValues
         > {
-    frozen_at?: string
     reason?: TTimeMachineReasonOption
     description?: string
+    frozenAt?: string
 }
 
 const TimeMachineForm = ({
     className,
     userOrganizationId,
-    frozen_at,
     description,
     reason,
+    frozenAt,
     ...formProps
 }: ITimeMachineCancelFormProps & { userOrganizationId: string }) => {
     const timeMachineCancel = useModalState()
@@ -102,9 +102,7 @@ const TimeMachineForm = ({
             reason: reason,
             frozen_until_seconds: 3600,
             description: description,
-            frozen_at: new Date(frozen_at || Date.now())
-                .toISOString()
-                .slice(0, 16),
+            frozen_at: frozenAt || new Date().toISOString(),
             ...formProps.defaultValues,
         },
     })

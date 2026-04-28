@@ -24,8 +24,8 @@
         "el": "eslint .",
         "elf": "eslint . --fix",
         "fmt": "eslint . --fix && prettier . -w",
-        "build": "tsc -b && bun --bun vite build",
-        "vc": "eslint . && prettier . -c && vitest run && tsc -b --verbose && vite build",
+        "build": "NODE_OPTIONS=\"--max-old-space-size=8192\" tsc -b && NODE_OPTIONS=\"--max-old-space-size=8192\" bun --bun vite build",
+        "vc": "eslint . && prettier . -c && vitest run && NODE_OPTIONS=\"--max-old-space-size=8192\" tsc -b --verbose && NODE_OPTIONS=\"--max-old-space-size=8192\" vite build",
         "dick": "bun run fmt && bun run vc",
         "gen-mod": "bunx plop module-gen",
         "unused": "knip"

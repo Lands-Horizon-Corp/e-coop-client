@@ -109,7 +109,7 @@ const TransactionBatch = ({
                     userOrganizationId={user_organization.id}
                     {...timeMachineForm}
                     formProps={{
-                        frozen_at: transactionBatch.created_at,
+                        frozenAt: transactionBatch.created_at,
                         reason: 'Blotter balancing verification is in progress',
                         description:
                             'Unabalanced blotter detected during review, requiring time machine to verify transactions under current batch date',
@@ -173,10 +173,16 @@ const TransactionBatch = ({
                                 !transactionBatch.is_today && 'text-destructive'
                             )}
                         >
-                            {toReadableDate(
-                                transactionBatch?.created_at,
-                                "MMM, dd yyyy 'at' h:mm a "
-                            )}
+                            {user_organization?.time_machine_time &&
+                            !transactionBatch.is_today
+                                ? `Blotter date: ${toReadableDateTime(
+                                      user_organization.time_machine_time,
+                                      "MMM, dd yyyy 'at' h:mm a "
+                                  )}`
+                                : toReadableDate(
+                                      transactionBatch?.created_at,
+                                      "MMM, dd yyyy 'at' h:mm a "
+                                  )}
                         </p>
 
                         <div className="text-xs text-muted-foreground/70 font-semibold">
