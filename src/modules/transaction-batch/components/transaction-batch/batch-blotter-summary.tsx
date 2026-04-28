@@ -95,6 +95,8 @@ export const BatchBlotterSummaryView = ({
                                     transBatch.time_deposit_withdrawal,
                                 savings_withdrawal:
                                     transBatch.savings_withdrawal,
+                                cash_check_voucher:
+                                    transBatch.cash_check_voucher_total,
                             }),
                             {
                                 currency,
