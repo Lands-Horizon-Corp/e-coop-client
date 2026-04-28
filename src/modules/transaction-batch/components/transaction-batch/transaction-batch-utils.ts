@@ -27,6 +27,7 @@ type LessInput = {
     loan_releases: number
     time_deposit_withdrawal: number
     savings_withdrawal: number
+    cash_check_voucher: number
 }
 
 export const getCollectionTotal = (data: CollectionInput): number => {
@@ -45,11 +46,13 @@ export const getLessTotal = (data: LessInput): number => {
         loan_releases,
         time_deposit_withdrawal,
         savings_withdrawal,
+        cash_check_voucher,
     } = data
     return (
         Number(petty_cash || 0) +
         Number(loan_releases || 0) +
         Number(time_deposit_withdrawal || 0) +
-        Number(savings_withdrawal || 0)
+        Number(savings_withdrawal || 0) +
+        Number(cash_check_voucher || 0)
     )
 }
