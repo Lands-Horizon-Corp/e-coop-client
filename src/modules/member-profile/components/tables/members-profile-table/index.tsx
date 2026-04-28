@@ -13,6 +13,7 @@ import {
 } from '@tanstack/react-table'
 
 import DataTable from '@/components/data-table'
+import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
@@ -225,6 +226,7 @@ const MemberProfileTable = ({
                         skeletonRowCount={20}
                         table={table}
                     />
+                    <DataTablePagination table={table} totalSize={totalSize} />
                 </div>
                 <MemberProfileTableActionManager />
             </FilterContext.Provider>
