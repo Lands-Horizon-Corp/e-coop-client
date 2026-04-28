@@ -175,7 +175,7 @@ const TransactionBatch = ({
                         >
                             {user_organization?.time_machine_time &&
                             !transactionBatch.is_today
-                                ? `Blotter date: ${toReadableDateTime(
+                                ? `${toReadableDateTime(
                                       user_organization.time_machine_time,
                                       "MMM, dd yyyy 'at' h:mm a "
                                   )}`
