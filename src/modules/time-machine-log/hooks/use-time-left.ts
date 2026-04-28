@@ -44,6 +44,15 @@ export const useTimeLeft = ({
             const endDate = new Date(serverFrozenUntil)
             const endTime = endDate.getTime()
 
+            console.log(
+                new Date(serverFrozenUntil).toLocaleTimeString('en-US', {
+                    timeZone: 'UTC',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                })
+            )
+
             // Validate that the date was parsed correctly (not NaN)
             if (!isNaN(endTime)) {
                 const current = now.getTime()
@@ -54,7 +63,7 @@ export const useTimeLeft = ({
         }
 
         // Priority 2: frozenAtInput + frozenUntilSeconds (duration-based)
-        if (frozenAtInput && frozenUntilSeconds) {
+        if (frozenAtInput && frozenUntilSeconds && serverFrozenUntil) {
             const startDate = new Date(frozenAtInput)
             const start = startDate.getTime()
 

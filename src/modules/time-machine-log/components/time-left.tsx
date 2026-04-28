@@ -83,12 +83,10 @@ const TimeLeft = ({
         </Kbd>
     )
 
-    // Compact display - just the time left
     if (compact) {
         return timeLeftDisplay
     }
 
-    // Full display
     return (
         <div className="flex flex-col space-y-2">
             <div className="flex justify-end">{timeLeftDisplay}</div>
