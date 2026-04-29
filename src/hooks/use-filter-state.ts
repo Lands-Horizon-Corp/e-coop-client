@@ -13,8 +13,6 @@ import { toBase64 } from '@/helpers/encoding-utils'
 
 import useDebounce from '@/hooks/use-debounce'
 
-// import logger from '@/helpers/loggers/logger'
-
 const useFilterState = ({
     debounceFinalFilterMs,
     defaultFilter = {},
@@ -71,12 +69,10 @@ const useFilterState = ({
 
         Object.entries(debouncedFilter).forEach(([key, value]) => {
             if ((!value || !value.value) && value?.mode !== 'range') {
-                // logger.log('Value failed', value)
                 return
             }
 
             if (!value.mode || key === 'globalSearch') {
-                // logger.log('value mode, globalSearch failed', value.mode, key)
                 return
             }
 
@@ -85,20 +81,10 @@ const useFilterState = ({
                 !Array.isArray(value.value) &&
                 (value.from === undefined || value.to === undefined)
             ) {
-                // logger.log(
-                //     'line 80 failed -> invalid range from to',
-                //     value.from,
-                //     value.to
-                // )
                 return
             } else if (value.mode !== 'range' && value.value === undefined) {
-                // logger.log('line 86 failed -> invalid value', value.value)
                 return
             } else if (Array.isArray(value.value) && value.value.length === 0) {
-                // logger.log(
-                //     'line 89 failed -> invalid multi select array',
-                //     value.value
-                // )
                 return
             }
 

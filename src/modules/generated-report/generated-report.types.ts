@@ -106,17 +106,8 @@ export interface GeneratedReportTemplate<T = unknown> {
 
     template: string
 
-    // niremove ko dahil contradicting to sa input and changeable unit.
-    // example max-width dito is 14in, pag binago ko unit to mm, 14mm lang allowable which is too small
-    // kaya remove nalang
-
-    // max_width: number
-    // max_height: number
-    // min_width: number
-    // min_height: number
-
     default_unit: TPaperSizeUnit
-    model: TReportName
+    report_name: TReportName
 
     width: string // combined ng value sa default sizing unit 18in
     height: string // combined ng value sa default sizing unit 14in
@@ -138,6 +129,8 @@ export interface IBaseReportTemplateData {
     header_address: string
     tax_number: string
     report_title: string
+
+    density?: TDisplayDensity
 
     print_count?: number
 }

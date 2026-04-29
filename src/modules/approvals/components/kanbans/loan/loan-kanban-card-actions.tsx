@@ -192,7 +192,7 @@ export const LoanTransactionCardActions = ({
                     defaultValues: {
                         name: 'Loan Release Voucher',
                         description: 'Generated Loan Release Voucher',
-                        model: 'LoanReleaseVoucher',
+                        report_name: 'LoanReleaseVoucher',
                         generated_report_type: 'pdf',
                         url: `/api/v1/loan-transaction/${loanTransaction.id}`,
                     },

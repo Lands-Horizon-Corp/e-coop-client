@@ -182,7 +182,7 @@ export const CashCheckVoucherCardActions = ({
                     defaultValues: {
                         name: 'Cash Check disbursement',
                         description: 'Generated Cash Check Voucher',
-                        model: 'CashCheckVoucher',
+                        report_name: 'CashCheckVoucher',
                         generated_report_type: 'pdf',
                         url: `/api/v1/cash-check-voucher/${cashCheckVoucher.id}`,
                     },

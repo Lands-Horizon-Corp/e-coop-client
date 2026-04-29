@@ -86,7 +86,7 @@ export const OTHER_FUND_PRINT_TEMPLATES: GeneratedReportTemplate<IOtherFundPrint
         {
             id: 'ofv-normal',
             template_name: 'Other Fund Voucher Normal',
-            model: 'OtherFundRelease',
+            report_name: 'OtherFundRelease',
             template: OFV_NORMAL,
             default_unit: 'in',
             width: '8.5in',
@@ -96,7 +96,7 @@ export const OTHER_FUND_PRINT_TEMPLATES: GeneratedReportTemplate<IOtherFundPrint
         {
             id: 'ofv-compact',
             template_name: 'Other Fund Voucher Compact',
-            model: 'OtherFundRelease',
+            report_name: 'OtherFundRelease',
             template: OFV_COMPACT,
             default_unit: 'mm',
             width: '125mm',
@@ -106,7 +106,7 @@ export const OTHER_FUND_PRINT_TEMPLATES: GeneratedReportTemplate<IOtherFundPrint
         {
             id: 'ofv-large',
             template_name: 'Other Fund Voucher Large',
-            model: 'OtherFundRelease',
+            report_name: 'OtherFundRelease',
             template: OFV_LARGE,
             default_unit: 'in',
             width: '8.5in',

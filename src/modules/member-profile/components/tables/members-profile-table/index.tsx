@@ -76,7 +76,7 @@ const MemberProfileTable = ({
 }: MemberProfileTableProps) => {
     const { pagination, setPagination } = usePagination()
     const { sortingStateBase64, tableSorting, setTableSorting } =
-        useDataTableSorting()
+        useDataTableSorting({ persistKey })
 
     const columns = useMemo(
         () =>

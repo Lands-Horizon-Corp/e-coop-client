@@ -108,7 +108,7 @@ export const LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES: GeneratedReportTemplate
         {
             id: 'lrv-1-normal',
             template_name: 'Loan Voucher Release Normal',
-            model: 'LoanReleaseVoucher',
+            report_name: 'LoanReleaseVoucher',
             template: LRV_NORMAL,
             default_unit: 'in',
             width: '8.5in',
@@ -118,7 +118,7 @@ export const LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES: GeneratedReportTemplate
         {
             id: 'lrv-1-compact',
             template_name: 'Loan Voucher Release Compact',
-            model: 'LoanReleaseVoucher',
+            report_name: 'LoanReleaseVoucher',
             template: LRV_COMPACT,
             default_unit: 'mm',
             width: '125mm',
@@ -128,7 +128,7 @@ export const LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES: GeneratedReportTemplate
         {
             id: 'lrv-1-large',
             template_name: 'Loan Voucher Release Large',
-            model: 'LoanReleaseVoucher',
+            report_name: 'LoanReleaseVoucher',
             template: LRV_LARGE,
             default_unit: 'in',
             width: '8.5in',

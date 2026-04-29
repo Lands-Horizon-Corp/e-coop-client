@@ -76,7 +76,7 @@ const PrintReportForm = ({
         defaultValues: {
             landscape: false,
             paper_size: selectedTemplatePath?.defaultSize,
-            model: 'LoanReleaseVoucher',
+            report_name: 'LoanReleaseVoucher',
             generated_report_type: 'pdf',
             template_config: selectedTemplatePath,
             ...formProps.defaultValues,

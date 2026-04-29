@@ -33,6 +33,7 @@ import {
     AccountLedgerReport,
     TAccountLedgerReportSchema,
 } from '../../general-ledger-definition.validation'
+import { ACCOUNT_GENERAL_LEDGER_REPORT_TEMPLATES } from '../../reports/account-ledger-report-templates'
 
 export interface IAccountLedgerReportFormProps
     extends
@@ -60,8 +61,7 @@ const AccountLedgerReportCreateForm = ({
             is_account_per_page: false,
             ...formProps.defaultValues,
             report_config: {
-                // TODO: Jervx - add real template array list pick
-                ...getTemplateAt(undefined, 0),
+                ...getTemplateAt(ACCOUNT_GENERAL_LEDGER_REPORT_TEMPLATES, 0),
                 ...formProps.defaultValues?.report_config,
                 report_name: 'AccountLedgerReport',
                 name: `account_ledger_report_${toReadableDate(new Date(), 'MMddyy_mmss')}`,
@@ -284,6 +284,7 @@ const AccountLedgerReportCreateForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="gl_account_report_template"
                     />
                 </fieldset>
 

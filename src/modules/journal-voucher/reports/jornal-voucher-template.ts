@@ -65,7 +65,7 @@ export const JOURNAL_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<IJournalVo
         {
             id: 'jvv-1-normal',
             template_name: 'Journal Voucher Normal',
-            model: 'JournalVoucherRelease',
+            report_name: 'JournalVoucherRelease',
             template: JV_NORMAL,
             default_unit: 'in',
             width: '8.5in',
@@ -75,7 +75,7 @@ export const JOURNAL_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<IJournalVo
         {
             id: 'jvv-1-compact',
             template_name: 'Journal Voucher Compact',
-            model: 'JournalVoucherRelease',
+            report_name: 'JournalVoucherRelease',
             template: JV_COMPACT,
             default_unit: 'mm',
             width: '125mm',
@@ -85,7 +85,7 @@ export const JOURNAL_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<IJournalVo
         {
             id: 'jvv-1-large',
             template_name: 'Journal Voucher Large',
-            model: 'JournalVoucherRelease',
+            report_name: 'JournalVoucherRelease',
             template: JV_LARGE,
             default_unit: 'in',
             width: '8.5in',

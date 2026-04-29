@@ -83,7 +83,7 @@ export const CASH_CHECK_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<ICashCh
         {
             id: 'ccv-a5',
             template_name: 'Cash Check Voucher A5',
-            model: 'CashCheckVoucher',
+            report_name: 'CashCheckVoucher',
             template: CCV_NORMAL,
             default_unit: 'in',
             width: '8.5in',
@@ -93,7 +93,7 @@ export const CASH_CHECK_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<ICashCh
         {
             id: 'ccv-bank-book',
             template_name: 'Cash Check Voucher Bank Book',
-            model: 'CashCheckVoucher',
+            report_name: 'CashCheckVoucher',
             template: CCV_COMPACT,
             default_unit: 'mm',
             width: '125mm',
@@ -103,7 +103,7 @@ export const CASH_CHECK_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<ICashCh
         {
             id: 'ccv-statement',
             template_name: 'Cash Check Voucher Statement',
-            model: 'CashCheckVoucher',
+            report_name: 'CashCheckVoucher',
             template: CCV_LARGE,
             default_unit: 'in',
             width: '8.5in',

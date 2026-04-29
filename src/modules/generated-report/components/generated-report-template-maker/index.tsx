@@ -80,12 +80,19 @@ export const NunjucksTemplateEditor = () => {
 
     const { rendered, error } = useMemo(() => {
         let data: unknown = {}
-        try {
-            data = jsonInput.trim() ? JSON.parse(jsonInput) : {}
-        } catch (e) {
-            return {
-                rendered: '',
-                error: `JSON error: ${e instanceof Error ? e.message : String(e)}`,
+        const trimmed = jsonInput.trim()
+        if (trimmed) {
+            try {
+                data = JSON.parse(trimmed)
+            } catch {
+                try {
+                    data = new Function(`"use strict"; return (${trimmed});`)()
+                } catch (e) {
+                    return {
+                        rendered: '',
+                        error: `JSON error: ${e instanceof Error ? e.message : String(e)}`,
+                    }
+                }
             }
         }
         try {
@@ -134,7 +141,7 @@ export const NunjucksTemplateEditor = () => {
                         <Label htmlFor="json-input">JSON data</Label>
                         <DebouncedTextarea
                             className="flex-1 resize-none font-mono text-xs ecoop-scroll"
-                            delay={500}
+                            delay={1500}
                             id="json-input"
                             onDebouncedChange={setJsonInput}
                             placeholder='{ "key": "value" }'
@@ -149,7 +156,7 @@ export const NunjucksTemplateEditor = () => {
                         </Label>
                         <DebouncedTextarea
                             className="flex-1 resize-none font-mono text-xs ecoop-scroll"
-                            delay={500}
+                            delay={1500}
                             id="template-input"
                             onDebouncedChange={setTemplateInput}
                             placeholder="<h1>{{ title }}</h1>"

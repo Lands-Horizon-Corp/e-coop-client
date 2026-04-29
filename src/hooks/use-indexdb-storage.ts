@@ -4,9 +4,7 @@ import { del, get, set } from 'idb-keyval'
 
 export async function getIDB<T>(key: string, fallback?: T): Promise<T | null> {
     try {
-        console.log('IDB: Getting ', key)
         const item = await get<T>(key)
-        console.log('IDB: GOT', item)
         return item !== undefined ? item : (fallback ?? null)
     } catch (error) {
         console.error(`Error reading IndexedDB key "${key}":`, error)
