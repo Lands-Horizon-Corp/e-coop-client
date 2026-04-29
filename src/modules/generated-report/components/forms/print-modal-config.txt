@@ -337,8 +337,10 @@ export const PrintReportFormModal = ({
     description = 'Define the source and printing specifications for a new report.',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess? : boolean,
     formProps?: Omit<IGeneratedReportFormProps, 'className' | 'onClose'>
 }) => {
     return (

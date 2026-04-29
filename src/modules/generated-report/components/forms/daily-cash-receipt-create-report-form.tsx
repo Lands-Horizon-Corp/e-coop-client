@@ -287,7 +287,7 @@ const DailyCashCollectionReceiptJournalCreateReportForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty || isPending}
+                    disableSubmit={isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -309,8 +309,10 @@ export const DailyCashCollectionReceiptJournalCreateReportFormModal = ({
     description = 'Define filters and report configuration for daily cash collection',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<
         IDailyCashCollectionReceiptJournalReportFormProps,
         'className' | 'onClose'
@@ -335,7 +337,7 @@ export const DailyCashCollectionReceiptJournalCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

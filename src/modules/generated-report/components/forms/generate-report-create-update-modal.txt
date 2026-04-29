@@ -224,8 +224,10 @@ export const GeneratedCreateReportFormModal = <TData,>({
     description = 'Fill out the form to generate report.',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess? : boolean,
     formProps?: Omit<IGeneratedReportFormProps<TData>, 'className'>
 }) => {
     return (

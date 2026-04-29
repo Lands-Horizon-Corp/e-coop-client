@@ -606,7 +606,7 @@ const SupposedActualCollectionCreateReportForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty || isPending}
+                    disableSubmit={isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -628,8 +628,10 @@ export const SupposedActualCollectionCreateReportFormModal = ({
     description = 'Generate supposed vs actual collection report',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<
         ISupposedActualCollectionFormProps,
         'className' | 'onClose'
@@ -654,7 +656,7 @@ export const SupposedActualCollectionCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

@@ -284,8 +284,10 @@ export const LoanProtectionPlanCreateReportFormModal = ({
     description = 'Define filters for loan protection plan report',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<
         ILoanProtectionPlanReportFormProps,
         'className' | 'onClose'
@@ -310,7 +312,7 @@ export const LoanProtectionPlanCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

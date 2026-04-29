@@ -33,6 +33,7 @@ import {
 
 import { Button } from '@/components/ui/button'
 
+import { IGeneratedReport } from '../generated-report.types'
 import { AccountBalanceCreateReportFormModal } from './forms/account-balance-create-report-form'
 import { AccountHoldOutCreateReportFormModal } from './forms/account-holdout-create-report-form'
 import { AdjustmentCreateReportFormModal } from './forms/adjustment-create-report-form'
@@ -79,6 +80,7 @@ import { TimeDepositBalanceCreateReportFormModal } from './forms/time-deposit-ba
 import { TimeDepositBalanceYTDCreateReportFormModal } from './forms/time-deposit-balance-ytd-create-report-form'
 import { TimeDepositCreateReportFormModal } from './forms/time-deposit-create-report-form'
 import { TransactionBatchCreateReportFormModal } from './forms/transaction-batch-create-report-form'
+import { useReportViewerStore } from './generated-report-view/global-generate-report-viewer.store'
 
 interface ReportItem {
     label: string
@@ -86,6 +88,7 @@ interface ReportItem {
     component?: React.ElementType<{
         trigger: React.ReactNode
         formProps?: object
+        closeOnSuccess?: boolean
     }>
     persistKey?: string
 }
@@ -515,8 +518,13 @@ const ReportItemButton = ({
 
     return (
         <Component
+            closeOnSuccess={false}
             formProps={{
                 persistKey: report.persistKey,
+                onSuccess: (generatedReport: IGeneratedReport) =>
+                    useReportViewerStore
+                        .getState()
+                        .open({ reportId: generatedReport.id }),
             }}
             trigger={
                 <Button

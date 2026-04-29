@@ -589,8 +589,10 @@ export const CashCheckDisbursementCreateReportFormModal = ({
     description = 'Define filters and configuration for cash check disbursement',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<
         ICashCheckDisbursementReportFormProps,
         'className' | 'onClose'
@@ -615,7 +617,7 @@ export const CashCheckDisbursementCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>
