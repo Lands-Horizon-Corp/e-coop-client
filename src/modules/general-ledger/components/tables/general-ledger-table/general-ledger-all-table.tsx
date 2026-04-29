@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 
+import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
 import {
     TGeneralLedgerEndpointMode,
@@ -26,6 +27,7 @@ import useDataTableState, {
     useResolvedColumnOrder,
 } from '@/components/data-table/use-datatable-state'
 
+import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
 import { TEntityId } from '@/types'
@@ -156,6 +158,10 @@ const GeneralLedgerAllTable = ({
         onSelectData,
     })
 
+    const filterState = useDatableFilterState({
+        onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
+    })
+
     const {
         isPending,
         isRefetching,
@@ -172,6 +178,7 @@ const GeneralLedgerAllTable = ({
         query: {
             ...pagination,
             sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
         },
     })
 
@@ -204,39 +211,41 @@ const GeneralLedgerAllTable = ({
 
     return (
         <TableRowActionStoreProvider>
-            <div
-                className={cn(
-                    'flex h-full flex-col gap-y-2',
-                    className,
-                    !tableState.isScrollable && 'h-fit max-h-none!'
-                )}
-            >
-                <DataTableToolbar
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    scrollableProps={{
-                        isScrollable: tableState.isScrollable,
-                        setIsScrollable: tableState.setIsScrollable,
-                    }}
-                    table={table}
-                    {...toolbarProps}
-                />
-                <DataTable
-                    className="mb-2"
-                    isLoading={isPending}
-                    isScrollable={tableState.isScrollable}
-                    isStickyFooter
-                    isStickyHeader
-                    onDoubleClick={onDoubleClick}
-                    onRowClick={onRowClick}
-                    RowContextComponent={RowContextComponent}
-                    skeletonRowCount={20}
-                    table={table}
-                />
-            </div>
-            <GeneralLedgerRunningTableActionManager />
+            <FilterContext.Provider value={filterState}>
+                <div
+                    className={cn(
+                        'flex h-full flex-col gap-y-2',
+                        className,
+                        !tableState.isScrollable && 'h-fit max-h-none!'
+                    )}
+                >
+                    <DataTableToolbar
+                        refreshActionProps={{
+                            onClick: () => refetch(),
+                            isLoading: isPending || isRefetching,
+                        }}
+                        scrollableProps={{
+                            isScrollable: tableState.isScrollable,
+                            setIsScrollable: tableState.setIsScrollable,
+                        }}
+                        table={table}
+                        {...toolbarProps}
+                    />
+                    <DataTable
+                        className="mb-2"
+                        isLoading={isPending}
+                        isScrollable={tableState.isScrollable}
+                        isStickyFooter
+                        isStickyHeader
+                        onDoubleClick={onDoubleClick}
+                        onRowClick={onRowClick}
+                        RowContextComponent={RowContextComponent}
+                        skeletonRowCount={20}
+                        table={table}
+                    />
+                </div>
+                <GeneralLedgerRunningTableActionManager />
+            </FilterContext.Provider>
         </TableRowActionStoreProvider>
     )
 }

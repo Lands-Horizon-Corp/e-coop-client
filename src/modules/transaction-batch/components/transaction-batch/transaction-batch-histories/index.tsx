@@ -68,7 +68,13 @@ const HistoryTabs: {
             <GeneralLedgerAllTable
                 className="grow p-0"
                 entryType=""
+                excludeColumnIds={['balance']}
                 mode="transaction-batch"
+                persistKey={[
+                    'general-ledger-all',
+                    'transaction-batch',
+                    'general-ledger',
+                ]}
                 transactionBatchId={transactionBatchId}
             />
         ),
@@ -81,7 +87,13 @@ const HistoryTabs: {
             <GeneralLedgerAllTable
                 className="grow p-0"
                 entryType="check-entry"
+                excludeColumnIds={['balance']}
                 mode="transaction-batch"
+                persistKey={[
+                    'general-ledger-all',
+                    'transaction-batch',
+                    'check-entry',
+                ]}
                 transactionBatchId={transactionBatchId}
             />
         ),
@@ -94,7 +106,13 @@ const HistoryTabs: {
             <GeneralLedgerAllTable
                 className="grow p-0"
                 entryType="online-entry"
+                excludeColumnIds={['balance']}
                 mode="transaction-batch"
+                persistKey={[
+                    'general-ledger-all',
+                    'transaction-batch',
+                    'online-entry',
+                ]}
                 transactionBatchId={transactionBatchId}
             />
         ),
@@ -107,7 +125,13 @@ const HistoryTabs: {
             <GeneralLedgerAllTable
                 className="grow p-0"
                 entryType="cash-entry"
+                excludeColumnIds={['balance']}
                 mode="transaction-batch"
+                persistKey={[
+                    'general-ledger-all',
+                    'transaction-batch',
+                    'cash-entry',
+                ]}
                 transactionBatchId={transactionBatchId}
             />
         ),
@@ -120,7 +144,13 @@ const HistoryTabs: {
             <GeneralLedgerAllTable
                 className="grow p-0"
                 entryType="payment-entry"
+                excludeColumnIds={['balance']}
                 mode="transaction-batch"
+                persistKey={[
+                    'general-ledger-all',
+                    'transaction-batch',
+                    'payment-entry',
+                ]}
                 transactionBatchId={transactionBatchId}
             />
         ),
@@ -132,7 +162,13 @@ const HistoryTabs: {
         Component: ({ transactionBatchId }) => (
             <GeneralLedgerAllTable
                 className="grow p-0"
+                excludeColumnIds={['balance']}
                 mode="transaction-batch-loan-entry"
+                persistKey={[
+                    'general-ledger-all',
+                    'transaction-batch',
+                    'loan-entry',
+                ]}
                 transactionBatchId={transactionBatchId}
             />
         ),
@@ -145,7 +181,13 @@ const HistoryTabs: {
             <GeneralLedgerAllTable
                 className="grow p-0"
                 entryType="withdraw-entry"
+                excludeColumnIds={['balance']}
                 mode="transaction-batch"
+                persistKey={[
+                    'general-ledger-all',
+                    'transaction-batch',
+                    'withdraw-entry',
+                ]}
                 transactionBatchId={transactionBatchId}
             />
         ),
@@ -158,7 +200,13 @@ const HistoryTabs: {
             <GeneralLedgerAllTable
                 className="grow p-0"
                 entryType="deposit-entry"
+                excludeColumnIds={['balance']}
                 mode="transaction-batch"
+                persistKey={[
+                    'general-ledger-all',
+                    'transaction-batch',
+                    'deposit-entry',
+                ]}
                 transactionBatchId={transactionBatchId}
             />
         ),
