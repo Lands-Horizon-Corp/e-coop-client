@@ -28,7 +28,6 @@ export const useTimeLeft = ({
 
     const isActive = !!(serverFrozenUntil || frozenAtInput)
 
-    // Update current time every second
     useEffect(() => {
         const interval = setInterval(() => {
             setNow(new Date())
@@ -37,23 +36,11 @@ export const useTimeLeft = ({
         return () => clearInterval(interval)
     }, [])
 
-    // Calculate remaining time
     useEffect(() => {
-        // Priority 1: serverFrozenUntil (ISO date string - end time)
         if (serverFrozenUntil) {
             const endDate = new Date(serverFrozenUntil)
             const endTime = endDate.getTime()
 
-            console.log(
-                new Date(serverFrozenUntil).toLocaleTimeString('en-US', {
-                    timeZone: 'UTC',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                })
-            )
-
-            // Validate that the date was parsed correctly (not NaN)
             if (!isNaN(endTime)) {
                 const current = now.getTime()
                 const left = Math.max(0, Math.floor((endTime - current) / 1000))
@@ -62,12 +49,10 @@ export const useTimeLeft = ({
             }
         }
 
-        // Priority 2: frozenAtInput + frozenUntilSeconds (duration-based)
         if (frozenAtInput && frozenUntilSeconds && serverFrozenUntil) {
             const startDate = new Date(frozenAtInput)
             const start = startDate.getTime()
 
-            // Validate that the date was parsed correctly
             if (!isNaN(start)) {
                 const total = Number(frozenUntilSeconds)
 
@@ -84,7 +69,6 @@ export const useTimeLeft = ({
             }
         }
 
-        // No valid data, set to 0
         setRemainingTime(0)
     }, [now, serverFrozenUntil, frozenAtInput, frozenUntilSeconds])
 

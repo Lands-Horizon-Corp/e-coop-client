@@ -30,7 +30,6 @@ interface UseAutoCancelTimeMachineOptions {
 
 export const useAutoCancelTimeMachine = ({
     isActive,
-    remainingTime,
     timeDiff,
     userOrganizationId,
     payload,
@@ -55,10 +54,10 @@ export const useAutoCancelTimeMachine = ({
         }
 
         // Determine which remaining time value to use
-        const timeToCheck = calculatedRemainingTime ?? remainingTime
+        const timeToCheck = calculatedRemainingTime ?? timeDiff
 
         // Check if remainingTime-based trigger (TimeLeft component)
-        if (timeToCheck !== undefined && timeToCheck === 0 && isActive) {
+        if (timeToCheck !== undefined && timeToCheck < 0 && isActive) {
             shouldCancel = true
         }
 
@@ -88,7 +87,6 @@ export const useAutoCancelTimeMachine = ({
             hasCalledMutate.current = false
         }
     }, [
-        remainingTime,
         timeDiff,
         isActive,
         payload,

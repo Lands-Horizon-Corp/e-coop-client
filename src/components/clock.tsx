@@ -57,6 +57,8 @@ const Clock = ({
         isActive: hasActiveTimeMachine,
         timeDiff,
         userOrganizationId: user_organization?.id,
+        currentTime: time,
+        startTime: new Date(user_organization?.time_machine_time || ''),
     })
 
     const isLowTime = remainingTime <= 30 && remainingTime > 0
