@@ -88,6 +88,8 @@ export const CASH_CHECK_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<ICashCh
             default_unit: 'in',
             width: '8.5in',
             height: '11in',
+            density: 'normal',
+            orientation: 'portrait',
             preview_data: SHARED_CASH_CHECK_PRINT_PREVIEW_DATA,
         },
         {
@@ -98,6 +100,8 @@ export const CASH_CHECK_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<ICashCh
             default_unit: 'mm',
             width: '125mm',
             height: '176mm',
+            density: 'normal',
+            orientation: 'portrait',
             preview_data: SHARED_CASH_CHECK_PRINT_PREVIEW_DATA,
         },
         {
@@ -108,6 +112,8 @@ export const CASH_CHECK_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<ICashCh
             default_unit: 'in',
             width: '8.5in',
             height: '11in',
+            density: 'normal',
+            orientation: 'portrait',
             preview_data: SHARED_CASH_CHECK_PRINT_PREVIEW_DATA,
         },
     ]

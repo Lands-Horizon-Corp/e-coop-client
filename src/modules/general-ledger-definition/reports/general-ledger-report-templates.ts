@@ -4,7 +4,7 @@ import {
     IBaseReportTemplateData,
 } from '@/modules/generated-report'
 
-import GL_BOOK_T1 from './templates/gl_book_t1.njk?raw'
+import GL_BOOK_T1 from './templates/gl_bk_t1.njk?raw'
 
 export interface IGLBookReportTemplate
     extends IBaseReportTemplateData, IBaseReportTemplateCheck {
@@ -115,6 +115,8 @@ export const GL_BOOK_REPORT_TEMPLATES: GeneratedReportTemplate<IGLBookReportTemp
             default_unit: 'in',
             width: '8.5in',
             height: '11in',
+            density: 'normal',
+            orientation: 'portrait',
             preview_data: SHARED_GL_BOOK_PREVIEW_DATA,
         },
     ]

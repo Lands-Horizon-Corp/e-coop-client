@@ -54,6 +54,7 @@ import {
 import {
     GeneratedReportTemplate,
     TDisplayDensity,
+    TPaperOrientation,
     TPaperSizeUnit,
 } from '../../generated-report.types'
 import {
@@ -100,6 +101,8 @@ export function GenerateReportTemplatePicker<T = unknown>({
     const [inputW, setInputW] = useState('800')
     const [inputH, setInputH] = useState('1100')
     const [unit, setUnit] = useState<TPaperSizeUnit>('px')
+    const [orientation, setOrientation] =
+        useState<TPaperOrientation>('portrait')
     const [displayDensity, setDisplayDensity] =
         useState<TDisplayDensity>('normal')
 
@@ -108,10 +111,21 @@ export function GenerateReportTemplatePicker<T = unknown>({
             setLoading(true)
             try {
                 const source = item.template
+
+                // base dimensions (ALWAYS original)
+                const baseW = pageW
+                const baseH = pageH
+
+                const isLandscape = orientation === 'landscape'
+
+                const finalW = isLandscape ? baseH : baseW
+                const finalH = isLandscape ? baseW : baseH
+
                 setRenderedHtml(
                     nunjucks.renderString(source, {
                         ...(item.preview_data ? { ...item.preview_data } : {}),
-                        width: inputW,
+                        width: String(finalW),
+                        height: String(finalH),
                     })
                 )
             } catch {
@@ -123,7 +137,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
                 setLoading(false)
             }
         },
-        [inputW]
+        [pageW, pageH, orientation]
     )
 
     useEffect(() => {
@@ -143,6 +157,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
 
     const handleSelect = (item: GeneratedReportTemplate<T>) => {
         setSelected(item)
+        setOrientation(item.orientation)
         const w = parseFloat(item.width) || 800
         const h = parseFloat(item.height) || 1100
         setPageW(w)
@@ -155,11 +170,17 @@ export function GenerateReportTemplatePicker<T = unknown>({
 
     const handleConfirm = () => {
         if (selected) {
-            onSelect?.(selected, {
-                width: `${pageW}${unit}`,
-                height: `${pageH}${unit}`,
-                unit,
-            })
+            onSelect?.(
+                {
+                    ...selected,
+                    orientation,
+                },
+                {
+                    width: `${pageW}${unit}`,
+                    height: `${pageH}${unit}`,
+                    unit,
+                }
+            )
         } else toast.warning('No template selected')
     }
 
@@ -188,10 +209,17 @@ export function GenerateReportTemplatePicker<T = unknown>({
         setPageH(h)
         setInputW(String(w))
         setInputH(String(h))
+        setOrientation(selected.orientation)
         setUnit(selected.default_unit)
     }
 
-    const iframeSrcDoc = `<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0;width:${pageW}${unit};height:${pageH}${unit};overflow:hidden;font-family:'Segoe UI',sans-serif;}</style></head><body>${renderedHtml}</body></html>`
+    const isLandscape = orientation === 'landscape'
+
+    const finalW = isLandscape ? pageH : pageW
+    const finalH = isLandscape ? pageW : pageH
+
+    // const iframeSrcDoc = `<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0;width:${pageW}${unit};height:${pageH}${unit};overflow:hidden;font-family:'Segoe UI',sans-serif;}</style></head><body>${renderedHtml}</body></html>`
+    const iframeSrcDoc = renderedHtml
 
     useHotkeys(
         'alt+enter',
@@ -412,6 +440,71 @@ export function GenerateReportTemplatePicker<T = unknown>({
                                 })}
                             </RadioGroup>
                         </div>
+                        <div className="space-y-1">
+                            <Label className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                                Orientation
+                            </Label>
+                            <RadioGroup
+                                className="flex gap-2"
+                                onValueChange={(val: TPaperOrientation) => {
+                                    setOrientation(val)
+                                    setInputW(String(pageH))
+                                    setInputH(String(pageW))
+                                }}
+                                value={orientation}
+                            >
+                                {[
+                                    {
+                                        value: 'portrait',
+                                        label: 'Portrait',
+                                        size: { width: 14, height: 18 },
+                                    },
+                                    {
+                                        value: 'landscape',
+                                        label: 'Landscape',
+                                        size: { width: 18, height: 14 },
+                                    },
+                                ].map((opt) => {
+                                    const isSelected = orientation === opt.value
+
+                                    return (
+                                        <label
+                                            className={cn(
+                                                'flex-1 flex items-center justify-center gap-1.5 rounded-md border-2 py-1.5 px-2 cursor-pointer transition-all',
+                                                isSelected
+                                                    ? 'border-primary bg-primary/5'
+                                                    : 'border-border bg-card hover:border-muted-foreground/30'
+                                            )}
+                                            key={opt.value}
+                                        >
+                                            <RadioGroupItem
+                                                className="sr-only"
+                                                value={opt.value}
+                                            />
+                                            <div
+                                                className={cn(
+                                                    'rounded-[2px] border transition-all',
+                                                    isSelected
+                                                        ? 'border-primary bg-primary/20'
+                                                        : 'border-border bg-muted'
+                                                )}
+                                                style={opt.size}
+                                            />
+                                            <span
+                                                className={cn(
+                                                    'text-xs font-medium capitalize',
+                                                    isSelected
+                                                        ? 'text-primary'
+                                                        : 'text-muted-foreground'
+                                                )}
+                                            >
+                                                {opt.label}
+                                            </span>
+                                        </label>
+                                    )
+                                })}
+                            </RadioGroup>
+                        </div>
                     </div>
                     <div className="flex gap-2">
                         <Button
@@ -464,8 +557,8 @@ export function GenerateReportTemplatePicker<T = unknown>({
                             sandbox="allow-same-origin"
                             srcDoc={iframeSrcDoc}
                             style={{
-                                width: `${pageW}${unit}`,
-                                height: `${pageH}${unit}`,
+                                width: `${finalW}${unit}`,
+                                height: `${finalH}${unit}`,
                                 background: 'black',
                             }}
                             title="Template Preview"

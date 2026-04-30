@@ -5,7 +5,7 @@ import {
 } from '@/modules/generated-report'
 
 // Account General Ledger Template 1
-import ACCOUNT_GL_T1 from './templates/account_ledger_report_t1.njk?raw'
+import ACCOUNT_GL_T1 from './templates/acct_ldgr_t1.njk?raw'
 
 type TAccountGeneralLedgerEntry = {
     description: string
@@ -46,7 +46,6 @@ export const SHARED_ACCOUNT_GENERAL_LEDGER_PREVIEW_DATA: IAccountGeneralLedgerRe
         is_per_page: false,
 
         all_data_entries: [
-            // --- 1. ASSETS: CASH & EQUIVALENTS ---
             {
                 description: 'PETTY CASH FUND',
                 debit: '',
@@ -189,7 +188,6 @@ export const SHARED_ACCOUNT_GENERAL_LEDGER_PREVIEW_DATA: IAccountGeneralLedgerRe
                 is_bold: true,
             },
 
-            // --- 2. ASSETS: LOANS RECEIVABLE ---
             {
                 description: 'LOANS RECEIVABLE - PRODUCTIVE',
                 debit: '',
@@ -240,7 +238,6 @@ export const SHARED_ACCOUNT_GENERAL_LEDGER_PREVIEW_DATA: IAccountGeneralLedgerRe
                 is_bold: true,
             },
 
-            // --- 3. LIABILITIES ---
             {
                 description: 'SAVINGS DEPOSITS',
                 debit: '',
@@ -350,7 +347,6 @@ export const SHARED_ACCOUNT_GENERAL_LEDGER_PREVIEW_DATA: IAccountGeneralLedgerRe
                 is_bold: true,
             },
 
-            // --- 5. EXPENSES ---
             {
                 description: 'SALARIES AND WAGES',
                 debit: '',
@@ -495,7 +491,6 @@ export const SHARED_ACCOUNT_GENERAL_LEDGER_PREVIEW_DATA: IAccountGeneralLedgerRe
                 is_bold: true,
             },
 
-            // --- FINAL TOTALS ---
             {
                 description: 'REPORT MONTH-END TOTALS',
                 debit: 390519,
@@ -654,6 +649,8 @@ export const ACCOUNT_GENERAL_LEDGER_REPORT_TEMPLATES: GeneratedReportTemplate<IA
             default_unit: 'in',
             width: '8.5in',
             height: '11in',
+            density: 'normal',
+            orientation: 'portrait',
             preview_data: SHARED_ACCOUNT_GENERAL_LEDGER_PREVIEW_DATA,
         },
     ]

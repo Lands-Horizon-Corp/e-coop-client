@@ -172,6 +172,8 @@ export const PAPER_SIZE_GROUPS = {
     'North American': ['LETTER', 'LEGAL', 'FOLIO'],
 } as const
 
+export const PAPER_ORIENTATION = ['portrait', 'landscape'] as const
+
 // 🧭 Helper Function to Get Orientation
 export function getPaperSize(
     key: keyof typeof PAPER_SIZES,

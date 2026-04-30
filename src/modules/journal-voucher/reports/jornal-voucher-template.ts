@@ -70,6 +70,8 @@ export const JOURNAL_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<IJournalVo
             default_unit: 'in',
             width: '8.5in',
             height: '11in',
+            density: 'normal',
+            orientation: 'portrait',
             preview_data: SHARED_JV_PREVIEW_DATA,
         },
         {
@@ -80,6 +82,8 @@ export const JOURNAL_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<IJournalVo
             default_unit: 'mm',
             width: '125mm',
             height: '176mm',
+            density: 'normal',
+            orientation: 'portrait',
             preview_data: SHARED_JV_PREVIEW_DATA,
         },
         {
@@ -90,6 +94,8 @@ export const JOURNAL_VOUCHER_PRINT_TEMPLATES: GeneratedReportTemplate<IJournalVo
             default_unit: 'in',
             width: '8.5in',
             height: '11in',
+            density: 'normal',
+            orientation: 'portrait',
             preview_data: SHARED_JV_PREVIEW_DATA,
         },
     ]

@@ -113,6 +113,8 @@ export const LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES: GeneratedReportTemplate
             default_unit: 'in',
             width: '8.5in',
             height: '11in',
+            density: 'normal',
+            orientation: 'portrait',
             preview_data: SHARED_LOAN_PREVIEW_DATA,
         },
         {
@@ -123,6 +125,8 @@ export const LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES: GeneratedReportTemplate
             default_unit: 'mm',
             width: '125mm',
             height: '176mm',
+            density: 'compact',
+            orientation: 'portrait',
             preview_data: SHARED_LOAN_PREVIEW_DATA,
         },
         {
@@ -133,6 +137,8 @@ export const LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES: GeneratedReportTemplate
             default_unit: 'in',
             width: '8.5in',
             height: '11in',
+            density: 'normal',
+            orientation: 'portrait',
             preview_data: SHARED_LOAN_PREVIEW_DATA,
         },
     ]

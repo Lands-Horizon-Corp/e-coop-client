@@ -7,6 +7,7 @@ import { TPaperSizeName } from './components/forms/paper-size-selector'
 import { TGeneratedReportSchema } from './generated-report.validation'
 import {
     DISPLAY_DENSITY,
+    PAPER_ORIENTATION,
     PAPER_SIZES,
     PAPER_SIZE_UNIT,
     REPORT_NAMES,
@@ -100,11 +101,17 @@ export type TemplateOptions = {
 
 export type TPaperSizeUnit = (typeof PAPER_SIZE_UNIT)[number]
 
-export interface GeneratedReportTemplate<T = unknown> {
+export type TPaperOrientation = (typeof PAPER_ORIENTATION)[number]
+
+export interface GeneratedReportTemplate<
+    T = unknown,
+    TTemplateFilter = unknown,
+> {
     id: string
     template_name: string
 
     template: string
+    template_filter?: TTemplateFilter // contains static filter config based on template that the form template can't override
 
     default_unit: TPaperSizeUnit
     report_name: TReportName
@@ -115,6 +122,9 @@ export interface GeneratedReportTemplate<T = unknown> {
     page_size?: (typeof PAPER_SIZES)[number]
 
     preview_data: T
+
+    density: TDisplayDensity
+    orientation: TPaperOrientation
 
     lock_organization_id?: TEntityId[]
     lock_branch_id?: TEntityId[]

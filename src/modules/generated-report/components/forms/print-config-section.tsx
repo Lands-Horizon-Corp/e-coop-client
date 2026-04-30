@@ -263,6 +263,22 @@ export function PrintSettingsSection({
                                 shouldDirty: true,
                                 shouldTouch: true,
                             })
+                            setValue(
+                                'report_config.display_density',
+                                template.density,
+                                {
+                                    shouldDirty: true,
+                                    shouldTouch: true,
+                                }
+                            )
+                            setValue(
+                                'report_config.template_filter',
+                                template.template_filter
+                            )
+                            setValue(
+                                'report_config.orientation',
+                                template.orientation
+                            )
                         },
                     }}
                     trigger={

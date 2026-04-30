@@ -42,8 +42,9 @@ import {
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
+import { ButtonGroup } from '@/components/ui/button-group'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Form } from '@/components/ui/form'
+import { Form, FormLabel } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
@@ -62,7 +63,7 @@ import {
 import { useFormHelper } from '@/hooks/use-form-helper'
 import { useInternalState } from '@/hooks/use-internal-state'
 
-import { IClassProps, IForm, TEntityId } from '@/types'
+import { IClassProps, IForm } from '@/types'
 
 import { WithGeneratedReportSchema } from '../../generated-report.validation'
 
@@ -125,13 +126,28 @@ export const DailyCollectionDetailSchema = z
                 z.object({
                     account_id: entityIdSchema,
                     account: z.any().optional(), // FOR UI only
+                    display_entry_type: z.enum(['CR', 'DR']),
                 })
             )
             .min(1, 'Must have minimum of 1 account column to display')
             .default([]),
+        account_column_list_showable_first: z.coerce
+            .number()
+            .min(1, 'Require to show at least 1 account from list')
+            .default(1),
     })
     .and(WithGeneratedReportSchema)
     .and(WithSignatureSchema)
+    .refine(
+        (data) =>
+            data.account_column_list_showable_first <=
+            data.account_column_list.length,
+        {
+            message:
+                'Cannot show more accounts than what is available in the list',
+            path: ['account_column_list_showable_first'], // Points the error to the specific field
+        }
+    )
 
 export type TDailyCollectionDetailSchema = z.infer<
     typeof DailyCollectionDetailSchema
@@ -176,6 +192,7 @@ const DailyCollectionDetailCreateReportForm = ({
                     sundries_print_separate_page: false,
 
                     account_column_list: [],
+                    account_column_list_showable_first: 10,
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
@@ -362,60 +379,84 @@ const DailyCollectionDetailCreateReportForm = ({
                             />
                         </div>
                     </div>
+                    <BrowseDailyCollectionEntries
+                        form={form}
+                        trigger={
+                            <Button type="button" variant="outline">
+                                Browse Daily Collection Entries
+                            </Button>
+                        }
+                    />
 
-                    <div className="grid grid-cols-2 gap-x-4">
-                        <BrowseDailyCollectionEntries
-                            form={form}
-                            trigger={
-                                <Button type="button" variant="outline">
-                                    Browse Daily Collection Entries
-                                </Button>
-                            }
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="account_column_list"
-                            render={({ field }) => {
-                                const accounts =
-                                    form.getValues('account_column_list') ?? []
+                    <div className="bg-popover p-4 rounded-2xl space-y-2">
+                        <div>
+                            <FormLabel className="text-sm">
+                                Report Detailed Column Account
+                            </FormLabel>
+                            <p className="text-xs text-muted-foreground">
+                                Setup Column/Accounts to be displayed in the
+                                report table
+                            </p>
+                        </div>
+                        <div className="flex gap-x-4">
+                            <FormFieldWrapper
+                                className="flex-1"
+                                control={form.control}
+                                description="Define what accounts will be included in the report column"
+                                label="Account Column List"
+                                name="account_column_list"
+                                render={({ field }) => {
+                                    const accounts =
+                                        form.getValues('account_column_list') ??
+                                        []
 
-                                return (
-                                    <div className="flex flex-col gap-y-2">
-                                        <AccountListOrderModal
-                                            account_column={accounts}
-                                            onApply={(items) => {
-                                                const ids = items.map(
-                                                    (i) => i.account_id
-                                                )
-                                                const fullAccounts = items.map(
-                                                    (i) => i
-                                                )
+                                    return (
+                                        <div className="flex flex-col gap-y-2">
+                                            <AccountListOrderModal
+                                                account_column={accounts}
+                                                onApply={(items) => {
+                                                    const ids = items.map(
+                                                        (i) => i.account_id
+                                                    )
+                                                    const fullAccounts =
+                                                        items.map((i) => i)
 
-                                                field.onChange(ids)
-                                                form.setValue(
-                                                    'account_column_list',
-                                                    fullAccounts
-                                                )
-                                            }}
-                                            trigger={
-                                                <Button
-                                                    // disabled={isDisabled(
-                                                    //     field.name
-                                                    // )}
-                                                    type="button"
-                                                    variant="outline"
-                                                >
-                                                    {(field.value ?? [])
-                                                        .length === 0
-                                                        ? 'Define Report Account Columns'
-                                                        : `${(field.value ?? []).length} Acc Column Defined`}
-                                                </Button>
-                                            }
-                                        />
-                                    </div>
-                                )
-                            }}
-                        />
+                                                    field.onChange(ids)
+                                                    form.setValue(
+                                                        'account_column_list',
+                                                        fullAccounts
+                                                    )
+                                                }}
+                                                trigger={
+                                                    <Button
+                                                        // disabled={isDisabled(
+                                                        //     field.name
+                                                        // )}
+                                                        type="button"
+                                                        variant="outline"
+                                                    >
+                                                        {(field.value ?? [])
+                                                            .length === 0
+                                                            ? 'Define Report Account Columns'
+                                                            : `${(field.value ?? []).length} Column Defined`}
+                                                    </Button>
+                                                }
+                                            />
+                                        </div>
+                                    )
+                                }}
+                            />
+                            <FormFieldWrapper
+                                className="w-fit"
+                                control={form.control}
+                                description="Will show first number of account in the table"
+                                label="Show First"
+                                name="account_column_list_showable_first"
+                                render={({ field }) => (
+                                    <Input className="" {...field} />
+                                )}
+                            />
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -517,6 +558,10 @@ const DailyCollectionDetailCreateReportForm = ({
                         )}
                     />
 
+                    <FormLabel className="text-xs text-muted-foreground">
+                        Other Options
+                    </FormLabel>
+
                     <div className="grid grid-cols-2 gap-3">
                         <FormFieldWrapper
                             control={form.control}
@@ -592,6 +637,7 @@ const DailyCollectionDetailCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="daily_collection_detail_report_template"
                     />
                 </fieldset>
 
@@ -922,10 +968,7 @@ const BrowseDailyCollectionEntries = ({
 // PANG ACCOUNT COLUMN DEFINER
 const DND_TYPE = 'ACCOUNT_COLUMN_ITEM'
 
-type TAccountEntry = {
-    account_id: TEntityId
-    account?: IAccount
-}
+type TAccountEntry = TDailyCollectionDetailSchema['account_column_list'][number]
 
 const reindex = (cols: TAccountEntry[]): TAccountEntry[] =>
     cols.map((c, i) => ({ ...c, index: i }))
@@ -945,7 +988,11 @@ export const AccountListOrder = ({
         const existingIds = new Set(kept.map((c) => c.account_id))
         const added: TAccountEntry[] = accounts
             .filter((a) => !existingIds.has(a.id))
-            .map((a) => ({ account_id: a.id, account: a }))
+            .map((a) => ({
+                account_id: a.id,
+                account: a,
+                display_entry_type: 'CR',
+            }))
         setItems(reindex([...kept, ...added]))
     }
 
@@ -962,6 +1009,17 @@ export const AccountListOrder = ({
             const [moved] = next.splice(from, 1)
             next.splice(to, 0, moved)
             return reindex(next)
+        })
+    }
+
+    const updateEntryType = (index: number, type: 'CR' | 'DR') => {
+        setItems((prev) => {
+            const next = prev.slice()
+            next[index] = {
+                ...next[index],
+                display_entry_type: type,
+            }
+            return next
         })
     }
 
@@ -1013,6 +1071,7 @@ export const AccountListOrder = ({
                                     index={i}
                                     key={`${col.account_id}-${i}`}
                                     moveItem={moveItem}
+                                    onChangeType={updateEntryType}
                                     removeAt={removeAt}
                                 />
                             ))}
@@ -1035,11 +1094,13 @@ const AccountRow = ({
     index,
     moveItem,
     removeAt,
+    onChangeType,
 }: {
     entry: TAccountEntry
     index: number
     moveItem: (from: number, to: number) => void
     removeAt: (i: number) => void
+    onChangeType: (index: number, type: 'CR' | 'DR') => void
 }) => {
     const ref = useRef<HTMLLIElement>(null)
 
@@ -1084,10 +1145,40 @@ const AccountRow = ({
             >
                 <DragHandleIcon />
             </Button>
+
             <span className="w-6 text-center text-xs text-muted-foreground tabular-nums">
                 {index + 1}
             </span>
+
             <div className="flex-1 truncate text-sm">{label}</div>
+
+            <ButtonGroup>
+                <Button
+                    onClick={() => onChangeType(index, 'CR')}
+                    size="xs"
+                    type="button"
+                    variant={
+                        entry.display_entry_type === 'CR'
+                            ? 'default'
+                            : 'secondary'
+                    }
+                >
+                    CR
+                </Button>
+                <Button
+                    onClick={() => onChangeType(index, 'DR')}
+                    size="xs"
+                    type="button"
+                    variant={
+                        entry.display_entry_type === 'DR'
+                            ? 'default'
+                            : 'secondary'
+                    }
+                >
+                    DR
+                </Button>
+            </ButtonGroup>
+
             <Button
                 aria-label="Remove account"
                 onClick={() => removeAt(index)}
