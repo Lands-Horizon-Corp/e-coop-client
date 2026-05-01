@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { Fragment, ReactNode, useState } from 'react'
 
 import { cn } from '@/helpers'
 import { ICurrency, currencyFormat } from '@/modules/currency'
@@ -12,24 +12,20 @@ import type { ITransactionBatchHistoryTotal } from '@/modules/transaction-batch'
 import { IconType } from 'react-icons/lib'
 
 import {
-    ArrowDownLeftIcon,
-    ArrowUpRightIcon,
     BadgeExclamationFillIcon,
     BillIcon,
     BookOpenIcon,
-    EmptyIcon,
     HandCoinsIcon,
     HandDropCoinsIcon,
     MoneyCheckIcon,
     MoneyStackIcon,
+    SwapArrowIcon,
     WalletIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Empty, EmptyContent, EmptyHeader } from '@/components/ui/empty'
-import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { useInternalState } from '@/hooks/use-internal-state'
@@ -411,123 +407,89 @@ const TotalCard = ({
 interface TransactionBatchSummaryItemProps {
     transactionBatchSummary?: ITransactionBatchSummary[]
     currency: ICurrency
+    sectionLabel: string
+    swapped?: boolean
 }
 
 const TransactionBatchSummary = ({
     transactionBatchSummary,
     currency,
+    swapped = false,
 }: TransactionBatchSummaryItemProps) => {
+    if (
+        !Array.isArray(transactionBatchSummary) ||
+        transactionBatchSummary.length === 0
+    ) {
+        return (
+            <div className="py-4 text-center text-xs text-muted-foreground">
+                No transactions available
+            </div>
+        )
+    }
+
     return (
-        <div className="overflow-y-auto pr-2 pt-2 pl-1 ecoop-scroll min-fit max-h-[95%]">
-            {transactionBatchSummary?.map((summary) => {
-                return (
-                    <div className="">
-                        <div className="grid grid-cols-2 gap-2 ">
-                            <TotalCard
-                                amount={summary.total_debit}
-                                currency={currency}
-                                icon={<ArrowUpRightIcon className="h-5 w-5" />}
-                                label="Debit"
-                                variant="debit"
-                            />
-                            <TotalCard
-                                amount={summary.total_credit}
-                                currency={currency}
-                                icon={<ArrowDownLeftIcon className="h-5 w-5" />}
-                                label="Credit"
-                                variant="credit"
-                            />
-                            <TotalCard
-                                amount={summary.total_balance}
-                                currency={currency}
-                                icon={<WalletIcon className="h-5 w-5" />}
-                                label="Total Balance"
-                                variant="total"
-                            />
+        <>
+            {transactionBatchSummary.map((summary, idx) => (
+                <Fragment key={idx}>
+                    {summary.transaction_batch_account_summary?.map((acc) => (
+                        <div
+                            className="border-b py-2 px-3 hover:bg-muted/30 transition-colors"
+                            key={acc.account.id}
+                        >
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-primary/10 text-primary text-xs font-medium mb-1">
+                                {acc.account.name}
+                            </span>
+                            <div className="grid grid-cols-3 text-xs tabular-nums text-right gap-x-2">
+                                <span className="text-muted-foreground">
+                                    {currencyFormat(
+                                        swapped ? acc.credit : acc.debit,
+                                        { currency, showSymbol: true }
+                                    )}
+                                </span>
+                                <span className="text-muted-foreground">
+                                    {currencyFormat(
+                                        swapped ? acc.debit : acc.credit,
+                                        { currency, showSymbol: true }
+                                    )}
+                                </span>
+                                <span className="font-medium">
+                                    {currencyFormat(acc.balance, {
+                                        currency,
+                                        showSymbol: true,
+                                    })}
+                                </span>
+                            </div>
                         </div>
-                        <div className=" flex flex-col gap-2 mt-4 overflow-y-auto ecoop-scroll min-h-fit py-2">
-                            {summary.transaction_batch_account_summary.map(
-                                (accountSummary) => {
-                                    return (
-                                        <>
-                                            <Card
-                                                className="rounded-lg border"
-                                                key={accountSummary.account.id}
-                                            >
-                                                <CardContent className="p-4">
-                                                    <div className="flex items-center justify-between">
-                                                        <span className="text-sm font-medium text-muted-foreground">
-                                                            {
-                                                                accountSummary
-                                                                    .account
-                                                                    .name
-                                                            }
-                                                        </span>
-                                                        <span
-                                                            className={cn(
-                                                                'text-sm font-semibold',
-                                                                accountSummary.balance >=
-                                                                    0
-                                                                    ? 'text-debit'
-                                                                    : 'text-credit'
-                                                            )}
-                                                        >
-                                                            {currencyFormat(
-                                                                accountSummary.balance,
-                                                                {
-                                                                    currency:
-                                                                        currency,
-                                                                    showSymbol: true,
-                                                                }
-                                                            )}
-                                                        </span>
-                                                    </div>
-                                                    <div className="mt-2 flex items-center justify-between">
-                                                        <span className="text-sm text-muted-foreground">
-                                                            Debit:{' '}
-                                                            {currencyFormat(
-                                                                accountSummary.debit,
-                                                                {
-                                                                    currency:
-                                                                        currency,
-                                                                    showSymbol: true,
-                                                                }
-                                                            )}
-                                                        </span>
-                                                        <span className="text-sm text-muted-foreground">
-                                                            Credit:{' '}
-                                                            {currencyFormat(
-                                                                accountSummary.credit,
-                                                                {
-                                                                    currency:
-                                                                        currency,
-                                                                    showSymbol: true,
-                                                                }
-                                                            )}
-                                                        </span>
-                                                    </div>
-                                                </CardContent>
-                                            </Card>
-                                        </>
-                                    )
-                                } /*  */
-                            )}
-                            {summary.transaction_batch_account_summary ===
-                                null && (
-                                <Empty>
-                                    <EmptyHeader>
-                                        <EmptyIcon />
-                                    </EmptyHeader>
-                                    <EmptyContent>
-                                        No transaction Available
-                                    </EmptyContent>
-                                </Empty>
-                            )}
+                    ))}
+                    <div className="border-y-2 border-primary/20 bg-primary/5 py-2 px-3">
+                        <div className="grid grid-cols-3 text-xs tabular-nums text-right gap-x-2 font-semibold">
+                            <span className="text-foreground">
+                                {currencyFormat(
+                                    swapped
+                                        ? summary.total_credit
+                                        : summary.total_debit,
+                                    { currency, showSymbol: true }
+                                )}
+                            </span>
+                            <span className="text-foreground">
+                                {currencyFormat(
+                                    swapped
+                                        ? summary.total_debit
+                                        : summary.total_credit,
+                                    { currency, showSymbol: true }
+                                )}
+                            </span>
+                            <span className="text-emerald-500 font-bold">
+                                {currencyFormat(summary.total_balance, {
+                                    currency,
+                                    showSymbol: true,
+                                })}
+                            </span>
                         </div>
                     </div>
-                )
-            })}
-        </div>
+                </Fragment>
+            ))}
+        </>
     )
 }
 
@@ -597,6 +559,7 @@ const tabSummaryConfig: Record<
 }
 
 const SidebarSummary = ({ transactionBatchId, activeTab }: SideBarSummary) => {
+    const [swapped, setSwapped] = useState(false)
     const { data: totals } = useTransactionBatchHistoryTotal({
         transactionBatchId,
     })
@@ -682,67 +645,111 @@ const SidebarSummary = ({ transactionBatchId, activeTab }: SideBarSummary) => {
     return (
         <div
             className={cn(
-                'min-w-sm overflow-y-auto ecoop-scroll h-full bg-background rounded-xl border p-5'
+                'w-[260px] shrink-0 flex flex-col overflow-hidden bg-background rounded-xl border h-full'
             )}
         >
+            {/* Sticky column header */}
+            <div className="sticky top-0 z-10 bg-muted/40 border-b ">
+                <div className="flex items-center bg-muted w-full justify-between mb-1">
+                    <span className="text-xs text-muted-foreground font-medium">
+                        Summary
+                    </span>
+                    <button
+                        className={cn(
+                            'inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium transition-colors',
+                            swapped
+                                ? 'bg-primary/15 text-primary'
+                                : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                        )}
+                        onClick={() => setSwapped((s) => !s)}
+                        title="Swap debit / credit columns"
+                        type="button"
+                    >
+                        <SwapArrowIcon className="size-3" />
+                        swap
+                    </button>
+                </div>
+                <div className="grid grid-cols-3 text-xs font-medium text-muted-foreground text-right gap-x-2">
+                    <span className={swapped ? 'text-orange-400' : ''}>
+                        {swapped ? 'credit' : 'debit'}
+                    </span>
+                    <span className={swapped ? 'text-primary' : ''}>
+                        {swapped ? 'debit' : 'credit'}
+                    </span>
+                    <span>balance</span>
+                </div>
+            </div>
+
+            {/* Scrollable rows */}
+            <div className="flex-1 overflow-y-auto ecoop-scroll">
+                {/* Account section */}
+                <div className="flex items-center gap-2 px-3 pt-3 pb-1">
+                    <span className="text-xs font-semibold text-foreground uppercase tracking-wider whitespace-nowrap">
+                        Account
+                    </span>
+                    <div className="flex-1 border-t border-dashed border-border/60" />
+                </div>
+                <TransactionBatchSummary
+                    currency={currency}
+                    sectionLabel="Account"
+                    swapped={swapped}
+                    transactionBatchSummary={accountSummary}
+                />
+
+                {/* Cash section */}
+                <div className="flex items-center gap-2 px-3 pt-4 pb-1">
+                    <span className="text-xs font-semibold text-foreground uppercase tracking-wider whitespace-nowrap">
+                        Cash &amp; Cash Equivalence
+                    </span>
+                    <div className="flex-1 border-t border-dashed border-border/60" />
+                </div>
+                <TransactionBatchSummary
+                    currency={currency}
+                    sectionLabel="Cash and Cash Equivalence"
+                    swapped={swapped}
+                    transactionBatchSummary={cashSummary}
+                />
+            </div>
+
+            {/* Grand total footer */}
             {(typeof debit === 'number' || typeof credit === 'number') && (
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                    {typeof debit === 'number' && (
-                        <TotalCard
-                            amount={debit}
-                            currency={currency}
-                            icon={<ArrowUpRightIcon className="h-5 w-5" />}
-                            label="Total Debit"
-                            variant="debit"
-                        />
-                    )}
-                    {typeof credit === 'number' && (
-                        <TotalCard
-                            amount={credit}
-                            currency={currency}
-                            icon={<ArrowDownLeftIcon className="h-5 w-5" />}
-                            label="Total Credit"
-                            variant="credit"
-                        />
-                    )}
+                <div className="border-t-2 border-border px-3 pt-2 pb-3 shrink-0">
+                    <div className="grid grid-cols-3 text-right tabular-nums font-bold text-sm gap-x-2">
+                        <span>
+                            {swapped
+                                ? typeof credit === 'number' &&
+                                  currencyFormat(credit, {
+                                      currency,
+                                      showSymbol: true,
+                                  })
+                                : typeof debit === 'number' &&
+                                  currencyFormat(debit, {
+                                      currency,
+                                      showSymbol: true,
+                                  })}
+                        </span>
+                        <span>
+                            {swapped
+                                ? typeof debit === 'number' &&
+                                  currencyFormat(debit, {
+                                      currency,
+                                      showSymbol: true,
+                                  })
+                                : typeof credit === 'number' &&
+                                  currencyFormat(credit, {
+                                      currency,
+                                      showSymbol: true,
+                                  })}
+                        </span>
+                        <span />
+                    </div>
+                    <div className="grid grid-cols-3 text-right text-xs text-muted-foreground gap-x-2 mt-0.5">
+                        <span>{swapped ? 'total credit' : 'total debit'}</span>
+                        <span>{swapped ? 'total debit' : 'total credit'}</span>
+                        <span />
+                    </div>
                 </div>
             )}
-            <div className="mb-4">
-                <Label className="text-sm font-semibold mb-2 block">
-                    Account Summary
-                </Label>
-                {Array.isArray(accountSummary) && accountSummary.length > 0 ? (
-                    <TransactionBatchSummary
-                        currency={currency}
-                        transactionBatchSummary={accountSummary}
-                    />
-                ) : (
-                    <Empty>
-                        <EmptyHeader>
-                            <EmptyIcon />
-                        </EmptyHeader>
-                        <EmptyContent>No transaction Available</EmptyContent>
-                    </Empty>
-                )}
-            </div>
-            <div className="mb-4">
-                <Label className="text-sm font-semibold mb-2 block">
-                    Cash on Hand Summary
-                </Label>
-                {Array.isArray(cashSummary) && cashSummary.length > 0 ? (
-                    <TransactionBatchSummary
-                        currency={currency}
-                        transactionBatchSummary={cashSummary}
-                    />
-                ) : (
-                    <Empty>
-                        <EmptyHeader>
-                            <EmptyIcon />
-                        </EmptyHeader>
-                        <EmptyContent>No transaction Available</EmptyContent>
-                    </Empty>
-                )}
-            </div>
         </div>
     )
 }
