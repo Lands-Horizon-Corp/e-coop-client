@@ -20,7 +20,6 @@ import {
     LayersSharpDotIcon,
     RefreshIcon,
 } from '@/components/icons'
-// import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Kbd } from '@/components/ui/kbd'
@@ -30,6 +29,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, TEntityId } from '@/types'
 
+import { useTransactionBatchCurrentRefresh } from '../../transaction-batch.service'
 import {
     ITransactionBatch,
     TTransactionBatchFullorMin,
@@ -65,14 +65,17 @@ const TransactionBatch = ({
         currentAuth: { user, user_organization },
     } = useAuthUserWithOrg()
 
+    const { mutate: refreshCurrentTransactionBatch } =
+        useTransactionBatchCurrentRefresh()
+
     const invalidateTransactionBatch = () => {
         queryClient.invalidateQueries({
             queryKey: ['transaction-batch', transactionBatch.id],
         })
 
-        queryClient.invalidateQueries({
-            queryKey: ['transaction-batch', 'current'],
-        })
+        // queryClient.invalidateQueries({
+        //     queryKey: ['transaction-batch', 'current'],
+        // })
     }
 
     const hasCurrentTimeMachineSession = !!user_organization?.time_machine_time
@@ -97,7 +100,7 @@ const TransactionBatch = ({
     return (
         <div
             className={cn(
-                'ecoop-scroll flex max-h-[90vh] w-full flex-col gap-y-3 overflow-auto rounded-2xl border-2 bg-secondary p-4 ring-offset-0 dark:bg-popover',
+                'ecoop-scroll flex v1 max-h-[90vh] w-full flex-col gap-y-3 overflow-auto rounded-2xl border-2 bg-secondary p-4 ring-offset-0 dark:bg-popover',
                 'shadow-xl',
                 className,
                 !transactionBatch.is_today && 'ring-destructive! ring'
@@ -204,7 +207,10 @@ const TransactionBatch = ({
                     )}
                     <Button
                         hoverVariant="primary"
-                        onClick={() => invalidateTransactionBatch()}
+                        onClick={() => {
+                            refreshCurrentTransactionBatch()
+                            invalidateTransactionBatch()
+                        }}
                         size="icon-sm"
                         variant="secondary"
                     >

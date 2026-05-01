@@ -1,5 +1,6 @@
 import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from '@/types'
 
+import { IAccount } from '../account'
 import { IBatchFundingRequest } from '../batch-funding'
 import { IBranch } from '../branch'
 import { ICurrency } from '../currency'
@@ -160,33 +161,63 @@ export interface ITransactionBatchEndRequest {
     employee_by_position: string
 }
 
+export interface ITransactionBatchAccountSummary {
+    account: IAccount
+    debit: number
+    credit: number
+    balance: number
+}
+
+export interface ITransactionBatchSummary {
+    transaction_batch_account_summary: ITransactionBatchAccountSummary[]
+    total_debit: number
+    total_credit: number
+    total_balance: number
+}
+
 export interface ITransactionBatchHistoryTotal {
     batch_funding_total: number
     disbursement_transaction_total: number
 
     general_ledger_debit_total: number
     general_ledger_credit_total: number
+    general_ledger_account_summary: ITransactionBatchSummary[]
+    general_ledger_cash_on_hand_summary: ITransactionBatchSummary[]
 
     check_entry_debit_total: number
     check_entry_credit_total: number
+    check_entry_account_summary: ITransactionBatchSummary[]
+    check_entry_cash_on_hand_summary: ITransactionBatchSummary[]
 
     online_entry_debit_total: number
     online_entry_credit_total: number
+    online_entry_account_summary: ITransactionBatchSummary[]
+    online_entry_cash_on_hand_summary: ITransactionBatchSummary[]
 
     cash_entry_debit_total: number
     cash_entry_credit_total: number
+    cash_entry_account_summary: ITransactionBatchSummary[]
+    cash_entry_cash_on_hand_summary: ITransactionBatchSummary[]
 
     payment_entry_debit_total: number
     payment_entry_credit_total: number
+    payment_entry_account_summary: ITransactionBatchSummary[]
+    payment_entry_cash_on_hand_summary: ITransactionBatchSummary[]
 
     withdraw_entry_debit_total: number
     withdraw_entry_credit_total: number
+    withdraw_entry_account_summary: ITransactionBatchSummary[]
+    withdraw_entry_cash_on_hand_summary: ITransactionBatchSummary[]
 
     deposit_entry_debit_total: number
     deposit_entry_credit_total: number
+    deposit_entry_account_summary: ITransactionBatchSummary[]
+    deposit_entry_cash_on_hand_summary: ITransactionBatchSummary[]
 
     loan_entry_debit_total: number
     loan_entry_credit_total: number
+    loan_entry_account_summary: ITransactionBatchSummary[]
+    loan_entry_cash_on_hand_summary: ITransactionBatchSummary[]
 
     currency_id: TEntityId
     currency: ICurrency

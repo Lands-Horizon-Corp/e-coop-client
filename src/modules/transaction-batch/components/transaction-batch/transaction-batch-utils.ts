@@ -56,3 +56,7 @@ export const getLessTotal = (data: LessInput): number => {
         Number(cash_check_voucher || 0)
     )
 }
+
+export const stringReplace = (str: string, replace: string): string => {
+    return str.replace(/[^a-zA-Z0-9]/g, replace)
+}

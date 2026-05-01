@@ -718,7 +718,7 @@ export const TransactionBatchTableActionManager = () => {
         <>
             {state.action === 'view-disbursements' && (
                 <Modal
-                    className="!max-w-[95vw]"
+                    className="max-w-[95vw]!"
                     description={`You are viewing ${batch.batch_name || 'unknown'}'s disbursement transactions`}
                     onOpenChange={close}
                     open={state.isOpen}
@@ -733,7 +733,7 @@ export const TransactionBatchTableActionManager = () => {
             )}
             {state.action === 'view-ledger' && (
                 <Modal
-                    className="!max-w-[95vw]"
+                    className="max-w-[95vw]!"
                     onOpenChange={close}
                     open={state.isOpen}
                     title={getModalTitle(entryType)}

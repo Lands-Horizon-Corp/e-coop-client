@@ -448,4 +448,21 @@ export const useTransactionBatchHistoryTotal = ({
     })
 }
 
+export const useTransactionBatchCurrentRefresh = createMutationFactory<
+    ITransactionBatch,
+    Error,
+    void
+>({
+    mutationFn: async () => {
+        const response = await API.post<void, ITransactionBatch>(
+            `${transactionBatchAPIRoute}/current/refresh`
+        )
+
+        return response.data
+    },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn('transaction-batch', args),
+    defaultInvalidates: [[transactionBatchQueryKey, 'current']],
+})
+
 export const logger = Logger.getInstance('transaction-batch')
