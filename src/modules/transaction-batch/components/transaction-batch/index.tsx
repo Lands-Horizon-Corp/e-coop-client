@@ -100,7 +100,7 @@ const TransactionBatch = ({
     return (
         <div
             className={cn(
-                'ecoop-scroll flex v1 max-h-[90vh] w-full flex-col gap-y-3 overflow-auto rounded-2xl border-2 bg-secondary p-4 ring-offset-0 dark:bg-popover',
+                'ecoop-scroll flex max-h-[90vh] w-full flex-col gap-y-3 overflow-auto rounded-2xl border-2 bg-secondary p-4 ring-offset-0 dark:bg-popover',
                 'shadow-xl',
                 className,
                 !transactionBatch.is_today && 'ring-destructive! ring'

@@ -650,7 +650,7 @@ const SidebarSummary = ({ transactionBatchId, activeTab }: SideBarSummary) => {
         >
             {/* Sticky column header */}
             <div className="sticky top-0 z-10 bg-muted/40 border-b ">
-                <div className="flex items-center bg-muted w-full justify-between mb-1">
+                <div className="flex items-center pl-1 bg-muted w-full justify-between mb-1">
                     <span className="text-xs text-muted-foreground font-medium">
                         Summary
                     </span>
@@ -669,7 +669,7 @@ const SidebarSummary = ({ transactionBatchId, activeTab }: SideBarSummary) => {
                         swap
                     </button>
                 </div>
-                <div className="grid grid-cols-3 text-xs font-medium text-muted-foreground text-right gap-x-2">
+                <div className="grid grid-cols-3 pr-2 text-xs font-medium text-muted-foreground text-right gap-x-2">
                     <span className={swapped ? 'text-orange-400' : ''}>
                         {swapped ? 'credit' : 'debit'}
                     </span>

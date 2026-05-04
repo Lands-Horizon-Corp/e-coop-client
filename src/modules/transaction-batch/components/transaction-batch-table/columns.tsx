@@ -333,7 +333,7 @@ const TransactionBatchTableColumns = (
                     original: { description },
                 },
             }) => (
-                <p className="!text-wrap text-muted-foreground">
+                <p className="text-wrap! text-muted-foreground">
                     {description ?? '-'}
                 </p>
             ),
