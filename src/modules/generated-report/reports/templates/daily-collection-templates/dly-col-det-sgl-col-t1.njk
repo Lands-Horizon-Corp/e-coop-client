@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Account Ledger Report</title>
+        <title>Daily Collection Report</title>
         <style>
             @page {
                 margin: 0.5in;
@@ -181,26 +181,19 @@
             }
 
             /* TABLE */
-            .table-wrapper {
+            .table {
                 width: 100%;
                 margin-top: var(--space-xl);
                 margin-bottom: var(--space-lg);
-                border: 1px solid #e5e7eb;
+                border: 0;
                 border-radius: 6px;
                 overflow: hidden;
-            }
-
-            .table-wrapper table {
-                width: 100%;
-                border-collapse: collapse;
-                {
-                    # background: white;
-                    #;
-                }
                 font-size: var(--fs-base);
+                border-collapse: collapse;
+                box-shadow: inset 0 0 0 1px #e5e7eb;
             }
 
-            .table-wrapper th {
+            .table th {
                 text-transform: uppercase;
                 font-size: var(--fs-sm);
                 font-weight: 700;
@@ -209,7 +202,7 @@
                 border-bottom: 2px solid #e5e7eb;
             }
 
-            .table-wrapper td {
+            .table td {
                 padding: var(--space-md) var(--space-lg);
                 border-bottom: 1px solid #f3f4f6;
             }
@@ -222,32 +215,6 @@
                 text-align: right !important;
                 font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
                 font-variant-numeric: tabular-nums;
-            }
-
-            .page-break {
-                display: none;
-                /* Hide in web view */
-            }
-
-            /* PRINT */
-            @media print {
-                body {
-                    background-color: white;
-                }
-                * {
-                    -webkit-print-color-adjust: exact;
-                    print-color-adjust: exact;
-                }
-
-                .container {
-                    padding: 0 !important;
-                    margin: 0 !important;
-                }
-
-                .page-break {
-                    display: block;
-                    page-break-after: always;
-                }
             }
 
             {
@@ -313,6 +280,56 @@
                 margin-left: auto;
                 margin-right: auto;
             }
+
+            .page-break {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                margin: 20px 0;
+                border-top: 1px dashed #ccc;
+                height: 1px;
+                position: relative;
+            }
+
+            .page-break::after {
+                content: 'next page';
+                position: absolute;
+                background: #fff;
+                padding: 0 10px;
+                font-size: 10px;
+                color: #999;
+            }
+
+            /* PRINT */
+            @media print {
+                body {
+                    background-color: white;
+                }
+                * {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+
+                .container {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+
+                .page-break {
+                    display: block;
+                    page-break-after: always;
+                    break-after: page;
+
+                    border: none;
+                    height: 0;
+                    margin: 0;
+                }
+
+                .page-break::after {
+                    content: '';
+                }
+            }
         </style>
     </head>
     <body class="{{ density | default('normal') }}">
@@ -323,8 +340,8 @@
                 <p class="tin">TIN: {{ tax_number }}</p>
             </header>
 
-            {% if groupings == 'by_teller' %}
-             {# PAG PER TELLER #}
+            {% if groupings == 'by-teller' %}
+                {# PAG PER TELLER #}
 
                 {% for teller in single_col_data.by_teller_data_entries %}
                     <div class="center">
@@ -339,8 +356,7 @@
                             {{ account_name | default('ALL ACCOUNTS')}}
                         </div>
                     </div>
-                    <div class="table-wrapper">
-                        <table>
+                    <table class="table">
                             <thead>
                                 <tr>
                                     <th>Account</th>
@@ -369,8 +385,7 @@
                                     </tr>
                                 {% endif %}
                             </tbody>
-                        </table>
-                    </div>
+                    </table>
 
                     {% if not loop.last %}
                         <div class="page-break"></div>
@@ -397,8 +412,7 @@
                     </div>
                 </div>
 
-                <div class="table-wrapper">
-                    <table>
+                <table class="table">
                         <thead>
                             <tr>
                                 <th>Account</th>
@@ -427,8 +441,7 @@
                                 </tr>
                             {% endif %}
                         </tbody>
-                    </table>
-                </div>
+                </table>
             {% endif %}
 
             <!-- SIGNATURES -->

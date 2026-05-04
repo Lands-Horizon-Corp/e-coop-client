@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Account Ledger Report</title>
+        <title>Daily Collection Report</title>
         <style>
             @page {
                 margin: 0.5in;
@@ -181,26 +181,19 @@
             }
 
             /* TABLE */
-            .table-wrapper {
+            .table {
                 width: 100%;
                 margin-top: var(--space-xl);
                 margin-bottom: var(--space-lg);
-                border: 1px solid #e5e7eb;
+                border: 0;
                 border-radius: 6px;
                 overflow: hidden;
-            }
-
-            .table-wrapper table {
-                width: 100%;
-                border-collapse: collapse;
-                {
-                    # background: white;
-                    #;
-                }
                 font-size: var(--fs-base);
+                border-collapse: collapse;
+                box-shadow: inset 0 0 0 1px #e5e7eb;
             }
 
-            .table-wrapper th {
+            .table th {
                 text-transform: uppercase;
                 font-size: var(--fs-sm);
                 font-weight: 700;
@@ -209,7 +202,7 @@
                 border-bottom: 2px solid #e5e7eb;
             }
 
-            .table-wrapper td {
+            .table td {
                 padding: var(--space-md) var(--space-lg);
                 border-bottom: 1px solid #f3f4f6;
             }
@@ -226,32 +219,6 @@
 
             .italic {
                 font-style: italic;
-            }
-
-            .page-break {
-                display: none;
-                /* Hide in web view */
-            }
-
-            /* PRINT */
-            @media print {
-                body {
-                    background-color: white;
-                }
-                * {
-                    -webkit-print-color-adjust: exact;
-                    print-color-adjust: exact;
-                }
-
-                .container {
-                    padding: 0 !important;
-                    margin: 0 !important;
-                }
-
-                .page-break {
-                    display: block;
-                    page-break-after: always;
-                }
             }
 
             {
@@ -317,6 +284,56 @@
                 margin-left: auto;
                 margin-right: auto;
             }
+
+            .page-break {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                margin: 20px 0;
+                border-top: 1px dashed #ccc;
+                height: 1px;
+                position: relative;
+            }
+
+            .page-break::after {
+                content: 'next page';
+                position: absolute;
+                background: #fff;
+                padding: 0 10px;
+                font-size: 10px;
+                color: #999;
+            }
+
+            /* PRINT */
+            @media print {
+                body {
+                    background-color: white;
+                }
+                * {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+
+                .container {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+
+                .page-break {
+                    display: block;
+                    page-break-after: always;
+                    break-after: page;
+
+                    border: none;
+                    height: 0;
+                    margin: 0;
+                }
+
+                .page-break::after {
+                    content: '';
+                }
+            }
         </style>
     </head>
     <body class="{{ density | default('normal') }}">
@@ -330,7 +347,7 @@
             {% set account_col_count = showable_account_column_list.length %}
             {% set base_col_span = 4 + account_col_count %}
 
-            {% if groupings == 'by_teller' %}
+            {% if groupings == 'by-teller' %}
 
                 {% for teller in multi_column_data.by_teller_data_entries %}
                     <div class="center">
@@ -347,172 +364,7 @@
                     </div>
 
                     <!-- MAIN TABLE -->
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>OR No</th>
-                                    <th>PB No</th>
-                                    <th>Member Name</th>
-
-                                    {% for acc in showable_account_column_list %}
-                                        <th class="text-right">
-                                            <div style="display: inline-block; text-align: center; vertical-align: middle;">
-                                                {{ acc.short_name or acc.name }}
-                                                <br/> 
-                                                ({{ acc.display_entry_type }}) 
-                                            </div>
-                                        </th>
-                                    {% endfor %}
-
-                                    <th class="text-right">
-                                        <div style="display: inline-block; text-align: center; vertical-align: middle;">
-                                            Sundries
-                                            <br/> 
-                                            (CR) 
-                                        </div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for entry in teller.data_entries %}
-                                    <tr>
-                                        {% if entry.is_sundry_entry %}
-                                            <td colspan="{{ base_col_span }}" class="text-right italic">
-                                                {{ entry.sundry_name }}
-                                            </td>
-                                            <td class="text-right">
-                                                {{ entry.sundry_amount }}
-                                            </td>
-                                        {% else %}
-                                            <td>{{ entry.date }}</td>
-                                            <td>{{ entry.or_no }}</td>
-                                            <td>{{ entry.passbook }}</td>
-                                            <td>{{ entry.member_full_name }}</td>
-
-                                            {% for acc in showable_account_column_list %}
-                                                <td class="text-right">
-                                                    {{ entry['account_' + acc.account_id + '_amount'] or '' }}
-                                                </td>
-                                            {% endfor %}
-
-                                            <td class="text-right">
-                                                {{ entry.sundry_amount }}
-                                            </td>
-                                        {% endif %}
-                                    </tr>
-                                {% endfor %}
-
-                                {% if teller.grand_total %}
-                                    <tr>
-                                        <td colspan="{{ base_col_span }}" class="bold">
-                                        GRAND TOTAL
-                                    </td>
-                                        <td class="text-right bold">
-                                            {{ teller.grand_total }}
-                                        </td>
-                                    </tr>
-                                {% endif %}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- DETAIL TITLE -->
-                    <div class="center">
-                        <h3 class="bold">DETAILS</h3>
-                    </div>
-
-                    <!-- DETAIL TABLE -->
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>OR No</th>
-                                    <th>PB No</th>
-                                    <th>Account</th>
-                                    <th class="text-right">Credit</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for d in teller.detail_data_entries %}
-                                    <tr>
-                                        <td>{{ d.or_no }}</td>
-                                        <td>{{ d.passbook }}</td>
-                                        <td>{{ d.account_name }}</td>
-                                        <td class="text-right">{{ d.credit }}</td>
-                                    </tr>
-                                {% endfor %}
-                                <tr>
-                                    <td colspan="3" class="bold">TOTAL</td>
-                                    <td class="text-right bold">
-                                        {{ teller.detail_data_entries_total }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    {% if sundries_print_separate_page %}
-                        <div class="page-break"></div>
-                    {% endif %}
-
-                    <!-- SUMMARY TITLE -->
-                    <div class="center">
-                        <h3 class="bold">SUMMARY</h3>
-                    </div>
-
-                    <!-- SUMMARY TABLE -->
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Account</th>
-                                    <th class="text-right">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for s in teller.summary_data_entries %}
-                                    <tr>
-                                        <td>{{ s.account_name }}</td>
-                                        <td class="text-right">{{ s.credit_amount }}</td>
-                                    </tr>
-                                {% endfor %}
-                                <tr>
-                                    <td class="bold">TOTAL</td>
-                                    <td class="text-right bold">
-                                        {{ teller.summary_data_total }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    {% if not loop.last %}
-                        <div class="page-break"></div>
-                    {% endif %}
-                {% endfor %}
-
-            {% else %}
-                <div class="center">
-                    <h2 class="bold">{{ page_title }}</h2>
-                    <div class="subtext">
-                        {{ tellers_count | default('No') }} Teller(s)
-                </div>
-                    <div class="subtext">
-                    FROM: {{ start_date }} TO: {{ end_date }}
-                    </div>
-                    <div class="subtext">
-                    BATCH NO: {{ batch_no }}
-                    </div>
-                    <div class="subtext">
-                        {{ account_name | default('ALL ACCOUNTS') }}
-                    </div>
-                </div>
-
-                <!-- MAIN TABLE -->
-                <div class="table-wrapper">
-                    <table>
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>Date</th>
@@ -525,22 +377,22 @@
                                         <div style="display: inline-block; text-align: center; vertical-align: middle;">
                                             {{ acc.short_name or acc.name }}
                                             <br/> 
-                                            ({{ acc.display_entry_type }}) 
-                                        </div>
+                                                ({{ acc.display_entry_type }}) 
+                                            </div>
                                     </th>
                                 {% endfor %}
 
                                 <th class="text-right">
                                     <div style="display: inline-block; text-align: center; vertical-align: middle;">
-                                        Sundries
-                                        <br/> 
-                                        (CR)
-                                    </div>
+                                            Sundries
+                                            <br/> 
+                                            (CR) 
+                                        </div>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for entry in multi_column_data.data_entries %}
+                            {% for entry in teller.data_entries %}
                                 <tr>
                                     {% if entry.is_sundry_entry %}
                                         <td colspan="{{ base_col_span }}" class="text-right italic">
@@ -568,28 +420,46 @@
                                 </tr>
                             {% endfor %}
 
-                            {% if multi_column_data.grand_total %}
+                            {% if teller.grand_total %}
                                 <tr>
                                     <td colspan="{{ base_col_span }}" class="bold">
-                                    GRAND TOTAL
-                                </td>
+                                        GRAND TOTAL
+                                    </td>
                                     <td class="text-right bold">
-                                        {{ multi_column_data.grand_total }}
+                                        {{ teller.grand_total }}
                                     </td>
                                 </tr>
                             {% endif %}
+
+                            {% if print_summary_cash_check and teller.cash_check_data_entries and teller.cash_check_data_entries.length %}
+                                {% for cc in teller.cash_check_data_entries %}
+                                    <tr>
+                                        <td colspan="4" class="italic">
+                                            {{ cc.description }}
+                                        </td>
+
+                                        {% for acc in showable_account_column_list %}
+                                            <td class="text-right">
+                                                {{ cc['account_' + acc.account_id + '_amount'] or '' }}
+                                            </td>
+                                        {% endfor %}
+
+                                        <td class="text-right">
+                                            {{ cc.sundry_amount }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
                         </tbody>
                     </table>
-                </div>
 
-                <!-- DETAIL TITLE -->
-                <div class="center">
-                    <h3 class="bold">DETAILS</h3>
-                </div>
+                    <!-- DETAIL TITLE -->
+                    <div class="center">
+                        <h3 class="bold">DETAILS</h3>
+                    </div>
 
-                <!-- DETAIL TABLE -->
-                <div class="table-wrapper">
-                    <table>
+                    <!-- DETAIL TABLE -->
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>OR No</th>
@@ -599,7 +469,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for d in multi_column_data.detail_data_entries %}
+                            {% for d in teller.detail_data_entries %}
                                 <tr>
                                     <td>{{ d.or_no }}</td>
                                     <td>{{ d.passbook }}</td>
@@ -610,12 +480,189 @@
                             <tr>
                                 <td colspan="3" class="bold">TOTAL</td>
                                 <td class="text-right bold">
-                                    {{ multi_column_data.detail_data_entries_total }}
+                                    {{ teller.detail_data_entries_total }}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+
+                    {% if sundries_print_separate_page %}
+                        <div class="page-break"></div>
+                    {% endif %}
+
+                    <!-- SUMMARY TITLE -->
+                    <div class="center">
+                        <h3 class="bold">SUMMARY</h3>
+                    </div>
+
+                    <!-- SUMMARY TABLE -->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Account</th>
+                                <th class="text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in teller.summary_data_entries %}
+                                <tr>
+                                    <td>{{ s.account_name }}</td>
+                                    <td class="text-right">{{ s.credit_amount }}</td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td class="bold">TOTAL</td>
+                                <td class="text-right bold">
+                                    {{ teller.summary_data_total }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {% if not loop.last %}
+                        <div class="page-break"></div>
+                    {% endif %}
+                {% endfor %}
+
+            {% else %}
+                <div class="center">
+                    <h2 class="bold">{{ page_title }}</h2>
+                    <div class="subtext">
+                        {{ tellers_count | default('No') }} Teller(s)
                 </div>
+                    <div class="subtext">
+                    FROM: {{ start_date }} TO: {{ end_date }}
+                    </div>
+                    <div class="subtext">
+                    BATCH NO: {{ batch_no }}
+                    </div>
+                    <div class="subtext">
+                        {{ account_name | default('ALL ACCOUNTS') }}
+                    </div>
+                </div>
+
+                <!-- MAIN TABLE -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>OR No</th>
+                            <th>PB No</th>
+                            <th>Member Name</th>
+
+                            {% for acc in showable_account_column_list %}
+                                <th class="text-right">
+                                    <div style="display: inline-block; text-align: center; vertical-align: middle;">
+                                        {{ acc.short_name or acc.name }}
+                                        <br/> 
+                                            ({{ acc.display_entry_type }}) 
+                                        </div>
+                                </th>
+                            {% endfor %}
+
+                            <th class="text-right">
+                                <div style="display: inline-block; text-align: center; vertical-align: middle;">
+                                        Sundries
+                                        <br/> 
+                                        (CR)
+                                    </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in multi_column_data.data_entries %}
+                            <tr>
+                                {% if entry.is_sundry_entry %}
+                                    <td colspan="{{ base_col_span }}" class="text-right italic">
+                                        {{ entry.sundry_name }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ entry.sundry_amount }}
+                                    </td>
+                                {% else %}
+                                    <td>{{ entry.date }}</td>
+                                    <td>{{ entry.or_no }}</td>
+                                    <td>{{ entry.passbook }}</td>
+                                    <td>{{ entry.member_full_name }}</td>
+
+                                    {% for acc in showable_account_column_list %}
+                                        <td class="text-right">
+                                            {{ entry['account_' + acc.account_id + '_amount'] or '' }}
+                                        </td>
+                                    {% endfor %}
+
+                                    <td class="text-right">
+                                        {{ entry.sundry_amount }}
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+
+                        {% if multi_column_data.grand_total %}
+                            <tr>
+                                <td colspan="{{ base_col_span }}" class="bold">
+                                    GRAND TOTAL
+                                </td>
+                                <td class="text-right bold">
+                                    {{ multi_column_data.grand_total }}
+                                </td>
+                            </tr>
+                        {% endif %}
+
+                        {% if print_summary_cash_check and multi_column_data.cash_check_data_entries and multi_column_data.cash_check_data_entries.length %}
+                            {% for cc in multi_column_data.cash_check_data_entries %}
+                                <tr>
+                                    <td colspan="4" class="italic">
+                                        {{ cc.description }}
+                                    </td>
+
+                                    {% for acc in showable_account_column_list %}
+                                        <td class="text-right">
+                                            {{ cc['account_' + acc.account_id + '_amount'] or '' }}
+                                        </td>
+                                    {% endfor %}
+
+                                    <td class="text-right">
+                                        {{ cc.sundry_amount }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+
+                <!-- DETAIL TITLE -->
+                <div class="center">
+                    <h3 class="bold">DETAILS</h3>
+                </div>
+
+                <!-- DETAIL TABLE -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>OR No</th>
+                            <th>PB No</th>
+                            <th>Account</th>
+                            <th class="text-right">Credit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for d in multi_column_data.detail_data_entries %}
+                            <tr>
+                                <td>{{ d.or_no }}</td>
+                                <td>{{ d.passbook }}</td>
+                                <td>{{ d.account_name }}</td>
+                                <td class="text-right">{{ d.credit }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="3" class="bold">TOTAL</td>
+                            <td class="text-right bold">
+                                {{ multi_column_data.detail_data_entries_total }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 {% if sundries_print_separate_page %}
                     <div class="page-break"></div>
@@ -627,30 +674,28 @@
                 </div>
 
                 <!-- SUMMARY TABLE -->
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th class="text-right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in multi_column_data.summary_data_entries %}
                             <tr>
-                                <th>Account</th>
-                                <th class="text-right">Amount</th>
+                                <td>{{ s.account_name }}</td>
+                                <td class="text-right">{{ s.credit_amount }}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {% for s in multi_column_data.summary_data_entries %}
-                                <tr>
-                                    <td>{{ s.account_name }}</td>
-                                    <td class="text-right">{{ s.credit_amount }}</td>
-                                </tr>
-                            {% endfor %}
-                            <tr>
-                                <td class="bold">TOTAL</td>
-                                <td class="text-right bold">
-                                    {{ multi_column_data.summary_data_total }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                        {% endfor %}
+                        <tr>
+                            <td class="bold">TOTAL</td>
+                            <td class="text-right bold">
+                                {{ multi_column_data.summary_data_total }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             {% endif %}
 
             <!-- SIGNATURES -->

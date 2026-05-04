@@ -80,7 +80,7 @@ export const DailyCollectionDetailSchema = z
         account: z.any().optional(),
         batch_no: z.coerce.number().optional(),
 
-        groupings: z.enum(['by_teller', 'no_grouping']).default('no_grouping'),
+        groupings: z.enum(['by-teller', 'no-grouping']).default('no-grouping'),
 
         option_type: z.enum(['option_1', 'option_2']).default('option_1'),
 
@@ -184,7 +184,7 @@ const DailyCollectionDetailCreateReportForm = ({
                     account: undefined,
                     batch_no: undefined,
 
-                    groupings: 'no_grouping',
+                    groupings: 'no-grouping',
                     option_type: 'option_1',
                     type: 'standard',
 
@@ -472,11 +472,11 @@ const DailyCollectionDetailCreateReportForm = ({
                                 >
                                     {[
                                         {
-                                            value: 'by_teller',
+                                            value: 'by-teller',
                                             label: 'By Teller',
                                         },
                                         {
-                                            value: 'no_grouping',
+                                            value: 'no-grouping',
                                             label: 'No Grouping',
                                         },
                                     ].map((opt) => (
