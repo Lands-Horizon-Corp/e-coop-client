@@ -47,7 +47,7 @@ import {
     DropdownMenuSubTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import ViewAccountTransactionLedger from '../account-transaction-ledger'
+import ViewAccountTransactionLedger from '../account-actions/account-transaction-ledger'
 import { IAccountsTableActionComponentProp } from './columns'
 
 export type AccountActionType =

@@ -88,19 +88,6 @@ export const getAccountQuickSearch = async (search: string) => {
     return response.data
 }
 
-// export const AccountUpdateIndex = async (
-//     changedItems: UpdateIndexRequest[]
-// ): Promise<IAccount> => {
-//     const response = await Promise.all(
-//         changedItems.map((item) =>
-//             API.put<{ accountId: TEntityId; index: number }, IAccount>(
-//                 `${accountAPIRoute}/${item.id}/index/${item.index}`
-//             )
-//         )
-//     )
-//     return response[0].data
-// }
-
 export const deleteAccountFromGLFS = async ({
     id,
     mode,
@@ -112,16 +99,6 @@ export const deleteAccountFromGLFS = async ({
         )
     ).data
 }
-
-// export const useUpdateAccountIndex = createMutationFactory<
-//     IAccount,
-//     Error,
-//     UpdateIndexRequest[]
-// >({
-//     mutationFn: AccountUpdateIndex,
-//     invalidationFn: (args) =>
-//         updateMutationInvalidationFn('update-account-index', args),
-// })
 
 export const useDeleteAccountFromGLFS = createMutationFactory<
     IAccount,
@@ -491,5 +468,25 @@ export const useGetFirstAccountIndexByGlType = createMutationFactory<
         )?.index
     },
 })
+
+export const useGetAllAccountByBranchId = ({
+    branchId,
+    options,
+}: {
+    branchId: TEntityId
+    options?: HookQueryOptions<IAccount[], Error>
+}) => {
+    return useQuery<IAccount[], Error>({
+        queryKey: [accountBaseQueryKey, 'by-branch', branchId],
+        queryFn: async () => {
+            const response = await API.get<IAccount[]>(
+                `${accountAPIRoute}/branch/${branchId}`
+            )
+            return response.data
+        },
+        enabled: Boolean(branchId),
+        ...options,
+    })
+}
 
 export const logger = Logger.getInstance('account')

@@ -116,7 +116,7 @@ export const AccountCard = memo(
                                 <TooltipTrigger asChild>
                                     <div
                                         className={cn(
-                                            `group relative border-l-0 rounded-l-none! flex items-center gap-3 rounded-lg  bg-card p-4 transition-all duration-300`,
+                                            `group relative  border-l-0 rounded-l-none! flex items-center gap-3 rounded-lg  bg-card/80 p-4 transition-all duration-300`,
                                             glTypeStyleMap[
                                                 account.general_ledger_type
                                             ].border,

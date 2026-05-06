@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import { Logger } from '@/helpers/loggers'
 import {
@@ -72,14 +72,7 @@ export const useGetBranchesByOrganizationId = ({
         queryKey: ['get-branches-by-organization-id', organizationId],
         queryFn: () => getBranchesByOrganizationId(organizationId),
         ...options,
-        enabled: !!organizationId && (options?.enabled ?? true),
-    })
-}
-
-export const usePostBranchByOrganizationId = () => {
-    return useMutation<IUserOrganization, string, TEntityId>({
-        mutationKey: ['branch', 'post-by-org'],
-        mutationFn: postBranchByOrganizationId,
+        enabled: !!organizationId,
     })
 }
 

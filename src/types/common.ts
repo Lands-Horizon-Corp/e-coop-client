@@ -83,5 +83,3 @@ export interface IPaginatedResult<T> {
     pageSize: number
     totalSize: number
 }
-
-export type TActions = 'create' | 'view' | 'edit' | 'delete'

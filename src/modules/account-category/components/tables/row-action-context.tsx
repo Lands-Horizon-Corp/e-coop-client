@@ -180,7 +180,7 @@ export const AccountCategoryTableActionManager = () => {
             {state.action === 'edit' && state.defaultValues && (
                 <AccountCategoryFormModal
                     branchId={state.defaultValues.branch_id}
-                    className="!max-w-2xl"
+                    className="max-w-2xl!"
                     description="Update details for this account category."
                     formProps={{
                         accountCategoryId: state.id,

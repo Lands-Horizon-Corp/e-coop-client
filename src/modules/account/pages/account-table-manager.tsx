@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
 
 import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
@@ -11,7 +12,8 @@ import {
     AccountActionExtra,
     AccountActionType,
 } from '../components/account-actions'
-import ViewAccountTransactionLedger from '../components/account-transaction-ledger'
+import AccountConsolidationModal from '../components/account-actions/account-consolidation-modal'
+import ViewAccountTransactionLedger from '../components/account-actions/account-transaction-ledger'
 import { AccountViewerModal } from '../components/account-viewer/account-viewer'
 import { getModalTitle } from '../components/tables/row-actions'
 
@@ -23,6 +25,10 @@ export const AccountTableActionManager = () => {
         AccountActionType,
         AccountActionExtra
     >()
+
+    const {
+        currentAuth: { user_organization },
+    } = useAuthStore()
 
     const isCreate = state.action === 'create'
 
@@ -88,6 +94,18 @@ export const AccountTableActionManager = () => {
                             accountId={state.defaultValues.id}
                         />
                     </Modal>
+                )}
+            {state.action === 'view-account-consolidations' &&
+                state.id &&
+                user_organization?.id &&
+                state.defaultValues && (
+                    <AccountConsolidationModal
+                        accountId={state.id}
+                        accountName={state.defaultValues?.name}
+                        onOpenChange={close}
+                        open={state.isOpen}
+                        organizationId={user_organization.organization_id}
+                    />
                 )}
         </>
     )

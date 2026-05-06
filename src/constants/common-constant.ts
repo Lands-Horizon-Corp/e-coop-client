@@ -59,4 +59,7 @@ export const MONTHS = [
     { value: 11, label: 'December' },
 ] as const
 
+export const ACTIONS = ['view', 'edit', 'delete', 'create'] as const
+export type TAction = (typeof ACTIONS)[number]
+
 export const MONTH_NAMES = MONTHS.map((month) => month.label)

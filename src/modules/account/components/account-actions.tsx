@@ -1,3 +1,5 @@
+import { ComponentType } from 'react'
+
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
@@ -6,6 +8,8 @@ import {
     DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu'
 
+import { TAction } from '@/constants'
+import { cn } from '@/helpers/tw-utils'
 import {
     IAccount,
     useDeleteById,
@@ -24,24 +28,22 @@ import {
     BookOpenIcon,
     BookStackIcon,
     BookThickIcon,
-    ChevronRightIcon,
     EyeIcon,
     HandCoinsIcon,
     MoneyCheckIcon,
     PencilFillIcon,
     TrashIcon,
 } from '@/components/icons'
-import { Button } from '@/components/ui/button'
+import { Button, ButtonProps } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { PopoverContent } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
 
-import { TActions } from '@/types'
-
 export type AccountActionType =
     | 'view-ledger'
     | 'view-accounting-ledger-transaction'
-    | TActions
+    | 'view-account-consolidations'
+    | TAction
 
 export interface AccountActionExtra {
     onDeleteSuccess?: () => void
@@ -55,6 +57,8 @@ interface UseAccountActionsProps {
     onDeleteSuccess?: () => void
     onEditSuccess?: () => void
 }
+
+interface AccountActionProps extends UseAccountActionsProps {}
 
 export const useAccountActions = ({
     account,
@@ -128,6 +132,13 @@ export const useAccountActions = ({
         })
     }
 
+    const openAccountConsolidations = () => {
+        open('view-account-consolidations', {
+            id: account.id,
+            defaultValues: account,
+        })
+    }
+
     return {
         account,
         accountCrudPerms,
@@ -138,10 +149,9 @@ export const useAccountActions = ({
         openLedgerModal,
         handleViewAccountingLedger,
         openAccountModal,
+        openAccountConsolidations,
     }
 }
-
-interface AccountActionProps extends UseAccountActionsProps {}
 
 export const AccountActions = ({
     account,
@@ -154,6 +164,7 @@ export const AccountActions = ({
         openLedgerModal,
         handleViewAccountingLedger,
         openAccountModal,
+        openAccountConsolidations,
     } = useAccountActions({
         account,
         onDeleteSuccess,
@@ -161,77 +172,49 @@ export const AccountActions = ({
     })
 
     return (
-        <PopoverContent className="w-64 p-2 rounded-2xl bg-background/80">
-            <div className="flex flex-col gap-1">
-                {/* Edit */}
-                <button
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition"
-                    onClick={() => openAccountModal()}
-                >
-                    <EyeIcon className="size-4" />
-                    view
-                </button>
-                <button
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition"
+        <PopoverContent className="w-64 p-2 rounded-2xl bg-card ">
+            <div className="flex flex-col gap-1 p-0">
+                <ActionButton label="View" onClick={openAccountModal} />
+                <ActionButton
+                    icon={PencilFillIcon}
+                    label="Edit"
                     onClick={handleEdit}
-                >
-                    <PencilFillIcon className="h-4 w-4" />
-                    Edit
-                </button>
-
-                {/* Delete */}
-                <button
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition"
+                />
+                <ActionButton
+                    icon={TrashIcon}
+                    label="Delete"
                     onClick={handleDelete}
-                >
-                    <TrashIcon className="h-4 w-4" />
-                    Delete
-                </button>
+                />
+                <ActionButton
+                    icon={BookOpenIcon}
+                    label="View Accounting Ledger"
+                    onClick={handleViewAccountingLedger}
+                />
+                <ActionButton
+                    icon={BookStackIcon}
+                    label="View Account Consolidations"
+                    onClick={openAccountConsolidations}
+                />
 
-                {/* View Accounting Ledger */}
-                <button
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted disabled:opacity-50 disabled:pointer-events-none transition"
-                    disabled={
-                        !hasPermissionFromAuth({
-                            action: 'Read',
-                            resourceType: 'AccountTransaction',
-                        })
-                    }
-                    onClick={() => handleViewAccountingLedger()}
-                >
-                    <BookOpenIcon className="h-4 w-4" strokeWidth={1.5} />
-                    View Accounting Ledger
-                </button>
-
-                {/* Divider */}
                 <Separator className="my-2 " />
-
-                {/* GL Entries Label */}
                 <p className="px-3 text-xs font-medium text-muted-foreground">
                     GL Entries
                 </p>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button
-                            className="popover-item justify-between w-full"
+                        <ActionButton
+                            className="justify-between w-full"
                             disabled={
                                 !hasPermissionFromAuth({
                                     action: 'Read',
                                     resourceType: 'GeneralLedger',
                                 })
                             }
-                        >
-                            <div className="flex items-center gap-2">
-                                <BookOpenIcon
-                                    className="h-4 w-4"
-                                    strokeWidth={1.5}
-                                />
-                                GL Entries
-                            </div>
-                            <ChevronRightIcon className="h-4 w-4 opacity-60" />
-                        </Button>
+                            icon={BookOpenIcon}
+                            iconClassName="stroke-1.5"
+                            label="View GL Entries"
+                        />
                     </DropdownMenuTrigger>
-
                     <DropdownMenuContent
                         align="start"
                         className="rounded-2xl bg-background p-2"
@@ -348,5 +331,34 @@ export const AccountActions = ({
                 </DropdownMenu>
             </div>
         </PopoverContent>
+    )
+}
+
+const ActionButton = ({
+    onClick,
+    label,
+    icon: Icon = EyeIcon,
+    iconClassName,
+    ...props
+}: {
+    onClick?: () => void
+    label: string
+    icon?: ComponentType<{ className?: string }>
+    iconClassName?: string
+} & ButtonProps) => {
+    return (
+        <Button
+            {...props}
+            className={cn(
+                'flex items-center justify-start gap-2 px-3 py-2 rounded-lg transition'
+            )}
+            hoverVariant={'primary'}
+            onClick={onClick}
+            size={'sm'}
+            variant={'ghost'}
+        >
+            <Icon className={cn('size-4', iconClassName)} />
+            <span>{label}</span>
+        </Button>
     )
 }

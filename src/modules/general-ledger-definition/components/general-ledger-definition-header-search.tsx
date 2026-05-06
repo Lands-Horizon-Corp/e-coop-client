@@ -5,7 +5,7 @@ import {
     AccountPicker,
     IAccount,
 } from '@/modules/account'
-import ViewAccountTransactionLedger from '@/modules/account/components/account-transaction-ledger'
+import ViewAccountTransactionLedger from '@/modules/account/components/account-actions/account-transaction-ledger'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { MagnifyingGlassIcon, PlusIcon } from '@/components/icons'
