@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Daily Collection Report</title>
+        <style>
+            @page {
+                margin: 0.5in;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                min-height: 100%;
+                background-color: white;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+                height: auto;
+                /* Change from min-height: 100% */
+                display: block;
+            }
+
+            /* BASE VARS AT TOKEN */
+            .container {
+                /* FONT SCALE */
+                --fs-xs: 7px;
+                --fs-sm: 8px;
+                --fs-base: 9px;
+                --fs-lg: 10px;
+                --fs-xl: 12px;
+                --fs-2xl: 14px;
+
+                /* SPACING SCALE */
+                --space-xs: 0.08rem;
+                --space-sm: 0.15rem;
+                --space-md: 0.25rem;
+                --space-lg: 0.3rem;
+                --space-xl: 0.4rem;
+
+                /* LAYOUT */
+                --container-padding: 0.3in;
+                --line-height: 1.3;
+
+                --sig-gap-x: 0.7rem;
+                --sig-gap-y: 1.4rem;
+                --sig-margin-t: 2rem;
+
+                padding: var(--container-padding);
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+                font-size: var(--fs-base);
+                line-height: var(--line-height);
+
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                /* FORCE content to the top */
+                align-items: stretch;
+                width: 100%;
+            }
+
+            /* DENSITY VARIANTS */
+
+            /* NORMAL (default, explicit if you want) */
+            .normal .container {
+                --fs-xs: 7px;
+                --fs-sm: 8px;
+                --fs-base: 9px;
+                --fs-lg: 10px;
+                --fs-xl: 12px;
+                --fs-2xl: 14px;
+
+                --space-xs: 0.08rem;
+                --space-sm: 0.15rem;
+                --space-md: 0.25rem;
+                --space-lg: 0.3rem;
+                --space-xl: 0.4rem;
+
+                --sig-gap-x: 0.7rem;
+                --sig-gap-y: 1.4rem;
+                --sig-margin-t: 2rem;
+
+                --container-padding: 0.3in;
+                --line-height: 1.3;
+            }
+
+            /* COMPACT */
+            .compact .container {
+                --fs-xs: 6px;
+                --fs-sm: 7px;
+                --fs-base: 8px;
+                --fs-lg: 9px;
+                --fs-xl: 10px;
+                --fs-2xl: 12px;
+
+                --space-xs: 0.05rem;
+                --space-sm: 0.1rem;
+                --space-md: 0.15rem;
+                --space-lg: 0.2rem;
+                --space-xl: 0.25rem;
+
+                --sig-gap-x: 0.3rem;
+                --sig-gap-y: 1rem;
+                --sig-margin-t: 1.4rem;
+
+                --container-padding: 0.15in;
+                --line-height: 1.2;
+            }
+
+            /* LARGER */
+            .loose .container {
+                --fs-xs: 8px;
+                --fs-sm: 10px;
+                --fs-base: 12px;
+                --fs-lg: 14px;
+                --fs-xl: 16px;
+                --fs-2xl: 18px;
+
+                --space-xs: 0.1rem;
+                --space-sm: 0.2rem;
+                --space-md: 0.3rem;
+                --space-lg: 0.4rem;
+                --space-xl: 0.5rem;
+
+                --sig-gap-x: 1.8rem;
+                --sig-gap-y: 2rem;
+                --sig-margin-t: 1rem;
+
+                --container-padding: 0.4in;
+                --line-height: 1.4;
+            }
+
+            /* HEADER */
+            .header {
+                text-align: center;
+                margin-bottom: var(--space-lg);
+                padding-bottom: var(--space-sm);
+                /* border-bottom: 1px solid #e5e7eb; */
+            }
+
+            .header h1 {
+                font-size: var(--fs-xl);
+                font-weight: 800;
+                margin-bottom: var(--space-xs);
+                letter-spacing: -0.025em;
+            }
+
+            .header .address {
+                font-size: var(--fs-base);
+                margin: var(--space-xs) 0;
+            }
+
+            .header .tin {
+                font-size: var(--fs-sm);
+            }
+
+            .report-title {
+                font-size: var(--fs-2xl);
+                font-weight: 800;
+                margin-top: var(--space-sm);
+                letter-spacing: -0.025em;
+                text-transform: uppercase;
+            }
+
+            .center {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+
+            /* TABLE */
+            .table {
+                width: 100%;
+                margin-top: var(--space-xl);
+                margin-bottom: var(--space-lg);
+                border: 0;
+                border-radius: 6px;
+                overflow: hidden;
+                font-size: var(--fs-base);
+                border-collapse: collapse;
+                box-shadow: inset 0 0 0 1px #e5e7eb;
+            }
+
+            .table th {
+                text-transform: uppercase;
+                font-size: var(--fs-sm);
+                font-weight: 700;
+                padding: var(--space-lg);
+                text-align: left;
+                border-bottom: 2px solid #e5e7eb;
+            }
+
+            .table td {
+                padding: var(--space-md) var(--space-lg);
+                border-bottom: 1px solid #f3f4f6;
+            }
+
+            .bold {
+                font-weight: 900;
+            }
+
+            .text-right {
+                text-align: right !important;
+                font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+                font-variant-numeric: tabular-nums;
+            }
+
+            .italic {
+                font-style: italic;
+            }
+
+            {
+                # SIG #
+            }
+
+            /* SIGNATURE */
+            .signature-section {
+                margin-top: var(--sig-margin-t);
+            }
+
+            .sig-row {
+                display: grid;
+                gap: var(--sig-gap-x);
+                margin-bottom: var(--sig-gap-y);
+            }
+
+            /* Helper Classes for Grid Columns */
+            .sig-row-1 {
+                grid-template-columns: repeat(1, 1fr);
+            }
+            .sig-row-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .sig-row-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .sig-row-4 {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .sig-row-5 {
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            /* Item Styling */
+            .sig-item {
+                text-align: center;
+            }
+
+            /* Signature Label */
+            .sig-label {
+                font-size: var(--fs-xs);
+                font-weight: 700;
+                text-transform: uppercase;
+                margin-bottom: var(--space-xs);
+            }
+
+            /* Signature Line */
+            .sig-line {
+                border-bottom: 1px solid #9ca3af;
+                min-height: calc(var(--fs-lg) * 1.5);
+                font-weight: 600;
+                font-size: var(--fs-base);
+                padding-top: var(--space-xs);
+                width: 100%;
+                box-sizing: border-box;
+                text-transform: uppercase;
+            }
+
+            /* Optional: Center helper for single or fewer signatures in a row */
+            .sig-center {
+                max-width: 50%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .page-break {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                margin: 20px 0;
+                border-top: 1px dashed #ccc;
+                height: 1px;
+                position: relative;
+            }
+
+            .page-break::after {
+                content: 'next page';
+                position: absolute;
+                background: #fff;
+                padding: 0 10px;
+                font-size: 10px;
+                color: #999;
+            }
+
+            /* PRINT */
+            @media print {
+                body {
+                    background-color: white;
+                }
+                * {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+
+                .container {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+
+                .page-break {
+                    display: block;
+                    page-break-after: always;
+                    break-after: page;
+
+                    border: none;
+                    height: 0;
+                    margin: 0;
+                }
+
+                .page-break::after {
+                    content: '';
+                }
+            }
+        </style>
+    </head>
+    <body class="{{ density | default('normal') }}">
+        <div class="container">
+            <header class="header">
+                <h1>{{ header_title }}</h1>
+                <p class="address">{{ header_address }}</p>
+                <p class="tin">TIN: {{ tax_number }}</p>
+            </header>
+
+            <div class="center">
+                <h2 class="bold">{{ report_title }}</h2>
+                <div class="subtext">{{ account_name | default('ALL ACCOUNTS') }} - {{ account_category_name | default('ALL CATEGORY') }}</div>
+                <div class="subtext">FROM: {{ start_date }} TO: {{ end_date }}</div>
+            </div>
+
+            {% if tabulated_data %}
+
+                {% set account_col_count = tabulated_data.showable_account_column_list.length %}
+                {% set base_col_span = 5 + account_col_count %}
+
+                <!-- MAIN TABLE -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>CV No</th>
+                            <th>PB No</th>
+                            <th>Member</th>
+                            <th>Account</th>
+                            <th class="text-right">Granted</th>
+
+                            {% for acc in tabulated_data.showable_account_column_list %}
+                                <th class="text-right">
+                                    <div style="text-align:center;">
+                                        {{ acc.short_name or acc.name }}<br/>
+                                        ({{ acc.display_entry_type }})
+                                    </div>
+                                </th>
+                            {% endfor %}
+
+                            <th class="text-right">
+                                <div style="text-align:center;">
+                                Sundries<br/>(CR)
+                            </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in tabulated_data.data_entries %}
+                            <tr>
+                                {% if entry.is_sundry_entry %}
+                                    <td colspan="{{ base_col_span }}" class="text-right italic">
+                                        {{ entry.sundry_name }}
+                                    </td>
+                                    <td class="text-right">{{ entry.sundries_amount }}</td>
+                                {% else %}
+                                    <td>{{ entry.cv_no }}</td>
+                                    <td>{{ entry.pasbook }}</td>
+                                    <td>{{ entry.member_full_name }}</td>
+                                    <td>{{ entry.account_short_name }}</td>
+                                    <td class="text-right">{{ entry.amount_granted }}</td>
+
+                                    {% for acc in tabulated_data.showable_account_column_list %}
+                                        <td class="text-right">
+                                            {{ entry['account_' + acc.account_id + '_amount'] or '' }}
+                                        </td>
+                                    {% endfor %}
+
+                                    <td class="text-right">{{ entry.sundries_amount }}</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+
+                        <!-- TOTAL ROW -->
+                        <tr>
+                            <td colspan="4" class="bold">TOTAL</td>
+
+                            <td class="text-right bold">
+                                {{ tabulated_data.data_entries_total_debits.amount_granted_total }}
+                            </td>
+
+                            {% for acc in tabulated_data.showable_account_column_list %}
+                                <td class="text-right bold">
+                                    {{ tabulated_data.data_entries_total_debits['account_' + acc.account_id + '_total'] }}
+                                </td>
+                            {% endfor %}
+
+                            <td class="text-right bold">
+                                {{ tabulated_data.sundries_summary_total }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                {% if include_sundries_summary and tabulated_data.sundries_summary_data_entries and tabulated_data.sundries_summary_data_entries.length %}
+
+                    <div class="center">
+                        <h3 class="bold">SUMMARY</h3>
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Account</th>
+                                <th class="text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in tabulated_data.sundries_summary_data_entries %}
+                                <tr>
+                                    <td>{{ s.account_name }}</td>
+                                    <td class="text-right">{{ s.credit }}</td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td class="bold">TOTAL</td>
+                                <td class="text-right bold">
+                                    {{ tabulated_data.sundries_summary_total }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                {% endif %}
+
+            {% endif %}
+
+            <!-- SIGNATURES -->
+            <div class="signature-section">
+                <div class="sig-row sig-row-2">
+                    <div class="sig-item">
+                        <p class="sig-label">Checked By</p>
+                        <div class="sig-line">{{ checked_by or '' }}</div>
+                    </div>
+
+                    <div class="sig-item">
+                        <p class="sig-label">Approved By</p>
+                        <div class="sig-line">{{ approved_by or '' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

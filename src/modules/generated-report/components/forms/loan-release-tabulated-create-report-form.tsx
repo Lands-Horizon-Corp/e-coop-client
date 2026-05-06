@@ -15,7 +15,11 @@ import {
     useCreateGeneratedReport,
 } from '@/modules/generated-report'
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
-import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
+import {
+    WithSignatureSchema,
+    entityIdSchema,
+    stringDateWithTransformSchema,
+} from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
@@ -35,6 +39,10 @@ import { IClassProps, IForm } from '@/types'
 
 import { getTemplateAt } from '../../generated-report-template-registry'
 import { WithGeneratedReportSchema } from '../../generated-report.validation'
+import {
+    AccountColumnListFormSection,
+    WithAccountColumnListSchema,
+} from './account-column-list-form-section'
 
 export const LoanReleasesReportSchema = z
     .object({
@@ -47,8 +55,6 @@ export const LoanReleasesReportSchema = z
             .enum(['personal', 'jewelry', 'grocery', 'all'])
             .default('all'),
 
-        report_type: z.enum(['tabulated', 'register']).default('tabulated'),
-
         account: z.any().optional(),
         account_id: entityIdSchema.optional(),
         account_category_id: entityIdSchema.optional(),
@@ -59,7 +65,9 @@ export const LoanReleasesReportSchema = z
         include_excluded_to_gl: z.boolean().default(false),
         include_sundries_detail: z.boolean().default(false),
     })
+    .and(WithAccountColumnListSchema)
     .and(WithGeneratedReportSchema)
+    .and(WithSignatureSchema)
     .superRefine((data, ctx) => {
         if (
             data.start_date &&
@@ -79,16 +87,18 @@ export const LoanReleasesReportSchema = z
         }
     })
 
-export type TLoanReleasesReportSchema = z.infer<typeof LoanReleasesReportSchema>
+export type TLoanReleasesTabulatedReportSchema = z.infer<
+    typeof LoanReleasesReportSchema
+>
 
 export interface ILoanReleasesReportFormProps
     extends
         IClassProps,
         IForm<
-            Partial<TLoanReleasesReportSchema>,
+            Partial<TLoanReleasesTabulatedReportSchema>,
             IGeneratedReport,
             Error,
-            TLoanReleasesReportSchema
+            TLoanReleasesTabulatedReportSchema
         > {}
 
 const LoanReleaseCreateReportForm = ({
@@ -98,18 +108,17 @@ const LoanReleaseCreateReportForm = ({
     onError,
     ...formProps
 }: ILoanReleasesReportFormProps) => {
-    const form = useForm<TLoanReleasesReportSchema>({
+    const form = useForm<TLoanReleasesTabulatedReportSchema>({
         resolver: standardSchemaResolver(LoanReleasesReportSchema),
         mode: 'onSubmit',
         defaultValues: async () =>
-            buildFormDefaults<TLoanReleasesReportSchema>({
+            buildFormDefaults<TLoanReleasesTabulatedReportSchema>({
                 persistKey: formProps.persistKey,
                 baseDefaults: {
                     start_date: undefined,
                     end_date: undefined,
                     entry_type: 'all',
                     loan_type: 'all',
-                    report_type: 'tabulated',
                     account: undefined,
                     account_id: undefined,
                     account_category_id: undefined,
@@ -117,6 +126,8 @@ const LoanReleaseCreateReportForm = ({
                     end_cv: '',
                     include_excluded_to_gl: false,
                     include_sundries_detail: false,
+                    account_column_list: [],
+                    account_column_list_showable_first: 10,
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
@@ -136,7 +147,7 @@ const LoanReleaseCreateReportForm = ({
     })
 
     const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TLoanReleasesReportSchema>({ form, readOnly })
+        useFormHelper<TLoanReleasesTabulatedReportSchema>({ form, readOnly })
 
     const onSubmit = form.handleSubmit(({ report_config, ...filters }) => {
         generateMutation.mutate({
@@ -251,65 +262,6 @@ const LoanReleaseCreateReportForm = ({
 
                     <FormFieldWrapper
                         control={form.control}
-                        label="Report Type"
-                        name="report_type"
-                        render={({ field }) => (
-                            <RadioGroup
-                                className="grid grid-cols-1 sm:grid-cols-2 gap-3"
-                                onValueChange={field.onChange}
-                                value={field.value}
-                            >
-                                {[
-                                    {
-                                        value: 'tabulated',
-                                        label: 'Tabulated',
-                                        desc: 'Summarized loan releases in table format.',
-                                    },
-                                    {
-                                        value: 'register',
-                                        label: 'Register',
-                                        desc: 'Detailed transaction-level loan releases.',
-                                    },
-                                ].map((opt) => {
-                                    const isSelected = field.value === opt.value
-                                    return (
-                                        <label
-                                            className={cn(
-                                                'relative flex flex-col gap-1 rounded-xl border p-4 cursor-pointer transition-all',
-                                                'hover:bg-accent/50',
-                                                isSelected
-                                                    ? 'bg-gradient-to-br from-popover to-primary/20 border-primary shadow-md ring-1 ring-primary/20'
-                                                    : 'bg-background border-border'
-                                            )}
-                                            key={opt.value}
-                                        >
-                                            <div className="flex items-center justify-between">
-                                                <span
-                                                    className={cn(
-                                                        'text-sm font-medium',
-                                                        isSelected
-                                                            ? 'text-primary'
-                                                            : 'text-foreground'
-                                                    )}
-                                                >
-                                                    {opt.label}
-                                                </span>
-                                                <RadioGroupItem
-                                                    value={opt.value}
-                                                />
-                                            </div>
-                                            <span className="text-xs text-muted-foreground">
-                                                {opt.desc}
-                                            </span>
-                                        </label>
-                                    )
-                                })}
-                            </RadioGroup>
-                        )}
-                    />
-
-                    <FormFieldWrapper
-                        control={form.control}
                         label="Account"
                         name="account"
                         render={({ field }) => (
@@ -356,6 +308,8 @@ const LoanReleaseCreateReportForm = ({
                             render={({ field }) => <Input {...field} />}
                         />
                     </div>
+
+                    <AccountColumnListFormSection form={form} />
 
                     <FormLabel
                         className="text-muted-foreground text-xs"
@@ -456,6 +410,7 @@ const LoanReleaseCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="loan_releases_tabulated_report_template"
                     />
                 </fieldset>
 

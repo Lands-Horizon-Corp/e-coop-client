@@ -131,6 +131,23 @@ const AccountHeaderForm = ({
                     className="flex-1"
                     control={form.control}
                     disabled={isReadOnly}
+                    label="Account Short Name"
+                    name="name"
+                    render={({ field }) => (
+                        <Input
+                            {...field}
+                            autoComplete="off"
+                            disabled={isDisabled(field.name)}
+                            id={field.name}
+                            placeholder="Account Short Name"
+                            value={field.value ?? ''}
+                        />
+                    )}
+                />
+                <FormFieldWrapper
+                    className="flex-1"
+                    control={form.control}
+                    disabled={isReadOnly}
                     label="Financial Statement Title"
                     name="financial_statement_title_id"
                     render={({ field }) => (

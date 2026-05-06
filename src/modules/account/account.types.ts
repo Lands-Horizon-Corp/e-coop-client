@@ -81,6 +81,7 @@ export interface IAccount extends IAuditable, ITimeStamps {
 
     icon: TIcon
     name: string
+    short_name?: string
     description?: string
 
     min_amount?: number

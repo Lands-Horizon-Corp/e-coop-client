@@ -7,6 +7,8 @@ import { OTHER_FUND_PRINT_TEMPLATES } from '../other-fund/reports/other-fund-tem
 import NO_TEMPLATE from './defaults/no-template.njk?raw'
 import { IGeneratedReportRequest } from './generated-report.types'
 import { DAILY_COLLECTION_DETAIL_REPORT_TEMPLATES } from './reports/daily-collection-detail-report-templates'
+import { DAILY_COLLECTION_SUMMARY_REPORT_TEMPLATES } from './reports/daily-collection-summary-report-templates'
+import { LOAN_RELEASE_TABULATED_REPORT_TEMPLATES } from './reports/loan-releases-tabulated-report-templates'
 
 // import { IGeneratedReportRequest } from './generated-report.types'
 
@@ -25,6 +27,12 @@ export const REPORT_REGISTRY = {
     // FOR COLLECTION REPORT
     daily_collection_detail_report_template:
         DAILY_COLLECTION_DETAIL_REPORT_TEMPLATES,
+
+    daily_collection_summary_report_template:
+        DAILY_COLLECTION_SUMMARY_REPORT_TEMPLATES,
+
+    loan_releases_tabulated_report_template:
+        LOAN_RELEASE_TABULATED_REPORT_TEMPLATES,
 } as const
 
 export const getTemplateAt = <T>(
