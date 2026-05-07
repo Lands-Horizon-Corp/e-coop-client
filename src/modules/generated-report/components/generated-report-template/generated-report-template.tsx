@@ -112,18 +112,14 @@ export function GenerateReportTemplatePicker<T = unknown>({
             try {
                 const source = item.template
 
-                // base dimensions (ALWAYS original)
-                const baseW = pageW
-                const baseH = pageH
-
-                const isLandscape = orientation === 'landscape'
-
-                const finalW = isLandscape ? baseH : baseW
-                const finalH = isLandscape ? baseW : baseH
+                // pageW/pageH are already the active dimensions shown in the form.
+                const finalW = pageW
+                const finalH = pageH
 
                 setRenderedHtml(
                     nunjucks.renderString(source, {
                         ...(item.preview_data ? { ...item.preview_data } : {}),
+                        density: displayDensity,
                         width: String(finalW),
                         height: String(finalH),
                     })
@@ -137,7 +133,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
                 setLoading(false)
             }
         },
-        [pageW, pageH, orientation]
+        [pageW, pageH, displayDensity]
     )
 
     useEffect(() => {
@@ -151,9 +147,14 @@ export function GenerateReportTemplatePicker<T = unknown>({
             setInputW(String(w))
             setInputH(String(h))
             setUnit(first.default_unit ?? 'px')
-            renderTemplate(first)
+            setOrientation(first.orientation)
         }
     }, [selected, resolvedTemplates, renderTemplate])
+
+    useEffect(() => {
+        if (!selected) return
+        renderTemplate(selected)
+    }, [selected, renderTemplate])
 
     const handleSelect = (item: GeneratedReportTemplate<T>) => {
         setSelected(item)
@@ -165,7 +166,6 @@ export function GenerateReportTemplatePicker<T = unknown>({
         setInputW(String(w))
         setInputH(String(h))
         setUnit(item.default_unit ?? 'px')
-        renderTemplate(item)
     }
 
     const handleConfirm = () => {
@@ -213,10 +213,8 @@ export function GenerateReportTemplatePicker<T = unknown>({
         setUnit(selected.default_unit)
     }
 
-    const isLandscape = orientation === 'landscape'
-
-    const finalW = isLandscape ? pageH : pageW
-    const finalH = isLandscape ? pageW : pageH
+    const finalW = pageW
+    const finalH = pageH
 
     // const iframeSrcDoc = `<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0;width:${pageW}${unit};height:${pageH}${unit};overflow:hidden;font-family:'Segoe UI',sans-serif;}</style></head><body>${renderedHtml}</body></html>`
     const iframeSrcDoc = renderedHtml
@@ -304,10 +302,20 @@ export function GenerateReportTemplatePicker<T = unknown>({
                                 onValueChange={(key: string) => {
                                     const paper = PAPER_SIZES[key]
                                     if (!paper) return
-                                    setPageW(paper.width)
-                                    setPageH(paper.height)
-                                    setInputW(String(paper.width))
-                                    setInputH(String(paper.height))
+
+                                    const isLandscape =
+                                        orientation === 'landscape'
+                                    const nextW = isLandscape
+                                        ? paper.height
+                                        : paper.width
+                                    const nextH = isLandscape
+                                        ? paper.width
+                                        : paper.height
+
+                                    setPageW(nextW)
+                                    setPageH(nextH)
+                                    setInputW(String(nextW))
+                                    setInputH(String(nextH))
                                     setUnit(paper.unit as TPaperSizeUnit)
                                 }}
                             >
@@ -447,9 +455,16 @@ export function GenerateReportTemplatePicker<T = unknown>({
                             <RadioGroup
                                 className="flex gap-2"
                                 onValueChange={(val: TPaperOrientation) => {
+                                    if (val === orientation) return
+
+                                    const swappedW = pageH
+                                    const swappedH = pageW
+
                                     setOrientation(val)
-                                    setInputW(String(pageH))
-                                    setInputH(String(pageW))
+                                    setPageW(swappedW)
+                                    setPageH(swappedH)
+                                    setInputW(String(swappedW))
+                                    setInputH(String(swappedH))
                                 }}
                                 value={orientation}
                             >

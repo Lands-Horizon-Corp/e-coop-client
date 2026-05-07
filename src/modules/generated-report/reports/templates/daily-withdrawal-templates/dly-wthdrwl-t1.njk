@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Daily Collection Report</title>
+        <title>Daily Withdrawal Report</title>
         <style>
             @page {
                 margin: 0.5in;
@@ -348,127 +348,173 @@
             <br>
             <div class="center">
                 <h2 class="bold">{{ report_title }}</h2>
-                <div class="subtext">{{ account_name | default('ALL ACCOUNTS') }} - {{ account_category_name | default('ALL CATEGORY') }}</div>
-                <div class="subtext">FROM: {{ start_date }} TO: {{ end_date }}</div>
+                <div class="subtext">
+                FROM: {{ start_date }} TO: {{ end_date }}
+                </div>
             </div>
 
-            {% if tabulated_data %}
+            {% set dynamic_col_count = showable_account_column_list.length %}
+            {% set base_col_span = 5 + dynamic_col_count %}
 
-                {% set account_col_count = tabulated_data.showable_account_column_list.length %}
-                {% set base_col_span = 5 + account_col_count %}
+            <!-- MAIN TABLE -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        {% if show_date_column %}
+                            <th>Date</th>
+                        {% endif %}
 
-                <!-- MAIN TABLE -->
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>CV No</th>
-                            <th>PB No</th>
-                            <th>Member</th>
-                            <th>Account</th>
-                            <th class="text-right">Granted</th>
+                        <th>Teller</th>
+                        <th>Reference No.</th>
+                        <th>Passbook No.</th>
+                        <th>Member Name</th>
 
-                            {% for acc in tabulated_data.showable_account_column_list %}
+                        {% if show_showable_account_column_list %}
+                            {% for acc in showable_account_column_list %}
                                 <th class="text-right">
                                     <div style="text-align:center;">
-                                        {{ acc.short_name or acc.name }}<br/>
-                                        ({{ acc.display_entry_type }})
+                                        {{ acc.short_name or acc.name }}
                                     </div>
                                 </th>
                             {% endfor %}
+                        {% endif %}
 
-                            <th class="text-right">
-                                <div style="text-align:center;">
-                                Sundries<br/>(CR)
-                            </div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for entry in tabulated_data.data_entries %}
-                            <tr>
-                                {% if entry.is_sundry_entry %}
-                                    <td colspan="{{ base_col_span }}" class="text-right italic">
-                                        {{ entry.sundry_name }}
-                                    </td>
-                                    <td class="text-right">{{ entry.sundries_amount }}</td>
-                                {% else %}
-                                    <td>{{ entry.cv_no }}</td>
-                                    <td>{{ entry.pasbook }}</td>
-                                    <td>{{ entry.member_full_name }}</td>
-                                    <td>{{ entry.account_short_name }}</td>
-                                    <td class="text-right">{{ entry.amount_granted }}</td>
+                        <th class="text-right">Total</th>
+                    </tr>
+                </thead>
 
-                                    {% for acc in tabulated_data.showable_account_column_list %}
-                                        <td class="text-right">
-                                            {{ entry['account_' + acc.account_id + '_amount'] or '' }}
-                                        </td>
-                                    {% endfor %}
-
-                                    <td class="text-right">{{ entry.sundries_amount }}</td>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-
-                        <!-- TOTAL ROW -->
+                <tbody>
+                    {% for entry in withdrawal_entries %}
                         <tr>
-                            <td colspan="4" class="bold">TOTAL</td>
+                            {% if show_date_column %}
+                                <td>{{ entry.date }}</td>
+                            {% endif %}
 
-                            <td class="text-right bold">
-                                {{ tabulated_data.data_entries_total_debits.amount_granted_total }}
-                            </td>
+                            <td>{{ entry.teller_name }}</td>
+                            <td>{{ entry.reference_no }}</td>
+                            <td>{{ entry.passbook_no }}</td>
+                            <td>{{ entry.member_full_name }}</td>
 
-                            {% for acc in tabulated_data.showable_account_column_list %}
-                                <td class="text-right bold">
-                                    {{ tabulated_data.data_entries_total_debits['account_' + acc.account_id + '_total'] }}
-                                </td>
-                            {% endfor %}
+                            {% if show_showable_account_column_list %}
+                                {% for acc in showable_account_column_list %}
+                                    <td class="text-right">
+                                        {{ entry['account_' + acc.account_id + '_amount'] or '' }}
+                                    </td>
+                                {% endfor %}
+                            {% endif %}
 
-                            <td class="text-right bold">
-                                {{ tabulated_data.sundries_summary_total }}
+                            <td class="text-right">
+                                {{ entry.total }}
                             </td>
                         </tr>
-                    </tbody>
-                </table>
+                    {% endfor %}
 
-                {% if include_sundries_summary and tabulated_data.sundries_summary_data_entries and tabulated_data.sundries_summary_data_entries.length %}
+                    <!-- GRAND TOTAL -->
+                    <tr>
+                        <td
+                        colspan="
+                            {% if show_date_column %}
+                                {{ 5 + (dynamic_col_count if show_showable_account_column_list else 0) }}
+                            {% else %}
+                                {{ 4 + (dynamic_col_count if show_showable_account_column_list else 0) }}
+                            {% endif %}
+                        "
+                        class="bold"
+                    >
+                        GRAND TOTAL
+                    </td>
 
-                    <div class="center">
-                        <h3 class="bold">SUMMARY</h3>
-                    </div>
+                        <td class="text-right bold">
+                            {{ withdrawal_entries_grand_total }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Account</th>
-                                <th class="text-right">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for s in tabulated_data.sundries_summary_data_entries %}
-                                <tr>
-                                    <td>{{ s.account_name }}</td>
-                                    <td class="text-right">{{ s.credit }}</td>
-                                </tr>
+            <!-- TELLER SUMMARY -->
+            <div class="center">
+                <h3 class="bold">TELLER SUMMARY</h3>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Teller</th>
+
+                        {% if show_showable_account_column_list %}
+                            {% for acc in showable_account_column_list %}
+                                <th class="text-right">
+                                    <div style="text-align:center;">
+                                        {{ acc.short_name or acc.name }}
+                                    </div>
+                                </th>
                             {% endfor %}
-                            <tr>
-                                <td class="bold">TOTAL</td>
-                                <td class="text-right bold">
-                                    {{ tabulated_data.sundries_summary_total }}
+                        {% endif %}
+
+                        <th class="text-right">Total</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>{{ teller_summary_withdrawal_entries.teller_name }}</td>
+
+                        {% if show_showable_account_column_list %}
+                            {% for acc in showable_account_column_list %}
+                                <td class="text-right">
+                                    {{ teller_summary_withdrawal_entries['account_' + acc.account_id + '_grand_amount'] or '' }}
                                 </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            {% endfor %}
+                        {% endif %}
 
-                {% endif %}
+                        <td class="text-right">
+                            {{ teller_summary_withdrawal_entries.total }}
+                        </td>
+                    </tr>
 
-            {% endif %}
+                    <!-- SUMMARY GRAND TOTAL -->
+                    <tr>
+                        <td
+                        colspan="
+                            {{ 1 + (dynamic_col_count if show_showable_account_column_list else 0) }}
+                        "
+                        class="bold"
+                    >
+                        GRAND TOTAL
+                    </td>
+
+                        <td
+                        class="text-right bold"
+                        style="border-top:1px solid #000;"
+                    >
+                            {{ teller_summary_withdrawal_entries_grand_total }}
+                        </td>
+                    </tr>
+
+                    <!-- TRX COUNT -->
+                    <tr>
+                        <td
+                        colspan="
+                            {{ 1 + (dynamic_col_count if show_showable_account_column_list else 0) }}
+                        "
+                        class="bold"
+                    >
+                        TRX COUNT
+                    </td>
+
+                        <td class="text-right bold">
+                            {{ trx_count }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
             <!-- SIGNATURES -->
             <div class="signature-section">
                 <div class="sig-row sig-row-2">
                     <div class="sig-item">
-                        <p class="sig-label">Checked By</p>
-                        <div class="sig-line">{{ checked_by or '' }}</div>
+                        <p class="sig-label">Prepared By</p>
+                        <div class="sig-line">{{ prepared_by or '' }}</div>
                     </div>
 
                     <div class="sig-item">

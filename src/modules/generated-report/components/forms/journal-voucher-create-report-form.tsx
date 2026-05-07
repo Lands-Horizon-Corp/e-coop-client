@@ -200,6 +200,7 @@ const JournalVoucherCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="journal_voucher_report_templates"
                     />
                 </fieldset>
 

@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Daily Collection Report</title>
+        <title>Loan Release Register Report</title>
         <style>
             @page {
                 margin: 0.5in;
@@ -27,13 +27,10 @@
                 margin: 0;
                 padding: 0;
                 height: auto;
-                /* Change from min-height: 100% */
                 display: block;
             }
 
-            /* BASE VARS AT TOKEN */
             .container {
-                /* FONT SCALE */
                 --fs-xs: 7px;
                 --fs-sm: 8px;
                 --fs-base: 9px;
@@ -41,14 +38,12 @@
                 --fs-xl: 12px;
                 --fs-2xl: 14px;
 
-                /* SPACING SCALE */
                 --space-xs: 0.08rem;
                 --space-sm: 0.15rem;
                 --space-md: 0.25rem;
                 --space-lg: 0.3rem;
                 --space-xl: 0.4rem;
 
-                /* LAYOUT */
                 --container-padding: 0.3in;
                 --line-height: 1.3;
 
@@ -64,14 +59,10 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-start;
-                /* FORCE content to the top */
                 align-items: stretch;
                 width: 100%;
             }
 
-            /* DENSITY VARIANTS */
-
-            /* NORMAL (default, explicit if you want) */
             .normal .container {
                 --fs-xs: 7px;
                 --fs-sm: 8px;
@@ -94,7 +85,6 @@
                 --line-height: 1.3;
             }
 
-            /* COMPACT */
             .compact .container {
                 --fs-xs: 6px;
                 --fs-sm: 7px;
@@ -117,7 +107,6 @@
                 --line-height: 1.2;
             }
 
-            /* LARGER */
             .loose .container {
                 --fs-xs: 8px;
                 --fs-sm: 10px;
@@ -140,12 +129,10 @@
                 --line-height: 1.4;
             }
 
-            /* HEADER */
             .header {
                 text-align: center;
                 margin-bottom: var(--space-lg);
                 padding-bottom: var(--space-sm);
-                /* border-bottom: 1px solid #e5e7eb; */
             }
 
             .header h1 {
@@ -164,14 +151,6 @@
                 font-size: var(--fs-sm);
             }
 
-            .report-title {
-                font-size: var(--fs-2xl);
-                font-weight: 800;
-                margin-top: var(--space-sm);
-                letter-spacing: -0.025em;
-                text-transform: uppercase;
-            }
-
             .center {
                 display: flex;
                 flex-direction: column;
@@ -180,7 +159,6 @@
                 text-align: center;
             }
 
-            /* TABLE */
             .table {
                 width: 100%;
                 margin-top: var(--space-xl);
@@ -217,15 +195,6 @@
                 font-variant-numeric: tabular-nums;
             }
 
-            .italic {
-                font-style: italic;
-            }
-
-            {
-                # SIG #
-            }
-
-            /* SIGNATURE */
             .signature-section {
                 margin-top: var(--sig-margin-t);
             }
@@ -236,29 +205,18 @@
                 margin-bottom: var(--sig-gap-y);
             }
 
-            /* Helper Classes for Grid Columns */
-            .sig-row-1 {
-                grid-template-columns: repeat(1, 1fr);
-            }
             .sig-row-2 {
                 grid-template-columns: repeat(2, 1fr);
             }
+
             .sig-row-3 {
                 grid-template-columns: repeat(3, 1fr);
             }
-            .sig-row-4 {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            .sig-row-5 {
-                grid-template-columns: repeat(5, 1fr);
-            }
 
-            /* Item Styling */
             .sig-item {
                 text-align: center;
             }
 
-            /* Signature Label */
             .sig-label {
                 font-size: var(--fs-xs);
                 font-weight: 700;
@@ -266,7 +224,6 @@
                 margin-bottom: var(--space-xs);
             }
 
-            /* Signature Line */
             .sig-line {
                 border-bottom: 1px solid #9ca3af;
                 min-height: calc(var(--fs-lg) * 1.5);
@@ -276,13 +233,6 @@
                 width: 100%;
                 box-sizing: border-box;
                 text-transform: uppercase;
-            }
-
-            /* Optional: Center helper for single or fewer signatures in a row */
-            .sig-center {
-                max-width: 50%;
-                margin-left: auto;
-                margin-right: auto;
             }
 
             .page-break {
@@ -305,7 +255,6 @@
                 color: #999;
             }
 
-            /* PRINT */
             @media print {
                 body {
                     background-color: white;
@@ -337,6 +286,13 @@
         </style>
     </head>
     <body class="{{ density | default('normal') }}">
+        {% macro display_amount(value) -%}
+            {%- if value is not defined or value is none or value == '' or value == 0 or value == '0' or value == '0.0' or value == '0.00' -%}
+            {%- else -%}
+                {{ value }}
+            {%- endif -%}
+        {%- endmacro %}
+
         <div class="container">
             <header class="header">
                 <h1>{{ header_title }}</h1>
@@ -348,124 +304,120 @@
             <br>
             <div class="center">
                 <h2 class="bold">{{ report_title }}</h2>
-                <div class="subtext">{{ account_name | default('ALL ACCOUNTS') }} - {{ account_category_name | default('ALL CATEGORY') }}</div>
-                <div class="subtext">FROM: {{ start_date }} TO: {{ end_date }}</div>
+                <div class="subtext">
+                FROM: {{ start_date }} TO: {{ end_date }}
+                </div>
             </div>
 
-            {% if tabulated_data %}
+            <!-- MAIN TABLE -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>CV No.</th>
+                        <th>Pay To</th>
+                        <th>Particulars</th>
+                    </tr>
+                </thead>
 
-                {% set account_col_count = tabulated_data.showable_account_column_list.length %}
-                {% set base_col_span = 5 + account_col_count %}
-
-                <!-- MAIN TABLE -->
-                <table class="table">
-                    <thead>
+                <tbody>
+                    {% for entry in journal_voucher_entries %}
                         <tr>
-                            <th>CV No</th>
-                            <th>PB No</th>
-                            <th>Member</th>
-                            <th>Account</th>
-                            <th class="text-right">Granted</th>
-
-                            {% for acc in tabulated_data.showable_account_column_list %}
-                                <th class="text-right">
-                                    <div style="text-align:center;">
-                                        {{ acc.short_name or acc.name }}<br/>
-                                        ({{ acc.display_entry_type }})
-                                    </div>
-                                </th>
-                            {% endfor %}
-
-                            <th class="text-right">
-                                <div style="text-align:center;">
-                                Sundries<br/>(CR)
-                            </div>
-                            </th>
+                            <td>{{ entry.cv_no }}</td>
+                            <td>{{ entry.payto }}</td>
+                            <td>{{ entry.particular }}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for entry in tabulated_data.data_entries %}
-                            <tr>
-                                {% if entry.is_sundry_entry %}
-                                    <td colspan="{{ base_col_span }}" class="text-right italic">
-                                        {{ entry.sundry_name }}
-                                    </td>
-                                    <td class="text-right">{{ entry.sundries_amount }}</td>
-                                {% else %}
-                                    <td>{{ entry.cv_no }}</td>
-                                    <td>{{ entry.pasbook }}</td>
-                                    <td>{{ entry.member_full_name }}</td>
-                                    <td>{{ entry.account_short_name }}</td>
-                                    <td class="text-right">{{ entry.amount_granted }}</td>
+                    {% endfor %}
+                </tbody>
+            </table>
 
-                                    {% for acc in tabulated_data.showable_account_column_list %}
-                                        <td class="text-right">
-                                            {{ entry['account_' + acc.account_id + '_amount'] or '' }}
-                                        </td>
-                                    {% endfor %}
+            <!-- DETAILED SCHEDULE -->
+            <br>
+            <br>
+            <div class="center">
+                <h3 class="bold">DETAILED SCHEDULE OF DAILY JOURNAL VOUCHER</h3>
+            </div>
 
-                                    <td class="text-right">{{ entry.sundries_amount }}</td>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>CV No.</th>
+                        <th>Account Name</th>
+                        <th class="text-right">Debit</th>
+                        <th class="text-right">Credit</th>
+                    </tr>
+                </thead>
 
-                        <!-- TOTAL ROW -->
+                <tbody>
+                    {% for entry in detailed_schedule_of_daily_journal_voucher_entries %}
                         <tr>
-                            <td colspan="4" class="bold">TOTAL</td>
-
-                            <td class="text-right bold">
-                                {{ tabulated_data.data_entries_total_debits.amount_granted_total }}
-                            </td>
-
-                            {% for acc in tabulated_data.showable_account_column_list %}
-                                <td class="text-right bold">
-                                    {{ tabulated_data.data_entries_total_debits['account_' + acc.account_id + '_total'] }}
-                                </td>
-                            {% endfor %}
-
-                            <td class="text-right bold">
-                                {{ tabulated_data.sundries_summary_total }}
-                            </td>
+                            <td>{{ entry.cv_no }}</td>
+                            <td>{{ entry.account_name }}</td>
+                            <td class="text-right">{{ display_amount(entry.debit) }}</td>
+                            <td class="text-right">{{ display_amount(entry.credit) }}</td>
                         </tr>
-                    </tbody>
-                </table>
+                    {% endfor %}
 
-                {% if include_sundries_summary and tabulated_data.sundries_summary_data_entries and tabulated_data.sundries_summary_data_entries.length %}
+                    <tr>
+                        <td colspan="2" class="bold">TOTAL</td>
 
-                    <div class="center">
-                        <h3 class="bold">SUMMARY</h3>
-                    </div>
+                        <td class="text-right bold">
+                            {{ display_amount(detailed_schedule_of_daily_journal_voucher_entries_totals.total_debit) }}
+                        </td>
 
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Account</th>
-                                <th class="text-right">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for s in tabulated_data.sundries_summary_data_entries %}
-                                <tr>
-                                    <td>{{ s.account_name }}</td>
-                                    <td class="text-right">{{ s.credit }}</td>
-                                </tr>
-                            {% endfor %}
-                            <tr>
-                                <td class="bold">TOTAL</td>
-                                <td class="text-right bold">
-                                    {{ tabulated_data.sundries_summary_total }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        <td class="text-right bold">
+                            {{ display_amount(detailed_schedule_of_daily_journal_voucher_entries_totals.total_credit) }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-                {% endif %}
+            <!-- SUMMARY -->
+            <br>
+            <br>
+            <div class="center">
+                <h3 class="bold">SUMMARY OF DAILY JOURNAL VOUCHER</h3>
+            </div>
 
-            {% endif %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Account Name</th>
+                        <th class="text-right">Debit</th>
+                        <th class="text-right">Credit</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for entry in summary_of_daily_journal_voucher_entries %}
+                        <tr>
+                            <td>{{ entry.account_name }}</td>
+                            <td class="text-right">{{ display_amount(entry.debit) }}</td>
+                            <td class="text-right">{{ display_amount(entry.credit) }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    <tr>
+                        <td class="bold">TOTAL</td>
+
+                        <td class="text-right bold">
+                            {{ display_amount(summary_of_daily_journal_voucher_entries_totals.total_debit) }}
+                        </td>
+
+                        <td class="text-right bold">
+                            {{ display_amount(summary_of_daily_journal_voucher_entries_totals.total_credit) }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
             <!-- SIGNATURES -->
             <div class="signature-section">
-                <div class="sig-row sig-row-2">
+                <div class="sig-row sig-row-3">
+                    <div class="sig-item">
+                        <p class="sig-label">Prepared By</p>
+                        <div class="sig-line">{{ checked_by or '' }}</div>
+                    </div>
+
                     <div class="sig-item">
                         <p class="sig-label">Checked By</p>
                         <div class="sig-line">{{ checked_by or '' }}</div>

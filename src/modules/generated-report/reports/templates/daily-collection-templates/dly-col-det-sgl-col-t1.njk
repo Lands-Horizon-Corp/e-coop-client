@@ -344,6 +344,8 @@
                 {# PAG PER TELLER #}
 
                 {% for teller in single_col_data.by_teller_data_entries %}
+                    <br>
+                    <br>
                     <div class="center">
                         <h2 class="bold">{{ page_title }}</h2>
                         <div class="subtext">
@@ -357,34 +359,34 @@
                         </div>
                     </div>
                     <table class="table">
-                            <thead>
+                        <thead>
+                            <tr>
+                                <th>Account</th>
+                                <th class="text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for entry in teller.data_entries %}
                                 <tr>
-                                    <th>Account</th>
-                                    <th class="text-right">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for entry in teller.data_entries %}
-                                    <tr>
-                                        <td>
-                                            {{ entry.account_name }}
-                                            {% if entry.account_short_name %}
+                                    <td>
+                                        {{ entry.account_name }}
+                                        {% if entry.account_short_name %}
                                             ({{ entry.account_short_name }})
                                         {% endif %}
-                                        </td>
-                                        <td class="text-right">{{ entry.amount }}</td>
-                                    </tr>
-                                {% endfor %}
+                                    </td>
+                                    <td class="text-right">{{ entry.amount }}</td>
+                                </tr>
+                            {% endfor %}
 
-                                {% if teller.grand_total %}
-                                    <tr>
-                                        <td class="bold">TOTAL</td>
-                                        <td class="text-right bold">
-                                            {{ teller.grand_total }}
-                                        </td>
-                                    </tr>
-                                {% endif %}
-                            </tbody>
+                            {% if teller.grand_total %}
+                                <tr>
+                                    <td class="bold">TOTAL</td>
+                                    <td class="text-right bold">
+                                        {{ teller.grand_total }}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
                     </table>
 
                     {% if not loop.last %}
@@ -413,34 +415,34 @@
                 </div>
 
                 <table class="table">
-                        <thead>
+                    <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th class="text-right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in single_col_data.data_entries %}
                             <tr>
-                                <th>Account</th>
-                                <th class="text-right">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for entry in single_col_data.data_entries %}
-                                <tr>
-                                    <td>
-                                        {{ entry.account_name }}
-                                        {% if entry.account_short_name %}
+                                <td>
+                                    {{ entry.account_name }}
+                                    {% if entry.account_short_name %}
                                         ({{ entry.account_short_name }})
                                     {% endif %}
-                                    </td>
-                                    <td class="text-right">{{ entry.amount }}</td>
-                                </tr>
-                            {% endfor %}
+                                </td>
+                                <td class="text-right">{{ entry.amount }}</td>
+                            </tr>
+                        {% endfor %}
 
-                            {% if single_col_data.grand_total %}
-                                <tr>
-                                    <td class="bold">GRAND TOTAL</td>
-                                    <td class="text-right bold">
-                                        {{ single_col_data.grand_total }}
-                                    </td>
-                                </tr>
-                            {% endif %}
-                        </tbody>
+                        {% if single_col_data.grand_total %}
+                            <tr>
+                                <td class="bold">GRAND TOTAL</td>
+                                <td class="text-right bold">
+                                    {{ single_col_data.grand_total }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
                 </table>
             {% endif %}
 

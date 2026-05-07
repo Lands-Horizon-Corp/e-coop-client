@@ -20,7 +20,8 @@ import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import { Form } from '@/components/ui/form'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Form, FormLabel } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
@@ -33,6 +34,10 @@ import { useInternalState } from '@/hooks/use-internal-state'
 import { IClassProps, IForm } from '@/types'
 
 import { WithGeneratedReportSchema } from '../../generated-report.validation'
+import {
+    AccountColumnListFormSection,
+    WithAccountColumnListSchema,
+} from './account-column-list-form-section'
 
 export const DailyWithdrawalSchema = z
     .object({
@@ -60,8 +65,12 @@ export const DailyWithdrawalSchema = z
             ])
             .default('option_1'),
 
+        show_date_column: z.boolean().optional().default(true),
+        show_showable_account_column_list: z.boolean().optional().default(true),
+
         print_type: z.enum(['summary', 'detail']).default('summary'),
     })
+    .and(WithAccountColumnListSchema)
     .and(WithGeneratedReportSchema)
 
 export type TDailyWithdrawalSchema = z.infer<typeof DailyWithdrawalSchema>
@@ -97,7 +106,12 @@ const DailyWithdrawalCreateReportForm = ({
 
                     sort_by: 'teller',
                     option_type: 'option_1',
+                    show_date_column: true,
+                    show_showable_account_column_list: true,
                     print_type: 'summary',
+
+                    account_column_list: [],
+                    account_column_list_showable_first: 4,
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
@@ -111,6 +125,10 @@ const DailyWithdrawalCreateReportForm = ({
                 overrideDefaults: formProps.defaultValues,
             }),
     })
+
+    const showDynamicAccountColumns = form.watch(
+        'show_showable_account_column_list'
+    )
 
     const generateMutation = useCreateGeneratedReport({
         options: {
@@ -320,6 +338,108 @@ const DailyWithdrawalCreateReportForm = ({
                         )}
                     />
 
+                    <FormLabel
+                        className="text-muted-foreground text-xs"
+                        tabIndex={-1}
+                    >
+                        Other Options
+                    </FormLabel>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="show_date_column"
+                            render={({ field }) => {
+                                const isSelected = !!field.value
+
+                                return (
+                                    <label
+                                        className={cn(
+                                            'flex flex-col gap-1 rounded-xl border p-4 cursor-pointer transition-all',
+                                            isSelected
+                                                ? 'bg-gradient-to-br from-popover to-primary/20 border-primary shadow-md ring-1 ring-primary/20'
+                                                : 'bg-background border-border'
+                                        )}
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <span
+                                                className={cn(
+                                                    'text-sm font-medium',
+                                                    isSelected
+                                                        ? 'text-primary'
+                                                        : 'text-foreground'
+                                                )}
+                                            >
+                                                Show Date Column
+                                            </span>
+                                            <Checkbox
+                                                checked={isSelected}
+                                                onCheckedChange={(val) =>
+                                                    field.onChange(!!val)
+                                                }
+                                            />
+                                        </div>
+                                        <span className="text-xs text-muted-foreground">
+                                            It shows in table withdraw entries.
+                                        </span>
+                                    </label>
+                                )
+                            }}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="show_showable_account_column_list"
+                            render={({ field }) => {
+                                const isSelected = !!field.value
+
+                                return (
+                                    <label
+                                        className={cn(
+                                            'flex flex-col gap-1 rounded-xl border p-4 cursor-pointer transition-all',
+                                            isSelected
+                                                ? 'bg-gradient-to-br from-popover to-primary/20 border-primary shadow-md ring-1 ring-primary/20'
+                                                : 'bg-background border-border'
+                                        )}
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <span
+                                                className={cn(
+                                                    'text-sm font-medium',
+                                                    isSelected
+                                                        ? 'text-primary'
+                                                        : 'text-foreground'
+                                                )}
+                                            >
+                                                Show Dynamic Account Columns
+                                            </span>
+                                            <Checkbox
+                                                checked={isSelected}
+                                                onCheckedChange={(val) =>
+                                                    field.onChange(!!val)
+                                                }
+                                            />
+                                        </div>
+                                        <span className="text-xs text-muted-foreground">
+                                            It will show those account in table
+                                            as column.
+                                        </span>
+                                    </label>
+                                )
+                            }}
+                        />
+                    </div>
+
+                    <div
+                        className={cn(
+                            'transition-opacity',
+                            !showDynamicAccountColumns &&
+                                'opacity-50 pointer-events-none select-none'
+                        )}
+                    >
+                        <AccountColumnListFormSection form={form} />
+                    </div>
+
                     <Separator />
 
                     <PrintSettingsSection
@@ -327,6 +447,7 @@ const DailyWithdrawalCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="daily_withdrawal_report_template"
                     />
                 </fieldset>
 

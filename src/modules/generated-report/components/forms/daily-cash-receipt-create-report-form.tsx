@@ -20,7 +20,7 @@ import FormFooterResetSubmit from '@/components/form-components/form-footer-rese
 import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Form } from '@/components/ui/form'
+import { Form, FormLabel } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import InputDate from '@/components/ui/input-date'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -32,6 +32,10 @@ import { useInternalState } from '@/hooks/use-internal-state'
 import { IClassProps, IForm } from '@/types'
 
 import { WithGeneratedReportSchema } from '../../generated-report.validation'
+import {
+    AccountColumnListFormSection,
+    WithAccountColumnListSchema,
+} from './account-column-list-form-section'
 
 export const DailyCashReceiptJournalReportSchema = z
     .object({
@@ -45,6 +49,7 @@ export const DailyCashReceiptJournalReportSchema = z
         generic_text_printing: z.boolean().optional().default(false),
     })
     .and(WithGeneratedReportSchema)
+    .and(WithAccountColumnListSchema)
     .superRefine((data, ctx) => {
         if (
             data.start_date &&
@@ -94,6 +99,9 @@ const DailyCashCollectionReceiptJournalCreateReportForm = ({
                     end_date: undefined,
                     report_type: 'by_teller',
                     generic_text_printing: false,
+
+                    account_column_list: [],
+                    account_column_list_showable_first: 3,
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
@@ -232,6 +240,13 @@ const DailyCashCollectionReceiptJournalCreateReportForm = ({
                         )}
                     />
 
+                    <AccountColumnListFormSection form={form} />
+                    <FormLabel
+                        className="text-muted-foreground text-xs"
+                        tabIndex={-1}
+                    >
+                        Other Options
+                    </FormLabel>
                     <FormFieldWrapper
                         control={form.control}
                         name="generic_text_printing"
@@ -283,6 +298,7 @@ const DailyCashCollectionReceiptJournalCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="cash_receipt_journal_report_template"
                     />
                 </fieldset>
 
