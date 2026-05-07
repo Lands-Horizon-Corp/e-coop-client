@@ -8,6 +8,7 @@ import {
     useAccountConsolidationLinkAccount,
     useGetAllAccountConsolidationByAccountId,
 } from '@/modules/account-consolidation'
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import { IBranch, useGetBranchesByOrganizationId } from '@/modules/branch'
 
 import RefreshButton from '@/components/buttons/refresh-button'
@@ -36,6 +37,9 @@ const AccountConsolidationModal = (props: AccountConsolidationModalProps) => {
     const { data: branches } = useGetBranchesByOrganizationId({
         organizationId,
     })
+    const {
+        currentAuth: { user_organization },
+    } = useAuthStore()
 
     return (
         <Modal
@@ -45,13 +49,17 @@ const AccountConsolidationModal = (props: AccountConsolidationModalProps) => {
             {...props}
         >
             <div className=" h-[80vh] w-full flex items-start gap-4  ecoop-scroll p-4">
-                {branches?.map((branch) => (
-                    <BranchItem
-                        accountId={accountId}
-                        branch={branch}
-                        key={branch.id}
-                    />
-                ))}
+                {branches
+                    ?.filter(
+                        (branch) => branch.id !== user_organization?.branch_id
+                    )
+                    ?.map((branch) => (
+                        <BranchItem
+                            accountId={accountId}
+                            branch={branch}
+                            key={branch.id}
+                        />
+                    ))}
             </div>
         </Modal>
     )
@@ -159,7 +167,7 @@ const BranchItem = ({ branch, accountId }: BranchItemProps) => {
                             size={'sm'}
                         >
                             {highlightMatch(
-                                account.primary_account.name,
+                                account.linked_account.name,
                                 search
                             )}
                         </Button>
@@ -185,7 +193,11 @@ const BranchItem = ({ branch, accountId }: BranchItemProps) => {
                     return (
                         <Button
                             className="min-w-xs"
-                            disabled={accountId === account.id}
+                            disabled={consolidatedAccounts?.some(
+                                (consolidated) =>
+                                    consolidated.linked_account_id ===
+                                    account.id
+                            )}
                             key={account.id}
                             onClick={() => {
                                 mutateLinkAccount({
