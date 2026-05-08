@@ -40,6 +40,8 @@ export const glTypeStyleMap: Record<
         iconBg: string
         iconText: string
         hoverGradient: string
+        background?: string
+        fullBorder?: string
     }
 > = {
     Assets: {
@@ -48,6 +50,8 @@ export const glTypeStyleMap: Record<
         iconText: 'text-emerald-600',
         hoverGradient:
             'hover:!bg-gradient-to-r hover:!from-emerald-500/20 hover:!to-transparent',
+        background: 'bg-emerald-500/10',
+        fullBorder: 'border-[0.5px] border-emerald-500/30 rounded-lg',
     },
     Liabilities: {
         border: 'border-l-4 border-rose-500',
@@ -55,6 +59,8 @@ export const glTypeStyleMap: Record<
         iconText: 'text-rose-600',
         hoverGradient:
             'hover:!bg-gradient-to-r hover:!from-rose-500/20 hover:!to-transparent',
+        background: 'bg-rose-500/10',
+        fullBorder: 'border-[0.5px] border-rose-500/30 rounded-lg',
     },
     Equity: {
         border: 'border-l-4 border-violet-500',
@@ -62,6 +68,8 @@ export const glTypeStyleMap: Record<
         iconText: 'text-violet-600',
         hoverGradient:
             'hover:!bg-gradient-to-r hover:!from-violet-500/20 hover:!to-transparent',
+        background: 'bg-violet-500/10',
+        fullBorder: 'border-[0.5px] border-violet-500/30 rounded-lg',
     },
     Revenue: {
         border: 'border-l-4 border-sky-500',
@@ -69,6 +77,8 @@ export const glTypeStyleMap: Record<
         iconText: 'text-sky-600',
         hoverGradient:
             'hover:!bg-gradient-to-r hover:!from-sky-500/20 hover:!to-transparent',
+        background: 'bg-sky-500/10',
+        fullBorder: 'border-[0.5px] border-sky-500/30 rounded-lg',
     },
     Expenses: {
         border: 'border-l-4 border-amber-500',
@@ -76,6 +86,8 @@ export const glTypeStyleMap: Record<
         iconText: 'text-amber-600',
         hoverGradient:
             'hover:!bg-gradient-to-r hover:!from-amber-500/20 hover:!to-transparent',
+        background: 'bg-amber-500/10',
+        fullBorder: 'border-[0.5px] border-amber-500/30 rounded-lg',
     },
 }
 

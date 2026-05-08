@@ -1,9 +1,4 @@
-import {
-    IAuditable,
-    IPaginatedResult,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
 
 import { TIcon } from '@/components/icons'
 
@@ -65,7 +60,7 @@ export type TInterestStandardComputation =
 export type TAccountExclusiveSettingType =
     (typeof ACCOUNT_EXCLUSIVE_SETTING_TYPE)[number]
 
-export interface IAccount extends IAuditable, ITimeStamps {
+export interface IAccount extends IBaseEntityMeta {
     id: TEntityId
 
     // GENERAL CONFIG

@@ -4,6 +4,7 @@ import Fuse from 'fuse.js'
 import { toast } from 'sonner'
 
 import { allErrorMessageExtractor } from '@/helpers/error-message-extractor'
+import { cn } from '@/helpers/tw-utils'
 import {
     useAccountConsolidationLinkAccount,
     useGetAllAccountConsolidationByAccountId,
@@ -13,17 +14,28 @@ import { IBranch, useGetBranchesByOrganizationId } from '@/modules/branch'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import { highlightMatch } from '@/components/hightlight-match'
-import { BuildingIcon, EmptyIcon } from '@/components/icons'
+import {
+    BadgeCheckIcon,
+    BuildingIcon,
+    EmptyIcon,
+    LinkIcon,
+    RenderIcon,
+    TIcon,
+} from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import SearchInput from '@/components/search/generic-search-input'
 import { Button } from '@/components/ui/button'
 import { Empty } from '@/components/ui/empty'
 import { Skeleton } from '@/components/ui/skeleton'
 
+import { useModalState } from '@/hooks/use-modal-state'
+
 import { TEntityId } from '@/types'
 
 import { useGetAllAccountByBranchId } from '../../account.service'
 import { IAccount } from '../../account.types'
+import { glTypeStyleMap } from '../account-card'
+import { AccountViewerModal } from '../account-viewer/account-viewer'
 
 interface AccountConsolidationModalProps extends IModalProps {
     organizationId: TEntityId
@@ -84,14 +96,17 @@ const BranchItem = ({ branch, accountId }: BranchItemProps) => {
         data: consolidatedAccounts,
         isRefetching: isConsolidatedAccountsRefetching,
         isLoading: isConsolidatedAccountsLoading,
+        refetch: refetchConsolidatedAccounts,
     } = useGetAllAccountConsolidationByAccountId(accountId)
 
     const [search, setSearch] = useState('')
+    const [selectedAccountId, setSelectedAccountId] =
+        useState<TEntityId | null>(null)
+    const accountViewModal = useModalState()
     const { mutate: mutateLinkAccount } = useAccountConsolidationLinkAccount({
         options: {
             onSuccess: () => {
                 toast.success('Account linked successfully')
-                refetch()
             },
             onError: (error) => {
                 const errorMessage = allErrorMessageExtractor({
@@ -122,12 +137,25 @@ const BranchItem = ({ branch, accountId }: BranchItemProps) => {
 
     return (
         <div className="flex flex-col items-center gap-2 overflow-y-auto overflow-x-hidden max-h-screen pr-1 ecoop-scroll">
+            {selectedAccountId && (
+                <AccountViewerModal
+                    accountViewerProps={{
+                        accountId: selectedAccountId,
+                    }}
+                    {...accountViewModal}
+                />
+            )}
             <div className="sticky top-0 z-10 w-full space-y-1 bg-background pt-2 pb-4 border-b">
                 <div className="border-primary/20 bg-background border flex items-center p-2 rounded-xl min-w-xs">
-                    {' '}
                     <BuildingIcon className="mr-2" />
                     <span className="font-semibold grow">{branch.name}</span>
-                    <RefreshButton className="" onClick={refetch} />
+                    <RefreshButton
+                        className=""
+                        onClick={() => {
+                            refetch()
+                            refetchConsolidatedAccounts()
+                        }}
+                    />
                 </div>
                 <SearchInput
                     className="max-w-full w-full"
@@ -152,27 +180,53 @@ const BranchItem = ({ branch, accountId }: BranchItemProps) => {
                     No accounts consolidated yet for this account.
                 </Empty>
             ) : (
-                consolidatedAccounts?.map((account) => {
-                    return (
-                        <Button
-                            className="min-w-xs"
-                            disabled={true}
-                            key={account.id}
-                            onClick={() => {
-                                mutateLinkAccount({
-                                    primary_account_id: accountId,
-                                    linked_account_id: account.id,
-                                })
-                            }}
-                            size={'sm'}
-                        >
-                            {highlightMatch(
-                                account.linked_account.name,
-                                search
-                            )}
-                        </Button>
+                consolidatedAccounts
+                    ?.filter(
+                        (acctConsolidated) =>
+                            acctConsolidated.linked_account.branch_id ===
+                            branch.id
                     )
-                })
+                    ?.map((acctConsolidated) => {
+                        return (
+                            <div
+                                className={cn(
+                                    'min-w-xs w-full pl-2 border-primary/50 bg-primary/20 border rounded-lg cursor-pointer'
+                                )}
+                                key={acctConsolidated.id}
+                            >
+                                <div className="flex items-center gap-2 w-full">
+                                    <RenderIcon
+                                        className={cn(
+                                            'transition-colors duration-300',
+                                            glTypeStyleMap[
+                                                acctConsolidated.linked_account
+                                                    .general_ledger_type
+                                            ].iconText
+                                        )}
+                                        icon={
+                                            acctConsolidated.linked_account
+                                                .icon as TIcon
+                                        }
+                                    />
+
+                                    <p className="grow flex flex-col py-1 text-sm text-left max-w-xs min-w-0 ">
+                                        {highlightMatch(
+                                            acctConsolidated.linked_account
+                                                .name,
+                                            search
+                                        )}
+                                        <span className="text-xs truncate min-w-0  text-muted-foreground">
+                                            {
+                                                acctConsolidated.linked_account
+                                                    .description
+                                            }
+                                        </span>
+                                    </p>
+                                    <BadgeCheckIcon />
+                                </div>
+                            </div>
+                        )
+                    })
             )}
             {isRefetching || isLoading ? (
                 <>
@@ -190,26 +244,62 @@ const BranchItem = ({ branch, accountId }: BranchItemProps) => {
                 </Empty>
             ) : (
                 filtered.map((account) => {
+                    const isDisabled = consolidatedAccounts?.some(
+                        (consolidated) =>
+                            consolidated.linked_account_id === account.id
+                    )
                     return (
-                        <Button
-                            className="min-w-xs"
-                            disabled={consolidatedAccounts?.some(
-                                (consolidated) =>
-                                    consolidated.linked_account_id ===
-                                    account.id
+                        <div
+                            className={cn(
+                                'min-w-xs w-full pl-2 bg-card cursor-pointer',
+                                glTypeStyleMap[account.general_ledger_type]
+                                    .fullBorder,
+                                isDisabled
+                                    ? 'opacity-50 cursor-not-allowed'
+                                    : ''
                             )}
                             key={account.id}
-                            onClick={() => {
-                                mutateLinkAccount({
-                                    primary_account_id: accountId,
-                                    linked_account_id: account.id,
-                                })
+                            onClick={(e) => {
+                                e.preventDefault()
+                                setSelectedAccountId(account.id)
+                                accountViewModal.openModal()
                             }}
-                            size={'sm'}
-                            variant={'secondary'}
                         >
-                            {highlightMatch(account.name, search)}
-                        </Button>
+                            <div className="flex items-center gap-2 w-full">
+                                <RenderIcon
+                                    className={cn(
+                                        'transition-colors duration-300',
+                                        glTypeStyleMap[
+                                            account.general_ledger_type
+                                        ].iconText
+                                    )}
+                                    icon={account.icon as TIcon}
+                                />
+
+                                <p className="grow flex flex-col py-1 text-sm text-left max-w-xs min-w-0 ">
+                                    {highlightMatch(account.name, search)}
+                                    <span className="text-xs truncate min-w-0  text-muted-foreground">
+                                        {account.description}
+                                    </span>
+                                </p>
+                                <Button
+                                    className="ml-auto"
+                                    disabled={isDisabled}
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        e.preventDefault()
+                                        mutateLinkAccount({
+                                            primary_account_id: accountId,
+                                            linked_account_id: account.id,
+                                        })
+                                    }}
+                                    size={'sm'}
+                                    variant={'ghost'}
+                                >
+                                    <LinkIcon />
+                                </Button>
+                            </div>
+                        </div>
                     )
                 })
             )}
