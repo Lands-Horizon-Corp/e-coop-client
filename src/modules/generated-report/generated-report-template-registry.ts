@@ -12,6 +12,7 @@ import { DAILY_COLLECTION_SUMMARY_REPORT_TEMPLATES } from './reports/daily-colle
 import { DAILY_WITHDRAWAL_REPORT_TEMPLATES } from './reports/daily-withdrawal-report-templates'
 import { JOURNAL_VOUCHER_REPORT_TEMPLATES } from './reports/journal-voucher-report-templates'
 import { LOAN_RELEASE_TABULATED_REPORT_TEMPLATES } from './reports/loan-releases-tabulated-report-templates'
+import { TRANSACTION_BATCH_REPORT_TEMPLATES } from './reports/transaction-batch-report-templates'
 
 // import { IGeneratedReportRequest } from './generated-report.types'
 
@@ -42,6 +43,8 @@ export const REPORT_REGISTRY = {
 
     loan_releases_tabulated_report_template:
         LOAN_RELEASE_TABULATED_REPORT_TEMPLATES,
+
+    transaction_batch_report_template: TRANSACTION_BATCH_REPORT_TEMPLATES,
 } as const
 
 export const getTemplateAt = <T>(

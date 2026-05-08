@@ -187,6 +187,7 @@ const TransactionBatchCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="transaction_batch_report_template"
                     />
                 </fieldset>
 
