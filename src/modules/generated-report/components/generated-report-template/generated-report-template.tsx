@@ -107,11 +107,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
         useState<TDisplayDensity>('normal')
 
     const getOrientedDimensions = useCallback(
-        (
-            width: string,
-            height: string,
-            nextOrientation: TPaperOrientation
-        ) => {
+        (width: string, height: string, nextOrientation: TPaperOrientation) => {
             const rawW = parseFloat(width) || 800
             const rawH = parseFloat(height) || 1100
 
@@ -195,6 +191,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
         setPageH(height)
         setInputW(String(width))
         setInputH(String(height))
+        setDisplayDensity(item.density)
         setUnit(item.default_unit ?? 'px')
     }
 
@@ -204,6 +201,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
                 {
                     ...selected,
                     orientation,
+                    density: displayDensity,
                 },
                 {
                     width: `${pageW}${unit}`,
@@ -216,20 +214,20 @@ export function GenerateReportTemplatePicker<T = unknown>({
 
     const dimSchema = z.coerce.number().min(0.01).max(99999)
 
-    const handleApplyDimensions = () => {
+    useEffect(() => {
         if (!selected) return
 
         const parsedW = dimSchema.safeParse(inputW)
         const parsedH = dimSchema.safeParse(inputH)
 
-        const nextW = parsedW.success ? parsedW.data : pageW
-        const nextH = parsedH.success ? parsedH.data : pageH
+        if (parsedW.success && parsedW.data !== pageW) {
+            setPageW(parsedW.data)
+        }
 
-        setPageW(nextW)
-        setPageH(nextH)
-        setInputW(String(nextW))
-        setInputH(String(nextH))
-    }
+        if (parsedH.success && parsedH.data !== pageH) {
+            setPageH(parsedH.data)
+        }
+    }, [selected, inputW, inputH, dimSchema, pageW, pageH])
 
     const resetDimensions = () => {
         if (!selected) return
@@ -266,7 +264,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
     )
 
     return (
-        <div className="max-w-6xl w-full mx-auto bg-popover ring-4 ring-muted border border-border overflow-clip rounded-xl h-[80vh] p-0 gap-0 flex">
+        <div className="max-w-6xl w-full mx-auto bg-popover ring-4 ring-muted border border-border overflow-clip rounded-xl h-[95vh] p-0 gap-0 flex">
             <aside className="flex !w-64 flex-col border-r border-border bg-muted/30">
                 <Command className="rounded-none border-0 bg-transparent">
                     <div className="p-4 pb-0">
@@ -290,8 +288,9 @@ export function GenerateReportTemplatePicker<T = unknown>({
                                 return (
                                     <CommandItem
                                         className={cn(
-                                            'flex cursor-pointer flex-col items-start gap-0.5 rounded-lg px-3 py-2.5',
-                                            isActive && 'bg-accent'
+                                            'flex cursor-pointer text-foreground/60 flex-col items-start gap-0.5 rounded-lg px-3 py-2.5',
+                                            isActive &&
+                                                'bg-popover ring-2 ring-primary/40 text-foreground'
                                         )}
                                         key={item.id}
                                         onSelect={() => handleSelect(item)}
@@ -300,10 +299,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
                                         <div className="flex w-full items-center justify-between">
                                             <span
                                                 className={cn(
-                                                    'text-sm font-medium',
-                                                    isActive
-                                                        ? 'text-accent-foreground'
-                                                        : 'text-foreground'
+                                                    'text-sm font-medium'
                                                 )}
                                             >
                                                 {item.template_name}
@@ -322,12 +318,12 @@ export function GenerateReportTemplatePicker<T = unknown>({
                     </CommandList>
                 </Command>
 
-                <div className="mt-auto space-y-5 border-t border-border bg-background/50 p-5">
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
-                            <UserCogIcon className="h-3 w-3" />
-                            Page Size
-                        </div>
+                <div className="mt-auto space-y-2 border-t border-border bg-background/50 p-2">
+                    <div className="flex sticky top-2 items-center gap-2 text-[10px] p-2 font-semibold uppercase tracking-widest text-muted-foreground">
+                        <UserCogIcon className="size-3" />
+                        Configuration
+                    </div>
+                    <div className="space-y-4 max-h-[50vh] overflow-y-auto ecoop-scroll px-3 pb-3">
                         <div className="space-y-1.5">
                             <Label className="text-[10px] uppercase text-muted-foreground">
                                 Paper Size
@@ -557,21 +553,13 @@ export function GenerateReportTemplatePicker<T = unknown>({
                     </div>
                     <div className="flex gap-2">
                         <Button
-                            className="h-8 flex-1 text-xs"
+                            className="h-8 w-full text-xs"
                             onClick={resetDimensions}
                             size="xs"
                             variant="outline"
                         >
                             <RotateLeftIcon className="mr-1.5 h-3 w-3" />
                             Reset
-                        </Button>
-                        <Button
-                            className="h-8 flex-1 text-xs"
-                            onClick={handleApplyDimensions}
-                            size="xs"
-                            variant="secondary"
-                        >
-                            Apply
                         </Button>
                     </div>
                 </div>
@@ -659,7 +647,7 @@ export function GenerateReportTemplatePickerModal({
     return (
         <Dialog {...modalProps}>
             {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-            <DialogContent className="!max-w-6xl h-[80vh] !bg-transparent p-0 gap-0 flex flex-col">
+            <DialogContent className="!max-w-6xl !bg-transparent p-0 gap-0 flex flex-col">
                 <DialogHeader className="px-6 py-4 hidden border-b border-border shrink-0">
                     <DialogTitle className="text-lg">
                         Select Template

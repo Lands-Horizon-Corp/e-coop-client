@@ -6,12 +6,14 @@ import { LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES } from '../loan-transaction/
 import { OTHER_FUND_PRINT_TEMPLATES } from '../other-fund/reports/other-fund-templates'
 import NO_TEMPLATE from './defaults/no-template.njk?raw'
 import { IGeneratedReportRequest } from './generated-report.types'
+import { ADJUSTMENT_REPORT_TEMPLATES } from './reports/adjustment-report-templates'
 import { CASH_RECEIPT_JOURNAL_REPORT_TEMPLATES } from './reports/cash-receipt-journal-report-templates'
 import { DAILY_COLLECTION_DETAIL_REPORT_TEMPLATES } from './reports/daily-collection-detail-report-templates'
 import { DAILY_COLLECTION_SUMMARY_REPORT_TEMPLATES } from './reports/daily-collection-summary-report-templates'
 import { DAILY_WITHDRAWAL_REPORT_TEMPLATES } from './reports/daily-withdrawal-report-templates'
 import { JOURNAL_VOUCHER_REPORT_TEMPLATES } from './reports/journal-voucher-report-templates'
 import { LOAN_RELEASE_TABULATED_REPORT_TEMPLATES } from './reports/loan-releases-tabulated-report-templates'
+import { MEMBER_LISTING_REPORT_TEMPLATES } from './reports/member-listing-report-templates'
 import { TRANSACTION_BATCH_REPORT_TEMPLATES } from './reports/transaction-batch-report-templates'
 
 // import { IGeneratedReportRequest } from './generated-report.types'
@@ -45,6 +47,9 @@ export const REPORT_REGISTRY = {
         LOAN_RELEASE_TABULATED_REPORT_TEMPLATES,
 
     transaction_batch_report_template: TRANSACTION_BATCH_REPORT_TEMPLATES,
+
+    adjustment_report_template: ADJUSTMENT_REPORT_TEMPLATES,
+    member_listing_report_template: MEMBER_LISTING_REPORT_TEMPLATES,
 } as const
 
 export const getTemplateAt = <T>(

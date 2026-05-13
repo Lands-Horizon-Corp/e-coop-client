@@ -167,6 +167,7 @@ const AdjustmentCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="adjustment_report_template"
                     />
                 </fieldset>
 

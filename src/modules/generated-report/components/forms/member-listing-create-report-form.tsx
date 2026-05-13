@@ -360,27 +360,57 @@ const MemberListingCreateReportForm = ({
                                     value={field.value}
                                 >
                                     {[
-                                        'barangay',
-                                        'occupation',
-                                        'classification',
-                                        'age_range',
-                                        'year',
-                                        'month',
-                                        'age_year',
-                                        'no_grouping',
-                                        'area',
-                                        'education',
-                                        'share_capital',
-                                        'group',
-                                        'collector',
-                                        'income_range',
+                                        {
+                                            value: 'barangay',
+                                            label: 'Barangay',
+                                        },
+                                        {
+                                            value: 'occupation',
+                                            label: 'Occupation',
+                                        },
+                                        {
+                                            value: 'classification',
+                                            label: 'Classification',
+                                        },
+                                        {
+                                            value: 'age_range',
+                                            label: 'Age Range',
+                                        },
+                                        { value: 'year', label: 'Year' },
+                                        { value: 'month', label: 'Month' },
+                                        {
+                                            value: 'age_year',
+                                            label: 'Age Year',
+                                        },
+                                        {
+                                            value: 'no_grouping',
+                                            label: 'No Grouping',
+                                        },
+                                        { value: 'area', label: 'Area' },
+                                        {
+                                            value: 'education',
+                                            label: 'Education',
+                                        },
+                                        {
+                                            value: 'share_capital',
+                                            label: 'Share Capital',
+                                        },
+                                        { value: 'group', label: 'Group' },
+                                        {
+                                            value: 'collector',
+                                            label: 'Collector',
+                                        },
+                                        {
+                                            value: 'income_range',
+                                            label: 'Income Range',
+                                        },
                                     ].map((v) => (
                                         <label
                                             className="flex items-center gap-2 text-sm"
-                                            key={v}
+                                            key={v.value}
                                         >
-                                            <RadioGroupItem value={v} />
-                                            <span>{v}</span>
+                                            <RadioGroupItem value={v.value} />
+                                            <span>{v.label}</span>
                                         </label>
                                     ))}
                                 </RadioGroup>
@@ -659,6 +689,7 @@ const MemberListingCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="member_listing_report_template"
                     />
                 </fieldset>
 

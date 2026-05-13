@@ -200,7 +200,9 @@ export function PrintSettingsSection({
                         value={field.value}
                     >
                         {DISPLAY_DENSITY.map((density, i) => {
-                            const isActive = field.value === density
+                            const isActive =
+                                form.watch('report_config.display_density') ===
+                                density
                             const id = `density-${density}`
 
                             return (
