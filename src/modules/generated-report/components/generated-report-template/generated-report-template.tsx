@@ -106,6 +106,28 @@ export function GenerateReportTemplatePicker<T = unknown>({
     const [displayDensity, setDisplayDensity] =
         useState<TDisplayDensity>('normal')
 
+    const getOrientedDimensions = useCallback(
+        (
+            width: string,
+            height: string,
+            nextOrientation: TPaperOrientation
+        ) => {
+            const rawW = parseFloat(width) || 800
+            const rawH = parseFloat(height) || 1100
+
+            if (nextOrientation === 'portrait' && rawW > rawH) {
+                return { width: rawH, height: rawW }
+            }
+
+            if (nextOrientation === 'landscape' && rawH > rawW) {
+                return { width: rawH, height: rawW }
+            }
+
+            return { width: rawW, height: rawH }
+        },
+        []
+    )
+
     const renderTemplate = useCallback(
         async (item: GeneratedReportTemplate) => {
             setLoading(true)
@@ -140,16 +162,20 @@ export function GenerateReportTemplatePicker<T = unknown>({
         if (!selected && resolvedTemplates.length > 0) {
             const first = resolvedTemplates[0]
             setSelected(first)
-            const w = parseFloat(first.width) || 800
-            const h = parseFloat(first.height) || 1100
-            setPageW(w)
-            setPageH(h)
-            setInputW(String(w))
-            setInputH(String(h))
+            const nextOrientation = first.orientation
+            const { width, height } = getOrientedDimensions(
+                first.width,
+                first.height,
+                nextOrientation
+            )
+            setPageW(width)
+            setPageH(height)
+            setInputW(String(width))
+            setInputH(String(height))
             setUnit(first.default_unit ?? 'px')
-            setOrientation(first.orientation)
+            setOrientation(nextOrientation)
         }
-    }, [selected, resolvedTemplates, renderTemplate])
+    }, [selected, resolvedTemplates, getOrientedDimensions])
 
     useEffect(() => {
         if (!selected) return
@@ -158,13 +184,17 @@ export function GenerateReportTemplatePicker<T = unknown>({
 
     const handleSelect = (item: GeneratedReportTemplate<T>) => {
         setSelected(item)
-        setOrientation(item.orientation)
-        const w = parseFloat(item.width) || 800
-        const h = parseFloat(item.height) || 1100
-        setPageW(w)
-        setPageH(h)
-        setInputW(String(w))
-        setInputH(String(h))
+        const nextOrientation = item.orientation
+        const { width, height } = getOrientedDimensions(
+            item.width,
+            item.height,
+            nextOrientation
+        )
+        setOrientation(nextOrientation)
+        setPageW(width)
+        setPageH(height)
+        setInputW(String(width))
+        setInputH(String(height))
         setUnit(item.default_unit ?? 'px')
     }
 
@@ -203,13 +233,17 @@ export function GenerateReportTemplatePicker<T = unknown>({
 
     const resetDimensions = () => {
         if (!selected) return
-        const w = parseFloat(selected.width)
-        const h = parseFloat(selected.height)
-        setPageW(w)
-        setPageH(h)
-        setInputW(String(w))
-        setInputH(String(h))
-        setOrientation(selected.orientation)
+        const nextOrientation = selected.orientation
+        const { width, height } = getOrientedDimensions(
+            selected.width,
+            selected.height,
+            nextOrientation
+        )
+        setPageW(width)
+        setPageH(height)
+        setInputW(String(width))
+        setInputH(String(height))
+        setOrientation(nextOrientation)
         setUnit(selected.default_unit)
     }
 
