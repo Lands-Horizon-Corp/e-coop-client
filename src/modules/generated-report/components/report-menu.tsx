@@ -162,8 +162,7 @@ const LOAN_RELEASES_GROUP: ReportItem[] = [
         label: 'Loan Release Detail',
         icon: ScrollText,
         component: LoanReleaseDetailCreateReportFormModal,
-        is_available: false,
-        warning_message: 'No template',
+        is_available: true,
         persistKey: 'form-report-loans-loan-release-detail',
     },
     {

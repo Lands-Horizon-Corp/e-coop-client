@@ -344,299 +344,336 @@
                 <p class="tin">TIN: {{ tax_number }}</p>
             </header>
 
-            <br>
-            <br>
             <div class="center">
-                <h2 class="bold" style="letter-spacing: 0.35em;">TELLER&apos;S BLOTTER</h2>
+                <h2 class="bold">{{ report_title }}</h2>
+
                 <div class="subtext">
-                    <span class="bold">BATCH NO : &nbsp;</span>
-                    {{ batch_number }}
+                    {{ mode_of_payment }} - FROM: {{ start_date }} TO: {{ end_date }}
                 </div>
             </div>
 
-            <table style="width: 100%; border-collapse: collapse; font-size: var(--fs-base); margin-bottom: var(--space-md);">
+            {% set is_set_1 = grouping == 'by_mtype_acct'%}
+
+            {% set is_set_2 = grouping == 'by_mtype_brgy'
+            or grouping == 'by_coll_area'
+            or grouping == 'by_mtype_mclass'
+            or grouping == 'by_coll_brgy'
+            or grouping == 'by_mtype_occup'
+            or grouping == 'no_grouping'
+ %}
+
+            {% set is_set_3 = grouping == 'by_mclass_area_mtype_grp'
+            or grouping == 'by_mtype_area'
+            or grouping == 'by_mtype_ltype'
+            or grouping == 'by_mtype_area_grp'
+ %}
+
+            {% set is_set_4 = grouping == 'by_mtype_acct_ltr' %}
+
+            <!-- MACRO : TABLE HEAD -->
+            {% macro render_table_head() %}
+                <thead>
+                    <tr>
+                        {% if is_set_1 %}
+                            <th>PB No.</th>
+                            <th>Member Name</th>
+                            <th>CV No.</th>
+                            <th>Release Date</th>
+                            <th>Due Date</th>
+                            <th>First Pay</th>
+                            <th>Terms</th>
+                            <th>Pay Mode</th>
+                            <th class="text-right">Amortization</th>
+                            <th class="text-right">Current</th>
+                            <th class="text-right">Restruct</th>
+                            <th class="text-right">Renewal</th>
+                        {% endif %}
+
+                        {% if is_set_2 %}
+                            <th>PB No.</th>
+                            <th>Member Name</th>
+                            <th>Loan Type</th>
+                            <th>CV No.</th>
+                            <th>Release Date</th>
+                            <th>Due Date</th>
+                            <th>First Pay</th>
+                            <th>Terms</th>
+                            <th>Pay Mode</th>
+                            <th class="text-right">Amortization</th>
+                            <th class="text-right">Current</th>
+                            <th class="text-right">Restruct</th>
+                            <th class="text-right">Renewal</th>
+                        {% endif %}
+
+                        {% if is_set_3 %}
+                            <th>Member Name</th>
+                            <th>Loan Type</th>
+                            <th>Date Granted</th>
+                            <th>Terms</th>
+                            <th>Maturity Date</th>
+                            <th>Payment Mode</th>
+                            <th class="text-right">Amount Applied</th>
+                            <th class="text-right">Interest on Loan</th>
+                            <th class="text-right">Amount Granted</th>
+                        {% endif %}
+
+                        {% if is_set_4 %}
+                            <th>PB No.</th>
+                            <th>Member Name</th>
+                            <th>Release Date</th>
+                            <th>Due Date</th>
+                            <th>Pay Mode</th>
+                            <th class="text-right">Amortization</th>
+                            <th class="text-right">Granted</th>
+                            <th class="text-right">RL</th>
+                            <th class="text-right">CCL</th>
+                            <th class="text-right">ML</th>
+                            <th class="text-right">CMKR</th>
+                            <th class="text-right">BOD</th>
+                            <th class="text-right">CMC</th>
+                            <th class="text-right">Legal</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+            {% endmacro %}
+
+            <!-- MACRO : DATA ENTRIES -->
+            {% macro render_data_entries(entries) %}
+                {% for entry in entries %}
+                    <tr>
+                        {% if is_set_1 %}
+                            <td>{{ entry.passbook }}</td>
+                            <td>{{ entry.member_fullname }}</td>
+                            <td>{{ entry.cv_no }}</td>
+                            <td>{{ entry.release_date }}</td>
+                            <td>{{ entry.due_date }}</td>
+                            <td>{{ entry.firt_pay_date }}</td>
+                            <td>{{ entry.terms }}</td>
+                            <td>{{ entry.mode_of_payment }}</td>
+                            <td class="text-right">{{ entry.amortization }}</td>
+                            <td class="text-right">{{ entry.current }}</td>
+                            <td class="text-right">{{ entry.restructured }}</td>
+                            <td class="text-right">{{ entry.renewal }}</td>
+                        {% endif %}
+
+                        {% if is_set_2 %}
+                            <td>{{ entry.passbook }}</td>
+                            <td>{{ entry.member_fullname }}</td>
+                            <td>{{ entry.loan_type }}</td>
+                            <td>{{ entry.cv_no }}</td>
+                            <td>{{ entry.release_date }}</td>
+                            <td>{{ entry.due_date }}</td>
+                            <td>{{ entry.firt_pay_date }}</td>
+                            <td>{{ entry.terms }}</td>
+                            <td>{{ entry.mode_of_payment }}</td>
+                            <td class="text-right">{{ entry.amortization }}</td>
+                            <td class="text-right">{{ entry.current }}</td>
+                            <td class="text-right">{{ entry.restructured }}</td>
+                            <td class="text-right">{{ entry.renewal }}</td>
+                        {% endif %}
+
+                        {% if is_set_3 %}
+                            <td>{{ entry.member_fullname }}</td>
+                            <td>{{ entry.loan_type }}</td>
+                            <td>{{ entry.date_granted }}</td>
+                            <td>{{ entry.terms }}</td>
+                            <td>{{ entry.maturity_date }}</td>
+                            <td>{{ entry.mode_of_payment }}</td>
+                            <td class="text-right">{{ entry.amount_applied }}</td>
+                            <td class="text-right">{{ entry.interest_on_loan }}</td>
+                            <td class="text-right">{{ entry.amount_granted }}</td>
+                        {% endif %}
+
+                        {% if is_set_4 %}
+                            <td>{{ entry.passbook }}</td>
+                            <td>{{ entry.member_fullname }}</td>
+                            <td>{{ entry.release_date }}</td>
+                            <td>{{ entry.due_date }}</td>
+                            <td>{{ entry.mode_of_payment }}</td>
+                            <td class="text-right">{{ entry.amortization }}</td>
+                            <td class="text-right">{{ entry.amount_granted }}</td>
+                            <td class="text-right">{{ entry.rl }}</td>
+                            <td class="text-right">{{ entry.ccl }}</td>
+                            <td class="text-right">{{ entry.ml }}</td>
+                            <td class="text-right">{{ entry.cmkr }}</td>
+                            <td class="text-right">{{ entry.bod }}</td>
+                            <td class="text-right">{{ entry.cmc }}</td>
+                            <td class="text-right">{{ entry.legal }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% endmacro %}
+
+            <!-- MACRO : TOTAL -->
+            {% macro render_total(total, title, tr_style = '', all_cells_style = '', value_cells_style = '') %}
+                <tr style="{{ tr_style }}">
+                    {% if is_set_1 %}
+                        <td colspan="8" class="bold" style="border-top: 0; border-bottom: 0; {{ all_cells_style }}">
+                            {{ title }}
+                        </td>
+
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0; {{ all_cells_style }} {{ value_cells_style }}">
+                            {{ total.total_amort }}
+                        </td>
+
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0; {{ all_cells_style }} {{ value_cells_style }}">
+                            {{ total.total_current }}
+                        </td>
+
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0; {{ all_cells_style }} {{ value_cells_style }}">
+                            {{ total.total_restuct }}
+                        </td>
+
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0; {{ all_cells_style }} {{ value_cells_style }}">
+                            {{ total.total_renewal }}
+                        </td>
+                    {% endif %}
+
+                    {% if is_set_2 %}
+                        <td colspan="9" class="bold" style="border-top: 0; border-bottom: 0; {{ all_cells_style }}">
+                            {{ title }}
+                        </td>
+
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0; {{ all_cells_style }} {{ value_cells_style }}">
+                            {{ total.total_amort }}
+                        </td>
+
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0; {{ all_cells_style }} {{ value_cells_style }}">
+                            {{ total.total_current }}
+                        </td>
+
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0; {{ all_cells_style }} {{ value_cells_style }}">
+                            {{ total.total_restuct }}
+                        </td>
+
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0; {{ all_cells_style }} {{ value_cells_style }}">
+                            {{ total.total_renewal }}
+                        </td>
+                    {% endif %}
+
+                    {% if is_set_3 %}
+                        <td colspan="6" class="bold" style="border-top: 0; border-bottom: 0; {{ all_cells_style }}">
+                            {{ title }}
+                        </td>
+
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0; {{ all_cells_style }} {{ value_cells_style }}">
+                            {{ total.total_amount_applied }}
+                        </td>
+
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0; {{ all_cells_style }} {{ value_cells_style }}">
+                            {{ total.total_interest_on_loan }}
+                        </td>
+
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0; {{ all_cells_style }} {{ value_cells_style }}">
+                            {{ total.total_amount_granted }}
+                        </td>
+                    {% endif %}
+
+                    {% if is_set_4 %}
+                        <td colspan="5" class="bold" style="border-top: 0; border-bottom: 0; {{ all_cells_style }}">
+                            {{ title }}
+                        </td>
+
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0; {{ all_cells_style }} {{ value_cells_style }}">
+                            {{ total.total_amort }}
+                        </td>
+
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0; {{ all_cells_style }} {{ value_cells_style }}">
+                            {{ total.total_amount_granted }}
+                        </td>
+
+                        <td colspan="7" style="border-top: 0; border-bottom: 0; {{ all_cells_style }}"></td>
+                    {% endif %}
+                </tr>
+            {% endmacro %}
+
+            <!-- MACRO : RECURSIVE GROUP -->
+            {% macro render_group(groups) %}
+                {% for group in groups %}
+                    <tr>
+                        <td
+                            colspan="
+                                {% if is_set_1 %}12{% endif %}
+                                {% if is_set_2 %}13{% endif %}
+                                {% if is_set_3 %}9{% endif %}
+                                {% if is_set_4 %}14{% endif %}
+                            "
+                            class="bold"
+                        >
+                            {{ group.group_name }} : {{ group.roup_title }}
+                        </td>
+                    </tr>
+
+                    {% if group.sub_groups and group.sub_groups.length %}
+                        {{ render_group(group.sub_groups) }}
+                    {% endif %}
+
+                    {% if group.data_entries and group.data_entries.length %}
+                        {{ render_data_entries(group.data_entries) }}
+                    {% endif %}
+
+                    {{ render_total(group.total_per, group.group_name + ' TOTAL') }}
+
+                    {% if not loop.last %}
+                        <tr>
+                            <td
+                                colspan="
+                                    {% if is_set_1 %}12{% endif %}
+                                    {% if is_set_2 %}13{% endif %}
+                                    {% if is_set_3 %}9{% endif %}
+                                    {% if is_set_4 %}14{% endif %}
+                                "
+                                style="border: 0; padding: 10px;"
+                            ></td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endmacro %}
+
+            <!-- MAIN TABLE -->
+            <table class="table">
+                {{ render_table_head() }}
+
                 <tbody>
+                    {% if grouping == 'no_grouping' %}
+                        {{ render_data_entries(no_grouping_data_entries) }}
+                    {% else %}
+                        {{ render_group(grouped_data) }}
+                    {% endif %}
+
                     <tr>
-                        <td style="width: 50%; border: 0; padding: var(--space-xs) 0;">
-                            <span class="bold">ID:</span>
-                            {{ employee_id }}</td>
-                        <td style="width: 50%; border: 0; padding: var(--space-xs) 0;" class="text-right">
-                            <span class="bold">Date:</span>
-                            {{ end_date }}</td>
+                        <td
+                            colspan="
+                                {% if is_set_1 %}12{% endif %}
+                                {% if is_set_2 %}13{% endif %}
+                                {% if is_set_3 %}9{% endif %}
+                                {% if is_set_4 %}14{% endif %}
+                            "
+                            style="border: 0; padding: 10px 0;"
+                        ><br></td>
                     </tr>
+
                     <tr>
-                        <td style="border: 0; padding: var(--space-xs) 0;">
-                            <span class="bold">Teller:</span>
-                            {{ employee_name }}</td>
-                        <td style="border: 0; padding: var(--space-xs) 0;" class="text-right">
-                            <span class="bold">Username:</span>
-                            {{ employee_user_name }}</td>
+                        <td
+                            colspan="
+                                {% if is_set_1 %}12{% endif %}
+                                {% if is_set_2 %}13{% endif %}
+                                {% if is_set_3 %}9{% endif %}
+                                {% if is_set_4 %}14{% endif %}
+                            "
+                            style="border: 0; padding: 0; border-top: 1px solid #111827;"
+                        ></td>
                     </tr>
+
+                    <!-- GRAND TOTAL -->
+                    {{ render_total(
+                        grand_total,
+                        'GRAND TOTAL',
+                        'border: 0',
+                        'border: 0'
+                    ) }}
                 </tbody>
             </table>
-
-            {% set summary_entries = summary_accounts_data_entries or[] %}
-            <table style="width: 100%; border-collapse: separate; border-spacing: 0;">
-                <tbody>
-                    <tr>
-                        <td style="width: 48%; border: 0; vertical-align: top; padding: 0 var(--space-lg) 0 0;">
-                            <div class="bold" style="margin-bottom: var(--space-sm);">COLLECTION</div>
-
-                            <table style="width: 100%; border-collapse: separate; border-spacing: 0.35rem 0; margin-top: 0; margin-bottom: var(--space-md);">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 38%; border: 0; padding: var(--space-xs) 0.15rem;">From</th>
-                                        <th style="width: 38%; border: 0; padding: var(--space-xs) 0.15rem;">To</th>
-                                        <th class="text-right" style="width: 24%; border: 0; padding: var(--space-xs) 0.15rem;">Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-xs) 0.15rem;">&nbsp;</td>
-                                        <td style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-xs) 0.15rem;">&nbsp;</td>
-                                        <td class="text-right" style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-xs) 0.15rem;">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-xs) 0.15rem;">&nbsp;</td>
-                                        <td style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-xs) 0.15rem;">&nbsp;</td>
-                                        <td style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-xs) 0.15rem;">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-xs) 0.15rem;">&nbsp;</td>
-                                        <td style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-xs) 0.15rem;">&nbsp;</td>
-                                        <td style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-xs) 0.15rem;">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-xs) 0.15rem;">&nbsp;</td>
-                                        <td style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-xs) 0.15rem;">&nbsp;</td>
-                                        <td style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-xs) 0.15rem;">&nbsp;</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <br>
-                            <table style="width: 100%; border-collapse: collapse; margin-bottom: var(--space-xs);">
-                                <tbody>
-                                    <tr>
-                                        <td style="border: 0; padding: var(--space-xs) 0;">O.R./Validated Slip</td>
-                                        <td class="text-right" style="border: 0; padding: var(--space-xs) 0;">{{ or_validated_slip }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <br>
-
-                            <table style="width: 100%; border-collapse: collapse; margin-bottom: var(--space-xs);">
-                                <tbody>
-                                    <tr>
-                                        <td style="border: 0; padding: var(--space-xs) 0;">Add Teller's Cash Beginning</td>
-                                        <td class="text-right" style="border: 0; padding: var(--space-xs) 0;">{{ beginning_balance }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <table style="width: 100%; border-collapse: collapse; margin-bottom: var(--space-sm);">
-                                <tbody>
-                                    <tr>
-                                        <td style="border: 0; padding: var(--space-xs) 0;" class="bold">Total Cash Handled</td>
-                                        <td class="text-right bold" style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-xs) 0;">{{ total_cash_handled }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <table style="width: 100%; border-collapse: collapse; margin-top: var(--space-xs);">
-                                <tbody>
-                                    <tr>
-                                        <td style="border: 0; padding: var(--space-xs) 0; width: 60%;">Less: Withdrawal</td>
-                                        <td class="text-right" style="border: 0; padding: var(--space-xs) 0;">{{ withdrawal }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 0; padding: var(--space-xs) 0;">Loan Release</td>
-                                        <td class="text-right" style="border: 0; padding: var(--space-xs) 0;">{{ loan_release }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 0; padding: var(--space-xs) 0;">Cash Disbursement</td>
-                                        <td class="text-right" style="border: 0; padding: var(--space-xs) 0;">{{ cash_disbursement }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-
-                        <td style="width: 4%; border: 0;"></td>
-
-                        <td style="width: 48%; border: 0; vertical-align: top; padding: 0;">
-                            <div class="bold" style="margin-bottom: var(--space-sm);">SUMMARY</div>
-                            <div style="margin-bottom: var(--space-xs);">A. Summary of Accounts</div>
-
-                            <table class="table" style="margin-top: 0;">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 60%;">Account Title</th>
-                                        <th class="text-right" style="width: 20%;">Debit</th>
-                                        <th class="text-right" style="width: 20%;">Credit</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for row in summary_entries %}
-                                        {% set debit_value = (row.debit ~ '') | replace(',', '') | trim %}
-                                        {% set credit_value = (row.credit ~ '') | replace(',', '') | trim %}
-                                        <tr>
-                                            <td>{{ row.account_name }}</td>
-                                            <td class="text-right">
-                                                {% if debit_value and debit_value != '0' and debit_value != '0.0' and debit_value != '0.00' and debit_value != '0.000' %}
-                                                    {{ row.debit }}
-                                                {% endif %}
-                                            </td>
-                                            <td class="text-right">
-                                                {% if credit_value and credit_value != '0' and credit_value != '0.0' and credit_value != '0.00' and credit_value != '0.000' %}
-                                                    {{ row.credit }}
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    {% set total_debit_value = (summary_accounts_data_entries_totals.total_debit ~ '') | replace(',', '') | trim %}
-                                    {% set total_credit_value = (summary_accounts_data_entries_totals.total_credit ~ '') | replace(',', '') | trim %}
-                                    <tr>
-                                        <td class="bold">TOTAL</td>
-                                        <td class="text-right bold">
-                                            {% if total_debit_value and total_debit_value != '0' and total_debit_value != '0.0' and total_debit_value != '0.00' and total_debit_value != '0.000' %}
-                                                {{ summary_accounts_data_entries_totals.total_debit }}
-                                            {% endif %}
-                                        </td>
-                                        <td class="text-right bold">
-                                            {% if total_credit_value and total_credit_value != '0' and total_credit_value != '0.0' and total_credit_value != '0.00' and total_credit_value != '0.000' %}
-                                                {{ summary_accounts_data_entries_totals.total_credit }}
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <br>
-            <br>
-            {% set cash_entries = cash_remittance_data_entries or[] %}
-            <div class="bold" style="margin-top: var(--space-md);">REMITTANCE</div>
-            <br>
-            <table style="width: 100%; border-collapse: separate; border-spacing: 0; margin-top: var(--space-sm);">
-                <tbody>
-                    <tr>
-                        <td style="width: 48%; border: 0; vertical-align: top; padding: 0 var(--space-lg) 0 0;">
-                            <table class="table" style="width: 100%; margin-top: 0; margin-bottom: 0;">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 45%;">Bills</th>
-                                        <th class="text-right" style="width: 20%;">Qty</th>
-                                        <th class="text-right" style="width: 35%;">Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for row in cash_entries %}
-                                        <tr>
-                                            <td>{{ row.bill_coin_name }}</td>
-                                            <td class="text-right">{{ row.quantity }} X</td>
-                                            <td class="text-right">{{ row.amount }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                    <tr>
-                                        <td class="bold">Total Cash Remittance</td>
-                                        <td></td>
-                                        <td class="text-right bold">{{ cash_remittance_data_entries_total }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-
-                        <td style="width: 4%; border: 0;"></td>
-
-                        <td style="width: 48%; border: 0; vertical-align: top; padding: 0;">
-                            <table style="width: 100%; border-collapse: collapse; margin-top: 0; margin-bottom: 0; line-height: 1.45;">
-                                <tbody>
-                                    <tr>
-                                        <td style="border: 0; padding: var(--space-sm) 0;">Total Check Remittance</td>
-                                        <td class="text-right" style="border: 0; padding: var(--space-sm) 0;">{{ total_check_remittance }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 0; padding: var(--space-sm) 0;">Total Petty Cash Remittance</td>
-                                        <td class="text-right" style="border: 0; padding: var(--space-sm) 0;">{{ total_petty_cash_remittance }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 0; padding: var(--space-sm) 0;">Total Transfer to RF</td>
-                                        <td class="text-right" style="border: 0; padding: var(--space-sm) 0;">{{ total_transfer_to_rf }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 0; padding: var(--space-sm) 0;">Total Commercial Check</td>
-                                        <td class="text-right" style="border: 0; padding: var(--space-sm) 0;">{{ total_commercial_check }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 0; padding: var(--space-sm) 0;">Total Deposit in Bank</td>
-                                        <td class="text-right" style="border: 0; padding: var(--space-sm) 0;">{{ total_deposit_in_bank }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 0; padding: var(--space-sm) 0;">&nbsp;</td>
-                                        <td style="border: 0; padding: var(--space-sm) 0;">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="bold" style="border: 0; padding: var(--space-sm) 0;">Cash Accounted/Remittance</td>
-                                        <td class="text-right bold" style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-sm) 0;">{{ cash_accounted_remittance }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="bold" style="border: 0; padding: var(--space-sm) 0;">Total Remittance</td>
-                                        <td class="text-right bold" style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-sm) 0;">{{ total_remittance }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="bold" style="border: 0; padding: var(--space-sm) 0;">Overage/(Shortage)</td>
-                                        <td class="text-right bold" style="border: 0; border-bottom: 1px solid #9ca3af; padding: var(--space-sm) 0;">{{ overage_shortage }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="center" style="margin-top: var(--sig-margin-t); font-size: var(--fs-sm);">
-                <div>I hereby receive and acknowledge the above statement as true</div>
-                <div>and correct as per attached supporting documents.</div>
-            </div>
-            <br>
-            <br>
-
-            <section class="signature-section" style="margin-top: var(--space-xl);">
-                <div class="sig-row sig-row-3" style="margin-bottom: var(--space-sm);">
-                    <div class="sig-item sig-label" style="font-size: var(--fs-sm);">Prepared and Submitted By</div>
-                    <div class="sig-item sig-label" style="font-size: var(--fs-sm);">Received and Acknowledged By</div>
-                    <div class="sig-item sig-label" style="font-size: var(--fs-sm);">Certified Correct</div>
-                </div>
-
-                <div class="sig-row sig-row-3">
-                    <div class="sig-item">
-                        <div style="font-size: var(--fs-base); font-weight: 700; text-transform: uppercase; min-height: 1.2rem;">
-                            {{ prepared_by }}
-                        </div>
-                        <div class="sig-line"></div>
-                        <div class="sig-label">Teller</div>
-                    </div>
-
-                    <div class="sig-item">
-                        <div style="font-size: var(--fs-base); font-weight: 700; text-transform: uppercase; min-height: 1.2rem;">
-                            {{ acknowledged_by }}
-                        </div>
-                        <div class="sig-line"></div>
-                        <div class="sig-label">Cashier/Treasurer</div>
-                    </div>
-
-                    <div class="sig-item">
-                        <div style="font-size: var(--fs-base); font-weight: 700; text-transform: uppercase; min-height: 1.2rem;">
-                            {{ certified_by }}
-                        </div>
-                        <div class="sig-line"></div>
-                        <div class="sig-label">Bookkeeper/Internal Auditor</div>
-                    </div>
-                </div>
-            </section>
         </div>
     </body>
 </html>
