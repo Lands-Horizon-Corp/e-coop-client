@@ -346,7 +346,7 @@
             <br>
             <br>
             <div class="center">
-                <h2 class="bold">{{ report_title }}</h2>
+                <h2 class="bold">{{ report_title or 'DAILY COLLECTION SUMMARY REPORT' }}</h2>
                 <div class="subtext">
                     FROM: {{ start_date }} TO: {{ end_date }}
                     {% if am_pm_time %}

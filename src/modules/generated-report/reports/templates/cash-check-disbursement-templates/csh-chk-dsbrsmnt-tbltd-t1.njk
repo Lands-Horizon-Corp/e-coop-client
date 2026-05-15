@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Daily Collection Report</title>
+        <title>Cash Check Disbursement Report</title>
         <style>
             @page {
                 margin: 0.5in;
@@ -344,136 +344,166 @@
                 <p class="tin">TIN: {{ tax_number }}</p>
             </header>
 
-            <br>
-            <br>
-            <div class="center">
-                <h2 class="bold">{{ report_title or 'DAILY LOAN RELEASES SUMMARY REPORT' }}</h2>
-                <div class="subtext">{{ account_name | default('ALL ACCOUNTS') }} - {{ account_category_name | default('ALL CATEGORY') }}</div>
-                <div class="subtext">FROM: {{ start_date }} TO: {{ end_date }}</div>
+            <div class="center" style="margin-top: 0.4rem;">
+                <h2 class="bold">{{ report_title or 'CASH CHECK DISBURSEMENT REPORT' }}</h2>
+                <div>ACCOUNT: {{ account_name or 'All' }}</div>
+                <div>FROM: {{ start_date }} TO: {{ end_date }}</div>
             </div>
 
-            {% if tabulated_data %}
+            {% set dynamic_col_count = showable_account_column_list.length %}
+            {% set base_col_span = dynamic_col_count + 7 %}
+            {% set sections = [
+                { label: 'CASH CHECK DATA', data: tabulated_data.cash_check_data },
+                { label: 'LOAN RELEASES', data: tabulated_data.loan_releases },
+                { label: 'WITHDRAWALS', data: tabulated_data.withdrawals }
+            ] %}
 
-                {% set account_col_count = tabulated_data.showable_account_column_list.length %}
-                {% set base_col_span = 5 + account_col_count %}
+            {% set grand_sundry_debit = 0 %}
+            {% set grand_sundry_credit = 0 %}
+            {% for section in sections %}
+                {% set grand_sundry_debit = grand_sundry_debit + (section.data.sub_total.sundry_total_debit or 0) %}
+                {% set grand_sundry_credit = grand_sundry_credit + (section.data.sub_total.sundry_total_credit or 0) %}
+            {% endfor %}
 
-                <!-- MAIN TABLE -->
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>CV No</th>
-                            <th>PB No</th>
-                            <th>Member</th>
-                            <th>Account</th>
-                            <th class="text-right">Granted</th>
-
-                            {% for acc in tabulated_data.showable_account_column_list %}
-                                <th class="text-right">
-                                    <div style="text-align:center;">
-                                        {{ acc.short_name or acc.name }}<br/>
-                                        ({{ acc.display_entry_type }})
-                                    </div>
-                                </th>
-                            {% endfor %}
-
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>CV No</th>
+                        <th>Passbook</th>
+                        <th>Check No</th>
+                        <th>Particulars / Payee</th>
+                        {% for acc in showable_account_column_list %}
                             <th class="text-right">
                                 <div style="text-align:center;">
-                                Sundries<br/>(CR)
-                            </div>
+                                    {{ acc.short_name or acc.name }}<br/>
+                                    ({{ acc.display_entry_type }})
+                                </div>
                             </th>
+                        {% endfor %}
+                        <th class="text-right">Sundry Debit</th>
+                        <th class="text-right">Sundry Credit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for section in sections %}
+                        <tr>
+                            <td colspan="{{ base_col_span }}" class="bold" style="border-top: 1px solid #9ca3af;">
+                                {{ section.label }}
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for entry in tabulated_data.data_entries %}
-                            <tr>
-                                {% if entry.is_sundry_entry %}
-                                    <td colspan="{{ base_col_span }}" class="text-right italic">
-                                        {{ entry.sundry_name }}
-                                    </td>
-                                    <td class="text-right">{{ entry.sundries_amount }}</td>
-                                {% else %}
-                                    <td>{{ entry.cv_no }}</td>
-                                    <td>{{ entry.pasbook }}</td>
-                                    <td>{{ entry.member_full_name }}</td>
-                                    <td>{{ entry.account_short_name }}</td>
-                                    <td class="text-right">{{ entry.amount_granted }}</td>
 
-                                    {% for acc in tabulated_data.showable_account_column_list %}
-                                        <td class="text-right">
-                                            {{ entry['account_' + acc.account_id + '_amount'] or '' }}
+                        {% for entry in section.data.data_entries %}
+                            {% if not (print_type == 'summary' and entry.is_sundry) %}
+                                <tr>
+                                    <td>{{ entry.date or '' }}</td>
+                                    <td>{{ entry.cv_no or '' }}</td>
+                                    <td>{{ entry.pasbook_no or '' }}</td>
+                                    <td>{{ entry.check_no or '' }}</td>
+                                    <td>{{ entry.particulars_payee or '' }}</td>
+
+                                    {% if entry.is_sundry %}
+                                        <td class="text-right italic" colspan="{{ dynamic_col_count }}">
+                                            {{ entry.sundries_account_name or '' }}
                                         </td>
-                                    {% endfor %}
+                                    {% else %}
+                                        {% for acc in showable_account_column_list %}
+                                            <td class="text-right">
+                                                {{ entry['account_' + acc.account_id + '_amount'] or '' }}
+                                            </td>
+                                        {% endfor %}
+                                    {% endif %}
 
-                                    <td class="text-right">{{ entry.sundries_amount }}</td>
-                                {% endif %}
-                            </tr>
+                                    <td class="text-right">{{ entry.sundried_debit or '' }}</td>
+                                    <td class="text-right">{{ entry.sundried_credit or '' }}</td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
 
-                        <!-- TOTAL ROW -->
                         <tr>
-                            <td colspan="4" class="bold">TOTAL</td>
-
-                            <td class="text-right bold">
-                                {{ tabulated_data.data_entries_total_debits.amount_granted_total }}
-                            </td>
-
-                            {% for acc in tabulated_data.showable_account_column_list %}
-                                <td class="text-right bold">
-                                    {{ tabulated_data.data_entries_total_debits['account_' + acc.account_id + '_total'] }}
+                            <td colspan="5" class="bold" style="border-top: 1px solid #9ca3af; border-bottom: 1px solid #9ca3af;">{{ section.label }} TOTAL</td>
+                            {% for acc in showable_account_column_list %}
+                                {% set subtotal_key = 'account_' + acc.account_id + '_subtotal_' + ('debit' if acc.display_entry_type == 'DR' else 'credit') %}
+                                <td class="text-right bold" style="border-top: 1px solid #9ca3af; border-bottom: 1px solid #9ca3af;">
+                                    {{ section.data.sub_total[subtotal_key] or '' }}
                                 </td>
                             {% endfor %}
-
-                            <td class="text-right bold">
-                                {{ tabulated_data.sundries_summary_total }}
-                            </td>
+                            <td class="text-right bold" style="border-top: 1px solid #9ca3af; border-bottom: 1px solid #9ca3af;">{{ section.data.sub_total.sundry_total_debit or '' }}</td>
+                            <td class="text-right bold" style="border-top: 1px solid #9ca3af; border-bottom: 1px solid #9ca3af;">{{ section.data.sub_total.sundry_total_credit or '' }}</td>
                         </tr>
-                    </tbody>
-                </table>
 
-                {% if include_sundries_summary and tabulated_data.sundries_summary_data_entries and tabulated_data.sundries_summary_data_entries.length %}
+                        {% if not loop.last %}
+                            <tr><td colspan="{{ base_col_span }}" style="height: 6px; background-color: #f8fafc;"></td></tr>
+                            <tr><td colspan="{{ base_col_span }}" style="height: 6px; background-color: #f8fafc;"></td></tr>
+                        {% endif %}
+                    {% endfor %}
 
-                    <div class="center">
-                        <h3 class="bold">SUMMARY</h3>
+                    <tr>
+                        <td colspan="5" class="bold" style="border-top: 1px solid #111827;">GRAND TOTAL</td>
+                        {% for acc in showable_account_column_list %}
+                            {% set acc_total = 0 %}
+                            {% for section in sections %}
+                                {% set subtotal_key = 'account_' + acc.account_id + '_subtotal_' + ('debit' if acc.display_entry_type == 'DR' else 'credit') %}
+                                {% set acc_total = acc_total + (section.data.sub_total[subtotal_key] or 0) %}
+                            {% endfor %}
+                            <td class="text-right bold" style="border-top: 1px solid #111827;">{{ acc_total }}</td>
+                        {% endfor %}
+                        <td class="text-right bold" style="border-top: 1px solid #111827;">{{ grand_sundry_debit }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827;">{{ grand_sundry_credit }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="bold" style="margin-top: 0.8rem; margin-bottom: 0.2rem;">SUNDRIES SUMMARY</div>
+            <table class="table" style="width: fit-content; max-width: 100%; min-width: 45%;">
+                <thead>
+                    <tr>
+                        <th>Account Name</th>
+                        <th class="text-right">Debit</th>
+                        <th class="text-right">Credit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in tabulated_data.sundry_summary.data_entries %}
+                        <tr>
+                            <td>{{ entry.account_name or '' }}</td>
+                            <td class="text-right">{{ entry.debit or '' }}</td>
+                            <td class="text-right">{{ entry.credit or '' }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td class="bold" style="border-top: 1px solid #9ca3af;">TOTAL</td>
+                        <td class="text-right bold" style="border-top: 1px solid #9ca3af;">
+                            {{ tabulated_data.sundry_summary.total_debit or '' }}
+                        </td>
+                        <td class="text-right bold" style="border-top: 1px solid #9ca3af;">
+                            {{ tabulated_data.sundry_summary.total_credit or '' }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="signature-section">
+                <div class="sig-row sig-row-3">
+                    <div class="sig-item">
+                        <p class="sig-label">Prepared By</p>
+                        <div class="sig-line">
+                            {{ prepared_by or '' }}
+                        </div>
                     </div>
 
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Account</th>
-                                <th class="text-right">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for s in tabulated_data.sundries_summary_data_entries %}
-                                <tr>
-                                    <td>{{ s.account_name }}</td>
-                                    <td class="text-right">{{ s.credit }}</td>
-                                </tr>
-                            {% endfor %}
-                            <tr>
-                                <td class="bold">TOTAL</td>
-                                <td class="text-right bold">
-                                    {{ tabulated_data.sundries_summary_total }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                {% endif %}
-
-            {% endif %}
-
-            <!-- SIGNATURES -->
-            <div class="signature-section">
-                <div class="sig-row sig-row-2">
                     <div class="sig-item">
                         <p class="sig-label">Checked By</p>
-                        <div class="sig-line">{{ checked_by or '' }}</div>
+                        <div class="sig-line">
+                            {{ checked_by or '' }}
+                        </div>
                     </div>
 
                     <div class="sig-item">
                         <p class="sig-label">Approved By</p>
-                        <div class="sig-line">{{ approved_by or '' }}</div>
+                        <div class="sig-line">
+                            {{ approved_by or '' }}
+                        </div>
                     </div>
                 </div>
             </div>

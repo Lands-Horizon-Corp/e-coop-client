@@ -7,6 +7,7 @@ import { OTHER_FUND_PRINT_TEMPLATES } from '../other-fund/reports/other-fund-tem
 import NO_TEMPLATE from './defaults/no-template.njk?raw'
 import { IGeneratedReportRequest } from './generated-report.types'
 import { ADJUSTMENT_REPORT_TEMPLATES } from './reports/adjustment-report-templates'
+import { CASH_CHECK_DISBURSEMENT_REPORT_TEMPLATES } from './reports/cash-check-disbursement-templates'
 import { CASH_RECEIPT_JOURNAL_REPORT_TEMPLATES } from './reports/cash-receipt-journal-report-templates'
 import { DAILY_COLLECTION_DETAIL_REPORT_TEMPLATES } from './reports/daily-collection-detail-report-templates'
 import { DAILY_COLLECTION_SUMMARY_REPORT_TEMPLATES } from './reports/daily-collection-summary-report-templates'
@@ -52,6 +53,7 @@ export const REPORT_REGISTRY = {
     adjustment_report_template: ADJUSTMENT_REPORT_TEMPLATES,
     member_listing_report_template: MEMBER_LISTING_REPORT_TEMPLATES,
     loan_release_detail_template: LOAN_RELEASE_DETAIL_REPORT_TEMPLATES,
+    cash_check_disbursement_template: CASH_CHECK_DISBURSEMENT_REPORT_TEMPLATES,
 } as const
 
 export const getTemplateAt = <T>(
@@ -78,3 +80,18 @@ export const getTemplateAt = <T>(
 }
 
 export type GeneratedReportRegistryKey = keyof typeof REPORT_REGISTRY
+
+export const getRegistryTemplateCount = (registryKey?: string): number => {
+    if (!registryKey) return 0
+
+    if (!(registryKey in REPORT_REGISTRY)) return 0
+
+    const key = registryKey as GeneratedReportRegistryKey
+    const templates = REPORT_REGISTRY[key]
+
+    return Array.isArray(templates) ? templates.length : 0
+}
+
+export const hasRegistryTemplates = (registryKey?: string): boolean => {
+    return getRegistryTemplateCount(registryKey) > 0
+}

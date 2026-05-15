@@ -292,7 +292,7 @@
             <br>
             <br>
             <div class="center">
-                <h2 class="bold">{{ report_title }}</h2>
+                <h2 class="bold">{{ report_title or 'DAILY LOAN RELEASES SUMMARY REPORT' }}</h2>
                 <div class="subtext">{{ account_name | default('ALL ACCOUNTS') }} - {{ account_category_name | default('ALL CATEGORY') }}</div>
                 <div class="subtext">FROM: {{ start_date }} TO: {{ end_date }}</div>
             </div>

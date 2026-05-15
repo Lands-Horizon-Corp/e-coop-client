@@ -35,6 +35,7 @@ import { WarningFillIcon } from '@/components/icons'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 
+import { hasRegistryTemplates } from '../generated-report-template-registry'
 import { IGeneratedReport } from '../generated-report.types'
 import { AccountBalanceCreateReportFormModal } from './forms/account-balance-create-report-form'
 import { AccountHoldOutCreateReportFormModal } from './forms/account-holdout-create-report-form'
@@ -93,6 +94,7 @@ interface ReportItem {
         closeOnSuccess?: boolean
     }>
     is_available?: boolean
+    registry_key?: string
     warning_message?: string // show if is_available is false, hide if component undefined
     persistKey?: string
 }
@@ -102,21 +104,21 @@ const COLLECTION_GROUP: ReportItem[] = [
         label: 'Daily Collection Detail',
         icon: FileText,
         component: DailyCollectionDetailCreateReportFormModal,
-        is_available: true,
+        registry_key: 'daily_collection_detail_report_template',
         persistKey: 'form-report-collections-daily-coll-detail',
     },
     {
         label: 'Daily Collection Summary',
         icon: ClipboardList,
         component: DailyCollectionSummaryCreateReportFormModal,
-        is_available: true,
+        registry_key: 'daily_collection_summary_report_template',
         persistKey: 'form-report-collections-daily-coll-summary',
     },
     {
         label: 'Cash Receipt Journal',
         icon: Receipt,
         component: DailyCashCollectionReceiptJournalCreateReportFormModal,
-        is_available: true,
+        registry_key: 'cash_receipt_journal_report_template',
         persistKey: 'form-report-accounting-cash-receipt-journal',
     },
 ]
@@ -126,7 +128,7 @@ const DISBURSEMENT_GROUP: ReportItem[] = [
         label: 'Daily Withdrawal',
         icon: ArrowLeftRight,
         component: DailyWithdrawalCreateReportFormModal,
-        is_available: true,
+        registry_key: 'daily_withdrawal_report_template',
         persistKey: 'form-report-deposits-daily-withdrawal',
     },
     {
@@ -144,7 +146,7 @@ const CASH_CHECK_VOUCHER_GROUP: ReportItem[] = [
         label: 'Cash Disbursement',
         icon: CreditCard,
         component: CashCheckDisbursementCreateReportFormModal,
-        is_available: false,
+        registry_key: 'cash_check_disbursement_template',
         warning_message: 'No template',
         persistKey: 'form-report-accounting-cash-disbursement',
     },
@@ -155,14 +157,14 @@ const LOAN_RELEASES_GROUP: ReportItem[] = [
         label: 'Loan Release Tabulated',
         icon: BarChart3,
         component: LoanReleaseCreateReportFormModal,
-        is_available: true,
+        registry_key: 'loan_releases_tabulated_report_template',
         persistKey: 'form-report-loans-loan-release-tabulated',
     },
     {
         label: 'Loan Release Detail',
         icon: ScrollText,
         component: LoanReleaseDetailCreateReportFormModal,
-        is_available: true,
+        registry_key: 'loan_release_detail_template',
         persistKey: 'form-report-loans-loan-release-detail',
     },
     {
@@ -188,14 +190,14 @@ const JOURNAL_GROUP: ReportItem[] = [
         label: 'Journal Voucher',
         icon: FileText,
         component: JournalVoucherCreateReportFormModal,
-        is_available: true,
+        registry_key: 'journal_voucher_report_templates',
         persistKey: 'form-report-accounting-journal-voucher',
     },
     {
         label: 'Adjustment',
         icon: Calculator,
         component: AdjustmentCreateReportFormModal,
-        is_available: true,
+        registry_key: 'adjustment_report_template',
         persistKey: 'form-report-accounting-adjustment',
     },
     {
@@ -221,7 +223,7 @@ const FUNDS_GROUP: ReportItem[] = [
         label: 'Transaction Batch',
         icon: ClipboardList,
         component: TransactionBatchCreateReportFormModal,
-        is_available: true,
+        registry_key: 'transaction_batch_report_template',
         persistKey: 'form-report-accounting-transaction-batch',
     },
     {
@@ -247,7 +249,7 @@ const MEMBERS_GROUP: ReportItem[] = [
         label: 'Member Listing',
         icon: ListChecks,
         component: MemberListingCreateReportFormModal,
-        is_available: false,
+        registry_key: 'member_listing_report_template',
         warning_message: 'No template',
         persistKey: 'form-report-member-listing',
     },
@@ -581,7 +583,9 @@ const ReportItemButton = ({
     variant?: 'ghost' | 'secondary'
 }) => {
     const Component = report.component
-    const templateAvailable = report.is_available === true
+    const templateAvailable = report.registry_key
+        ? hasRegistryTemplates(report.registry_key)
+        : report.is_available === true
     const warningMessage = report.warning_message ?? 'No template'
 
     if (!Component) {

@@ -347,7 +347,7 @@
             <br>
             <br>
             <div class="center">
-                <h2 class="bold">{{ report_title }}</h2>
+                <h2 class="bold">{{ report_title or 'WITHDRAWAL TRANSACTION REPORT' }}</h2>
                 <div class="subtext">
                 FROM: {{ start_date }} TO: {{ end_date }}
                 </div>
@@ -431,6 +431,7 @@
                 </tbody>
             </table>
 
+            <br><br>
             <!-- TELLER SUMMARY -->
             <div class="center">
                 <h3 class="bold">TELLER SUMMARY</h3>

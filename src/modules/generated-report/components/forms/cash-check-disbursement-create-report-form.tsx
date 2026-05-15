@@ -50,9 +50,9 @@ export const CashCheckDisbursementReportSchema = z
             .enum(['date_release', 'entry_date'])
             .default('date_release'),
 
-        report_type: z
-            .enum(['standard', 'tabulated', 'single_col'])
-            .default('standard'),
+        // report_type: z
+        //     .enum(['standard', 'tabulated', 'single_col'])
+        //     .default('standard'),
 
         print_type: z.enum(['summary', 'detail']).default('summary'),
 
@@ -117,7 +117,7 @@ const CashCheckDisbursementCreateReportForm = ({
                     include_loan_releases: false,
                     include_withdrawals: false,
                     filter_type: 'date_release',
-                    report_type: 'standard',
+                    // report_type: 'standard',
                     print_type: 'summary',
                     display_type: 'check_no',
                     sort_by: 'cv_no',
@@ -227,76 +227,6 @@ const CashCheckDisbursementCreateReportForm = ({
                         )}
                     />
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="include_loan_releases"
-                            render={({ field }) => (
-                                <label
-                                    className={cn(
-                                        'group flex flex-col gap-1 rounded-xl border p-4 cursor-pointer transition-all',
-                                        'bg-popover border-border',
-                                        field.value &&
-                                            'bg-gradient-to-br from-popover to-primary/20 border-primary shadow-md'
-                                    )}
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <Checkbox
-                                            checked={field.value}
-                                            onCheckedChange={(v) =>
-                                                field.onChange(!!v)
-                                            }
-                                        />
-                                        <span
-                                            className={cn(
-                                                'text-sm font-medium',
-                                                field.value
-                                                    ? 'text-primary'
-                                                    : 'text-foreground'
-                                            )}
-                                        >
-                                            Include Loan Releases
-                                        </span>
-                                    </div>
-                                </label>
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="include_withdrawals"
-                            render={({ field }) => (
-                                <label
-                                    className={cn(
-                                        'group flex flex-col gap-1 rounded-xl border p-4 cursor-pointer transition-all',
-                                        'bg-popover border-border',
-                                        field.value &&
-                                            'bg-gradient-to-br from-popover to-primary/20 border-primary shadow-md'
-                                    )}
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <Checkbox
-                                            checked={field.value}
-                                            onCheckedChange={(v) =>
-                                                field.onChange(!!v)
-                                            }
-                                        />
-                                        <span
-                                            className={cn(
-                                                'text-sm font-medium',
-                                                field.value
-                                                    ? 'text-primary'
-                                                    : 'text-foreground'
-                                            )}
-                                        >
-                                            Include Withdrawals
-                                        </span>
-                                    </div>
-                                </label>
-                            )}
-                        />
-                    </div>
-
                     <div className="grid grid-cols-1 text-sm sm:grid-cols-2 gap-3">
                         <FormFieldWrapper
                             control={form.control}
@@ -357,7 +287,7 @@ const CashCheckDisbursementCreateReportForm = ({
                         />
                     </div>
 
-                    <FormFieldWrapper
+                    {/* <FormFieldWrapper
                         control={form.control}
                         label="Report Type"
                         name="report_type"
@@ -418,7 +348,7 @@ const CashCheckDisbursementCreateReportForm = ({
                                 })}
                             </RadioGroup>
                         )}
-                    />
+                    /> */}
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                         <FormFieldWrapper
@@ -552,6 +482,74 @@ const CashCheckDisbursementCreateReportForm = ({
                                 </label>
                             )}
                         />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="include_loan_releases"
+                            render={({ field }) => (
+                                <label
+                                    className={cn(
+                                        'group flex flex-col gap-1 rounded-xl border p-4 cursor-pointer transition-all',
+                                        'bg-popover border-border',
+                                        field.value &&
+                                            'bg-gradient-to-br from-popover to-primary/20 border-primary shadow-md'
+                                    )}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={(v) =>
+                                                field.onChange(!!v)
+                                            }
+                                        />
+                                        <span
+                                            className={cn(
+                                                'text-sm font-medium',
+                                                field.value
+                                                    ? 'text-primary'
+                                                    : 'text-foreground'
+                                            )}
+                                        >
+                                            Include Loan Releases
+                                        </span>
+                                    </div>
+                                </label>
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="include_withdrawals"
+                            render={({ field }) => (
+                                <label
+                                    className={cn(
+                                        'group flex flex-col gap-1 rounded-xl border p-4 cursor-pointer transition-all',
+                                        'bg-popover border-border',
+                                        field.value &&
+                                            'bg-gradient-to-br from-popover to-primary/20 border-primary shadow-md'
+                                    )}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={(v) =>
+                                                field.onChange(!!v)
+                                            }
+                                        />
+                                        <span
+                                            className={cn(
+                                                'text-sm font-medium',
+                                                field.value
+                                                    ? 'text-primary'
+                                                    : 'text-foreground'
+                                            )}
+                                        >
+                                            Include Withdrawals
+                                        </span>
+                                    </div>
+                                </label>
+                            )}
+                        />
                     </div>
 
                     <Separator />
@@ -561,6 +559,7 @@ const CashCheckDisbursementCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="cash_check_disbursement_template"
                     />
                 </fieldset>
 
