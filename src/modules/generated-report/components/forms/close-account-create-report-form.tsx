@@ -167,6 +167,7 @@ const CloseAccountCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="close_account_report_template"
                     />
                 </fieldset>
 

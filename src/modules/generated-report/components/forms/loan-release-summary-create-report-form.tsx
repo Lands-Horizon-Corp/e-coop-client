@@ -20,7 +20,7 @@ import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
-import { XIcon } from '@/components/icons'
+import { CakeIcon, XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -36,6 +36,7 @@ import { useInternalState } from '@/hooks/use-internal-state'
 import { IClassProps, IForm } from '@/types'
 
 import { WithGeneratedReportSchema } from '../../generated-report.validation'
+import { AgeRangeListFormSection, WithAgeRangesSchema } from './age-range-list-form-section'
 
 export const LoanReleaseSummarySchema = z
     .object({
@@ -59,21 +60,16 @@ export const LoanReleaseSummarySchema = z
             .enum([...LOAN_MODE_OF_PAYMENT, 'all'])
             .default('all'),
         loan_amount_type: z.enum(['granted', 'applied']).default('granted'),
-        format: z
-            .enum([
-                'format_1',
-                'format_2',
-                'processor',
-                'release',
-                'format_5',
-                'age_range',
-            ])
-            .default('format_1'),
+        // format: z
+        //     .enum(['template', 'processor', 'age_range'])
+        //     .default('template'),
+
         loan_type: z.enum(['all', 'disbursement', 'journal']).default('all'),
         include_terms: z.boolean().default(false),
         include_cancelled_cv: z.boolean().default(false),
     })
     .and(WithGeneratedReportSchema)
+    .and(WithAgeRangesSchema)
     .superRefine((data, ctx) => {
         if (
             data.start_date &&
@@ -121,7 +117,7 @@ const LoanReleaseSummaryCreateReportForm = ({
                     end_date: undefined,
                     loan_amount_type: 'granted',
                     loan_type: 'all',
-                    format: 'format_1',
+                    // format: 'format_1',
                     mode_of_payment: 'all',
                     groupings: 'by_class_cat',
 
@@ -246,21 +242,36 @@ const LoanReleaseSummaryCreateReportForm = ({
                                 value={field.value}
                             >
                                 {[
-                                    'by_class_cat',
-                                    'by_account',
-                                    'by_area',
-                                    'barangay',
-                                    'group',
-                                    'by_category',
-                                    'by_purpose',
-                                    'by_occupation',
-                                ].map((v) => (
+                                    {
+                                        label: 'By Class + Category',
+                                        value: 'by_class_cat',
+                                    },
+                                    {
+                                        label: 'By Account',
+                                        value: 'by_account',
+                                    },
+                                    { label: 'By Area', value: 'by_area' },
+                                    { label: 'Barangay', value: 'barangay' },
+                                    { label: 'Group', value: 'group' },
+                                    {
+                                        label: 'By Category',
+                                        value: 'by_category',
+                                    },
+                                    {
+                                        label: 'By Purpose',
+                                        value: 'by_purpose',
+                                    },
+                                    {
+                                        label: 'By Occupation',
+                                        value: 'by_occupation',
+                                    },
+                                ].map((opt) => (
                                     <label
                                         className="flex items-center gap-2 text-sm"
-                                        key={v}
+                                        key={opt.value}
                                     >
-                                        <RadioGroupItem value={v} />
-                                        {v}
+                                        <RadioGroupItem value={opt.value} />
+                                        {opt.label}
                                     </label>
                                 ))}
                             </RadioGroup>
@@ -349,7 +360,7 @@ const LoanReleaseSummaryCreateReportForm = ({
                         )}
                     />
 
-                    <FormFieldWrapper
+                    {/* <FormFieldWrapper
                         control={form.control}
                         label="Format"
                         name="format"
@@ -360,24 +371,24 @@ const LoanReleaseSummaryCreateReportForm = ({
                                 value={field.value}
                             >
                                 {[
-                                    'format_1',
-                                    'format_2',
-                                    'processor',
-                                    'release',
-                                    'format_5',
-                                    'age_range',
-                                ].map((v) => (
+                                    { label: 'Format 1', value: 'format_1' },
+                                    { label: 'Format 2', value: 'format_2' },
+                                    { label: 'Processor', value: 'processor' },
+                                    { label: 'Release', value: 'release' },
+                                    { label: 'Format 5', value: 'format_5' },
+                                    { label: 'Age Range', value: 'age_range' },
+                                ].map((opt) => (
                                     <label
                                         className="flex items-center gap-2 text-sm"
-                                        key={v}
+                                        key={opt.value}
                                     >
-                                        <RadioGroupItem value={v} />
-                                        {v}
+                                        <RadioGroupItem value={opt.value} />
+                                        {opt.label}
                                     </label>
                                 ))}
                             </RadioGroup>
                         )}
-                    />
+                    /> */}
 
                     <FormFieldWrapper
                         control={form.control}
@@ -467,6 +478,20 @@ const LoanReleaseSummaryCreateReportForm = ({
                         ))}
                     </div>
 
+                    <AgeRangeListFormSection
+                        form={form}
+                        trigger={
+                            <Button
+                                className="w-full"
+                                type="button"
+                                variant="outline"
+                            >
+                                <CakeIcon />
+                                Age Ranges
+                            </Button>
+                        }
+                    />
+
                     <Separator />
 
                     <PrintSettingsSection
@@ -474,6 +499,7 @@ const LoanReleaseSummaryCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="loan_release_summary_report_template"
                     />
                 </fieldset>
 

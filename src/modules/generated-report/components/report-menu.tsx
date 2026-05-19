@@ -204,8 +204,7 @@ const JOURNAL_GROUP: ReportItem[] = [
         label: 'Rebates',
         icon: DollarSign,
         component: RebateCreateReportFormModal,
-        is_available: false,
-        warning_message: 'No template',
+        registry_key: 'rebate_report_template',
         persistKey: 'form-report-other-rebates',
     },
     {
@@ -278,8 +277,7 @@ const MEMBERS_GROUP: ReportItem[] = [
         label: 'Close Account',
         icon: FileX,
         component: CloseAccountCreateReportFormModal,
-        is_available: false,
-        warning_message: 'No template',
+        registry_key: 'close_account_report_template',
         persistKey: 'form-report-close-account',
     },
 ]

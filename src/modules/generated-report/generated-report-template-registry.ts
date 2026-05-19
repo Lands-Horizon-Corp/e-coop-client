@@ -9,13 +9,16 @@ import { IGeneratedReportRequest } from './generated-report.types'
 import { ADJUSTMENT_REPORT_TEMPLATES } from './reports/adjustment-report-templates'
 import { CASH_CHECK_DISBURSEMENT_REPORT_TEMPLATES } from './reports/cash-check-disbursement-templates'
 import { CASH_RECEIPT_JOURNAL_REPORT_TEMPLATES } from './reports/cash-receipt-journal-report-templates'
+import { MEMBER_CLOSE_ACCOUNT_REPORT_TEMPLATES } from './reports/close-account-report-templates'
 import { DAILY_COLLECTION_DETAIL_REPORT_TEMPLATES } from './reports/daily-collection-detail-report-templates'
 import { DAILY_COLLECTION_SUMMARY_REPORT_TEMPLATES } from './reports/daily-collection-summary-report-templates'
 import { DAILY_WITHDRAWAL_REPORT_TEMPLATES } from './reports/daily-withdrawal-report-templates'
 import { JOURNAL_VOUCHER_REPORT_TEMPLATES } from './reports/journal-voucher-report-templates'
 import { LOAN_RELEASE_DETAIL_REPORT_TEMPLATES } from './reports/loan-release-detail-report-templates'
+import { LOAN_RELEASE_SUMMARY_REPORT_TEMPLATES } from './reports/loan-release-summary-report-templates'
 import { LOAN_RELEASE_TABULATED_REPORT_TEMPLATES } from './reports/loan-releases-tabulated-report-templates'
 import { MEMBER_LISTING_REPORT_TEMPLATES } from './reports/member-listing-report-templates'
+import { REBATES_REPORT_TEMPLATES } from './reports/rebates-report-templates'
 import { TRANSACTION_BATCH_REPORT_TEMPLATES } from './reports/transaction-batch-report-templates'
 
 // import { IGeneratedReportRequest } from './generated-report.types'
@@ -47,13 +50,18 @@ export const REPORT_REGISTRY = {
 
     loan_releases_tabulated_report_template:
         LOAN_RELEASE_TABULATED_REPORT_TEMPLATES,
+    loan_release_summary_report_template: LOAN_RELEASE_SUMMARY_REPORT_TEMPLATES,
 
     transaction_batch_report_template: TRANSACTION_BATCH_REPORT_TEMPLATES,
 
     adjustment_report_template: ADJUSTMENT_REPORT_TEMPLATES,
     member_listing_report_template: MEMBER_LISTING_REPORT_TEMPLATES,
+    close_account_report_template: MEMBER_CLOSE_ACCOUNT_REPORT_TEMPLATES,
     loan_release_detail_template: LOAN_RELEASE_DETAIL_REPORT_TEMPLATES,
     cash_check_disbursement_template: CASH_CHECK_DISBURSEMENT_REPORT_TEMPLATES,
+
+    rebate_report_template: REBATES_REPORT_TEMPLATES,
+    loan_release_summary : LOAN_RELEASE_SUMMARY_REPORT_TEMPLATES
 } as const
 
 export const getTemplateAt = <T>(

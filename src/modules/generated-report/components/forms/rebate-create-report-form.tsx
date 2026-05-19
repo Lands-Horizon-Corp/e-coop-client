@@ -168,6 +168,7 @@ const RebateCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="rebate_report_template"
                     />
                 </fieldset>
 

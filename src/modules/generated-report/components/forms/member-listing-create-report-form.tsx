@@ -13,6 +13,10 @@ import {
     IGeneratedReport,
     useCreateGeneratedReport,
 } from '@/modules/generated-report'
+import {
+    AgeRangeListFormSection,
+    WithAgeRangesSchema,
+} from '@/modules/generated-report/components/forms/age-range-list-form-section'
 import { PrintSettingsSection } from '@/modules/generated-report/components/forms/print-config-section'
 import { getTemplateAt } from '@/modules/generated-report/generated-report-template-registry'
 import {
@@ -112,16 +116,6 @@ export const MemberListingSchema = z
         area_id: entityIdSchema.optional(),
         collector_id: entityIdSchema.optional(),
 
-        age_ranges: z
-            .array(
-                z.object({
-                    from: z.coerce.number().min(1).default(0),
-                    to: z.coerce.number().min(1).default(0),
-                })
-            )
-            .optional()
-            .default([]),
-
         income_ranges: z
             .array(
                 z.object({
@@ -143,6 +137,7 @@ export const MemberListingSchema = z
             .default([]),
     })
     .and(WithGeneratedReportSchema)
+    .and(WithAgeRangesSchema)
 
 export type TMemberListingSchema = z.infer<typeof MemberListingSchema>
 
@@ -553,7 +548,7 @@ const MemberListingCreateReportForm = ({
                         />
                     </div>
                     <div className="grid grid-cols-3 gap-2">
-                        <AgeRangesSection
+                        <AgeRangeListFormSection
                             form={form}
                             trigger={
                                 <Button
@@ -706,131 +701,6 @@ const MemberListingCreateReportForm = ({
                 />
             </form>
         </Form>
-    )
-}
-
-export const AgeRangesSection = ({
-    form,
-    title = 'Age Ranges',
-    description = 'Define age ranges',
-    className,
-    trigger,
-    open,
-    onOpenChange,
-    ...props
-}: IModalProps & {
-    form: UseFormReturn<TMemberListingSchema>
-}) => {
-    const [state, setState] = useInternalState(false, open, onOpenChange)
-
-    const { fields, append, remove } = useFieldArray({
-        control: form.control,
-        name: 'age_ranges',
-    })
-
-    useHotkeys(
-        'ctrl+enter',
-        (e) => {
-            e.preventDefault()
-            append({ from: 0, to: 0 })
-        },
-        { keydown: true, enableOnFormTags: true }
-    )
-
-    return (
-        <Modal
-            className={cn('!max-w-lg border-muted w-full', className)}
-            closeButtonClassName="sr-only"
-            description={description}
-            onOpenChange={setState}
-            open={state}
-            title={title}
-            titleHeaderContainerClassName="sr-only"
-            trigger={trigger}
-            {...props}
-        >
-            <div className="flex justify-between">
-                <div>
-                    <p className="text-lg font-medium">Age Ranges</p>
-                    <p className="text-sm text-muted-foreground">
-                        Define age ranges
-                    </p>
-                </div>
-                <div className="flex items-center gap-2">
-                    <p className="text-sm text-muted-foreground">
-                        <KbdGroup>
-                            <Kbd>Ctrl</Kbd>
-                            <Kbd>Enter</Kbd>
-                        </KbdGroup>
-                    </p>
-                    <Button
-                        onClick={() => append({ from: 0, to: 0 })}
-                        size="xs"
-                        type="button"
-                        variant="secondary"
-                    >
-                        Add Entry
-                    </Button>
-                </div>
-            </div>
-
-            <Table
-                className="border-separate border-spacing-0"
-                wrapperClassName="border-none ring-2 ring-muted h-[60vh] rounded-xl bg-muted/30 ecoop-scroll overflow-auto"
-            >
-                <TableHeader className="bg-popover/80 sticky top-0">
-                    <TableRow>
-                        <TableHead className="w-[60px] text-center">
-                            #
-                        </TableHead>
-                        <TableHead className="text-center">From</TableHead>
-                        <TableHead className="text-center">To</TableHead>
-                        <TableHead className="w-[60px]" />
-                    </TableRow>
-                </TableHeader>
-
-                <TableBody>
-                    {fields.map((field, index) => (
-                        <TableRow key={field.id}>
-                            <TableCell className="text-center py-2">
-                                {index + 1}
-                            </TableCell>
-
-                            <TableCell className="py-2 px-2">
-                                <Input
-                                    type="text"
-                                    {...form.register(
-                                        `age_ranges.${index}.from`,
-                                        { valueAsNumber: true }
-                                    )}
-                                />
-                            </TableCell>
-
-                            <TableCell className="py-2 px-2">
-                                <Input
-                                    type="text"
-                                    {...form.register(
-                                        `age_ranges.${index}.to`,
-                                        { valueAsNumber: true }
-                                    )}
-                                />
-                            </TableCell>
-
-                            <TableCell className="py-2 px-2">
-                                <Button
-                                    onClick={() => remove(index)}
-                                    size="icon"
-                                    type="button"
-                                    variant="ghost"
-                                >
-                                    <TrashIcon className="size-4 text-destructive" />
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </Modal>
     )
 }
 
