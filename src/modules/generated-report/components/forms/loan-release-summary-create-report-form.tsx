@@ -36,7 +36,10 @@ import { useInternalState } from '@/hooks/use-internal-state'
 import { IClassProps, IForm } from '@/types'
 
 import { WithGeneratedReportSchema } from '../../generated-report.validation'
-import { AgeRangeListFormSection, WithAgeRangesSchema } from './age-range-list-form-section'
+import {
+    AgeRangeListFormSection,
+    WithAgeRangesSchema,
+} from './age-range-list-form-section'
 
 export const LoanReleaseSummarySchema = z
     .object({

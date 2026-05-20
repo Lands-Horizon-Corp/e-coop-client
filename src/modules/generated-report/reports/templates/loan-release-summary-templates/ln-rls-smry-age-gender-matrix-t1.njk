@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Loan Release Summary Report</title>
+        <style>
+            @page {
+                margin: 0.5in;
+            }
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                min-height: 100%;
+                background-color: white;
+            }
+            .container {
+                padding: 0.3in;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+                font-size: 9px;
+                line-height: 1.3;
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 0.3rem;
+            }
+            .header h1 {
+                font-size: 12px;
+                font-weight: 800;
+            }
+            .header .address {
+                font-size: 9px;
+            }
+            .header .tin {
+                font-size: 8px;
+            }
+            .center {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .table {
+                width: 100%;
+                margin-top: 0.4rem;
+                margin-bottom: 0.3rem;
+                border-collapse: collapse;
+                box-shadow: inset 0 0 0 1px #e5e7eb;
+            }
+            .table th {
+                text-transform: uppercase;
+                font-size: 8px;
+                font-weight: 700;
+                padding: 0.3rem;
+                text-align: left;
+                border-bottom: 2px solid #e5e7eb;
+            }
+            .table td {
+                padding: 0.2rem 0.3rem;
+                border-bottom: 1px solid #f3f4f6;
+            }
+            .bold {
+                font-weight: 900;
+            }
+            .text-right {
+                text-align: right !important;
+                font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            }
+        </style>
+    </head>
+    <body class="{{ density | default('normal') }}">
+        <div class="container">
+            <header class="header">
+                <h1>{{ header_title }}</h1>
+                <p class="address">{{ header_address }}</p>
+                <p class="tin">TIN: {{ tax_number }}</p>
+            </header>
+            <div class="center">
+                <h2 class="bold">{{ report_title or 'LOAN RELEASE SUMMARY REPORT' }}</h2>
+                <div>AGE GENDER MATRIX - FROM: {{ start_date }} TO: {{ end_date }}</div>
+            </div>
+
+            <table class="table" style="width: 60%; min-width: 60%; max-width: 100%; margin-left: auto; margin-right: auto;">
+                <thead>
+                    <tr>
+                        <th>Age Range</th>
+                        <th class="text-right">Male</th>
+                        <th class="text-right">Female</th>
+                        <th class="text-right">N/A</th>
+                        <th class="text-right">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in age_gender_data.data_entries %}
+                        <tr>
+                            <td>{{ row.age_range }}</td>
+                            <td class="text-right">{{ row.male or 0 }}</td>
+                            <td class="text-right">{{ row.female or 0 }}</td>
+                            <td class="text-right">{{ row.na or 0 }}</td>
+                            <td class="text-right">{{ row.total }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr style="background-color: rgba(0, 0, 0, 0.1);">
+                        <td class="bold">Grand Total</td>
+                        <td class="text-right bold">{{ grand_total.total_male or 0 }}</td>
+                        <td class="text-right bold">{{ grand_total.total_female or 0 }}</td>
+                        <td class="text-right bold">{{ grand_total.total_na or 0 }}</td>
+                        <td class="text-right bold">{{ grand_total.total_total }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

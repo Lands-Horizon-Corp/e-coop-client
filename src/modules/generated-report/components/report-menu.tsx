@@ -171,9 +171,8 @@ const LOAN_RELEASES_GROUP: ReportItem[] = [
         label: 'Loan Release Summary',
         icon: FileText,
         component: LoanReleaseSummaryCreateReportFormModal,
-        is_available: false,
-        warning_message: 'No template',
         persistKey: 'form-report-loans-loan-release-summary',
+        registry_key: 'loan_release',
     },
     {
         label: 'Grocery Loan Release',

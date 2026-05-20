@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Loan Release Summary Report</title>
+        <style>
+            @page {
+                margin: 0.5in;
+            }
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                min-height: 100%;
+                background-color: white;
+            }
+            .container {
+                padding: 0.3in;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+                font-size: 9px;
+                line-height: 1.3;
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 0.3rem;
+            }
+            .header h1 {
+                font-size: 12px;
+                font-weight: 800;
+            }
+            .header .address {
+                font-size: 9px;
+            }
+            .header .tin {
+                font-size: 8px;
+            }
+            .center {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .table {
+                width: 100%;
+                margin-top: 0.4rem;
+                margin-bottom: 0.3rem;
+                border-collapse: collapse;
+                box-shadow: inset 0 0 0 1px #e5e7eb;
+            }
+            .table th {
+                text-transform: uppercase;
+                font-size: 8px;
+                font-weight: 700;
+                padding: 0.3rem;
+                text-align: left;
+                border-bottom: 2px solid #e5e7eb;
+            }
+            .table td {
+                padding: 0.2rem 0.3rem;
+                border-bottom: 1px solid #f3f4f6;
+            }
+            .bold {
+                font-weight: 900;
+            }
+            .text-right {
+                text-align: right !important;
+                font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            }
+        </style>
+    </head>
+    <body class="{{ density | default('normal') }}">
+        <div class="container">
+            <header class="header">
+                <h1>{{ header_title }}</h1>
+                <p class="address">{{ header_address }}</p>
+                <p class="tin">TIN: {{ tax_number }}</p>
+            </header>
+            <div class="center">
+                <h2 class="bold">{{ report_title or 'LOAN RELEASE SUMMARY REPORT' }}</h2>
+                <div>{{ mode_of_payment }} - FROM: {{ start_date }} TO: {{ end_date }}</div>
+            </div>
+
+            {% macro render_group(group, is_last = false) %}
+                <tr>
+                    <td class="bold" colspan="14">{{ group.group_title }}: {{ group.group_name }}</td>
+                </tr>
+                {% if group.data_entries %}
+                    {% for row in group.data_entries %}
+                        <tr>
+                            <td>{{ row.account_short_name or '' }}</td>
+                            <td class="text-right">{{ row.standard_amount or '' }}</td>
+                            <td class="text-right">{{ row.standard_count or '' }}</td>
+                            <td class="text-right">{{ row.standard_mbr or '' }}</td>
+                            <td class="text-right">{{ row.restruct_amount or '' }}</td>
+                            <td class="text-right">{{ row.restruct_count or '' }}</td>
+                            <td class="text-right">{{ row.restruct_mbr or '' }}</td>
+                            <td class="text-right">{{ row.renewal_amount or '' }}</td>
+                            <td class="text-right">{{ row.renewal_count or '' }}</td>
+                            <td class="text-right">{{ row.renewal_mbr or '' }}</td>
+                            <td class="text-right">{{ row.total_amount or '' }}</td>
+                            <td class="text-right">{{ row.total_count or '' }}</td>
+                            <td class="text-right">{{ row.total_mbr or '' }}</td>
+                            <td class="text-right">{{ row.proceeds or '' }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                {% if group.sub_groups %}
+                    {% for sub in group.sub_groups %}{{ render_group(sub, loop.last) }}
+                    {% endfor %}
+                {% endif %}
+                <tr>
+                    <td class="bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.group_title }} Sub Total</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_standard_amount or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_standard_count or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_standard_mbr or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_restruct_amount or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_restruct_count or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_restruct_mbr or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_renewal_amount or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_renewal_count or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_renewal_mbr or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_total_amount or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_total_count or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_total_mbr or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_proceeds or '' }}</td>
+                </tr>
+                {% if not is_last %}
+                    <tr><td colspan="14" style="border: 0; padding: 10px;"></td></tr>
+                {% endif %}
+            {% endmacro %}
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Type Of Loans</th>
+                        <th class="text-right">Standard</th>
+                        <th class="text-right">Cnt</th>
+                        <th class="text-right">Mbr</th>
+                        <th class="text-right">Restruct</th>
+                        <th class="text-right">Cnt</th>
+                        <th class="text-right">Mbr</th>
+                        <th class="text-right">Renewal</th>
+                        <th class="text-right">Cnt</th>
+                        <th class="text-right">Mbr</th>
+                        <th class="text-right">Total</th>
+                        <th class="text-right">Cnt</th>
+                        <th class="text-right">Mbr</th>
+                        <th class="text-right">Proceeds</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in grouped_data %}{{ render_group(item, loop.last) }}
+                    {% endfor %}
+                    <tr>
+                        <td class="bold" style="border-top: 1px solid #111827; border-bottom: 0;">Grand Total</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_standard_amount or grand_total.total_current or '' }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_standard_count or '' }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_standard_mbr or '' }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_restruct_amount or grand_total.total_restruct or '' }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_restruct_count or '' }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_restruct_mbr or '' }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_renewal_amount or grand_total.total_renewal or '' }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_renewal_count or '' }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_renewal_mbr or '' }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_total_amount or grand_total.total_amount_granted or '' }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_total_count or '' }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_total_mbr or grand_total.total_total or '' }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_proceeds or grand_total.proceeds or grand_total.total_amount_granted or '' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
