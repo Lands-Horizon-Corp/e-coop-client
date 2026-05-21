@@ -150,4 +150,11 @@ export interface IBaseReportTemplateCheck {
     check_date?: string
 }
 
+export interface IShowableAccount {
+    account_id: TEntityId
+    display_entry_type: 'CR' | 'DR'
+    short_name?: string
+    name?: string
+}
+
 export type TDisplayDensity = (typeof DISPLAY_DENSITY)[number]

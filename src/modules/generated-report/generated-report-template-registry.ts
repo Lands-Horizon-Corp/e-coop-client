@@ -19,6 +19,7 @@ import { LOAN_RELEASE_SUMMARY_REPORT_TEMPLATES } from './reports/loan-release-su
 import { LOAN_RELEASE_TABULATED_REPORT_TEMPLATES } from './reports/loan-releases-tabulated-report-templates'
 import { MEMBER_LISTING_REPORT_TEMPLATES } from './reports/member-listing-report-templates'
 import { REBATES_REPORT_TEMPLATES } from './reports/rebates-report-templates'
+import { TELLER_MONITORING_REPORT_TEMPLATES } from './reports/teller-monitoring-report-templates'
 import { TRANSACTION_BATCH_REPORT_TEMPLATES } from './reports/transaction-batch-report-templates'
 
 // import { IGeneratedReportRequest } from './generated-report.types'
@@ -62,6 +63,8 @@ export const REPORT_REGISTRY = {
 
     rebate_report_template: REBATES_REPORT_TEMPLATES,
     loan_release_summary: LOAN_RELEASE_SUMMARY_REPORT_TEMPLATES,
+
+    teller_monitoring_template: TELLER_MONITORING_REPORT_TEMPLATES,
 } as const
 
 export const getTemplateAt = <T>(

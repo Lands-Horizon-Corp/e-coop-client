@@ -495,9 +495,8 @@ const OTHER_REPORTS_GROUP: ReportItem[] = [
         label: 'Teller Monitor',
         icon: Monitor,
         component: TellerMonitoringCreateReportFormModal,
-        is_available: false,
-        warning_message: 'No template',
         persistKey: 'form-report-other-teller-monitor',
+        registry_key: 'teller_monitoring_template',
     },
     {
         label: 'Print Number Tag',

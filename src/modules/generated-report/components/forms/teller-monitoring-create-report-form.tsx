@@ -19,8 +19,11 @@ import { stringDateWithTransformSchema } from '@/validation'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { PersistFormHeadless } from '@/components/form-components/form-persist-headless'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
+import { FormLabel } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
 import { Separator } from '@/components/ui/separator'
 
@@ -30,13 +33,32 @@ import { useInternalState } from '@/hooks/use-internal-state'
 import { IClassProps, IForm } from '@/types'
 
 import { WithGeneratedReportSchema } from '../../generated-report.validation'
+import {
+    AccountColumnEntrySchema,
+    AccountColumnListFormSection,
+    AccountListOrderModal,
+    TAccountEntry,
+    WithAccountColumnListSchema,
+} from './account-column-list-form-section'
 
 export const TellerMonitoringReportSchema = z
     .object({
         start_date: stringDateWithTransformSchema,
         end_date: stringDateWithTransformSchema,
+        withdrawal_showable_account_column_list: z
+            .array(AccountColumnEntrySchema)
+            .min(
+                1,
+                'Must have minimum of 1 withdrawal account column to display'
+            )
+            .default([]),
+        withdrawal_showable_account_column_list_showable_first: z.coerce
+            .number()
+            .min(1, 'Require to show at least 1 withdrawal account from list')
+            .default(1),
     })
     .and(WithGeneratedReportSchema)
+    .and(WithAccountColumnListSchema)
     .superRefine((data, ctx) => {
         if (
             data.start_date &&
@@ -52,6 +74,20 @@ export const TellerMonitoringReportSchema = z
                 code: 'custom',
                 message: 'End Date must not be before Start Date',
                 path: ['end_date'],
+            })
+        }
+
+        if (
+            data.withdrawal_showable_account_column_list_showable_first >
+            data.withdrawal_showable_account_column_list.length
+        ) {
+            ctx.addIssue({
+                code: 'custom',
+                message:
+                    'Cannot show more withdrawal accounts than what is available in the list',
+                path: [
+                    'withdrawal_showable_account_column_list_showable_first',
+                ],
             })
         }
     })
@@ -84,6 +120,11 @@ const TellerMonitoringCreateReportForm = ({
                 baseDefaults: {
                     start_date: undefined,
                     end_date: undefined,
+
+                    account_column_list: [],
+                    account_column_list_showable_first: 10,
+                    withdrawal_showable_account_column_list: [],
+                    withdrawal_showable_account_column_list_showable_first: 10,
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
@@ -163,12 +204,84 @@ const TellerMonitoringCreateReportForm = ({
                         />
                     </div>
 
+                    <AccountColumnListFormSection form={form} />
+
+                    <div className="bg-popover p-4 rounded-2xl space-y-2">
+                        <div>
+                            <FormLabel className="text-sm">
+                                Withdrawal Report Detailed Column Account
+                            </FormLabel>
+                            <p className="text-xs text-muted-foreground">
+                                Setup withdrawal column/accounts to be displayed
+                                in the report table
+                            </p>
+                        </div>
+                        <div className="flex gap-x-4">
+                            <FormFieldWrapper
+                                className="flex-1"
+                                control={form.control}
+                                description="Define what withdrawal accounts will be included in the report column"
+                                label="Withdrawal Account Column List"
+                                name="withdrawal_showable_account_column_list"
+                                render={({ field }) => {
+                                    const accounts =
+                                        form.getValues(
+                                            'withdrawal_showable_account_column_list'
+                                        ) ?? []
+
+                                    return (
+                                        <div className="flex flex-col gap-y-2">
+                                            <AccountListOrderModal
+                                                account_column={
+                                                    accounts as TAccountEntry[]
+                                                }
+                                                onApply={(items) => {
+                                                    const ids = items.map(
+                                                        (i) => i.account_id
+                                                    )
+                                                    const fullAccounts =
+                                                        items.map((i) => i)
+
+                                                    field.onChange(ids)
+                                                    form.setValue(
+                                                        'withdrawal_showable_account_column_list',
+                                                        fullAccounts
+                                                    )
+                                                }}
+                                                trigger={
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                    >
+                                                        {(field.value ?? [])
+                                                            .length === 0
+                                                            ? 'Define Withdrawal Report Account Columns'
+                                                            : `${(field.value ?? []).length} Withdrawal Column Defined`}
+                                                    </Button>
+                                                }
+                                            />
+                                        </div>
+                                    )
+                                }}
+                            />
+                            <FormFieldWrapper
+                                className="w-fit"
+                                control={form.control}
+                                description="Will show first number of withdrawal account in the table"
+                                label="Show First"
+                                name="withdrawal_showable_account_column_list_showable_first"
+                                render={({ field }) => <Input {...field} />}
+                            />
+                        </div>
+                    </div>
+
                     <Separator />
                     <PrintSettingsSection
                         displayMode="dropdown"
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="teller_monitoring_template"
                     />
                 </fieldset>
 
