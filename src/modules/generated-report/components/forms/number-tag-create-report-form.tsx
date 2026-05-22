@@ -32,7 +32,7 @@ import { WithGeneratedReportSchema } from '../../generated-report.validation'
 
 export const PrintNumberTagSchema = z
     .object({
-        start_number: z.coerce.number().min(1),
+        start_number: z.coerce.number(),
         end_number: z.coerce.number().min(1),
     })
     .and(WithGeneratedReportSchema)

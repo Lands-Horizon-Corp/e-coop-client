@@ -486,6 +486,7 @@ const LoanCollectionDetailCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="loan_collection_detail"
                     />
                 </fieldset>
 

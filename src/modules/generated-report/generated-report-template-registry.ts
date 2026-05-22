@@ -14,6 +14,7 @@ import { DAILY_COLLECTION_DETAIL_REPORT_TEMPLATES } from './reports/daily-collec
 import { DAILY_COLLECTION_SUMMARY_REPORT_TEMPLATES } from './reports/daily-collection-summary-report-templates'
 import { DAILY_WITHDRAWAL_REPORT_TEMPLATES } from './reports/daily-withdrawal-report-templates'
 import { JOURNAL_VOUCHER_REPORT_TEMPLATES } from './reports/journal-voucher-report-templates'
+import { LOAN_COLLECTION_DETAIL_REPORT_TEMPLATES } from './reports/loan-collection-detail-templates'
 import { LOAN_RELEASE_DETAIL_REPORT_TEMPLATES } from './reports/loan-release-detail-report-templates'
 import { LOAN_RELEASE_SUMMARY_REPORT_TEMPLATES } from './reports/loan-release-summary-report-templates'
 import { LOAN_RELEASE_TABULATED_REPORT_TEMPLATES } from './reports/loan-releases-tabulated-report-templates'
@@ -65,6 +66,7 @@ export const REPORT_REGISTRY = {
     loan_release_summary: LOAN_RELEASE_SUMMARY_REPORT_TEMPLATES,
 
     teller_monitoring_template: TELLER_MONITORING_REPORT_TEMPLATES,
+    loan_collection_detail: LOAN_COLLECTION_DETAIL_REPORT_TEMPLATES,
 } as const
 
 export const getTemplateAt = <T>(
