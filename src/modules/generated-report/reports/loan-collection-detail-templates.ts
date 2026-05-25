@@ -6,6 +6,7 @@ import {
 
 import { TLoanCollectionDetailSchema } from '../components/forms/loan-collection-detail-create-report-form'
 import LOAN_COLLECTION_DETAIL_SIMPLE_T1 from './templates/loan-collection-detail-templates/ln-coll-detail-simple-t1.njk?raw'
+import LOAN_COLLECTION_DETAIL_STANDARD_T1 from './templates/loan-collection-detail-templates/ln-coll-detail-standard-t1.njk?raw'
 
 // START DO NOT EDIT
 type TDataEntryItem = {
@@ -484,6 +485,22 @@ export const LOAN_COLLECTION_DETAIL_REPORT_TEMPLATES: GeneratedReportTemplate<
     ILoanCollectionDetailReportTemplate,
     { presentation_style: TPresentationStyle }
 >[] = [
+    {
+        id: 'loan-collection-detail-t1-standard',
+        template_name: 'Default (Standard)',
+        report_name: 'LoanCollectionDetailReport',
+        template: LOAN_COLLECTION_DETAIL_STANDARD_T1,
+        template_filter: { presentation_style: 'standard' },
+        default_unit: 'in',
+        width: '13in',
+        height: '8.5in',
+        density: 'normal',
+        orientation: 'landscape',
+        preview_data: {
+            ...SHARED_LOAN_COLLECTION_DETAIL_PREVIEW_DATA,
+            presentation_style: 'standard',
+        },
+    },
     {
         id: 'loan-collection-detail-t1-simple',
         template_name: 'Default (Simple)',

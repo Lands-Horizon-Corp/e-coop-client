@@ -289,6 +289,7 @@ const LOAN_COLLECTION_GROUP: ReportItem[] = [
         is_available: false,
         warning_message: 'No template',
         persistKey: 'form-report-collections-loan-collection-detail',
+        registry_key : 'loan_collection_detail_template'
     },
     {
         label: 'Loan Collection Summary',
@@ -302,9 +303,8 @@ const LOAN_COLLECTION_GROUP: ReportItem[] = [
         label: 'Loan Collection Due',
         icon: Clock,
         component: LoanCollectionDueCreateReportFormModal,
-        is_available: false,
-        warning_message: 'No template',
         persistKey: 'form-report-collections-loan-collection-due',
+        registry_key: 'loan_collection_summary_template',
     },
 ]
 
