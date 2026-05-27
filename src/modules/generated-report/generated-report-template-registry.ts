@@ -13,6 +13,7 @@ import { MEMBER_CLOSE_ACCOUNT_REPORT_TEMPLATES } from './reports/close-account-r
 import { DAILY_COLLECTION_DETAIL_REPORT_TEMPLATES } from './reports/daily-collection-detail-report-templates'
 import { DAILY_COLLECTION_SUMMARY_REPORT_TEMPLATES } from './reports/daily-collection-summary-report-templates'
 import { DAILY_WITHDRAWAL_REPORT_TEMPLATES } from './reports/daily-withdrawal-report-templates'
+import { DIRECT_ADJUSTMENT_REPORT_TEMPLATES } from './reports/direct-adustment-report-template'
 import { JOURNAL_VOUCHER_REPORT_TEMPLATES } from './reports/journal-voucher-report-templates'
 import { LOAN_COLLECTION_DETAIL_REPORT_TEMPLATES } from './reports/loan-collection-detail-templates'
 import { LOAN_COLLECTION_SUMMARY_REPORT_TEMPLATES } from './reports/loan-collection-summary-report-templates'
@@ -20,6 +21,7 @@ import { LOAN_RELEASE_DETAIL_REPORT_TEMPLATES } from './reports/loan-release-det
 import { LOAN_RELEASE_SUMMARY_REPORT_TEMPLATES } from './reports/loan-release-summary-report-templates'
 import { LOAN_RELEASE_TABULATED_REPORT_TEMPLATES } from './reports/loan-releases-tabulated-report-templates'
 import { MEMBER_LISTING_REPORT_TEMPLATES } from './reports/member-listing-report-templates'
+import { NUMBER_TAG_REPORT_TEMPLATES } from './reports/number-tag-templates'
 import { REBATES_REPORT_TEMPLATES } from './reports/rebates-report-templates'
 import { TELLER_MONITORING_REPORT_TEMPLATES } from './reports/teller-monitoring-report-templates'
 import { TRANSACTION_BATCH_REPORT_TEMPLATES } from './reports/transaction-batch-report-templates'
@@ -69,6 +71,9 @@ export const REPORT_REGISTRY = {
     teller_monitoring_template: TELLER_MONITORING_REPORT_TEMPLATES,
     loan_collection_detail_template: LOAN_COLLECTION_DETAIL_REPORT_TEMPLATES,
     loan_collection_summary_template: LOAN_COLLECTION_SUMMARY_REPORT_TEMPLATES,
+
+    number_tag_template: NUMBER_TAG_REPORT_TEMPLATES,
+    direct_adjustment_template: DIRECT_ADJUSTMENT_REPORT_TEMPLATES,
 } as const
 
 export const getTemplateAt = <T>(

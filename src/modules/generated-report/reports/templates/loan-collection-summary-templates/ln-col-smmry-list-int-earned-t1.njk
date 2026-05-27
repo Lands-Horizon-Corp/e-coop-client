@@ -344,6 +344,8 @@
                 <p class="tin">TIN: {{ tax_number }}</p>
             </header>
 
+            <br>
+            <br>
             <div class="center">
                 <h2 class="bold">{{ report_title or 'LOAN RELEASE DETAIL REPORT' }}</h2>
 
@@ -351,7 +353,7 @@
                     {{ mode_of_payment }} - FROM: {{ start_date }} TO: {{ end_date }}
                 </div>
             </div>
-
+            <br>
             {% set is_account_grouping = grouping == 'by_acct' or grouping == 'by_mtype_acct' %}
 
             <!-- MACRO : TABLE HEAD -->

@@ -150,6 +150,7 @@ const PrintNumberTagForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="number_tag_template"
                     />
                 </fieldset>
 

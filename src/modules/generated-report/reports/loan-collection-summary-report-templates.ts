@@ -6,8 +6,8 @@ import {
 
 import { TLoanCollectionSummarySchema } from '../components/forms/loan-collection-summary-create-report-form'
 import LOAN_COLLECTION_SUMMARY_LIST_INTEREST_T1 from './templates/loan-collection-summary-templates/ln-col-smmry-list-int-earned-t1.njk?raw'
-import LOAN_COLLECTION_SUMMARY_T1 from './templates/loan-collection-summary-templates/ln-col-smmry-list-t1.njk?raw'
 import LOAN_COLLECTION_SUMMARY_LIST_T1 from './templates/loan-collection-summary-templates/ln-col-smmry-list-t1.njk?raw'
+import LOAN_COLLECTION_SUMMARY_T1 from './templates/loan-collection-summary-templates/ln-col-smmry-smmry-t1.njk?raw'
 
 // START DO NOT EDIT
 type TDataEntryItem = {
@@ -355,19 +355,6 @@ export const LOAN_COLLECTION_SUMMARY_REPORT_TEMPLATES: GeneratedReportTemplate<
     { presentation_style: TPresentationStyle }
 >[] = [
     {
-        id: 'loan-collection-summary-summary-t1',
-        template_name: 'Summary',
-        report_name: 'LoanCollectionSummaryReport',
-        template: LOAN_COLLECTION_SUMMARY_T1,
-        template_filter: { presentation_style: 'summary' },
-        default_unit: 'in',
-        width: '13in',
-        height: '8.5in',
-        density: 'normal',
-        orientation: 'landscape',
-        preview_data: SHARED_LOAN_COLLECTION_SUMMARY_PREVIEW_DATA,
-    },
-    {
         id: 'loan-collection-summary-list-t1',
         template_name: 'List',
         report_name: 'LoanCollectionSummaryReport',
@@ -378,6 +365,19 @@ export const LOAN_COLLECTION_SUMMARY_REPORT_TEMPLATES: GeneratedReportTemplate<
         height: '8.5in',
         density: 'normal',
         orientation: 'landscape',
+        preview_data: SHARED_LOAN_COLLECTION_SUMMARY_PREVIEW_DATA,
+    },
+    {
+        id: 'loan-collection-summary-summary-t1',
+        template_name: 'Summary',
+        report_name: 'LoanCollectionSummaryReport',
+        template: LOAN_COLLECTION_SUMMARY_T1,
+        template_filter: { presentation_style: 'summary' },
+        default_unit: 'in',
+        width: '13in',
+        height: '8.5in',
+        density: 'normal',
+        orientation: 'portrait',
         preview_data: SHARED_LOAN_COLLECTION_SUMMARY_PREVIEW_DATA,
     },
     {

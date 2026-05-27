@@ -289,22 +289,22 @@ const LOAN_COLLECTION_GROUP: ReportItem[] = [
         is_available: false,
         warning_message: 'No template',
         persistKey: 'form-report-collections-loan-collection-detail',
-        registry_key : 'loan_collection_detail_template'
+        registry_key: 'loan_collection_detail_template',
     },
     {
         label: 'Loan Collection Summary',
         icon: FileBarChart,
         component: LoanCollectionSummaryCreateReportFormModal,
-        is_available: false,
-        warning_message: 'No template',
+        registry_key: 'loan_collection_summary_template',
         persistKey: 'form-report-collections-loan-collection-summary',
     },
     {
         label: 'Loan Collection Due',
         icon: Clock,
         component: LoanCollectionDueCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-collections-loan-collection-due',
-        registry_key: 'loan_collection_summary_template',
     },
 ]
 
@@ -479,9 +479,8 @@ const OTHER_REPORTS_GROUP: ReportItem[] = [
         label: 'Direct Adjustment',
         icon: Calculator,
         component: DirectAdjustmentCreateReportFormModal,
-        is_available: false,
-        warning_message: 'No template',
         persistKey: 'form-report-accounting-direct-adjustment',
+        registry_key: 'direct_adjustment_template',
     },
     {
         label: 'Account Hold Out',
@@ -502,9 +501,8 @@ const OTHER_REPORTS_GROUP: ReportItem[] = [
         label: 'Print Number Tag',
         icon: Hash,
         component: PrintNumberTagCreateReportFormModal,
-        is_available: false,
-        warning_message: 'No template',
         persistKey: 'form-report-number-tag',
+        registry_key: 'number_tag_template',
     },
 ]
 
