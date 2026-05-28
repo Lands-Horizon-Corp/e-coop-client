@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Transaction Batch Report</title>
+        <style>
+            @page {
+                margin: 0.5in;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                min-height: 100%;
+                background-color: white;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+                height: auto;
+                /* Change from min-height: 100% */
+                display: block;
+            }
+
+            /* BASE VARS AT TOKEN */
+            .container {
+                /* FONT SCALE */
+                --fs-xs: 7px;
+                --fs-sm: 8px;
+                --fs-base: 9px;
+                --fs-lg: 10px;
+                --fs-xl: 12px;
+                --fs-2xl: 14px;
+
+                /* SPACING SCALE */
+                --space-xs: 0.08rem;
+                --space-sm: 0.15rem;
+                --space-md: 0.25rem;
+                --space-lg: 0.3rem;
+                --space-xl: 0.4rem;
+
+                /* LAYOUT */
+                --container-padding: 0.3in;
+                --line-height: 1.3;
+
+                --sig-gap-x: 0.7rem;
+                --sig-gap-y: 1.4rem;
+                --sig-margin-t: 2rem;
+
+                padding: var(--container-padding);
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+                font-size: var(--fs-base);
+                line-height: var(--line-height);
+
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                /* FORCE content to the top */
+                align-items: stretch;
+                width: 100%;
+            }
+
+            /* DENSITY VARIANTS */
+
+            /* NORMAL (default, explicit if you want) */
+            .normal .container {
+                --fs-xs: 7px;
+                --fs-sm: 8px;
+                --fs-base: 9px;
+                --fs-lg: 10px;
+                --fs-xl: 12px;
+                --fs-2xl: 14px;
+
+                --space-xs: 0.08rem;
+                --space-sm: 0.15rem;
+                --space-md: 0.25rem;
+                --space-lg: 0.3rem;
+                --space-xl: 0.4rem;
+
+                --sig-gap-x: 0.7rem;
+                --sig-gap-y: 1.4rem;
+                --sig-margin-t: 2rem;
+
+                --container-padding: 0.3in;
+                --line-height: 1.3;
+            }
+
+            /* COMPACT */
+            .compact .container {
+                --fs-xs: 6px;
+                --fs-sm: 7px;
+                --fs-base: 8px;
+                --fs-lg: 9px;
+                --fs-xl: 10px;
+                --fs-2xl: 12px;
+
+                --space-xs: 0.05rem;
+                --space-sm: 0.1rem;
+                --space-md: 0.15rem;
+                --space-lg: 0.2rem;
+                --space-xl: 0.25rem;
+
+                --sig-gap-x: 0.3rem;
+                --sig-gap-y: 1rem;
+                --sig-margin-t: 1.4rem;
+
+                --container-padding: 0.15in;
+                --line-height: 1.2;
+            }
+
+            /* LARGER */
+            .loose .container {
+                --fs-xs: 8px;
+                --fs-sm: 10px;
+                --fs-base: 12px;
+                --fs-lg: 14px;
+                --fs-xl: 16px;
+                --fs-2xl: 18px;
+
+                --space-xs: 0.1rem;
+                --space-sm: 0.2rem;
+                --space-md: 0.3rem;
+                --space-lg: 0.4rem;
+                --space-xl: 0.5rem;
+
+                --sig-gap-x: 1.8rem;
+                --sig-gap-y: 2rem;
+                --sig-margin-t: 1rem;
+
+                --container-padding: 0.4in;
+                --line-height: 1.4;
+            }
+
+            /* HEADER */
+            .header {
+                text-align: center;
+                margin-bottom: var(--space-lg);
+                padding-bottom: var(--space-sm);
+                /* border-bottom: 1px solid #e5e7eb; */
+            }
+
+            .header h1 {
+                font-size: var(--fs-xl);
+                font-weight: 800;
+                margin-bottom: var(--space-xs);
+                letter-spacing: -0.025em;
+            }
+
+            .header .address {
+                font-size: var(--fs-base);
+                margin: var(--space-xs) 0;
+            }
+
+            .header .tin {
+                font-size: var(--fs-sm);
+            }
+
+            .report-title {
+                font-size: var(--fs-2xl);
+                font-weight: 800;
+                margin-top: var(--space-sm);
+                letter-spacing: -0.025em;
+                text-transform: uppercase;
+            }
+
+            .center {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+
+            /* TABLE */
+            .table {
+                width: 100%;
+                margin-top: var(--space-xl);
+                margin-bottom: var(--space-lg);
+                border: 0;
+                border-radius: 6px;
+                overflow: hidden;
+                font-size: var(--fs-base);
+                border-collapse: collapse;
+                box-shadow: inset 0 0 0 1px #e5e7eb;
+            }
+
+            .table th {
+                text-transform: uppercase;
+                font-size: var(--fs-sm);
+                font-weight: 700;
+                padding: var(--space-lg);
+                text-align: left;
+                border-bottom: 2px solid #e5e7eb;
+            }
+
+            .table td {
+                padding: var(--space-md) var(--space-lg);
+                border-bottom: 1px solid #f3f4f6;
+            }
+
+            .bold {
+                font-weight: 900;
+            }
+
+            .text-right {
+                text-align: right !important;
+                font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+                font-variant-numeric: tabular-nums;
+            }
+
+            .italic {
+                font-style: italic;
+            }
+
+            {
+                # SIG #
+            }
+
+            /* SIGNATURE */
+            .signature-section {
+                margin-top: var(--sig-margin-t);
+            }
+
+            .sig-row {
+                display: grid;
+                gap: var(--sig-gap-x);
+                margin-bottom: var(--sig-gap-y);
+            }
+
+            /* Helper Classes for Grid Columns */
+            .sig-row-1 {
+                grid-template-columns: repeat(1, 1fr);
+            }
+            .sig-row-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .sig-row-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .sig-row-4 {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .sig-row-5 {
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            /* Item Styling */
+            .sig-item {
+                text-align: center;
+            }
+
+            /* Signature Label */
+            .sig-label {
+                font-size: var(--fs-xs);
+                font-weight: 700;
+                text-transform: uppercase;
+                margin-bottom: var(--space-xs);
+            }
+
+            /* Signature Line */
+            .sig-line {
+                border-bottom: 1px solid #9ca3af;
+                min-height: calc(var(--fs-lg) * 1.5);
+                font-weight: 600;
+                font-size: var(--fs-base);
+                padding-top: var(--space-xs);
+                width: 100%;
+                box-sizing: border-box;
+                text-transform: uppercase;
+            }
+
+            /* Optional: Center helper for single or fewer signatures in a row */
+            .sig-center {
+                max-width: 50%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .page-break {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                margin: 20px 0;
+                border-top: 1px dashed #ccc;
+                height: 1px;
+                position: relative;
+            }
+
+            .page-break::after {
+                content: 'next page';
+                position: absolute;
+                background: #fff;
+                padding: 0 10px;
+                font-size: 10px;
+                color: #999;
+            }
+
+            /* PRINT */
+            @media print {
+                body {
+                    background-color: white;
+                }
+                * {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+
+                .container {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+
+                .page-break {
+                    display: block;
+                    page-break-after: always;
+                    break-after: page;
+
+                    border: none;
+                    height: 0;
+                    margin: 0;
+                }
+
+                .page-break::after {
+                    content: '';
+                }
+            }
+        </style>
+    </head>
+    <body class="{{ density | default('normal') }}">
+        {% set is_by_member_type_account = grouping == 'by_member_type_account' %}
+        {% set is_by_barangay = grouping == 'by_barangay' %}
+        {% set is_by_member_type_no_grouping = grouping == 'by_member_type_no_grouping' %}
+        {% set is_mem_class_area_mtype_grp = grouping == 'mem_class_area_mtype_grp' %}
+        {% set is_brgy_act_ltype_pd_by_prev_mos = grouping == 'brgy_act_ltype_pd_by_prev_mos' %}
+
+        {% set is_pager_mode = is_by_member_type_account or is_by_barangay or is_by_member_type_no_grouping %}
+        {% set is_single_table_mode = is_mem_class_area_mtype_grp or is_brgy_act_ltype_pd_by_prev_mos %}
+
+        {% set active_set = 'loan_stat_elapsed' %}
+        {% if is_mem_class_area_mtype_grp %}
+            {% set active_set = 'mem_class_area_type_grp' %}
+        {% endif %}
+        {% if is_brgy_act_ltype_pd_by_prev_mos %}
+            {% set active_set = 'brgy_act_ltype_pd_by_prev_mos' %}
+        {% endif %}
+
+        {% set col_count = 5 %}
+        {% if active_set == 'mem_class_area_type_grp' or active_set == 'brgy_act_ltype_pd_by_prev_mos' %}
+            {% set col_count = 9 %}
+        {% endif %}
+
+        <div class="container">
+            <header class="header">
+                <h1>{{ header_title }}</h1>
+                <p class="address">{{ header_address }}</p>
+                <p class="tin">TIN: {{ tax_number }}</p>
+            </header>
+
+            {% macro render_page_header(page_group_title = '') %}
+                <div class="center">
+                    <h2 class="bold">{{ report_title or 'LOAN MATURITY REPORT' }}</h2>
+                    <div class="subtext">{{ mode_of_payment }} - FROM: {{ start_date }} TO: {{ end_date }}</div>
+                    {% if page_group_title %}
+                        <div class="subtext bold" style="margin-top: 6px;">{{ page_group_title }}</div>
+                    {% endif %}
+                </div>
+            {% endmacro %}
+
+            {% macro render_table_head(set_name) %}
+                <thead>
+                    <tr>
+                        {% if set_name == 'loan_stat_elapsed' %}
+                            <th>PB No.</th>
+                            <th>Member Name</th>
+                            <th>Date Of Loan</th>
+                            <th>Due Date</th>
+                            <th class="text-right">Days Lapsed</th>
+                        {% endif %}
+
+                        {% if set_name == 'mem_class_area_type_grp' %}
+                            <th>Member Name</th>
+                            <th>Loan Type</th>
+                            <th>Date Release</th>
+                            <th>Terms</th>
+                            <th>Payment Mode</th>
+                            <th class="text-right">Loan Granted</th>
+                            <th class="text-right">First Pay</th>
+                            <th class="text-right">Amort</th>
+                            <th class="text-right">Loan Balance</th>
+                        {% endif %}
+
+                        {% if set_name == 'brgy_act_ltype_pd_by_prev_mos' %}
+                            <th>PB No.</th>
+                            <th>Member Name</th>
+                            <th>Account</th>
+                            <th>CV No.</th>
+                            <th>Due Date</th>
+                            <th>Date Release</th>
+                            <th class="text-right">Standard</th>
+                            <th class="text-right">Restruct</th>
+                            <th class="text-right">Renewal</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+            {% endmacro %}
+
+            {% macro render_data_entries(entries, set_name) %}
+                {% for entry in entries %}
+                    <tr>
+                        {% if set_name == 'loan_stat_elapsed' %}
+                            <td>{{ entry.loan_stat_elapsed_data.passbook }}</td>
+                            <td>{{ entry.loan_stat_elapsed_data.member_name }}</td>
+                            <td>{{ entry.loan_stat_elapsed_data.date_of_loan }}</td>
+                            <td>{{ entry.loan_stat_elapsed_data.due_date }}</td>
+                            <td class="text-right">{{ entry.loan_stat_elapsed_data.days_lapsed }}</td>
+                        {% endif %}
+
+                        {% if set_name == 'mem_class_area_type_grp' %}
+                            <td>{{ entry.mem_class_area_type_grp_data.member_name }}</td>
+                            <td>{{ entry.mem_class_area_type_grp_data.loan_type }}</td>
+                            <td>{{ entry.mem_class_area_type_grp_data.date_release }}</td>
+                            <td>{{ entry.mem_class_area_type_grp_data.terms }}</td>
+                            <td>{{ entry.mem_class_area_type_grp_data.payment_mode }}</td>
+                            <td class="text-right">{{ entry.mem_class_area_type_grp_data.loan_granted }}</td>
+                            <td class="text-right">{{ entry.mem_class_area_type_grp_data.first_pay }}</td>
+                            <td class="text-right">{{ entry.mem_class_area_type_grp_data.amort }}</td>
+                            <td class="text-right">{{ entry.mem_class_area_type_grp_data.loan_balance }}</td>
+                        {% endif %}
+
+                        {% if set_name == 'brgy_act_ltype_pd_by_prev_mos' %}
+                            <td>{{ entry.brgy_act_ltype_pd_by_prev_mos_data.passbook }}</td>
+                            <td>{{ entry.brgy_act_ltype_pd_by_prev_mos_data.member_name }}</td>
+                            <td>{{ entry.brgy_act_ltype_pd_by_prev_mos_data.account_short_name }}</td>
+                            <td>{{ entry.brgy_act_ltype_pd_by_prev_mos_data.cv_no }}</td>
+                            <td>{{ entry.brgy_act_ltype_pd_by_prev_mos_data.due_date }}</td>
+                            <td>{{ entry.brgy_act_ltype_pd_by_prev_mos_data.date_release }}</td>
+                            <td class="text-right">{{ entry.brgy_act_ltype_pd_by_prev_mos_data.standard }}</td>
+                            <td class="text-right">{{ entry.brgy_act_ltype_pd_by_prev_mos_data.restruct }}</td>
+                            <td class="text-right">{{ entry.brgy_act_ltype_pd_by_prev_mos_data.renewal }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% endmacro %}
+
+            {% macro render_total(total, title, set_name) %}
+                <tr>
+                    {% if set_name == 'loan_stat_elapsed' %}
+                        <td colspan="4" class="bold">{{ title }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827;">{{ total.total_days_lapsed }}</td>
+                    {% endif %}
+
+                    {% if set_name == 'mem_class_area_type_grp' %}
+                        <td colspan="5" class="bold">{{ title }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827;">{{ total.total_loan_granted }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827;">{{ total.total_first_pay }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827;">{{ total.total_amort }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827;">{{ total.total_loan_balance }}</td>
+                    {% endif %}
+
+                    {% if set_name == 'brgy_act_ltype_pd_by_prev_mos' %}
+                        <td colspan="6" class="bold">{{ title }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827;">{{ total.total_standard }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827;">{{ total.total_restruct }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827;">{{ total.total_renewal }}</td>
+                    {% endif %}
+                </tr>
+            {% endmacro %}
+
+            {% macro render_one_group(group, set_name, total_col_count) %}
+                <tr>
+                    <td colspan="{{ total_col_count }}" class="bold">
+                        {{ group.group_name }}: {{ group.group_title }}
+                    </td>
+                </tr>
+
+                {% if group.sub_groups and(group.sub_groups | length) %}
+                    {{ render_group_rows(group.sub_groups, set_name, total_col_count) }}
+                {% endif %}
+
+                {% if group.data_entries and(group.data_entries | length) %}
+                    {{ render_data_entries(group.data_entries, set_name) }}
+                {% endif %}
+
+                {{ render_total(group.total_per, group.group_name ~ ' TOTAL', set_name) }}
+            {% endmacro %}
+
+            {% macro render_group_rows(groups, set_name, total_col_count) %}
+                {% for group in groups %}
+                    {{ render_one_group(group, set_name, total_col_count) }}
+                {% endfor %}
+            {% endmacro %}
+
+            {% if is_pager_mode and grouped_data and(grouped_data | length) %}
+                {% for first_group in grouped_data %}
+                    <div class="container">
+                        {{ render_page_header(first_group.group_name ~ ': ' ~ first_group.group_title) }}
+
+                        <table class="table">
+                            {{ render_table_head(active_set) }}
+                            <tbody>
+                                {{ render_one_group(first_group, active_set, col_count) }}
+
+                                {% if loop.last %}
+                                    <tr>
+                                        <td colspan="{{ col_count }}" style="border: 0; padding: 10px 0;"><br></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="{{ col_count }}" style="border: 0; padding: 0; border-top: 1px solid #111827;"></td>
+                                    </tr>
+                                    {{ render_total(grand_total, 'GRAND TOTAL', active_set) }}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {% if not loop.last %}
+                        <div class="page-break"></div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            {% if is_single_table_mode %}
+                <div class="container">
+                    {{ render_page_header() }}
+
+                    <table class="table">
+                        {{ render_table_head(active_set) }}
+                        <tbody>
+                            {% if grouped_data and(grouped_data | length) %}
+                                {{ render_group_rows(grouped_data, active_set, col_count) }}
+                            {% endif %}
+
+                            <tr>
+                                <td colspan="{{ col_count }}" style="border: 0; padding: 10px 0;"><br></td>
+                            </tr>
+                            <tr>
+                                <td colspan="{{ col_count }}" style="border: 0; padding: 0; border-top: 1px solid #111827;"></td>
+                            </tr>
+                            {{ render_total(grand_total, 'GRAND TOTAL', active_set) }}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if not is_pager_mode and not is_single_table_mode %}
+                <div class="container">
+                    {{ render_page_header() }}
+                    <table class="table">
+                        {{ render_table_head('loan_stat_elapsed') }}
+                        <tbody>
+                            {% if grouped_data and(grouped_data | length) %}
+                                {{ render_group_rows(grouped_data, 'loan_stat_elapsed', 5) }}
+                            {% endif %}
+                            <tr>
+                                <td colspan="5" style="border: 0; padding: 10px 0;"><br></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="border: 0; padding: 0; border-top: 1px solid #111827;"></td>
+                            </tr>
+                            {{ render_total(grand_total, 'GRAND TOTAL', 'loan_stat_elapsed') }}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        </div>
+    </body>
+</html>

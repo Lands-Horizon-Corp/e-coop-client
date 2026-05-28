@@ -66,7 +66,7 @@ export const REPORT_REGISTRY = {
     cash_check_disbursement_template: CASH_CHECK_DISBURSEMENT_REPORT_TEMPLATES,
 
     rebate_report_template: REBATES_REPORT_TEMPLATES,
-    loan_release_summary: LOAN_RELEASE_SUMMARY_REPORT_TEMPLATES,
+    loan_release_summary_template: LOAN_RELEASE_SUMMARY_REPORT_TEMPLATES,
 
     teller_monitoring_template: TELLER_MONITORING_REPORT_TEMPLATES,
     loan_collection_detail_template: LOAN_COLLECTION_DETAIL_REPORT_TEMPLATES,
