@@ -29,27 +29,16 @@ export const AccountColumnEntrySchema = z.object({
     display_entry_type: z.enum(['CR', 'DR']),
 })
 
-export const WithAccountColumnListSchema = z
-    .object({
-        account_column_list: z
-            .array(AccountColumnEntrySchema)
-            .min(1, 'Must have minimum of 1 account column to display')
-            .default([]),
-        account_column_list_showable_first: z.coerce
-            .number()
-            .min(1, 'Require to show at least 1 account from list')
-            .default(1),
-    })
-    .refine(
-        (data) =>
-            data.account_column_list_showable_first <=
-            data.account_column_list.length,
-        {
-            message:
-                'Cannot show more accounts than what is available in the list',
-            path: ['account_column_list_showable_first'],
-        }
-    )
+export const WithAccountColumnListSchema = z.object({
+    account_column_list: z
+        .array(AccountColumnEntrySchema)
+        .min(1, 'Must have minimum of 1 account column to display')
+        .default([]),
+    account_column_list_showable_first: z.coerce
+        .number()
+        .min(1, 'Require to show at least 1 account from list')
+        .default(1),
+})
 
 export type TAccountEntry = z.infer<typeof AccountColumnEntrySchema>
 
@@ -315,10 +304,12 @@ export const AccountColumnListFormSection = <TForm extends FieldValues>({
     form,
     rootClassName,
     contentClassName,
+    disableShowFirst,
 }: {
     form: UseFormReturn<TForm>
     rootClassName?: string
     contentClassName?: string
+    disableShowFirst?: boolean
 }) => {
     return (
         <div
@@ -376,14 +367,18 @@ export const AccountColumnListFormSection = <TForm extends FieldValues>({
                         )
                     }}
                 />
-                <FormFieldWrapper
-                    className="w-fit"
-                    control={form.control}
-                    description="Will show first number of account in the table"
-                    label="Show First"
-                    name={'account_column_list_showable_first' as Path<TForm>}
-                    render={({ field }) => <Input {...field} />}
-                />
+                {!disableShowFirst && (
+                    <FormFieldWrapper
+                        className="w-fit"
+                        control={form.control}
+                        description="Will show first number of account in the table"
+                        label="Show First"
+                        name={
+                            'account_column_list_showable_first' as Path<TForm>
+                        }
+                        render={({ field }) => <Input {...field} />}
+                    />
+                )}
             </div>
         </div>
     )

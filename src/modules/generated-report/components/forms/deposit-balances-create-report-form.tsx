@@ -9,7 +9,6 @@ import { buildFormDefaults } from '@/helpers/form/form-persist.helper'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import { AccountCategoryComboBox } from '@/modules/account-category'
-import { AccountMultiPickerModal } from '@/modules/account/components/picker/account-multi-picker'
 import AreaCombobox from '@/modules/area/components/area-combobox'
 import { CurrencyInput } from '@/modules/currency'
 import EmployeePicker from '@/modules/employee/components/employee-picker'
@@ -55,6 +54,10 @@ import { useInternalState } from '@/hooks/use-internal-state'
 import { IClassProps, IForm } from '@/types'
 
 import { WithGeneratedReportSchema } from '../../generated-report.validation'
+import {
+    AccountColumnListFormSection,
+    WithAccountColumnListSchema,
+} from './account-column-list-form-section'
 
 export const DepositBalancesSchema = z
     .object({
@@ -154,6 +157,7 @@ export const DepositBalancesSchema = z
         collector: z.any().optional(),
     })
     .and(WithGeneratedReportSchema)
+    .and(WithAccountColumnListSchema)
 
 export type TDepositBalancesSchema = z.infer<typeof DepositBalancesSchema>
 
@@ -220,6 +224,9 @@ const DepositBalancesCreateReportForm = ({
                     member_department_id: undefined,
                     member_group_id: undefined,
                     member_address_area_id: undefined,
+
+                    account_column_list: [],
+                    account_column_list_showable_first: 0,
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
@@ -434,7 +441,7 @@ const DepositBalancesCreateReportForm = ({
                                             },
                                             {
                                                 value: 'by_area_grp',
-                                                label: 'By Area Group',
+                                                label: 'By Area + Group',
                                             },
                                             {
                                                 value: 'by_department',
@@ -618,7 +625,7 @@ const DepositBalancesCreateReportForm = ({
                                 >
                                     Amount Type
                                 </FormLabel>
-                                <div className="grid grid-cols-3 gap-4 p-4 items-baseline rounded-xl bg-muted/60 border">
+                                <div className="grid grid-cols-2 gap-4 p-4 items-baseline rounded-xl bg-muted/60 border">
                                     <div className="space-y-2">
                                         {[
                                             {
@@ -720,7 +727,7 @@ const DepositBalancesCreateReportForm = ({
                                     />
                                 </div>
                             </div>
-                            <FormFieldWrapper
+                            {/* <FormFieldWrapper
                                 control={form.control}
                                 label="Option Type"
                                 name="option_type"
@@ -827,6 +834,11 @@ const DepositBalancesCreateReportForm = ({
                                         ))}
                                     </RadioGroup>
                                 )}
+                            /> */}
+
+                            <AccountColumnListFormSection
+                                disableShowFirst
+                                form={form}
                             />
 
                             <div className="grid grid-cols-2 gap-4">
@@ -983,6 +995,7 @@ const DepositBalancesCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="deposit_balances_template"
                     />
                 </fieldset>
 

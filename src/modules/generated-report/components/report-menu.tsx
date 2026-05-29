@@ -348,9 +348,8 @@ const SCHEDULE_BALANCES_GROUP: ReportItem[] = [
         label: 'Deposit Balances',
         icon: Coins,
         component: DepositBalancesCreateReportFormModal,
-        is_available: false,
-        warning_message: 'No template',
         persistKey: 'form-report-deposits-deposit-balances',
+        registry_key: 'deposit_balances_template',
     },
     {
         label: 'Subscription Fee',
@@ -373,7 +372,7 @@ const SCHEDULE_BALANCES_GROUP: ReportItem[] = [
         icon: Scale,
         component: LoanBalancesCreateReportFormModal,
         is_available: false,
-        warning_message: 'No template',
+        warning_message: 'no template',
         persistKey: 'form-report-loans-loan-balances',
     },
     {
