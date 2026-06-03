@@ -340,9 +340,8 @@ const SCHEDULE_BALANCES_GROUP: ReportItem[] = [
         label: 'Account Balance',
         icon: Wallet,
         component: AccountBalanceCreateReportFormModal,
-        is_available: false,
-        warning_message: 'No template',
         persistKey: 'form-report-account-balance',
+        registry_key: 'account_balance_template',
     },
     {
         label: 'Deposit Balances',

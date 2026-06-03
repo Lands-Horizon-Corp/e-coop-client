@@ -404,6 +404,7 @@ const AccountBalanceCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="account_balance_template"
                     />
                 </fieldset>
 

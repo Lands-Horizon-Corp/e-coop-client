@@ -16,7 +16,7 @@ export interface IAdjustmentReportTemplate
 
     showable_account_column_list: Array<{
         account_id: TEntityId
-        display_entry_type: 'CR' | 'DR' // ignore this shit wla to not used here.
+        display_entry_type?: 'CR' | 'DR' // ignore this shit wla to not used here.
         short_name?: string
         name?: string
     }>

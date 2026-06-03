@@ -6,6 +6,7 @@ import { LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES } from '../loan-transaction/
 import { OTHER_FUND_PRINT_TEMPLATES } from '../other-fund/reports/other-fund-templates'
 import NO_TEMPLATE from './defaults/no-template.njk?raw'
 import { IGeneratedReportRequest } from './generated-report.types'
+import { ACCOUNT_BALANCE_REPORT_TEMPLATES } from './reports/account-balance-report-templates'
 import { ADJUSTMENT_REPORT_TEMPLATES } from './reports/adjustment-report-templates'
 import { CASH_CHECK_DISBURSEMENT_REPORT_TEMPLATES } from './reports/cash-check-disbursement-templates'
 import { CASH_RECEIPT_JOURNAL_REPORT_TEMPLATES } from './reports/cash-receipt-journal-report-templates'
@@ -76,6 +77,8 @@ export const REPORT_REGISTRY = {
     number_tag_template: NUMBER_TAG_REPORT_TEMPLATES,
     direct_adjustment_template: DIRECT_ADJUSTMENT_REPORT_TEMPLATES,
     deposit_balances_template: DEPOSIT_BALANCES_REPORT_TEMPLATES,
+
+    account_balance_template: ACCOUNT_BALANCE_REPORT_TEMPLATES,
 } as const
 
 export const getTemplateAt = <T>(

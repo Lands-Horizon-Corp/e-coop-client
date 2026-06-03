@@ -17,7 +17,7 @@ export interface IRebatesReportTemplate
 
     showable_account_column_list: Array<{
         account_id: TEntityId
-        display_entry_type: 'CR' | 'DR'
+        display_entry_type?: 'CR' | 'DR'
         short_name?: string
         name?: string
     }>

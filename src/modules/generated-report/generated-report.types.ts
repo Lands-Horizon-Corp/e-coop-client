@@ -152,7 +152,7 @@ export interface IBaseReportTemplateCheck {
 
 export interface IShowableAccount {
     account_id: TEntityId
-    display_entry_type: 'CR' | 'DR'
+    display_entry_type?: 'CR' | 'DR'
     short_name?: string
     name?: string
 }
