@@ -30,6 +30,10 @@ import { useInternalState } from '@/hooks/use-internal-state'
 import { IClassProps, IForm } from '@/types'
 
 import { WithGeneratedReportSchema } from '../../generated-report.validation'
+import {
+    AccountColumnListFormSection,
+    WithAccountColumnListSchema,
+} from './account-column-list-form-section'
 
 export const DirectAdjustmentReportSchema = z
     .object({
@@ -38,6 +42,7 @@ export const DirectAdjustmentReportSchema = z
         account: z.any(),
         account_id: entityIdSchema.optional(),
     })
+    .and(WithAccountColumnListSchema)
     .and(WithGeneratedReportSchema)
     .superRefine((data, ctx) => {
         if (
@@ -86,6 +91,8 @@ const DirectAdjustmentCreateReportForm = ({
                     start_date: undefined,
                     end_date: undefined,
                     account_id: undefined,
+                    account_column_list: [],
+                    account_column_list_showable_first: 1,
 
                     report_config: {
                         report_name: 'DirectAdjustmentReport',
@@ -184,6 +191,8 @@ const DirectAdjustmentCreateReportForm = ({
                         )}
                     />
 
+                    <AccountColumnListFormSection form={form} />
+
                     <Separator />
 
                     <PrintSettingsSection
@@ -191,6 +200,7 @@ const DirectAdjustmentCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="direct_adjustment_template"
                     />
                 </fieldset>
 
@@ -219,8 +229,10 @@ export const DirectAdjustmentCreateReportFormModal = ({
     description = 'Define date range and account for adjustments',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<IDirectAdjustmentReportFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
@@ -242,7 +254,7 @@ export const DirectAdjustmentCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

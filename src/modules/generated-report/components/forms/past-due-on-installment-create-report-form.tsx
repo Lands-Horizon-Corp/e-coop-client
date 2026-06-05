@@ -466,7 +466,7 @@ const PastDueOnInstallmentCreateReportForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty || isPending}
+                    disableSubmit={isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -486,8 +486,10 @@ export const PastDueOnInstallmentCreateReportFormModal = ({
     description = 'Generate past due installment report',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<IPastDueOnInstallmentFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
@@ -509,7 +511,7 @@ export const PastDueOnInstallmentCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

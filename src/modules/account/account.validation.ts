@@ -231,7 +231,8 @@ export const IAccountRequestSchema = z
 
         general_ledger_grouping_exclude_account: z.boolean().optional(),
 
-        name: z.string().min(1, 'Name is required'),
+        name: z.coerce.string().min(1, 'Name is required'),
+        short_name: z.string().optional().default(''),
         description: z
             .string()
             .max(250, 'Maximum is 250')

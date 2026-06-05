@@ -400,7 +400,7 @@ const ComakerCreateReportForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty || isPending}
+                    disableSubmit={isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -422,8 +422,10 @@ export const ComakerCreateReportFormModal = ({
     description = 'Define filters and configuration for Comaker report',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<IComakerReportFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
@@ -445,7 +447,7 @@ export const ComakerCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

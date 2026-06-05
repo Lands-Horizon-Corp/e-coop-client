@@ -171,5 +171,5 @@ export const SignatureSchema = z.object({
 })
 
 export const WithSignatureSchema = z.object({
-    signatures: SignatureSchema,
+    signatures: SignatureSchema.optional(),
 })

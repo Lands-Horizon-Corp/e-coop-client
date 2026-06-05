@@ -31,8 +31,12 @@ import {
     Wallet,
 } from 'lucide-react'
 
+import { WarningFillIcon } from '@/components/icons'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 
+import { hasRegistryTemplates } from '../generated-report-template-registry'
+import { IGeneratedReport } from '../generated-report.types'
 import { AccountBalanceCreateReportFormModal } from './forms/account-balance-create-report-form'
 import { AccountHoldOutCreateReportFormModal } from './forms/account-holdout-create-report-form'
 import { AdjustmentCreateReportFormModal } from './forms/adjustment-create-report-form'
@@ -79,6 +83,7 @@ import { TimeDepositBalanceCreateReportFormModal } from './forms/time-deposit-ba
 import { TimeDepositBalanceYTDCreateReportFormModal } from './forms/time-deposit-balance-ytd-create-report-form'
 import { TimeDepositCreateReportFormModal } from './forms/time-deposit-create-report-form'
 import { TransactionBatchCreateReportFormModal } from './forms/transaction-batch-create-report-form'
+import { useReportViewerStore } from './generated-report-view/global-generate-report-viewer.store'
 
 interface ReportItem {
     label: string
@@ -86,7 +91,11 @@ interface ReportItem {
     component?: React.ElementType<{
         trigger: React.ReactNode
         formProps?: object
+        closeOnSuccess?: boolean
     }>
+    is_available?: boolean
+    registry_key?: string
+    warning_message?: string // show if is_available is false, hide if component undefined
     persistKey?: string
 }
 
@@ -95,18 +104,21 @@ const COLLECTION_GROUP: ReportItem[] = [
         label: 'Daily Collection Detail',
         icon: FileText,
         component: DailyCollectionDetailCreateReportFormModal,
+        registry_key: 'daily_collection_detail_report_template',
         persistKey: 'form-report-collections-daily-coll-detail',
     },
     {
         label: 'Daily Collection Summary',
         icon: ClipboardList,
         component: DailyCollectionSummaryCreateReportFormModal,
+        registry_key: 'daily_collection_summary_report_template',
         persistKey: 'form-report-collections-daily-coll-summary',
     },
     {
         label: 'Cash Receipt Journal',
         icon: Receipt,
         component: DailyCashCollectionReceiptJournalCreateReportFormModal,
+        registry_key: 'cash_receipt_journal_report_template',
         persistKey: 'form-report-accounting-cash-receipt-journal',
     },
 ]
@@ -116,12 +128,15 @@ const DISBURSEMENT_GROUP: ReportItem[] = [
         label: 'Daily Withdrawal',
         icon: ArrowLeftRight,
         component: DailyWithdrawalCreateReportFormModal,
+        registry_key: 'daily_withdrawal_report_template',
         persistKey: 'form-report-deposits-daily-withdrawal',
     },
     {
         label: 'Time Deposit',
         icon: Clock,
         component: TimeDepositCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-deposits-time-deposit',
     },
 ]
@@ -131,6 +146,8 @@ const CASH_CHECK_VOUCHER_GROUP: ReportItem[] = [
         label: 'Cash Disbursement',
         icon: CreditCard,
         component: CashCheckDisbursementCreateReportFormModal,
+        registry_key: 'cash_check_disbursement_template',
+        warning_message: 'No template',
         persistKey: 'form-report-accounting-cash-disbursement',
     },
 ]
@@ -140,12 +157,14 @@ const LOAN_RELEASES_GROUP: ReportItem[] = [
         label: 'Loan Release Tabulated',
         icon: BarChart3,
         component: LoanReleaseCreateReportFormModal,
+        registry_key: 'loan_releases_tabulated_report_template',
         persistKey: 'form-report-loans-loan-release-tabulated',
     },
     {
         label: 'Loan Release Detail',
         icon: ScrollText,
         component: LoanReleaseDetailCreateReportFormModal,
+        registry_key: 'loan_release_detail_template',
         persistKey: 'form-report-loans-loan-release-detail',
     },
     {
@@ -153,11 +172,14 @@ const LOAN_RELEASES_GROUP: ReportItem[] = [
         icon: FileText,
         component: LoanReleaseSummaryCreateReportFormModal,
         persistKey: 'form-report-loans-loan-release-summary',
+        registry_key: 'loan_release_summary_template',
     },
     {
         label: 'Grocery Loan Release',
         icon: ShoppingCart,
         component: GroceryLoanReleaseCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-loans-grocery-loan-release',
     },
 ]
@@ -167,24 +189,29 @@ const JOURNAL_GROUP: ReportItem[] = [
         label: 'Journal Voucher',
         icon: FileText,
         component: JournalVoucherCreateReportFormModal,
+        registry_key: 'journal_voucher_report_templates',
         persistKey: 'form-report-accounting-journal-voucher',
     },
     {
         label: 'Adjustment',
         icon: Calculator,
         component: AdjustmentCreateReportFormModal,
+        registry_key: 'adjustment_report_template',
         persistKey: 'form-report-accounting-adjustment',
     },
     {
         label: 'Rebates',
         icon: DollarSign,
         component: RebateCreateReportFormModal,
+        registry_key: 'rebate_report_template',
         persistKey: 'form-report-other-rebates',
     },
     {
         label: 'ICPR',
         icon: ReceiptText,
         component: ICPRCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-accounting-icpr',
     },
 ]
@@ -194,6 +221,7 @@ const FUNDS_GROUP: ReportItem[] = [
         label: 'Transaction Batch',
         icon: ClipboardList,
         component: TransactionBatchCreateReportFormModal,
+        registry_key: 'transaction_batch_report_template',
         persistKey: 'form-report-accounting-transaction-batch',
     },
     {
@@ -208,6 +236,8 @@ const FUNDS_GROUP: ReportItem[] = [
         label: 'Other Funds Entry / Petty Cash',
         icon: Coins,
         component: OtherFundsEntryCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-other-funds-entry',
     },
 ]
@@ -217,18 +247,24 @@ const MEMBERS_GROUP: ReportItem[] = [
         label: 'Member Listing',
         icon: ListChecks,
         component: MemberListingCreateReportFormModal,
+        registry_key: 'member_listing_report_template',
+        warning_message: 'No template',
         persistKey: 'form-report-member-listing',
     },
     {
         label: 'Statement of Account',
         icon: ReceiptText,
         component: StatementOfDepositsCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-statement-of-account',
     },
     {
         label: 'Ledger',
         icon: BookOpen,
         component: LedgerCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-accounting-ledger',
     },
     {
@@ -240,6 +276,7 @@ const MEMBERS_GROUP: ReportItem[] = [
         label: 'Close Account',
         icon: FileX,
         component: CloseAccountCreateReportFormModal,
+        registry_key: 'close_account_report_template',
         persistKey: 'form-report-close-account',
     },
 ]
@@ -249,18 +286,24 @@ const LOAN_COLLECTION_GROUP: ReportItem[] = [
         label: 'Loan Collection Detail',
         icon: ScrollText,
         component: LoanCollectionDetailCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-collections-loan-collection-detail',
+        registry_key: 'loan_collection_detail_template',
     },
     {
         label: 'Loan Collection Summary',
         icon: FileBarChart,
         component: LoanCollectionSummaryCreateReportFormModal,
+        registry_key: 'loan_collection_summary_template',
         persistKey: 'form-report-collections-loan-collection-summary',
     },
     {
         label: 'Loan Collection Due',
         icon: Clock,
         component: LoanCollectionDueCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-collections-loan-collection-due',
     },
 ]
@@ -270,18 +313,24 @@ const TIME_DEPOSIT_GROUP: ReportItem[] = [
         label: 'TD Balance',
         icon: DollarSign,
         component: TimeDepositBalanceCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-deposits-td-balance',
     },
     {
         label: 'TD Bal / YTD',
         icon: BarChart3,
         component: TimeDepositBalanceYTDCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-deposits-td-bal-ytd',
     },
     {
         label: 'TD Accrued',
         icon: Percent,
         component: TimeDepositAccruedInterestCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-deposits-td-accrued',
     },
 ]
@@ -292,101 +341,133 @@ const SCHEDULE_BALANCES_GROUP: ReportItem[] = [
         icon: Wallet,
         component: AccountBalanceCreateReportFormModal,
         persistKey: 'form-report-account-balance',
+        registry_key: 'account_balance_template',
     },
     {
         label: 'Deposit Balances',
         icon: Coins,
         component: DepositBalancesCreateReportFormModal,
         persistKey: 'form-report-deposits-deposit-balances',
+        registry_key: 'deposit_balances_template',
     },
     {
         label: 'Subscription Fee',
         icon: BadgeDollarSign,
         component: SubscriptionFeeCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-share-capital-subscription-fee',
     },
     {
         label: 'Share Capital Withdrawal',
         icon: ArrowLeftRight,
         component: ShareCapitalWithdrawalCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-share-capital-withdrawal',
     },
     {
         label: 'Loan Balances',
         icon: Scale,
         component: LoanBalancesCreateReportFormModal,
+        is_available: false,
+        warning_message: 'no template',
         persistKey: 'form-report-loans-loan-balances',
     },
     {
         label: 'Loan Statement',
         icon: FileBarChart,
         component: LoanStatementCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-loans-loan-statement',
     },
     {
         label: 'Loan Maturity',
         icon: FileClock,
         component: LoanMaturityCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-loans-loan-maturity',
     },
     {
         label: 'Portfolio at Risk',
         icon: Shield,
         component: PortfolioAtRiskCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-loans-portfolio-at-risk',
     },
     {
         label: 'Past Due on Installment',
         icon: TrendingDown,
         component: PastDueOnInstallmentCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-loans-past-due-installment',
     },
     {
         label: 'Loan Receivable',
         icon: Receipt,
         component: LoanReceivableCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-loans-loan-receivable',
     },
     {
         label: 'Supposed / Actual',
         icon: Scale,
         component: SupposedActualCollectionCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-other-supposed-actual',
     },
     {
         label: 'Earned / Unearned',
         icon: Layers,
         component: EarnedUnearnedCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-share-capital-earned-unearned',
     },
     {
         label: 'Comaker',
         icon: UserCheck,
         component: ComakerCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-loans-comaker',
     },
     {
         label: 'CLPP',
         icon: FileText,
         component: LoanProtectionPlanCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-loans-loan-protection-plan',
     },
     {
         label: 'Grocery Loan',
         icon: ShoppingCart,
         component: GroceryLoanReleaseCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-loans-grocery-loan-release',
     },
     {
         label: 'Proof of Purchase',
         icon: ShoppingCart,
         component: ProofOfPurchaseCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-other-proof-of-purchase',
     },
     {
         label: 'Interest on Share Capital',
         icon: Percent,
         component: InterestOnShareCapitalCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-share-capital-interest',
     },
 ]
@@ -397,11 +478,14 @@ const OTHER_REPORTS_GROUP: ReportItem[] = [
         icon: Calculator,
         component: DirectAdjustmentCreateReportFormModal,
         persistKey: 'form-report-accounting-direct-adjustment',
+        registry_key: 'direct_adjustment_template',
     },
     {
         label: 'Account Hold Out',
         icon: FileX,
         component: AccountHoldOutCreateReportFormModal,
+        is_available: false,
+        warning_message: 'No template',
         persistKey: 'form-report-account-hold-out',
     },
     {
@@ -409,12 +493,14 @@ const OTHER_REPORTS_GROUP: ReportItem[] = [
         icon: Monitor,
         component: TellerMonitoringCreateReportFormModal,
         persistKey: 'form-report-other-teller-monitor',
+        registry_key: 'teller_monitoring_template',
     },
     {
         label: 'Print Number Tag',
         icon: Hash,
         component: PrintNumberTagCreateReportFormModal,
         persistKey: 'form-report-number-tag',
+        registry_key: 'number_tag_template',
     },
 ]
 
@@ -489,6 +575,10 @@ const ReportItemButton = ({
     variant?: 'ghost' | 'secondary'
 }) => {
     const Component = report.component
+    const templateAvailable = report.registry_key
+        ? hasRegistryTemplates(report.registry_key)
+        : report.is_available === true
+    const warningMessage = report.warning_message ?? 'No template'
 
     if (!Component) {
         return (
@@ -515,8 +605,13 @@ const ReportItemButton = ({
 
     return (
         <Component
+            closeOnSuccess={false}
             formProps={{
                 persistKey: report.persistKey,
+                onSuccess: (generatedReport: IGeneratedReport) =>
+                    useReportViewerStore
+                        .getState()
+                        .open({ reportId: generatedReport.id }),
             }}
             trigger={
                 <Button
@@ -530,6 +625,23 @@ const ReportItemButton = ({
                     <span className="text-sm font-medium truncate tracking-tight">
                         {report.label}
                     </span>
+                    {!templateAvailable && (
+                        <ActionTooltip
+                            tooltipContent={
+                                <span className="mt-0.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                                    {warningMessage}
+                                </span>
+                            }
+                            tooltipContentProps={{
+                                className:
+                                    'bg-popover ring ring-muted-foreground',
+                            }}
+                        >
+                            <span>
+                                <WarningFillIcon className="text-muted-foreground animate-pulse" />
+                            </span>
+                        </ActionTooltip>
+                    )}
                 </Button>
             }
         />

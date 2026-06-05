@@ -344,7 +344,7 @@ const TimeDepositBalanceYTDCreateReportForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty || isPending}
+                    disableSubmit={isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -366,8 +366,10 @@ export const TimeDepositBalanceYTDCreateReportFormModal = ({
     description = 'Generate TD balance for this month and YTD',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<
         TimeDepositBalanceYTDReportFormProps,
         'className' | 'onClose'
@@ -392,7 +394,7 @@ export const TimeDepositBalanceYTDCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

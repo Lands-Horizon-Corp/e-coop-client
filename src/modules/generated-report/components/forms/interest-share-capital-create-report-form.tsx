@@ -419,7 +419,7 @@ const InterestOnShareCapitalCreateReportForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty || isPending}
+                    disableSubmit={isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -441,8 +441,10 @@ export const InterestOnShareCapitalCreateReportFormModal = ({
     description = 'Generate interest on share capital report',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<IInterestOnShareCapitalFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
@@ -464,7 +466,7 @@ export const InterestOnShareCapitalCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

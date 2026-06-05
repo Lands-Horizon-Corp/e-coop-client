@@ -7,6 +7,7 @@ import { TPaperSizeName } from './components/forms/paper-size-selector'
 import { TGeneratedReportSchema } from './generated-report.validation'
 import {
     DISPLAY_DENSITY,
+    PAPER_ORIENTATION,
     PAPER_SIZES,
     PAPER_SIZE_UNIT,
     REPORT_NAMES,
@@ -100,23 +101,20 @@ export type TemplateOptions = {
 
 export type TPaperSizeUnit = (typeof PAPER_SIZE_UNIT)[number]
 
-export interface GeneratedReportTemplate<T = unknown> {
+export type TPaperOrientation = (typeof PAPER_ORIENTATION)[number]
+
+export interface GeneratedReportTemplate<
+    T = unknown,
+    TTemplateFilter = unknown,
+> {
     id: string
     template_name: string
 
     template: string
-
-    // niremove ko dahil contradicting to sa input and changeable unit.
-    // example max-width dito is 14in, pag binago ko unit to mm, 14mm lang allowable which is too small
-    // kaya remove nalang
-
-    // max_width: number
-    // max_height: number
-    // min_width: number
-    // min_height: number
+    template_filter?: TTemplateFilter // contains static filter config based on template that the form template can't override
 
     default_unit: TPaperSizeUnit
-    model: TReportName
+    report_name: TReportName
 
     width: string // combined ng value sa default sizing unit 18in
     height: string // combined ng value sa default sizing unit 14in
@@ -124,6 +122,9 @@ export interface GeneratedReportTemplate<T = unknown> {
     page_size?: (typeof PAPER_SIZES)[number]
 
     preview_data: T
+
+    density: TDisplayDensity
+    orientation: TPaperOrientation
 
     lock_organization_id?: TEntityId[]
     lock_branch_id?: TEntityId[]
@@ -139,12 +140,21 @@ export interface IBaseReportTemplateData {
     tax_number: string
     report_title: string
 
+    density?: TDisplayDensity
+
     print_count?: number
 }
 
 export interface IBaseReportTemplateCheck {
     check_number?: string
     check_date?: string
+}
+
+export interface IShowableAccount {
+    account_id: TEntityId
+    display_entry_type?: 'CR' | 'DR'
+    short_name?: string
+    name?: string
 }
 
 export type TDisplayDensity = (typeof DISPLAY_DENSITY)[number]

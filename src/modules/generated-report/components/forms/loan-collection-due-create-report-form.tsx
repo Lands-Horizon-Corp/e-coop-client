@@ -681,7 +681,7 @@ const LoanCollectionDueCreateReportForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty || isPending}
+                    disableSubmit={isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -703,8 +703,10 @@ export const LoanCollectionDueCreateReportFormModal = ({
     description = 'Generate collection due report',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<ILoanCollectionDueFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
@@ -726,7 +728,7 @@ export const LoanCollectionDueCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

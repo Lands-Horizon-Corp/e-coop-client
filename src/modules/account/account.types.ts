@@ -76,6 +76,7 @@ export interface IAccount extends IBaseEntityMeta {
 
     icon: TIcon
     name: string
+    short_name?: string
     description?: string
 
     min_amount?: number

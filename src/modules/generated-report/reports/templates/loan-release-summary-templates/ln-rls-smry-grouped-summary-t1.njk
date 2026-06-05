@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Loan Release Summary Report</title>
+        <style>
+            @page { margin: 0.5in; }
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body, html { margin: 0; padding: 0; min-height: 100%; background-color: white; }
+            body { margin: 0; padding: 0; height: auto; display: block; }
+            .container { --fs-xs: 7px; --fs-sm: 8px; --fs-base: 9px; --fs-lg: 10px; --fs-xl: 12px; --fs-2xl: 14px; --space-xs: 0.08rem; --space-sm: 0.15rem; --space-md: 0.25rem; --space-lg: 0.3rem; --space-xl: 0.4rem; --container-padding: 0.3in; --line-height: 1.3; padding: var(--container-padding); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; font-size: var(--fs-base); line-height: var(--line-height); display: flex; flex-direction: column; }
+            .header { text-align: center; margin-bottom: var(--space-lg); }
+            .header h1 { font-size: var(--fs-xl); font-weight: 800; }
+            .header .address { font-size: var(--fs-base); margin: var(--space-xs) 0; }
+            .header .tin { font-size: var(--fs-sm); }
+            .center { display: flex; flex-direction: column; align-items: center; text-align: center; }
+            .table { width: 100%; margin-top: var(--space-xl); margin-bottom: var(--space-lg); border: 0; border-radius: 6px; overflow: hidden; font-size: var(--fs-base); border-collapse: collapse; box-shadow: inset 0 0 0 1px #e5e7eb; }
+            .table th { text-transform: uppercase; font-size: var(--fs-sm); font-weight: 700; padding: var(--space-lg); text-align: left; border-bottom: 2px solid #e5e7eb; }
+            .table td { padding: var(--space-md) var(--space-lg); border-bottom: 1px solid #f3f4f6; }
+            .bold { font-weight: 900; }
+            .text-right { text-align: right !important; font-family: 'SF Mono', 'Monaco', 'Courier New', monospace; }
+        </style>
+    </head>
+    <body class="{{ density | default('normal') }}"><div class="container">
+        <header class="header"><h1>{{ header_title }}</h1><p class="address">{{ header_address }}</p><p class="tin">TIN: {{ tax_number }}</p></header>
+        <div class="center"><h2 class="bold">{{ report_title or 'LOAN RELEASE SUMMARY REPORT' }}</h2><div>{{ mode_of_payment }} - FROM: {{ start_date }} TO: {{ end_date }}</div></div>
+
+        {% macro render_group(group, is_last = false) %}
+            <tr><td class="bold" colspan="11">{{ group.group_title }}: {{ group.group_name }}</td></tr>
+            {% if group.data_entries %}
+                {% for row in group.data_entries %}
+                    <tr>
+                        <td>{{ row.account_short_name or '' }}</td>
+                        <td class="text-right">{{ row.standard_amount or '' }}</td>
+                        <td class="text-right">{{ row.standard_count or '' }}</td>
+                        <td class="text-right">{{ row.restruct_amount or '' }}</td>
+                        <td class="text-right">{{ row.restruct_count or '' }}</td>
+                        <td class="text-right">{{ row.renewal_amount or '' }}</td>
+                        <td class="text-right">{{ row.renewal_count or '' }}</td>
+                        <td class="text-right">{{ row.total_amount or '' }}</td>
+                        <td class="text-right">{{ row.total_count or '' }}</td>
+                        <td class="text-right">{{ row.proceeds or '' }}</td>
+                        <td class="text-right">{{ row.interest or '' }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            {% if group.sub_groups %}{% for sub in group.sub_groups %}{{ render_group(sub, loop.last) }}{% endfor %}{% endif %}
+            <tr>
+                <td class="bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.group_title }} Sub Total</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_standard_amount or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_standard_count or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_restruct_amount or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_restruct_count or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_renewal_amount or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_renewal_count or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_total_amount or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_total_count or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_proceeds or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_interest or '' }}</td>
+            </tr>
+            {% if not is_last %}
+                <tr><td colspan="11" style="border: 0; padding: 10px;"></td></tr>
+            {% endif %}
+        {% endmacro %}
+
+        <table class="table"><thead><tr>
+            <th>Type Of Loans</th><th class="text-right">Standard</th><th class="text-right">Count</th><th class="text-right">Restruct</th><th class="text-right">Count</th><th class="text-right">Renewal</th><th class="text-right">Count</th><th class="text-right">Total</th><th class="text-right">Count</th><th class="text-right">Proceeds</th><th class="text-right">Interest</th>
+        </tr></thead><tbody>
+            {% for item in grouped_data %}
+                {% if item.group_title %}
+                    {{ render_group(item, loop.last) }}
+                {% else %}
+                    <tr>
+                        <td>{{ item.account_short_name or '' }}</td>
+                        <td class="text-right">{{ item.standard_amount or '' }}</td>
+                        <td class="text-right">{{ item.standard_count or '' }}</td>
+                        <td class="text-right">{{ item.restruct_amount or '' }}</td>
+                        <td class="text-right">{{ item.restruct_count or '' }}</td>
+                        <td class="text-right">{{ item.renewal_amount or '' }}</td>
+                        <td class="text-right">{{ item.renewal_count or '' }}</td>
+                        <td class="text-right">{{ item.total_amount or '' }}</td>
+                        <td class="text-right">{{ item.total_count or '' }}</td>
+                        <td class="text-right">{{ item.proceeds or '' }}</td>
+                        <td class="text-right">{{ item.interest or '' }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            <tr>
+                <td class="bold" style="border-top: 1px solid #111827; border-bottom: 0;">Grand Total</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_standard_amount or grand_total.total_current or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_standard_count or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_restruct_amount or grand_total.total_restruct or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_restruct_count or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_renewal_amount or grand_total.total_renewal or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_renewal_count or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_total_amount or grand_total.total_amount_granted or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_total_count or grand_total.total_total or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_proceeds or grand_total.proceeds or grand_total.total_amount_granted or '' }}</td>
+                <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_interest or grand_total.total_interest_on_loan or '' }}</td>
+            </tr>
+        </tbody></table>
+    </div></body>
+</html>

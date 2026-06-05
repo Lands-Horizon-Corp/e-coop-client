@@ -20,7 +20,6 @@
                 margin: 0;
                 padding: 0;
                 min-height: 100%;
-                background-color: #f9fafb;
             }
 
             body {
@@ -56,7 +55,6 @@
                 padding: var(--container-padding);
                 background: white;
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-                color: #1f2937;
                 font-size: var(--fs-base);
                 line-height: var(--line-height);
                 flex-grow: 1;
@@ -65,10 +63,10 @@
                 width: 100%;
             }
 
-            /* OTHER VARIANTS */
+            /* DENSITY VARIANTS */
 
             /* NORMAL (default, explicit if you want) */
-            .variant-normal .container {
+            .normal .container {
                 --fs-xs: 7px;
                 --fs-sm: 8px;
                 --fs-base: 9px;
@@ -91,7 +89,7 @@
             }
 
             /* COMPACT */
-            .variant-compact .container {
+            .compact .container {
                 --fs-xs: 6px;
                 --fs-sm: 7px;
                 --fs-base: 8px;
@@ -114,7 +112,7 @@
             }
 
             /* LARGER */
-            .variant-large .container {
+            .loose .container {
                 --fs-xs: 8px;
                 --fs-sm: 10px;
                 --fs-base: 12px;
@@ -147,26 +145,22 @@
             .header h1 {
                 font-size: var(--fs-xl);
                 font-weight: 800;
-                color: #111827;
                 margin-bottom: var(--space-xs);
                 letter-spacing: -0.025em;
             }
 
             .header .address {
                 font-size: var(--fs-base);
-                color: #6b7280;
                 margin: var(--space-xs) 0;
             }
 
             .header .tin {
                 font-size: var(--fs-sm);
-                color: #575656;
             }
 
             .report-title {
                 font-size: var(--fs-2xl);
                 font-weight: 800;
-                color: #111827;
                 margin-top: var(--space-sm);
                 letter-spacing: -0.025em;
                 text-transform: uppercase;
@@ -195,14 +189,12 @@
             .info-label {
                 font-size: var(--fs-sm);
                 font-weight: 600;
-                color: #575656;
                 display: inline-block;
                 min-width: 65px;
             }
 
             .info-value {
                 font-size: var(--fs-base);
-                color: #1f2937;
                 font-weight: 600;
                 padding-left: var(--space-md);
             }
@@ -227,7 +219,6 @@
                 text-transform: uppercase;
                 font-size: var(--fs-sm);
                 font-weight: 700;
-                color: #374151;
                 padding: var(--space-lg);
                 text-align: left;
                 border-bottom: 2px solid #e5e7eb;
@@ -247,7 +238,6 @@
             .highlight {
                 background: #dbeafe !important;
                 font-weight: 700;
-                color: #1e40af;
                 border-top: 1px solid #3b82f6;
                 border-bottom: 1px solid #3b82f6;
             }
@@ -255,7 +245,6 @@
             .totals {
                 background: #f3f4f6;
                 font-weight: 700;
-                color: #111827;
                 font-size: var(--fs-base);
                 border-top: 1px solid #9ca3af;
             }
@@ -267,7 +256,6 @@
                 background: linear-gradient(to right, #fef3c7, #fde68a);
                 border: 1px solid #fbbf24;
                 border-radius: 2px;
-                color: #78350f;
                 font-size: var(--fs-xs);
                 font-weight: 700;
                 text-align: center;
@@ -287,7 +275,6 @@
             .reprint-indicator {
                 margin: var(--space-xl) 0;
                 padding: var(--space-md);
-                color: #5e5e5e
                 font-size: var(--fs-base);
                 font-weight: 800;
                 text-align: center;
@@ -331,7 +318,6 @@
             .sig-label {
                 font-size: var(--fs-xs);
                 font-weight: 700;
-                color: #6b7280;
                 text-transform: uppercase;
                 margin-bottom: var(--space-xs);
             }
@@ -340,10 +326,8 @@
             .sig-line {
                 border-bottom: 1px solid #9ca3af;
                 min-height: calc(var(--fs-lg) * 1.5);
-                /* make line relative to font size */
                 font-weight: 600;
                 font-size: var(--fs-base);
-                color: #1f2937;
                 padding-top: var(--space-xs);
                 width: 100%;
                 box-sizing: border-box;
@@ -368,7 +352,7 @@
             }
         </style>
     </head>
-    <body class="variant-normal">
+    <body class="normal">
         <div class="container">
             <header class="header">
                 <h1>{{ header_title }}</h1>
@@ -408,7 +392,7 @@
                         <span class="info-label">Processor:</span><span class="info-value">{{ processor }}</span>
                     </p>
                     <p>
-                        <span class="info-label">Due Date:</span><span class="info-value" style="color: #dc2626;">{{ due_date }}</span>
+                        <span class="info-label">Due Date:</span><span class="info-value">{{ due_date }}</span>
                     </p>
                 </div>
             </div>
@@ -419,8 +403,12 @@
                         <tr>
                             <th>Account Title</th>
                             <th>Description</th>
-                            <th><p class="text-right">Debit</p></th>
-                            <th><p class="text-right">Credit</p></th>
+                            <th>
+                                <p class="text-right">Debit</p>
+                            </th>
+                            <th>
+                                <p class="text-right">Credit</p>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>

@@ -167,11 +167,12 @@ const CloseAccountCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="close_account_report_template"
                     />
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty || isPending}
+                    disableSubmit={isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -193,8 +194,10 @@ export const CloseAccountCreateReportFormModal = ({
     description = 'Define filters and report configuration for close account report',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<ICloseAccountReportFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
@@ -216,7 +219,7 @@ export const CloseAccountCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

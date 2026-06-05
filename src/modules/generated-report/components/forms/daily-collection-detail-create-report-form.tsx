@@ -33,7 +33,7 @@ import { SignatureLightIcon, TrashIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Form } from '@/components/ui/form'
+import { Form, FormLabel } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
@@ -55,6 +55,10 @@ import { useInternalState } from '@/hooks/use-internal-state'
 import { IClassProps, IForm } from '@/types'
 
 import { WithGeneratedReportSchema } from '../../generated-report.validation'
+import {
+    AccountColumnListFormSection,
+    WithAccountColumnListSchema,
+} from './account-column-list-form-section'
 
 export const DailyCollectionDetailSchema = z
     .object({
@@ -69,7 +73,7 @@ export const DailyCollectionDetailSchema = z
         account: z.any().optional(),
         batch_no: z.coerce.number().optional(),
 
-        groupings: z.enum(['by_teller', 'no_grouping']).default('no_grouping'),
+        groupings: z.enum(['by-teller', 'no-grouping']).default('no-grouping'),
 
         option_type: z.enum(['option_1', 'option_2']).default('option_1'),
 
@@ -110,6 +114,7 @@ export const DailyCollectionDetailSchema = z
             .optional()
             .default([]),
     })
+    .and(WithAccountColumnListSchema)
     .and(WithGeneratedReportSchema)
     .and(WithSignatureSchema)
 
@@ -148,12 +153,15 @@ const DailyCollectionDetailCreateReportForm = ({
                     account: undefined,
                     batch_no: undefined,
 
-                    groupings: 'no_grouping',
+                    groupings: 'no-grouping',
                     option_type: 'option_1',
                     type: 'standard',
 
                     print_summary_cash_check: false,
                     sundries_print_separate_page: false,
+
+                    account_column_list: [],
+                    account_column_list_showable_first: 10,
 
                     report_config: {
                         ...getTemplateAt(undefined, 0),
@@ -207,7 +215,7 @@ const DailyCollectionDetailCreateReportForm = ({
                     className="grid gap-y-4"
                     disabled={isPending || formProps.readOnly}
                 >
-                    <div className="flex justify-end gap-x-2">
+                    <div className="flex justify-end items-end gap-x-2">
                         <FormFieldWrapper
                             control={form.control}
                             label="Title"
@@ -229,12 +237,13 @@ const DailyCollectionDetailCreateReportForm = ({
                                         trigger={
                                             <Button
                                                 {...field}
-                                                className="w-fit mt-6.5"
+                                                className="w-full"
                                                 size="sm"
                                                 type="button"
                                                 variant="secondary"
                                             >
-                                                <SignatureLightIcon /> Sign
+                                                <SignatureLightIcon />{' '}
+                                                Signatures
                                             </Button>
                                         }
                                     />
@@ -339,7 +348,6 @@ const DailyCollectionDetailCreateReportForm = ({
                             />
                         </div>
                     </div>
-
                     <BrowseDailyCollectionEntries
                         form={form}
                         trigger={
@@ -348,6 +356,8 @@ const DailyCollectionDetailCreateReportForm = ({
                             </Button>
                         }
                     />
+
+                    <AccountColumnListFormSection form={form} />
 
                     <div className="grid grid-cols-2 gap-4">
                         <FormFieldWrapper
@@ -362,11 +372,11 @@ const DailyCollectionDetailCreateReportForm = ({
                                 >
                                     {[
                                         {
-                                            value: 'by_teller',
+                                            value: 'by-teller',
                                             label: 'By Teller',
                                         },
                                         {
-                                            value: 'no_grouping',
+                                            value: 'no-grouping',
                                             label: 'No Grouping',
                                         },
                                     ].map((opt) => (
@@ -448,6 +458,10 @@ const DailyCollectionDetailCreateReportForm = ({
                         )}
                     />
 
+                    <FormLabel className="text-xs text-muted-foreground">
+                        Other Options
+                    </FormLabel>
+
                     <div className="grid grid-cols-2 gap-3">
                         <FormFieldWrapper
                             control={form.control}
@@ -523,11 +537,12 @@ const DailyCollectionDetailCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="daily_collection_detail_report_template"
                     />
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty || isPending}
+                    disableSubmit={isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -855,8 +870,10 @@ export const DailyCollectionDetailCreateReportFormModal = ({
     description = 'Generate daily collection detail report',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<IDailyCollectionDetailFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
@@ -878,7 +895,7 @@ export const DailyCollectionDetailCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

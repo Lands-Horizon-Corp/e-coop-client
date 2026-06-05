@@ -60,14 +60,13 @@ export const LoanMaturitySchema = z
             .default('passbook_number'),
         grouping: z
             .enum([
-                'by_account',
+                'by_member_type_no_grouping',
+                'by_member_type_account',
                 'by_barangay',
-                'mclass_area_mtype_grp',
-                'brgy_act_ltype',
-                'no_grouping',
-                'pd_by_prev_mos',
+                'mem_class_area_mtype_grp',
+                'brgy_act_ltype_pd_by_prev_mos',
             ])
-            .default('no_grouping'),
+            .default('by_member_type_no_grouping'),
         mode_of_payment: z
             .enum([...LOAN_MODE_OF_PAYMENT, 'all'])
             .default('all'),
@@ -99,7 +98,7 @@ const LoanMaturityCreateReportForm = ({
                     start_date: undefined,
                     end_date: undefined,
                     sort_by: 'passbook_number',
-                    grouping: 'no_grouping',
+                    grouping: 'by_member_type_no_grouping',
                     mode_of_payment: 'all',
 
                     report_config: {
@@ -417,19 +416,34 @@ const LoanMaturityCreateReportForm = ({
                                 value={field.value}
                             >
                                 {[
-                                    'by_account',
-                                    'by_barangay',
-                                    'mclass_area_mtype_grp',
-                                    'brgy_act_ltype',
-                                    'no_grouping',
-                                    'pd_by_prev_mos',
-                                ].map((v) => (
+                                    {
+                                        label: 'By Member Type No Grouping',
+                                        value: 'by_member_type_no_grouping',
+                                    },
+                                    {
+                                        label: 'By Member Type Account',
+                                        value: 'by_member_type_account',
+                                    },
+                                    {
+                                        label: 'By Barangay',
+                                        value: 'by_barangay',
+                                    },
+
+                                    {
+                                        label: 'Mem Class Area Mtype Group',
+                                        value: 'mem_class_area_mtype_grp',
+                                    },
+                                    {
+                                        label: 'Brgy Act Ltype Pd By Prev Mos',
+                                        value: 'brgy_act_ltype_pd_by_prev_mos',
+                                    },
+                                ].map((option) => (
                                     <label
                                         className="flex items-center gap-2 text-sm"
-                                        key={v}
+                                        key={option.value}
                                     >
-                                        <RadioGroupItem value={v} />
-                                        {v}
+                                        <RadioGroupItem value={option.value} />
+                                        {option.label}
                                     </label>
                                 ))}
                             </RadioGroup>
@@ -470,7 +484,7 @@ const LoanMaturityCreateReportForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty || isPending}
+                    disableSubmit={isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -492,8 +506,10 @@ export const LoanMaturityCreateReportFormModal = ({
     description = 'Define filters and generate loan maturity report',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<ILoanMaturityFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
@@ -515,7 +531,7 @@ export const LoanMaturityCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

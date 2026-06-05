@@ -1,9 +1,32 @@
 import { CASH_CHECK_VOUCHER_PRINT_TEMPLATES } from '../cash-check-voucher/reports/cash-check-voucher-templates'
+import { ACCOUNT_GENERAL_LEDGER_REPORT_TEMPLATES } from '../general-ledger-definition/reports/account-ledger-report-templates'
+import { GL_BOOK_REPORT_TEMPLATES } from '../general-ledger-definition/reports/general-ledger-report-templates'
 import { JOURNAL_VOUCHER_PRINT_TEMPLATES } from '../journal-voucher/reports/jornal-voucher-template'
 import { LOAN_TRANSACTION_VOUCHER_RELEASE_TEMPLATES } from '../loan-transaction/reports/loan-transaction-templates'
 import { OTHER_FUND_PRINT_TEMPLATES } from '../other-fund/reports/other-fund-templates'
 import NO_TEMPLATE from './defaults/no-template.njk?raw'
 import { IGeneratedReportRequest } from './generated-report.types'
+import { ACCOUNT_BALANCE_REPORT_TEMPLATES } from './reports/account-balance-report-templates'
+import { ADJUSTMENT_REPORT_TEMPLATES } from './reports/adjustment-report-templates'
+import { CASH_CHECK_DISBURSEMENT_REPORT_TEMPLATES } from './reports/cash-check-disbursement-templates'
+import { CASH_RECEIPT_JOURNAL_REPORT_TEMPLATES } from './reports/cash-receipt-journal-report-templates'
+import { MEMBER_CLOSE_ACCOUNT_REPORT_TEMPLATES } from './reports/close-account-report-templates'
+import { DAILY_COLLECTION_DETAIL_REPORT_TEMPLATES } from './reports/daily-collection-detail-report-templates'
+import { DAILY_COLLECTION_SUMMARY_REPORT_TEMPLATES } from './reports/daily-collection-summary-report-templates'
+import { DAILY_WITHDRAWAL_REPORT_TEMPLATES } from './reports/daily-withdrawal-report-templates'
+import { DEPOSIT_BALANCES_REPORT_TEMPLATES } from './reports/deposit-balances-templates'
+import { DIRECT_ADJUSTMENT_REPORT_TEMPLATES } from './reports/direct-adustment-report-template'
+import { JOURNAL_VOUCHER_REPORT_TEMPLATES } from './reports/journal-voucher-report-templates'
+import { LOAN_COLLECTION_DETAIL_REPORT_TEMPLATES } from './reports/loan-collection-detail-templates'
+import { LOAN_COLLECTION_SUMMARY_REPORT_TEMPLATES } from './reports/loan-collection-summary-report-templates'
+import { LOAN_RELEASE_DETAIL_REPORT_TEMPLATES } from './reports/loan-release-detail-report-templates'
+import { LOAN_RELEASE_SUMMARY_REPORT_TEMPLATES } from './reports/loan-release-summary-report-templates'
+import { LOAN_RELEASE_TABULATED_REPORT_TEMPLATES } from './reports/loan-releases-tabulated-report-templates'
+import { MEMBER_LISTING_REPORT_TEMPLATES } from './reports/member-listing-report-templates'
+import { NUMBER_TAG_REPORT_TEMPLATES } from './reports/number-tag-templates'
+import { REBATES_REPORT_TEMPLATES } from './reports/rebates-report-templates'
+import { TELLER_MONITORING_REPORT_TEMPLATES } from './reports/teller-monitoring-report-templates'
+import { TRANSACTION_BATCH_REPORT_TEMPLATES } from './reports/transaction-batch-report-templates'
 
 // import { IGeneratedReportRequest } from './generated-report.types'
 
@@ -12,6 +35,50 @@ export const REPORT_REGISTRY = {
     cash_check_print_voucher: CASH_CHECK_VOUCHER_PRINT_TEMPLATES,
     journal_voucher_print_template: JOURNAL_VOUCHER_PRINT_TEMPLATES,
     other_fund_print_template: OTHER_FUND_PRINT_TEMPLATES,
+
+    // GLFS
+    gl_books_report_template: GL_BOOK_REPORT_TEMPLATES,
+    gl_account_report_template: ACCOUNT_GENERAL_LEDGER_REPORT_TEMPLATES,
+
+    // REPORTS
+
+    // FOR COLLECTION REPORT
+    daily_collection_detail_report_template:
+        DAILY_COLLECTION_DETAIL_REPORT_TEMPLATES,
+
+    daily_collection_summary_report_template:
+        DAILY_COLLECTION_SUMMARY_REPORT_TEMPLATES,
+
+    daily_withdrawal_report_template: DAILY_WITHDRAWAL_REPORT_TEMPLATES,
+
+    cash_receipt_journal_report_template: CASH_RECEIPT_JOURNAL_REPORT_TEMPLATES,
+
+    journal_voucher_report_templates: JOURNAL_VOUCHER_REPORT_TEMPLATES,
+
+    loan_releases_tabulated_report_template:
+        LOAN_RELEASE_TABULATED_REPORT_TEMPLATES,
+    loan_release_summary_report_template: LOAN_RELEASE_SUMMARY_REPORT_TEMPLATES,
+
+    transaction_batch_report_template: TRANSACTION_BATCH_REPORT_TEMPLATES,
+
+    adjustment_report_template: ADJUSTMENT_REPORT_TEMPLATES,
+    member_listing_report_template: MEMBER_LISTING_REPORT_TEMPLATES,
+    close_account_report_template: MEMBER_CLOSE_ACCOUNT_REPORT_TEMPLATES,
+    loan_release_detail_template: LOAN_RELEASE_DETAIL_REPORT_TEMPLATES,
+    cash_check_disbursement_template: CASH_CHECK_DISBURSEMENT_REPORT_TEMPLATES,
+
+    rebate_report_template: REBATES_REPORT_TEMPLATES,
+    loan_release_summary_template: LOAN_RELEASE_SUMMARY_REPORT_TEMPLATES,
+
+    teller_monitoring_template: TELLER_MONITORING_REPORT_TEMPLATES,
+    loan_collection_detail_template: LOAN_COLLECTION_DETAIL_REPORT_TEMPLATES,
+    loan_collection_summary_template: LOAN_COLLECTION_SUMMARY_REPORT_TEMPLATES,
+
+    number_tag_template: NUMBER_TAG_REPORT_TEMPLATES,
+    direct_adjustment_template: DIRECT_ADJUSTMENT_REPORT_TEMPLATES,
+    deposit_balances_template: DEPOSIT_BALANCES_REPORT_TEMPLATES,
+
+    account_balance_template: ACCOUNT_BALANCE_REPORT_TEMPLATES,
 } as const
 
 export const getTemplateAt = <T>(
@@ -27,6 +94,7 @@ export const getTemplateAt = <T>(
             height: '11in',
             orientation: 'portrait',
             report_name: 'none',
+            template_filter: {},
             filters: {},
             display_density: 'normal',
             generated_report_type: 'pdf',
@@ -37,3 +105,18 @@ export const getTemplateAt = <T>(
 }
 
 export type GeneratedReportRegistryKey = keyof typeof REPORT_REGISTRY
+
+export const getRegistryTemplateCount = (registryKey?: string): number => {
+    if (!registryKey) return 0
+
+    if (!(registryKey in REPORT_REGISTRY)) return 0
+
+    const key = registryKey as GeneratedReportRegistryKey
+    const templates = REPORT_REGISTRY[key]
+
+    return Array.isArray(templates) ? templates.length : 0
+}
+
+export const hasRegistryTemplates = (registryKey?: string): boolean => {
+    return getRegistryTemplateCount(registryKey) > 0
+}

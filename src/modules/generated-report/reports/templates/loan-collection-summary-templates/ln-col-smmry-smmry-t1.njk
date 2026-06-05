@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Loan Collection Summary Report</title>
+        <style>
+            @page {
+                margin: 0.5in;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                min-height: 100%;
+                background-color: white;
+            }
+
+            .container {
+                --fs-xs: 7px;
+                --fs-sm: 8px;
+                --fs-base: 9px;
+                --fs-lg: 10px;
+                --fs-xl: 12px;
+                --fs-2xl: 14px;
+
+                --space-xs: 0.08rem;
+                --space-sm: 0.15rem;
+                --space-md: 0.25rem;
+                --space-lg: 0.3rem;
+                --space-xl: 0.4rem;
+
+                --sig-gap-x: 0.7rem;
+                --sig-gap-y: 1.4rem;
+                --sig-margin-t: 2rem;
+
+                padding: 0.3in;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+                font-size: var(--fs-base);
+                line-height: 1.3;
+                width: 100%;
+            }
+
+            .normal .container {
+                --fs-xs: 7px;
+                --fs-sm: 8px;
+                --fs-base: 9px;
+                --fs-lg: 10px;
+                --fs-xl: 12px;
+                --fs-2xl: 14px;
+            }
+
+            .compact .container {
+                --fs-xs: 6px;
+                --fs-sm: 7px;
+                --fs-base: 8px;
+                --fs-lg: 9px;
+                --fs-xl: 10px;
+                --fs-2xl: 12px;
+            }
+
+            .loose .container {
+                --fs-xs: 8px;
+                --fs-sm: 10px;
+                --fs-base: 12px;
+                --fs-lg: 14px;
+                --fs-xl: 16px;
+                --fs-2xl: 18px;
+            }
+
+            .header {
+                text-align: center;
+                margin-bottom: var(--space-lg);
+            }
+
+            .header h1 {
+                font-size: var(--fs-xl);
+                font-weight: 800;
+                margin-bottom: var(--space-xs);
+            }
+
+            .header .address {
+                font-size: var(--fs-base);
+                margin: var(--space-xs) 0;
+            }
+
+            .header .tin {
+                font-size: var(--fs-sm);
+            }
+
+            .center {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                margin-bottom: var(--space-md);
+            }
+
+            .bold {
+                font-weight: 900;
+            }
+
+            .text-right {
+                text-align: right !important;
+                font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+                font-variant-numeric: tabular-nums;
+            }
+
+            .signature-section {
+                margin-top: var(--sig-margin-t);
+            }
+
+            .sig-row {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--sig-gap-x);
+                margin-bottom: var(--sig-gap-y);
+            }
+
+            .sig-item {
+                text-align: center;
+            }
+
+            .sig-label {
+                font-size: var(--fs-xs);
+                font-weight: 700;
+                text-transform: uppercase;
+                margin-bottom: var(--space-xs);
+            }
+
+            .sig-line {
+                border-bottom: 1px solid #9ca3af;
+                min-height: calc(var(--fs-lg) * 1.5);
+                font-weight: 600;
+                font-size: var(--fs-base);
+                padding-top: var(--space-xs);
+                text-transform: uppercase;
+            }
+        </style>
+    </head>
+    <body class="{{ density | default('normal') }}">
+        <div class="container">
+            <header class="header">
+                <h1>{{ header_title }}</h1>
+                <p class="address">{{ header_address }}</p>
+                <p class="tin">TIN: {{ tax_number }}</p>
+            </header>
+
+            <br>
+            <br>
+            <div class="center">
+                <h2 class="bold">{{ report_title or 'LOAN COLLECTION SUMMARY REPORT' }}</h2>
+                <div>{{ mode_of_payment }} - FROM: {{ start_date }} TO: {{ end_date }}</div>
+            </div>
+
+            <br>
+            {% macro render_entry_rows(entries) %}
+                {% for key, value in entries %}
+                    {% if '_name' in key %}
+                        {% set base_key = key | replace('_name', '') %}
+                        <tr>
+                            <td style="padding: 2px 8px 2px 18px; border: 0;">{{ value }}</td>
+                            <td class="text-right" style="padding: 2px 8px; border: 0;">{{ entries[base_key ~ '_due_loans'] }}</td>
+                            <td class="text-right" style="padding: 2px 8px; border: 0;">{{ entries[base_key ~ '_projected'] }}</td>
+                            <td class="text-right" style="padding: 2px 8px; border: 0;">{{ entries[base_key ~ '_collected'] }}</td>
+                            <td class="text-right" style="padding: 2px 8px; border: 0;">{{ entries[base_key ~ '_war'] }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endmacro %}
+
+            {% macro render_sub_total(sub_total) %}
+                <tr>
+                    <td class="bold" style="padding: 2px 8px 2px 18px; border: 0;">SUB-TOTAL:</td>
+                    <td class="text-right bold" style="padding: 2px 8px; border: 0; border-top: 1px solid #111827;">{{ sub_total.entry_total_due_loans or sub_total.total_due_loans }}</td>
+                    <td class="text-right bold" style="padding: 2px 8px; border: 0; border-top: 1px solid #111827;">{{ sub_total.entry_total_projected or sub_total.total_projected }}</td>
+                    <td class="text-right bold" style="padding: 2px 8px; border: 0; border-top: 1px solid #111827;">{{ sub_total.entry_total_collected or sub_total.total_collected }}</td>
+                    <td class="text-right bold" style="padding: 2px 8px; border: 0; border-top: 1px solid #111827;">{{ sub_total.entry_total_war or sub_total.total_war }}</td>
+                </tr>
+            {% endmacro %}
+
+            {% macro render_bucket(label, bucket) %}
+                <tr>
+                    <td class="bold" style="padding: 2px 8px 2px 12px; border: 0;">{{ label }}</td>
+                    <td style="border: 0;"></td>
+                    <td style="border: 0;"></td>
+                    <td style="border: 0;"></td>
+                    <td style="border: 0;"></td>
+                </tr>
+                {{ render_entry_rows(bucket.entries) }}
+                {{ render_sub_total(bucket.sub_total) }}
+            {% endmacro %}
+
+            {% macro render_section(title, data) %}
+                <tr>
+                    <td class="bold" colspan="5" style="padding: 6px 8px 2px 0; border: 0; text-decoration: underline;">{{ title }}</td>
+                </tr>
+                {{ render_bucket('Current', data.current) }}
+                {{ render_bucket('Past Due', data.past_due) }}
+                <tr>
+                    <td colspan="5" style="padding: 6px 0; border: 0;"></td>
+                </tr>
+            {% endmacro %}
+
+            <table
+                class="table"
+                style="width: 100%; margin-top: 6px; border: 0; box-shadow: none; border-collapse: collapse;"
+            >
+                <thead>
+                    <tr>
+                        <th style="padding: 4px 8px; border: 0; border-top: 1px solid #111827; border-bottom: 1px solid #111827; text-align: left;">TYPE OF LOANS</th>
+                        <th class="text-right" style="padding: 4px 8px; border: 0; border-top: 1px solid #111827; border-bottom: 1px solid #111827;">DUE LOANS</th>
+                        <th class="text-right" style="padding: 4px 8px; border: 0; border-top: 1px solid #111827; border-bottom: 1px solid #111827;">PROJECTED</th>
+                        <th class="text-right" style="padding: 4px 8px; border: 0; border-top: 1px solid #111827; border-bottom: 1px solid #111827;">COLLECTED</th>
+                        <th class="text-right" style="padding: 4px 8px; border: 0; border-top: 1px solid #111827; border-bottom: 1px solid #111827;">% WAR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if summary_data %}
+                        {{ render_section('LOAN COLLECTIONS', summary_data.loan_collection_data) }}
+                        {{ render_section('LOAN RESTRUCTURE', summary_data.loan_restructure_data) }}
+                    {% endif %}
+                </tbody>
+            </table>
+
+            <section class="signature-section">
+                <div class="sig-row">
+                    <div class="sig-item">
+                        <div class="sig-label">Prepared By</div>
+                        <div class="sig-line">{{ summary_data.prepared_by }}</div>
+                    </div>
+                    <div class="sig-item">
+                        <div class="sig-label">Noted By</div>
+                        <div class="sig-line">{{ summary_data.noted_by }}</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>

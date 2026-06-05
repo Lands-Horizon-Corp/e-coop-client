@@ -404,11 +404,12 @@ const AccountBalanceCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="account_balance_template"
                     />
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty || isPending}
+                    disableSubmit={isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -430,8 +431,10 @@ export const AccountBalanceCreateReportFormModal = ({
     description = 'Define filters and configuration for account balance report',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<IAccountBalanceReportFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
@@ -453,7 +456,7 @@ export const AccountBalanceCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

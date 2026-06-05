@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Loan Release Summary Report</title>
+        <style>
+            @page {
+                margin: 0.5in;
+            }
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                min-height: 100%;
+                background-color: white;
+            }
+            .container {
+                padding: 0.3in;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+                font-size: 9px;
+                line-height: 1.3;
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 0.3rem;
+            }
+            .header h1 {
+                font-size: 12px;
+                font-weight: 800;
+            }
+            .header .address {
+                font-size: 9px;
+            }
+            .header .tin {
+                font-size: 8px;
+            }
+            .center {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .table {
+                width: 100%;
+                margin-top: 0.4rem;
+                margin-bottom: 0.3rem;
+                border-collapse: collapse;
+                box-shadow: inset 0 0 0 1px #e5e7eb;
+            }
+            .table th {
+                text-transform: uppercase;
+                font-size: 8px;
+                font-weight: 700;
+                padding: 0.3rem;
+                text-align: left;
+                border-bottom: 2px solid #e5e7eb;
+            }
+            .table td {
+                padding: 0.2rem 0.3rem;
+                border-bottom: 1px solid #f3f4f6;
+            }
+            .bold {
+                font-weight: 900;
+            }
+            .text-right {
+                text-align: right !important;
+                font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            }
+        </style>
+    </head>
+    <body class="{{ density | default('normal') }}">
+        <div class="container">
+            <header class="header">
+                <h1>{{ header_title }}</h1>
+                <p class="address">{{ header_address }}</p>
+                <p class="tin">TIN: {{ tax_number }}</p>
+            </header>
+            <div class="center">
+                <h2 class="bold">{{ report_title or 'LOAN RELEASE SUMMARY REPORT' }}</h2>
+                <div>PROCESSOR - FROM: {{ start_date }} TO: {{ end_date }}</div>
+            </div>
+
+            {% macro render_group(group, is_last = false) %}
+                <tr>
+                    <td class="bold" colspan="6">{{ group.group_title }}: {{ group.group_name }}</td>
+                </tr>
+                {% if group.data_entries %}
+                    {% for row in group.data_entries %}
+                        <tr>
+                            <td>{{ row.account_short_name or '' }}</td>
+                            <td class="text-right">{{ row.standard_count or '' }}</td>
+                            <td class="text-right">{{ row.restruct_count or '' }}</td>
+                            <td class="text-right">{{ row.renewal_count or '' }}</td>
+                            <td class="text-right">{{ row.total_count or '' }}</td>
+                            <td class="text-right">{{ row.total_amount or '' }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                {% if group.sub_groups %}
+                    {% for sub in group.sub_groups %}{{ render_group(sub, loop.last) }}
+                    {% endfor %}
+                {% endif %}
+                <tr>
+                    <td class="bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.group_name }} {{ group.group_title }} Sub Total</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_standard_count or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_restruct_count or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_renewal_count or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_total_count or '' }}</td>
+                    <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ group.total_per.subtotal_total_amount or '' }}</td>
+                </tr>
+                {% if not is_last %}
+                    <tr><td colspan="6" style="border: 0; padding: 10px;"></td></tr>
+                {% endif %}
+            {% endmacro %}
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Type Of Loans</th>
+                        <th class="text-right">Standard Cnt</th>
+                        <th class="text-right">Restruct Cnt</th>
+                        <th class="text-right">Renewal Cnt</th>
+                        <th class="text-right">Total Cnt</th>
+                        <th class="text-right">Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in grouped_data %}{{ render_group(item, loop.last) }}
+                    {% endfor %}
+                    <tr>
+                        <td class="bold" style="border-top: 1px solid #111827; border-bottom: 0;">Grand Total</td>
+                        <td style="border-top: 1px solid #111827; border-bottom: 0;"></td>
+                        <td style="border-top: 1px solid #111827; border-bottom: 0;"></td>
+                        <td style="border-top: 1px solid #111827; border-bottom: 0;"></td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_total_count or grand_total.total_total or '' }}</td>
+                        <td class="text-right bold" style="border-top: 1px solid #111827; border-bottom: 0;">{{ grand_total.total_amount_granted or '' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

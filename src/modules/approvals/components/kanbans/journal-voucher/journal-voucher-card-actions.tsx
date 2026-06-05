@@ -148,7 +148,7 @@ export const JournalVoucherCardActions = ({
                     defaultValues: {
                         name: 'Journal Voucher ',
                         description: 'Generated Journal Voucher',
-                        model: 'JournalVoucherRelease',
+                        report_name: 'JournalVoucherRelease',
                         generated_report_type: 'pdf',
                         url: `/api/v1/journal-voucher/${journalVoucher.id}`,
                     },

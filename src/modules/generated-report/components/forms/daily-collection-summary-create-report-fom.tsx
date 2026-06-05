@@ -40,6 +40,10 @@ import { useInternalState } from '@/hooks/use-internal-state'
 import { IClassProps, IForm } from '@/types'
 
 import { WithGeneratedReportSchema } from '../../generated-report.validation'
+import {
+    AccountColumnListFormSection,
+    WithAccountColumnListSchema,
+} from './account-column-list-form-section'
 
 export const DailyCollectionSummarySchema = z
     .object({
@@ -48,6 +52,7 @@ export const DailyCollectionSummarySchema = z
 
         sundries_print_separate_page: z.boolean().default(false),
     })
+    .and(WithAccountColumnListSchema)
     .and(WithGeneratedReportSchema)
     .and(WithSignatureSchema)
 
@@ -177,6 +182,8 @@ const DailyCollectionSummaryCreateReportForm = ({
                         />
                     </div>
 
+                    <AccountColumnListFormSection form={form} />
+
                     <FormFieldWrapper
                         control={form.control}
                         name="sundries_print_separate_page"
@@ -218,11 +225,12 @@ const DailyCollectionSummaryCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="daily_collection_summary_report_template"
                     />
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty || isPending}
+                    disableSubmit={isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -244,8 +252,10 @@ export const DailyCollectionSummaryCreateReportFormModal = ({
     description = 'Generate daily collection summary report',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<IDailyCollectionSummaryFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
@@ -267,7 +277,7 @@ export const DailyCollectionSummaryCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

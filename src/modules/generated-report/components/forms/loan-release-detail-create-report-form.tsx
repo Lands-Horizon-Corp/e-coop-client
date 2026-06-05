@@ -84,9 +84,9 @@ export const LoanReleaseDetailSchema = z
         groupings: z
             .enum([
                 'by_mtype_acct',
+                'by_mtype_brgy',
                 'by_mtype_mclass',
                 'by_mtype_ltype',
-                'by_mtype_brgy',
                 'by_mtype_area',
                 'by_mtype_area_grp',
                 'by_mclass_area_mtype_grp',
@@ -150,6 +150,7 @@ const LoanReleaseDetailCreateReportForm = ({
                     end_date: undefined,
                     barangay: 'ALL',
                     loan_amount_type: 'all',
+                    payment_type: 'all',
                     loan_type: 'all',
                     sort_by: 'pb_no',
 
@@ -487,25 +488,61 @@ const LoanReleaseDetailCreateReportForm = ({
                                 value={field.value}
                             >
                                 {[
-                                    'by_mtype_acct',
-                                    'by_mtype_mclass',
-                                    'by_mtype_ltype',
-                                    'by_mtype_brgy',
-                                    'by_mtype_area',
-                                    'by_mtype_area_grp',
-                                    'by_mclass_area_mtype_grp',
-                                    'by_coll_brgy',
-                                    'by_coll_area',
-                                    'by_mtype_acct_ltr',
-                                    'by_mtype_occup',
-                                    'no_grouping',
-                                ].map((v) => (
+                                    {
+                                        label: 'Mem. Type + Account',
+                                        value: 'by_mtype_acct',
+                                    },
+                                    {
+                                        label: 'Mem. Type + Mem. Class',
+                                        value: 'by_mtype_mclass',
+                                    },
+                                    {
+                                        label: 'Mem. Type + Loan Type',
+                                        value: 'by_mtype_ltype',
+                                    },
+                                    {
+                                        label: 'Mem. Type + Brgy',
+                                        value: 'by_mtype_brgy',
+                                    },
+                                    {
+                                        label: 'Mem. Type + Area',
+                                        value: 'by_mtype_area',
+                                    },
+                                    {
+                                        label: 'Mem. Type + Area + Grp',
+                                        value: 'by_mtype_area_grp',
+                                    },
+                                    {
+                                        label: 'Mem. Class + Area + Mem. Type + Grp',
+                                        value: 'by_mclass_area_mtype_grp',
+                                    },
+                                    {
+                                        label: 'Collector + Brgy',
+                                        value: 'by_coll_brgy',
+                                    },
+                                    {
+                                        label: 'Collector + Area',
+                                        value: 'by_coll_area',
+                                    },
+                                    {
+                                        label: 'Mem. Type + Acct + Ltr',
+                                        value: 'by_mtype_acct_ltr',
+                                    },
+                                    {
+                                        label: 'Mem. Type + Occupation',
+                                        value: 'by_mtype_occup',
+                                    },
+                                    {
+                                        label: 'No Grouping',
+                                        value: 'no_grouping',
+                                    },
+                                ].map(({ label, value }) => (
                                     <label
                                         className="flex items-center gap-2 text-xs"
-                                        key={v}
+                                        key={value}
                                     >
-                                        <RadioGroupItem value={v} />
-                                        {v}
+                                        <RadioGroupItem value={value} />
+                                        {label}
                                     </label>
                                 ))}
                             </RadioGroup>
@@ -629,11 +666,12 @@ const LoanReleaseDetailCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="loan_release_detail_template"
                     />
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty || isPending}
+                    disableSubmit={isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -655,8 +693,10 @@ export const LoanReleaseDetailCreateReportFormModal = ({
     description = 'Define filters and generate loan release detail report',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<ILoanReleaseDetailFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
@@ -678,7 +718,7 @@ export const LoanReleaseDetailCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

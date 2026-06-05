@@ -272,7 +272,7 @@ const TimeDepositAccruedInterestCreateReportForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty || isPending}
+                    disableSubmit={isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -294,8 +294,10 @@ export const TimeDepositAccruedInterestCreateReportFormModal = ({
     description = 'Generate time deposit accrued interest report',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<
         ITimeDepositAccruedInterestFormProps,
         'className' | 'onClose'
@@ -320,7 +322,7 @@ export const TimeDepositAccruedInterestCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

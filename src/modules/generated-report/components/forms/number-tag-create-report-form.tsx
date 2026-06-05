@@ -32,7 +32,7 @@ import { WithGeneratedReportSchema } from '../../generated-report.validation'
 
 export const PrintNumberTagSchema = z
     .object({
-        start_number: z.coerce.number().min(1),
+        start_number: z.coerce.number(),
         end_number: z.coerce.number().min(1),
     })
     .and(WithGeneratedReportSchema)
@@ -150,6 +150,7 @@ const PrintNumberTagForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="number_tag_template"
                     />
                 </fieldset>
 
@@ -178,8 +179,10 @@ export const PrintNumberTagCreateReportFormModal = ({
     description = 'Define number range for printing tags',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<IPrintNumberTagFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
@@ -201,7 +204,7 @@ export const PrintNumberTagCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>

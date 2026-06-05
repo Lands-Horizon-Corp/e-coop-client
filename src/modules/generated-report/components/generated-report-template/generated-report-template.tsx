@@ -54,6 +54,7 @@ import {
 import {
     GeneratedReportTemplate,
     TDisplayDensity,
+    TPaperOrientation,
     TPaperSizeUnit,
 } from '../../generated-report.types'
 import {
@@ -100,18 +101,45 @@ export function GenerateReportTemplatePicker<T = unknown>({
     const [inputW, setInputW] = useState('800')
     const [inputH, setInputH] = useState('1100')
     const [unit, setUnit] = useState<TPaperSizeUnit>('px')
+    const [orientation, setOrientation] =
+        useState<TPaperOrientation>('portrait')
     const [displayDensity, setDisplayDensity] =
         useState<TDisplayDensity>('normal')
+
+    const getOrientedDimensions = useCallback(
+        (width: string, height: string, nextOrientation: TPaperOrientation) => {
+            const rawW = parseFloat(width) || 800
+            const rawH = parseFloat(height) || 1100
+
+            if (nextOrientation === 'portrait' && rawW > rawH) {
+                return { width: rawH, height: rawW }
+            }
+
+            if (nextOrientation === 'landscape' && rawH > rawW) {
+                return { width: rawH, height: rawW }
+            }
+
+            return { width: rawW, height: rawH }
+        },
+        []
+    )
 
     const renderTemplate = useCallback(
         async (item: GeneratedReportTemplate) => {
             setLoading(true)
             try {
                 const source = item.template
+
+                // pageW/pageH are already the active dimensions shown in the form.
+                const finalW = pageW
+                const finalH = pageH
+
                 setRenderedHtml(
                     nunjucks.renderString(source, {
                         ...(item.preview_data ? { ...item.preview_data } : {}),
-                        width: inputW,
+                        density: displayDensity,
+                        width: String(finalW),
+                        height: String(finalH),
                     })
                 )
             } catch {
@@ -123,75 +151,105 @@ export function GenerateReportTemplatePicker<T = unknown>({
                 setLoading(false)
             }
         },
-        [inputW]
+        [pageW, pageH, displayDensity]
     )
 
     useEffect(() => {
         if (!selected && resolvedTemplates.length > 0) {
             const first = resolvedTemplates[0]
             setSelected(first)
-            const w = parseFloat(first.width) || 800
-            const h = parseFloat(first.height) || 1100
-            setPageW(w)
-            setPageH(h)
-            setInputW(String(w))
-            setInputH(String(h))
+            const nextOrientation = first.orientation
+            const { width, height } = getOrientedDimensions(
+                first.width,
+                first.height,
+                nextOrientation
+            )
+            setPageW(width)
+            setPageH(height)
+            setInputW(String(width))
+            setInputH(String(height))
             setUnit(first.default_unit ?? 'px')
-            renderTemplate(first)
+            setOrientation(nextOrientation)
         }
-    }, [selected, resolvedTemplates, renderTemplate])
+    }, [selected, resolvedTemplates, getOrientedDimensions])
+
+    useEffect(() => {
+        if (!selected) return
+        renderTemplate(selected)
+    }, [selected, renderTemplate])
 
     const handleSelect = (item: GeneratedReportTemplate<T>) => {
         setSelected(item)
-        const w = parseFloat(item.width) || 800
-        const h = parseFloat(item.height) || 1100
-        setPageW(w)
-        setPageH(h)
-        setInputW(String(w))
-        setInputH(String(h))
+        const nextOrientation = item.orientation
+        const { width, height } = getOrientedDimensions(
+            item.width,
+            item.height,
+            nextOrientation
+        )
+        setOrientation(nextOrientation)
+        setPageW(width)
+        setPageH(height)
+        setInputW(String(width))
+        setInputH(String(height))
+        setDisplayDensity(item.density)
         setUnit(item.default_unit ?? 'px')
-        renderTemplate(item)
     }
 
     const handleConfirm = () => {
         if (selected) {
-            onSelect?.(selected, {
-                width: `${pageW}${unit}`,
-                height: `${pageH}${unit}`,
-                unit,
-            })
+            onSelect?.(
+                {
+                    ...selected,
+                    orientation,
+                    density: displayDensity,
+                },
+                {
+                    width: `${pageW}${unit}`,
+                    height: `${pageH}${unit}`,
+                    unit,
+                }
+            )
         } else toast.warning('No template selected')
     }
 
     const dimSchema = z.coerce.number().min(0.01).max(99999)
 
-    const handleApplyDimensions = () => {
+    useEffect(() => {
         if (!selected) return
 
         const parsedW = dimSchema.safeParse(inputW)
         const parsedH = dimSchema.safeParse(inputH)
 
-        const nextW = parsedW.success ? parsedW.data : pageW
-        const nextH = parsedH.success ? parsedH.data : pageH
+        if (parsedW.success && parsedW.data !== pageW) {
+            setPageW(parsedW.data)
+        }
 
-        setPageW(nextW)
-        setPageH(nextH)
-        setInputW(String(nextW))
-        setInputH(String(nextH))
-    }
+        if (parsedH.success && parsedH.data !== pageH) {
+            setPageH(parsedH.data)
+        }
+    }, [selected, inputW, inputH, dimSchema, pageW, pageH])
 
     const resetDimensions = () => {
         if (!selected) return
-        const w = parseFloat(selected.width)
-        const h = parseFloat(selected.height)
-        setPageW(w)
-        setPageH(h)
-        setInputW(String(w))
-        setInputH(String(h))
+        const nextOrientation = selected.orientation
+        const { width, height } = getOrientedDimensions(
+            selected.width,
+            selected.height,
+            nextOrientation
+        )
+        setPageW(width)
+        setPageH(height)
+        setInputW(String(width))
+        setInputH(String(height))
+        setOrientation(nextOrientation)
         setUnit(selected.default_unit)
     }
 
-    const iframeSrcDoc = `<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0;width:${pageW}${unit};height:${pageH}${unit};overflow:hidden;font-family:'Segoe UI',sans-serif;}</style></head><body>${renderedHtml}</body></html>`
+    const finalW = pageW
+    const finalH = pageH
+
+    // const iframeSrcDoc = `<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0;width:${pageW}${unit};height:${pageH}${unit};overflow:hidden;font-family:'Segoe UI',sans-serif;}</style></head><body>${renderedHtml}</body></html>`
+    const iframeSrcDoc = renderedHtml
 
     useHotkeys(
         'alt+enter',
@@ -206,7 +264,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
     )
 
     return (
-        <div className="max-w-6xl w-full mx-auto bg-popover ring-4 ring-muted border border-border overflow-clip rounded-xl h-[80vh] p-0 gap-0 flex">
+        <div className="max-w-6xl w-full mx-auto bg-popover ring-4 ring-muted border border-border overflow-clip rounded-xl h-[95vh] p-0 gap-0 flex">
             <aside className="flex !w-64 flex-col border-r border-border bg-muted/30">
                 <Command className="rounded-none border-0 bg-transparent">
                     <div className="p-4 pb-0">
@@ -230,8 +288,9 @@ export function GenerateReportTemplatePicker<T = unknown>({
                                 return (
                                     <CommandItem
                                         className={cn(
-                                            'flex cursor-pointer flex-col items-start gap-0.5 rounded-lg px-3 py-2.5',
-                                            isActive && 'bg-accent'
+                                            'flex cursor-pointer text-foreground/60 flex-col items-start gap-0.5 rounded-lg px-3 py-2.5',
+                                            isActive &&
+                                                'bg-popover ring-2 ring-primary/40 text-foreground'
                                         )}
                                         key={item.id}
                                         onSelect={() => handleSelect(item)}
@@ -240,10 +299,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
                                         <div className="flex w-full items-center justify-between">
                                             <span
                                                 className={cn(
-                                                    'text-sm font-medium',
-                                                    isActive
-                                                        ? 'text-accent-foreground'
-                                                        : 'text-foreground'
+                                                    'text-sm font-medium'
                                                 )}
                                             >
                                                 {item.template_name}
@@ -262,12 +318,12 @@ export function GenerateReportTemplatePicker<T = unknown>({
                     </CommandList>
                 </Command>
 
-                <div className="mt-auto space-y-5 border-t border-border bg-background/50 p-5">
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
-                            <UserCogIcon className="h-3 w-3" />
-                            Page Size
-                        </div>
+                <div className="mt-auto space-y-2 border-t border-border bg-background/50 p-2">
+                    <div className="flex sticky top-2 items-center gap-2 text-[10px] p-2 font-semibold uppercase tracking-widest text-muted-foreground">
+                        <UserCogIcon className="size-3" />
+                        Configuration
+                    </div>
+                    <div className="space-y-4 max-h-[50vh] overflow-y-auto ecoop-scroll px-3 pb-3">
                         <div className="space-y-1.5">
                             <Label className="text-[10px] uppercase text-muted-foreground">
                                 Paper Size
@@ -276,10 +332,20 @@ export function GenerateReportTemplatePicker<T = unknown>({
                                 onValueChange={(key: string) => {
                                     const paper = PAPER_SIZES[key]
                                     if (!paper) return
-                                    setPageW(paper.width)
-                                    setPageH(paper.height)
-                                    setInputW(String(paper.width))
-                                    setInputH(String(paper.height))
+
+                                    const isLandscape =
+                                        orientation === 'landscape'
+                                    const nextW = isLandscape
+                                        ? paper.height
+                                        : paper.width
+                                    const nextH = isLandscape
+                                        ? paper.width
+                                        : paper.height
+
+                                    setPageW(nextW)
+                                    setPageH(nextH)
+                                    setInputW(String(nextW))
+                                    setInputH(String(nextH))
                                     setUnit(paper.unit as TPaperSizeUnit)
                                 }}
                             >
@@ -412,24 +478,88 @@ export function GenerateReportTemplatePicker<T = unknown>({
                                 })}
                             </RadioGroup>
                         </div>
+                        <div className="space-y-1">
+                            <Label className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                                Orientation
+                            </Label>
+                            <RadioGroup
+                                className="flex gap-2"
+                                onValueChange={(val: TPaperOrientation) => {
+                                    if (val === orientation) return
+
+                                    const swappedW = pageH
+                                    const swappedH = pageW
+
+                                    setOrientation(val)
+                                    setPageW(swappedW)
+                                    setPageH(swappedH)
+                                    setInputW(String(swappedW))
+                                    setInputH(String(swappedH))
+                                }}
+                                value={orientation}
+                            >
+                                {[
+                                    {
+                                        value: 'portrait',
+                                        label: 'Portrait',
+                                        size: { width: 14, height: 18 },
+                                    },
+                                    {
+                                        value: 'landscape',
+                                        label: 'Landscape',
+                                        size: { width: 18, height: 14 },
+                                    },
+                                ].map((opt) => {
+                                    const isSelected = orientation === opt.value
+
+                                    return (
+                                        <label
+                                            className={cn(
+                                                'flex-1 flex items-center justify-center gap-1.5 rounded-md border-2 py-1.5 px-2 cursor-pointer transition-all',
+                                                isSelected
+                                                    ? 'border-primary bg-primary/5'
+                                                    : 'border-border bg-card hover:border-muted-foreground/30'
+                                            )}
+                                            key={opt.value}
+                                        >
+                                            <RadioGroupItem
+                                                className="sr-only"
+                                                value={opt.value}
+                                            />
+                                            <div
+                                                className={cn(
+                                                    'rounded-[2px] border transition-all',
+                                                    isSelected
+                                                        ? 'border-primary bg-primary/20'
+                                                        : 'border-border bg-muted'
+                                                )}
+                                                style={opt.size}
+                                            />
+                                            <span
+                                                className={cn(
+                                                    'text-xs font-medium capitalize',
+                                                    isSelected
+                                                        ? 'text-primary'
+                                                        : 'text-muted-foreground'
+                                                )}
+                                            >
+                                                {opt.label}
+                                            </span>
+                                        </label>
+                                    )
+                                })}
+                            </RadioGroup>
+                        </div>
                     </div>
                     <div className="flex gap-2">
                         <Button
-                            className="h-8 flex-1 text-xs"
+                            className="h-8 w-full text-xs"
                             onClick={resetDimensions}
                             size="xs"
                             variant="outline"
                         >
                             <RotateLeftIcon className="mr-1.5 h-3 w-3" />
                             Reset
-                        </Button>
-                        <Button
-                            className="h-8 flex-1 text-xs"
-                            onClick={handleApplyDimensions}
-                            size="xs"
-                            variant="secondary"
-                        >
-                            Apply
                         </Button>
                     </div>
                 </div>
@@ -464,8 +594,8 @@ export function GenerateReportTemplatePicker<T = unknown>({
                             sandbox="allow-same-origin"
                             srcDoc={iframeSrcDoc}
                             style={{
-                                width: `${pageW}${unit}`,
-                                height: `${pageH}${unit}`,
+                                width: `${finalW}${unit}`,
+                                height: `${finalH}${unit}`,
                                 background: 'black',
                             }}
                             title="Template Preview"
@@ -517,7 +647,7 @@ export function GenerateReportTemplatePickerModal({
     return (
         <Dialog {...modalProps}>
             {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-            <DialogContent className="!max-w-6xl h-[80vh] !bg-transparent p-0 gap-0 flex flex-col">
+            <DialogContent className="!max-w-6xl !bg-transparent p-0 gap-0 flex flex-col">
                 <DialogHeader className="px-6 py-4 hidden border-b border-border shrink-0">
                     <DialogTitle className="text-lg">
                         Select Template

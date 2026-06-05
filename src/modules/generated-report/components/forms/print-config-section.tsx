@@ -200,7 +200,9 @@ export function PrintSettingsSection({
                         value={field.value}
                     >
                         {DISPLAY_DENSITY.map((density, i) => {
-                            const isActive = field.value === density
+                            const isActive =
+                                form.watch('report_config.display_density') ===
+                                density
                             const id = `density-${density}`
 
                             return (
@@ -263,6 +265,22 @@ export function PrintSettingsSection({
                                 shouldDirty: true,
                                 shouldTouch: true,
                             })
+                            setValue(
+                                'report_config.display_density',
+                                template.density,
+                                {
+                                    shouldDirty: true,
+                                    shouldTouch: true,
+                                }
+                            )
+                            setValue(
+                                'report_config.template_filter',
+                                template.template_filter
+                            )
+                            setValue(
+                                'report_config.orientation',
+                                template.orientation
+                            )
                         },
                     }}
                     trigger={

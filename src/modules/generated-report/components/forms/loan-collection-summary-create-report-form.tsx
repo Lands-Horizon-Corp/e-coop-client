@@ -62,7 +62,7 @@ export const LoanCollectionSummarySchema = z
         filter_by_date_release_end_date:
             stringDateWithTransformSchema.optional(),
 
-        group_by: z
+        groupings: z
             .enum([
                 'by_class',
                 'by_area',
@@ -133,7 +133,7 @@ const LoanCollectionSummaryCreateReportForm = ({
                 baseDefaults: {
                     start_date: '',
                     end_date: '',
-                    group_by: 'by_class',
+                    groupings: 'by_class',
                     mode_of_payment: 'all',
                     report_type: 'standard',
                     payment_type: 'all',
@@ -228,7 +228,7 @@ const LoanCollectionSummaryCreateReportForm = ({
                     <FormFieldWrapper
                         control={form.control}
                         label="Group By"
-                        name="group_by"
+                        name="groupings"
                         render={({ field }) => (
                             <RadioGroup
                                 className="grid grid-cols-3 p-4 rounded-xl bg-muted/60 border gap-2"
@@ -448,11 +448,12 @@ const LoanCollectionSummaryCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="loan_collection_summary_template"
                     />
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty || isPending}
+                    disableSubmit={isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -674,8 +675,10 @@ export const LoanCollectionSummaryCreateReportFormModal = ({
     description = 'Generate loan collection summary report',
     className,
     formProps,
+    closeOnSuccess = true,
     ...props
 }: IModalProps & {
+    closeOnSuccess?: boolean
     formProps?: Omit<ILoanCollectionSummaryFormProps, 'className' | 'onClose'>
 }) => {
     const [open, onOpenChange] = useInternalState(
@@ -697,7 +700,7 @@ export const LoanCollectionSummaryCreateReportFormModal = ({
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
-                    onOpenChange(false)
+                    if (closeOnSuccess) onOpenChange(false)
                 }}
             />
         </Modal>
