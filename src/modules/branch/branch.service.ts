@@ -76,4 +76,17 @@ export const useGetBranchesByOrganizationId = ({
     })
 }
 
+export const useGetAllBranchByOrganizationId = ({
+    organizationId,
+    options,
+}: { organizationId: TEntityId } & QueryOptions<IBranch[]>) => {
+    return useQuery<IBranch[]>({
+        queryKey: ['get-all-branches-by-organization-id', organizationId],
+        queryFn: () => getBranchesByOrganizationId(organizationId),
+        ...options,
+        enabled: !!organizationId,
+        ...options,
+    })
+}
+
 export const logger = Logger.getInstance('branch')
