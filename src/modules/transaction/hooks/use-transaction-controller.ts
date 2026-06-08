@@ -126,9 +126,9 @@ export const useTransactionController = ({
 
     useEffect(() => {
         const shouldGenerate =
-            !form.getValues('reference_number') &&
-            (!user_organization?.payment_or_allow_user_input ||
-                user_organization?.payment_auto_increment)
+            (!form.getValues('reference_number') &&
+                !user_organization?.payment_or_allow_user_input) ||
+            user_organization?.payment_auto_increment
 
         if (!shouldGenerate) return
 

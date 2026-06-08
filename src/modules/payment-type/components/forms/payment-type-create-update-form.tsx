@@ -274,7 +274,7 @@ export const PaymentTypeCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('!max-w-xl', className)}
+            className={cn('max-w-xl!', className)}
             description={description}
             title={title}
             {...props}

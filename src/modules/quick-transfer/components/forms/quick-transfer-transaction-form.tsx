@@ -142,6 +142,13 @@ export const QuickTransferTransactionForm = ({
         handleAutoGenerateOR(true)
     }, [user_organization, branchSetting, form, mode, handleAutoGenerateOR])
 
+    useEffect(() => {
+        if (selectedAccount) {
+            form.setValue('account', selectedAccount)
+            form.setValue('account_id', selectedAccount.id)
+        }
+    }, [form, selectedAccount])
+
     const {
         mutate: createQuickTransaction,
         isPending: isQuickTransactionPending,
