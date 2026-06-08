@@ -360,6 +360,7 @@ const LedgerCreateReportForm = ({
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="ledger_templates"
                     />
                 </fieldset>
 

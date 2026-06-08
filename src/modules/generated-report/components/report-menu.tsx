@@ -263,9 +263,8 @@ const MEMBERS_GROUP: ReportItem[] = [
         label: 'Ledger',
         icon: BookOpen,
         component: LedgerCreateReportFormModal,
-        is_available: false,
-        warning_message: 'No template',
         persistKey: 'form-report-accounting-ledger',
+        registry_key: 'ledger_templates',
     },
     {
         label: 'Voters List',

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Account Balance Report</title>
+        <style>
+            @page {
+                margin: 0.5in;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                min-height: 100%;
+                background-color: white;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+                height: auto;
+                /* Change from min-height: 100% */
+                display: block;
+            }
+
+            /* BASE VARS AT TOKEN */
+            .container {
+                /* FONT SCALE */
+                --fs-xs: 7px;
+                --fs-sm: 8px;
+                --fs-base: 9px;
+                --fs-lg: 10px;
+                --fs-xl: 12px;
+                --fs-2xl: 14px;
+
+                /* SPACING SCALE */
+                --space-xs: 0.08rem;
+                --space-sm: 0.15rem;
+                --space-md: 0.25rem;
+                --space-lg: 0.3rem;
+                --space-xl: 0.4rem;
+
+                /* LAYOUT */
+                --container-padding: 0.3in;
+                --line-height: 1.3;
+
+                --sig-gap-x: 0.7rem;
+                --sig-gap-y: 1.4rem;
+                --sig-margin-t: 2rem;
+
+                padding: var(--container-padding);
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+                font-size: var(--fs-base);
+                line-height: var(--line-height);
+
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                /* FORCE content to the top */
+                align-items: stretch;
+                width: 100%;
+            }
+
+            /* DENSITY VARIANTS */
+
+            /* NORMAL (default, explicit if you want) */
+            .normal .container {
+                --fs-xs: 7px;
+                --fs-sm: 8px;
+                --fs-base: 9px;
+                --fs-lg: 10px;
+                --fs-xl: 12px;
+                --fs-2xl: 14px;
+
+                --space-xs: 0.08rem;
+                --space-sm: 0.15rem;
+                --space-md: 0.25rem;
+                --space-lg: 0.3rem;
+                --space-xl: 0.4rem;
+
+                --sig-gap-x: 0.7rem;
+                --sig-gap-y: 1.4rem;
+                --sig-margin-t: 2rem;
+
+                --container-padding: 0.3in;
+                --line-height: 1.3;
+            }
+
+            /* COMPACT */
+            .compact .container {
+                --fs-xs: 6px;
+                --fs-sm: 7px;
+                --fs-base: 8px;
+                --fs-lg: 9px;
+                --fs-xl: 10px;
+                --fs-2xl: 12px;
+
+                --space-xs: 0.05rem;
+                --space-sm: 0.1rem;
+                --space-md: 0.15rem;
+                --space-lg: 0.2rem;
+                --space-xl: 0.25rem;
+
+                --sig-gap-x: 0.3rem;
+                --sig-gap-y: 1rem;
+                --sig-margin-t: 1.4rem;
+
+                --container-padding: 0.15in;
+                --line-height: 1.2;
+            }
+
+            /* LARGER */
+            .loose .container {
+                --fs-xs: 8px;
+                --fs-sm: 10px;
+                --fs-base: 12px;
+                --fs-lg: 14px;
+                --fs-xl: 16px;
+                --fs-2xl: 18px;
+
+                --space-xs: 0.1rem;
+                --space-sm: 0.2rem;
+                --space-md: 0.3rem;
+                --space-lg: 0.4rem;
+                --space-xl: 0.5rem;
+
+                --sig-gap-x: 1.8rem;
+                --sig-gap-y: 2rem;
+                --sig-margin-t: 1rem;
+
+                --container-padding: 0.4in;
+                --line-height: 1.4;
+            }
+
+            /* HEADER */
+            .header {
+                text-align: center;
+                margin-bottom: var(--space-lg);
+                padding-bottom: var(--space-sm);
+                /* border-bottom: 1px solid #e5e7eb; */
+            }
+
+            .header h1 {
+                font-size: var(--fs-xl);
+                font-weight: 800;
+                margin-bottom: var(--space-xs);
+                letter-spacing: -0.025em;
+            }
+
+            .header .address {
+                font-size: var(--fs-base);
+                margin: var(--space-xs) 0;
+            }
+
+            .header .tin {
+                font-size: var(--fs-sm);
+            }
+
+            .report-title {
+                font-size: var(--fs-2xl);
+                font-weight: 800;
+                margin-top: var(--space-sm);
+                letter-spacing: -0.025em;
+                text-transform: uppercase;
+            }
+
+            .center {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+
+            /* TABLE */
+            .table {
+                width: 100%;
+                margin-top: var(--space-xl);
+                margin-bottom: var(--space-lg);
+                border: 0;
+                border-radius: 6px;
+                overflow: hidden;
+                font-size: var(--fs-base);
+                border-collapse: collapse;
+                box-shadow: inset 0 0 0 1px #e5e7eb;
+            }
+
+            .table th {
+                text-transform: uppercase;
+                font-size: var(--fs-sm);
+                font-weight: 700;
+                padding: var(--space-lg);
+                text-align: left;
+                border-bottom: 2px solid #e5e7eb;
+            }
+
+            .table td {
+                padding: var(--space-md) var(--space-lg);
+                border-bottom: 1px solid #f3f4f6;
+            }
+
+            .bold {
+                font-weight: 900;
+            }
+
+            .text-right {
+                text-align: right !important;
+                font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+                font-variant-numeric: tabular-nums;
+            }
+
+            .italic {
+                font-style: italic;
+            }
+
+            .page-break {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                margin: 20px 0;
+                border-top: 1px dashed #ccc;
+                height: 1px;
+                position: relative;
+            }
+
+            .page-break::after {
+                content: 'next page';
+                position: absolute;
+                background: #fff;
+                padding: 0 10px;
+                font-size: 10px;
+                color: #999;
+            }
+
+            /* PRINT */
+            @media print {
+                body {
+                    background-color: white;
+                }
+                * {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+
+                .container {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+
+                .page-break {
+                    display: block;
+                    page-break-after: always;
+                    break-after: page;
+
+                    border: none;
+                    height: 0;
+                    margin: 0;
+                }
+
+                .page-break::after {
+                    content: '';
+                }
+            }
+        </style>
+    </head>
+    {% set is_deposit = all_accounts == 'deposits' %}
+    {% set is_loan = all_accounts == 'loans' %}
+
+    <body class="{{ density | default('normal') }}">
+        <div class="container">
+
+            <header class="header">
+                <h1>{{ header_title }}</h1>
+                <p class="address">{{ header_address }}</p>
+                <p class="tin">TIN: {{ tax_number }}</p>
+            </header>
+
+            <br>
+            <br>
+
+            {% for member in data %}
+
+                {% if is_deposit %}
+
+                    <div class="center">
+                        <h2 class="bold">
+                            {{ member.pasbook_number }} - {{ member.member_name }}
+                        </h2>
+                        <div>
+                            {{ member.account_short_name }} - ({{ start_date }} - {{ end_date }})
+          </div>
+                    </div>
+
+                {% elseif is_loan %}
+
+                    <div class="center">
+                        <h2 class="bold">
+                            {{ member.account_short_name }}
+                        </h2>
+                        <div>
+                            {{ start_date }} - {{ end_date }}
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;font-size:var(--fs-base);align-items:start;">
+
+                        <div>
+                            <p>
+                                <span style="opacity:.65;">Name :</span>
+                                <span style="font-weight:700;">{{ member.member_name }}</span>
+                            </p>
+
+                            <p>
+                                <span style="opacity:.65;">Address :</span>
+                                <span style="font-weight:700;">{{ member.address }}</span>
+                            </p>
+                        </div>
+
+                        <div>
+                            <p>
+                                <span style="opacity:.65;">Share Capital :</span>
+                                <span style="font-weight:700;">{{ member.share_capital }}</span>
+                            </p>
+                        </div>
+
+                        <div style="margin-left: auto;">
+                            <p>
+                                <span style="opacity:.65;">Date Release :</span>
+                                <span style="font-weight:700;">{{ member.release_date }}</span>
+                            </p>
+
+                            <p>
+                                <span style="opacity:.65;">Maturity :</span>
+                                <span style="font-weight:700;">{{ member.maturity_date }}</span>
+                            </p>
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+                {% if is_deposit %}
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Ref No</th>
+                                <th>Date</th>
+                                <th class="text-right">Debit</th>
+                                <th class="text-right">Credit</th>
+                                <th class="text-right">Balance</th>
+                                <th>Type</th>
+                                <th>Employee</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for entry in member.ledger_entries %}
+
+                                {% if entry.is_beginning %}
+
+                                    <tr>
+                                        <td colspan="2" class="bold">
+                    BEGINNING AS OF {{ start_date }}
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right bold">{{ entry.balance }}</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+
+                                {% else %}
+
+                                    <tr>
+                                        <td>{{ entry.ref_no }}</td>
+                                        <td>{{ entry.date }}</td>
+                                        <td class="text-right">{{ entry.debit }}</td>
+                                        <td class="text-right">{{ entry.credit }}</td>
+                                        <td class="text-right">{{ entry.balance }}</td>
+                                        <td>{{ entry.type }}</td>
+                                        <td>{{ entry.employee_name }}</td>
+                                    </tr>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                            <tr>
+                                <td colspan="7" style="text-align:center;font-weight:700;opacity:.65;border-top:1px solid #d1d5db;">
+                                    --- Nothing Follows ---
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                {% elseif is_loan %}
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Ref No</th>
+                                <th>Date</th>
+                                <th class="text-right">Debit</th>
+                                <th class="text-right">Credit</th>
+                                <th class="text-right">Balance</th>
+                                <th class="text-right">Interest</th>
+                                <th class="text-right">Interest Balance</th>
+                                <th class="text-right">Fines</th>
+                                <th class="text-right">Fines Balance</th>
+                                <th>Employee</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for entry in member.ledger_entries %}
+
+                                {% if entry.is_beginning %}
+
+                                    <tr>
+                                        <td colspan="2" class="bold">
+                    BEGINNING AS OF {{ start_date }}
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right bold">{{ entry.balance }}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+
+                                {% else %}
+
+                                    <tr>
+                                        <td>{{ entry.ref_no }}</td>
+                                        <td>{{ entry.date }}</td>
+                                        <td class="text-right">{{ entry.debit }}</td>
+                                        <td class="text-right">{{ entry.credit }}</td>
+                                        <td class="text-right">{{ entry.balance }}</td>
+                                        <td class="text-right">{{ entry.interest }}</td>
+                                        <td class="text-right">{{ entry.interest_balance }}</td>
+                                        <td class="text-right">{{ entry.fines }}</td>
+                                        <td class="text-right">{{ entry.fines_balance }}</td>
+                                        <td>{{ entry.employee_name }}</td>
+                                    </tr>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                            <tr>
+                                <td colspan="10" style="text-align:center;font-weight:700;opacity:.65;border-top:1px solid #d1d5db;">
+                                    --- Nothing Follows ---
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                {% endif %}
+
+                {% if not loop.last %}
+                    <div class="page-break"></div>
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+    </body>
+</html>

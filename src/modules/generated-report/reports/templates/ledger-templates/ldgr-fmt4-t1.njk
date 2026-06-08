@@ -272,69 +272,211 @@
             }
         </style>
     </head>
-    <body class="{{ density | default('normal') }}">
-        {% set entries = data | default([]) %}
-        {% set account_cols = showable_account_column_list | default([]) %}
+    {% set is_deposit = all_accounts == 'deposits' %}
+    {% set is_loan = all_accounts == 'loans' %}
 
+    <body class="{{ density | default('normal') }}">
         <div class="container">
+
             <header class="header">
                 <h1>{{ header_title }}</h1>
                 <p class="address">{{ header_address }}</p>
                 <p class="tin">TIN: {{ tax_number }}</p>
             </header>
-            <br>
-            <div class="center">
-                <h2 class="report-title">
-                    {{ report_title or 'ACCOUNT BALANCE REPORT' }}
-                </h2>
-                <div class="tin">{{ start_date }} - {{ end_date }}</div>
-                <div class="tin">{{ barangay or 'all barangay' }}</div>
-            </div>
+
             <br>
             <br>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>PB No.</th>
-                        <th>Member Name</th>
-                        {% for col in account_cols %}
-                            <th class="text-right">
-                                {{ col.short_name or col.name or col.account_id }}
-                                {% if col.display_entry_type %}
-                                    ({{ col.display_entry_type }})
+
+            {% for member in data %}
+
+                {% if is_deposit %}
+
+                    <div class="center">
+                        <h2 class="bold">
+                            {{ member.pasbook_number }} - {{ member.member_name }}
+                        </h2>
+                        <div>
+                            {{ member.account_short_name }} - ({{ start_date }} - {{ end_date }})</div>
+                    </div>
+
+                {% elseif is_loan %}
+
+                    <div class="center">
+                        <h2 class="bold">
+                            {{ member.account_short_name }}
+                        </h2>
+                        <div>
+                            {{ start_date }} - {{ end_date }}
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;font-size:var(--fs-base);align-items:start;">
+
+                        <div>
+                            <p>
+                                <span style="opacity:.65;">Name :</span>
+                                <span style="font-weight:700;">{{ member.member_name }}</span>
+                            </p>
+
+                            <p>
+                                <span style="opacity:.65;">Address :</span>
+                                <span style="font-weight:700;">{{ member.address }}</span>
+                            </p>
+                        </div>
+
+                        <div>
+                            <p>
+                                <span style="opacity:.65;">Share Capital :</span>
+                                <span style="font-weight:700;">{{ member.share_capital }}</span>
+                            </p>
+                        </div>
+
+                        <div style="margin-left: auto;">
+                            <p>
+                                <span style="opacity:.65;">Date Release :</span>
+                                <span style="font-weight:700;">{{ member.release_date }}</span>
+                            </p>
+
+                            <p>
+                                <span style="opacity:.65;">Maturity :</span>
+                                <span style="font-weight:700;">{{ member.maturity_date }}</span>
+                            </p>
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+                {% if is_deposit %}
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Ref No</th>
+                                <th>Date</th>
+                                <th class="text-right">Amount</th>
+                                <th>Type</th>
+                                <th class="text-right">Balance</th>
+                                <th>Employee</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for entry in member.ledger_entries %}
+
+                                {% if entry.is_beginning %}
+
+                                    <tr>
+                                        <td colspan="2" class="bold">
+                    BEGINNING AS OF {{ start_date }}
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right bold">{{ entry.balance }}</td>
+                                        <td></td>
+                                    </tr>
+
+                                {% else %}
+
+                                    <tr>
+                                        <td>{{ entry.ref_no }}</td>
+                                        <td>{{ entry.date }}</td>
+                                        <td class="text-right">{{ entry.amount }}</td>
+                                        <td>{{ entry.type }}</td>
+                                        <td class="text-right">{{ entry.balance }}</td>
+                                        <td>{{ entry.employee_name }}</td>
+                                    </tr>
+
                                 {% endif %}
-                            </th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for entry in entries %}
-                        <tr>
-                            <td>{{ entry.passbook or '-' }}</td>
-                            <td>{{ entry.member_name or '-' }}</td>
-                            {% for col in account_cols %}
-                                {% set key = 'account_' + col.account_id + '_amount' %}
-                                <td class="text-right">{{ entry[key] or '0.00' }}</td>
+
                             {% endfor %}
-                        </tr>
-                    {% endfor %}
 
-                    <tr>
-                        <td class="bold">TOTAL PER ACCOUNT</td>
-                        <td></td>
-                        {% for col in account_cols %}
-                            {% set key = 'account_' + col.account_id + '_amount' %}
-                            <td class="text-right bold">{{ grand_total[key] or '0.00' }}</td>
-                        {% endfor %}
-                    </tr>
+                            <tr>
+                                <td colspan="6" style="text-align:center;font-weight:700;opacity:.65;border-top:1px solid #d1d5db;">
+                                    --- Nothing Follows ---
+                                </td>
+                            </tr>
 
-                    <tr>
-                        <td class="bold">TOTAL MEMBER</td>
-                        <td></td>
-                        <td class="text-right bold">{{ grand_total.total_members or 0 }}</td>
-                    </tr>
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+
+                {% elseif is_loan %}
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Ref No</th>
+                                <th>Date</th>
+                                <th class="text-right">Principal</th>
+                                <th class="text-right">Balance</th>
+                                <th class="text-right">Interest Paid</th>
+                                <th class="text-right">Interest Run Total</th>
+                                <th class="text-right">Fines Paid</th>
+                                <th class="text-right">Fines Run Total</th>
+                                <th class="text-right">Total Amount</th>
+                                <th>Employee</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for entry in member.ledger_entries %}
+
+                                {% if entry.is_beginning %}
+
+                                    <tr>
+                                        <td colspan="2" class="bold">
+                    BEGINNING AS OF {{ start_date }}
+                                        </td>
+                                        <td></td>
+                                        <td class="text-right bold">{{ entry.balance }}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+
+                                {% else %}
+
+                                    <tr>
+                                        <td>{{ entry.ref_no }}</td>
+                                        <td>{{ entry.date }}</td>
+                                        <td class="text-right">{{ entry.principal }}</td>
+                                        <td class="text-right">{{ entry.balance }}</td>
+                                        <td class="text-right">{{ entry.interest_paid }}</td>
+                                        <td class="text-right">{{ entry.interest_run_total }}</td>
+                                        <td class="text-right">{{ entry.fines_paid }}</td>
+                                        <td class="text-right">{{ entry.fines_run_total }}</td>
+                                        <td class="text-right">{{ entry.total_amount }}</td>
+                                        <td>{{ entry.employee_name }}</td>
+                                    </tr>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                            <tr>
+                                <td colspan="10" style="text-align:center;font-weight:700;opacity:.65;border-top:1px solid #d1d5db;">
+                                    --- Nothing Follows ---
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                {% endif %}
+
+                {% if not loop.last %}
+                    <div class="page-break"></div>
+                {% endif %}
+
+            {% endfor %}
+
         </div>
     </body>
 </html>
