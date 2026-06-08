@@ -4,6 +4,7 @@ import { CIVIL_STATUS, GENERAL_STATUS } from '@/constants'
 import { cn } from '@/helpers'
 import GeneralStatusBadge from '@/modules/authentication/components/general-status-badge'
 import CivilStatusBadge from '@/modules/member-profile/components/badges/civil-status-badge'
+import { maskPassbook } from '@/modules/member-profile/member-profile.utils'
 import { useInfoModalStore } from '@/store/info-modal-store'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
@@ -20,7 +21,6 @@ import {
     QrCodeIcon,
 } from '@/components/icons'
 import ImageNameDisplay from '@/components/image-name-display'
-import { QrCodeDownloadable } from '@/components/qr-code'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -29,6 +29,7 @@ import CopyWrapper from '@/components/wrappers/copy-wrapper'
 import { TCivilStatus, TGeneralStatus } from '@/types'
 
 import { IMemberProfile } from '../../..'
+import MemberQrCodeDownloadable from '../../member-qr-downloadable'
 
 export const memberGlobalSearchTargets: IGlobalSearchTargets<IMemberProfile>[] =
     [
@@ -536,7 +537,7 @@ const MemberProfileTableColumns = (
 }
 
 export const QrCodeCell = ({
-    memberProfile: { qr_code, passbook },
+    memberProfile: { qr_code, passbook, first_name, middle_name, last_name },
 }: {
     memberProfile: IMemberProfile
 }) => {
@@ -556,12 +557,21 @@ export const QrCodeCell = ({
                     hideConfirm: true,
                     component: (
                         <div className="space-y-2">
-                            <QrCodeDownloadable
+                            <MemberQrCodeDownloadable
                                 className="size-80 p-3"
                                 containerClassName="mx-auto"
                                 fileName={`member_profile_${passbook}`}
                                 value={JSON.stringify(qr_code)}
-                            />
+                            >
+                                <div className="space-y-1 text-black">
+                                    <p className="text-sm font-semibold">
+                                        {`${first_name} ${middle_name} ${last_name}`}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        PB No. {maskPassbook(passbook)}
+                                    </p>
+                                </div>
+                            </MemberQrCodeDownloadable>
                         </div>
                     ),
                 })

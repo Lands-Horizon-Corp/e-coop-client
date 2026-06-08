@@ -22,3 +22,23 @@ export const buildMemberProfilePB = (
         padding,
     })
 }
+
+export const maskName = (name: string) => {
+    return name
+        .split(' ')
+        .map((part) => {
+            if (part.length <= 2) return part
+            return part[0] + '*'.repeat(part.length - 2) + part[part.length - 1]
+        })
+        .join(' ')
+}
+
+export const maskPassbook = (value: string) => {
+    if (value.length <= 4) return value
+
+    return (
+        value.substring(0, 2) +
+        '*'.repeat(value.length - 4) +
+        value.substring(value.length - 2)
+    )
+}

@@ -10,6 +10,7 @@ import GeneralLedgerTable from '@/modules/general-ledger/components/tables/gener
 import LoanTransactionTable from '@/modules/loan-transaction/components/loan-transaction-table'
 import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
 import { MemberProfileCloseFormModal } from '@/modules/member-close-remark/components/forms/member-profile-close-form'
+import { maskPassbook } from '@/modules/member-profile/member-profile.utils'
 import { TransactionsTable } from '@/modules/transaction'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useInfoModalStore } from '@/store/info-modal-store'
@@ -37,7 +38,6 @@ import {
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import Modal from '@/components/modals/modal'
-import { QrCodeDownloadable } from '@/components/qr-code'
 import {
     ContextMenuItem,
     ContextMenuPortal,
@@ -56,6 +56,7 @@ import {
 import { IMemberProfile, useDeleteMemberProfileById } from '../../..'
 import { MemberHistoriesModal } from '../../member-histories'
 import { MemberOverallInfoModal } from '../../member-infos/view-member-info'
+import MemberQrCodeDownloadable from '../../member-qr-downloadable'
 import { IMemberProfileTableActionComponentProp } from './columns'
 
 // ===== TYPE DEFINITIONS =====
@@ -163,12 +164,21 @@ const useMemberProfileActions = ({
             hideConfirm: true,
             component: (
                 <div className="space-y-2">
-                    <QrCodeDownloadable
+                    <MemberQrCodeDownloadable
                         className="size-80 p-3"
                         containerClassName="mx-auto"
                         fileName={`member_profile_${member.passbook}`}
                         value={JSON.stringify(member.qr_code)}
-                    />
+                    >
+                        <div className="space-y-1 text-black">
+                            <p className="text-sm font-semibold">
+                                {`${member.first_name} ${member.middle_name} ${member.last_name}`}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                                PB No. {maskPassbook(member.passbook)}
+                            </p>
+                        </div>
+                    </MemberQrCodeDownloadable>
                 </div>
             ),
         })

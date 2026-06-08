@@ -29,7 +29,6 @@ import {
 import ImageDisplay from '@/components/image-display'
 import { OpenExternalMap } from '@/components/map'
 import Modal from '@/components/modals/modal'
-import { QrCodeDownloadable } from '@/components/qr-code'
 import TextRenderer from '@/components/text-renderer'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -43,6 +42,8 @@ import { IBaseProps, TEntityId } from '@/types'
 
 import { IMemberProfile } from '../..'
 import { useGetMemberProfileById } from '../../member-profile.service'
+import { maskPassbook } from '../../member-profile.utils'
+import MemberQrCodeDownloadable from '../member-qr-downloadable'
 import { InfoField } from './info-field'
 import { MemberOverallInfoModal, SectionHeader } from './view-member-info'
 
@@ -692,12 +693,21 @@ const UserQr = ({ memberProfile }: { memberProfile?: IMemberProfile }) => {
                 {...modalState}
                 title="Profile QR"
             >
-                <QrCodeDownloadable
+                <MemberQrCodeDownloadable
                     className="size-80 p-3"
                     containerClassName="mx-auto"
-                    fileName={`member_profile_${memberProfile?.first_name}_${memberProfile?.last_name}_${memberProfile?.passbook}`}
+                    fileName={`member_profile_${memberProfile?.passbook}`}
                     value={JSON.stringify(memberProfile?.qr_code)}
-                />
+                >
+                    <div className="space-y-1 text-black">
+                        <p className="text-sm font-semibold">
+                            {`${memberProfile?.first_name} ${memberProfile?.middle_name} ${memberProfile?.last_name}`}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                            PB No. {maskPassbook(memberProfile?.passbook || '')}
+                        </p>
+                    </div>
+                </MemberQrCodeDownloadable>
             </Modal>
         </>
     )
