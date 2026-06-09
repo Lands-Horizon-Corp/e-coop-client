@@ -38,7 +38,7 @@ const MemberAccountingLedgerTableColumns = (
     {
         id: 'select',
         cell: ({ row }) => (
-            <div className="flex w-fit items-center gap-x-1 px-0">
+            <div className=" w-fit h-full  flex items-center ">
                 {opts?.actionComponent?.({ row })}
             </div>
         ),

@@ -1,7 +1,9 @@
+import { cn } from '@/helpers/tw-utils'
 import { IMemberAccountingLedger } from '@/modules/member-account-ledger'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
+import { EyeIcon } from 'lucide-react'
 
-import RowActionsGroup from '@/components/data-table/data-table-row-actions'
+import { Button } from '@/components/ui/button'
 
 interface IMemberAccountGeneralLedgerActionProps {
     memberAccountLedger: IMemberAccountingLedger
@@ -15,8 +17,27 @@ const MemberAccountGeneralLedgerAction = ({
     const { setFocusedLedger } = useTransactionStore()
 
     return (
-        <div onClick={(e) => e.stopPropagation()}>
-            <RowActionsGroup
+        <Button
+            className={cn(
+                'hover:bg-transparent! cursor-pointer hover:scale-105 ease-in-out',
+                ''
+            )}
+            hoverVariant={'nostyle'}
+            variant={'ghost'}
+            size={'xs'}
+            onClick={(e) => {
+                e.stopPropagation()
+                props?.onOpen?.()
+                setFocusedLedger({
+                    memberProfileId: memberAccountLedger?.member_profile_id,
+                    account: memberAccountLedger?.account,
+                    accountId: memberAccountLedger?.account_id,
+                    memberAccountingLedgerId: memberAccountLedger?.id,
+                })
+            }}
+        >
+            <EyeIcon size={18} />
+            {/* <RowActionsGroup
                 onView={{
                     text: 'View General Ledger',
                     isAllowed: true,
@@ -31,8 +52,9 @@ const MemberAccountGeneralLedgerAction = ({
                         })
                     },
                 }}
-            />
-        </div>
+                canSelect={false}
+            /> */}
+        </Button>
     )
 }
 
