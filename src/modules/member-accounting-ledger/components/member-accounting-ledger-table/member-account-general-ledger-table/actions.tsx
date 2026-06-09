@@ -23,8 +23,6 @@ const MemberAccountGeneralLedgerAction = ({
                 ''
             )}
             hoverVariant={'nostyle'}
-            variant={'ghost'}
-            size={'xs'}
             onClick={(e) => {
                 e.stopPropagation()
                 props?.onOpen?.()
@@ -35,6 +33,8 @@ const MemberAccountGeneralLedgerAction = ({
                     memberAccountingLedgerId: memberAccountLedger?.id,
                 })
             }}
+            size={'xs'}
+            variant={'ghost'}
         >
             <EyeIcon size={18} />
             {/* <RowActionsGroup
