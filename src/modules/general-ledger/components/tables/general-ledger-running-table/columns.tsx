@@ -155,34 +155,6 @@ const GeneralLedgerRunningTableColumns = (
             minSize: 125,
         },
         {
-            id: 'credit',
-            accessorKey: 'credit',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Credit">
-                    <ColumnActions {...props} />
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { credit, currency },
-                },
-            }) => (
-                <p className="text-right font-medium">
-                    {credit
-                        ? currencyFormat(credit, {
-                              currency,
-                              showSymbol: !!currency,
-                          })
-                        : ''}
-                </p>
-            ),
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: false,
-            minSize: 102,
-        },
-        {
             id: 'debit',
             accessorKey: 'debit',
             header: (props) => (
@@ -210,6 +182,34 @@ const GeneralLedgerRunningTableColumns = (
             enableHiding: false,
             size: 98,
             minSize: 98,
+        },
+        {
+            id: 'credit',
+            accessorKey: 'credit',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Credit">
+                    <ColumnActions {...props} />
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { credit, currency },
+                },
+            }) => (
+                <p className="text-right font-medium">
+                    {credit
+                        ? currencyFormat(credit, {
+                              currency,
+                              showSymbol: !!currency,
+                          })
+                        : ''}
+                </p>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: false,
+            minSize: 102,
         },
         {
             id: 'balance',

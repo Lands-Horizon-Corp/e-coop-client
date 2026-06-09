@@ -45,6 +45,100 @@ const HistoryTabs: {
     Component: (props: ITransBatchHistoryTabsContentProps) => ReactNode
 }[] = [
     {
+        value: 'payment-entry',
+        title: 'Payment Entry',
+        Icon: BillIcon,
+        Component: ({ transactionBatchId }) => (
+            <GeneralLedgerAllTable
+                className="grow p-0"
+                entryType="payment-entry"
+                excludeColumnIds={['balance']}
+                mode="transaction-batch"
+                persistKey={[
+                    'general-ledger-all',
+                    'transaction-batch',
+                    'payment-entry',
+                ]}
+                transactionBatchId={transactionBatchId}
+            />
+        ),
+    },
+    {
+        value: 'deposit-entry',
+        title: 'Deposit Entry',
+        Icon: HandCoinsIcon,
+        Component: ({ transactionBatchId }) => (
+            <GeneralLedgerAllTable
+                className="grow p-0"
+                entryType="deposit-entry"
+                excludeColumnIds={['balance']}
+                mode="transaction-batch"
+                persistKey={[
+                    'general-ledger-all',
+                    'transaction-batch',
+                    'deposit-entry',
+                ]}
+                transactionBatchId={transactionBatchId}
+            />
+        ),
+    },
+    {
+        value: 'withdraw-entry',
+        title: 'Withdraw Entry',
+        Icon: HandCoinsIcon,
+        Component: ({ transactionBatchId }) => (
+            <GeneralLedgerAllTable
+                className="grow p-0"
+                entryType="withdraw-entry"
+                excludeColumnIds={['balance']}
+                mode="transaction-batch"
+                persistKey={[
+                    'general-ledger-all',
+                    'transaction-batch',
+                    'withdraw-entry',
+                ]}
+                transactionBatchId={transactionBatchId}
+            />
+        ),
+    },
+    {
+        value: 'loan-entry',
+        title: 'Loan Entry',
+        Icon: BillIcon,
+        Component: ({ transactionBatchId }) => (
+            <GeneralLedgerAllTable
+                className="grow p-0"
+                excludeColumnIds={['balance']}
+                mode="transaction-batch-loan-entry"
+                persistKey={[
+                    'general-ledger-all',
+                    'transaction-batch',
+                    'loan-entry',
+                ]}
+                transactionBatchId={transactionBatchId}
+            />
+        ),
+    },
+    {
+        value: 'cash-entry',
+        title: 'Cash Entry',
+        Icon: HandCoinsIcon,
+        Component: ({ transactionBatchId }) => (
+            <GeneralLedgerAllTable
+                className="grow p-0"
+                entryType="cash-entry"
+                excludeColumnIds={['balance']}
+                mode="transaction-batch"
+                persistKey={[
+                    'general-ledger-all',
+                    'transaction-batch',
+                    'cash-entry',
+                ]}
+                transactionBatchId={transactionBatchId}
+            />
+        ),
+    },
+    {
         value: 'batch-funding',
         title: 'Batch Funding',
         Icon: MoneyStackIcon,
@@ -119,100 +213,6 @@ const HistoryTabs: {
             />
         ),
     },
-    {
-        value: 'cash-entry',
-        title: 'Cash Entry',
-        Icon: HandCoinsIcon,
-        Component: ({ transactionBatchId }) => (
-            <GeneralLedgerAllTable
-                className="grow p-0"
-                entryType="cash-entry"
-                excludeColumnIds={['balance']}
-                mode="transaction-batch"
-                persistKey={[
-                    'general-ledger-all',
-                    'transaction-batch',
-                    'cash-entry',
-                ]}
-                transactionBatchId={transactionBatchId}
-            />
-        ),
-    },
-    {
-        value: 'payment-entry',
-        title: 'Payment Entry',
-        Icon: BillIcon,
-        Component: ({ transactionBatchId }) => (
-            <GeneralLedgerAllTable
-                className="grow p-0"
-                entryType="payment-entry"
-                excludeColumnIds={['balance']}
-                mode="transaction-batch"
-                persistKey={[
-                    'general-ledger-all',
-                    'transaction-batch',
-                    'payment-entry',
-                ]}
-                transactionBatchId={transactionBatchId}
-            />
-        ),
-    },
-    {
-        value: 'loan-entry',
-        title: 'Loan Entry',
-        Icon: BillIcon,
-        Component: ({ transactionBatchId }) => (
-            <GeneralLedgerAllTable
-                className="grow p-0"
-                excludeColumnIds={['balance']}
-                mode="transaction-batch-loan-entry"
-                persistKey={[
-                    'general-ledger-all',
-                    'transaction-batch',
-                    'loan-entry',
-                ]}
-                transactionBatchId={transactionBatchId}
-            />
-        ),
-    },
-    {
-        value: 'withdraw-entry',
-        title: 'Withdraw Entry',
-        Icon: HandCoinsIcon,
-        Component: ({ transactionBatchId }) => (
-            <GeneralLedgerAllTable
-                className="grow p-0"
-                entryType="withdraw-entry"
-                excludeColumnIds={['balance']}
-                mode="transaction-batch"
-                persistKey={[
-                    'general-ledger-all',
-                    'transaction-batch',
-                    'withdraw-entry',
-                ]}
-                transactionBatchId={transactionBatchId}
-            />
-        ),
-    },
-    {
-        value: 'deposit-entry',
-        title: 'Deposit Entry',
-        Icon: HandCoinsIcon,
-        Component: ({ transactionBatchId }) => (
-            <GeneralLedgerAllTable
-                className="grow p-0"
-                entryType="deposit-entry"
-                excludeColumnIds={['balance']}
-                mode="transaction-batch"
-                persistKey={[
-                    'general-ledger-all',
-                    'transaction-batch',
-                    'deposit-entry',
-                ]}
-                transactionBatchId={transactionBatchId}
-            />
-        ),
-    },
 ]
 
 type Props = {
@@ -233,22 +233,22 @@ const TransactionBatchHistories = ({
     )
 
     return (
-        <div className="flex min-h-[90vh] min-w-0 gap-x-4 p-4">
+        <div className="flex min-h-[90vh] max-w-full min-w-0 gap-x-4 p-4">
             <SidebarSummary
                 activeTab={value}
                 transactionBatchId={transactionBatchId}
             />
             <Tabs
-                className="flex-1 flex-col bg-background rounded-xl border p-5"
+                className="flex-1 min-w-0 flex-col bg-background rounded-xl border p-5"
                 defaultValue="batch-funding"
                 onValueChange={handleChange}
                 value={value}
             >
-                <div className="overflow-x-auto max-w-full bg-background scro ecoop-scroll overflow-y-hidden">
-                    <TabsList className="justify-start gap-2 rounded-none bg-transparent px-0 py-4 text-foreground">
+                <div className="max-w-full bg-background h-fit">
+                    <TabsList className="justify-start inline-flex flex-wrap gap-2 w-[60%] h-fit rounded-none bg-transparent px-0 py-1 text-foreground">
                         {HistoryTabs.map((tab) => (
                             <TabsTrigger
-                                className="relative after:absolute after:inset-x-0 h-fit after:bottom-0 after:-mb-1 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                className="h-fit grow-0 after:duration-300 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                                 key={tab.value}
                                 value={tab.value}
                             >
@@ -266,7 +266,7 @@ const TransactionBatchHistories = ({
                 </div>
                 {HistoryTabs.map((tab) => (
                     <TabsContent asChild key={tab.value} value={tab.value}>
-                        <div className="flex  min-h-[94%] flex-row rounded-xl bg-background p-0">
+                        <div className="flex-1 flex-row rounded-xl bg-background p-0">
                             {tab.Component({ transactionBatchId })}
                         </div>
                     </TabsContent>
@@ -288,7 +288,7 @@ export const TransactionBatchHistoriesModal = ({
         <Modal
             {...props}
             className={cn(
-                'flex max-w-[95vw]! px-0 pb-4 pt-0 bg-transparent border-0',
+                'flex max-w-[95vw]! overflow-hidden px-0 pb-4 pt-0 bg-transparent border-0',
                 className
             )}
             closeButtonClassName="top-2 right-2"
@@ -610,7 +610,7 @@ const SidebarSummary = ({ transactionBatchId, activeTab }: SideBarSummary) => {
         return (
             <div
                 className={cn(
-                    'min-w-sm overflow-y-auto ecoop-scroll h-full bg-background rounded-xl border p-5'
+                    'min-w-xs overflow-y-auto ecoop-scroll h-full bg-background rounded-xl border p-5'
                 )}
             >
                 <TotalCard
@@ -645,7 +645,7 @@ const SidebarSummary = ({ transactionBatchId, activeTab }: SideBarSummary) => {
     return (
         <div
             className={cn(
-                'w-[260px] shrink-0 flex flex-col overflow-hidden bg-background rounded-xl border h-full'
+                'min-w-xs shrink-0 flex flex-col overflow-hidden bg-background rounded-xl border h-full'
             )}
         >
             {/* Sticky column header */}

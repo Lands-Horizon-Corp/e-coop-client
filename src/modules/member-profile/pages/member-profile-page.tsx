@@ -72,6 +72,16 @@ function ViewMemberProfilePage() {
                 />
                 <MemberProfileTable
                     className="max-h-[90vh] min-h-[90vh] w-full"
+                    defaultColumnSortingState={[
+                        {
+                            id: 'first_name',
+                            desc: false,
+                        },
+                        {
+                            id: 'last_name',
+                            desc: false,
+                        },
+                    ]}
                     RowContextComponent={MemberProfileRowContext}
                     toolbarProps={{
                         createActionProps: {

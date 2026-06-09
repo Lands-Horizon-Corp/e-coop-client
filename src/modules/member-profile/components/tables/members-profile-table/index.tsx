@@ -71,12 +71,16 @@ const MemberProfileTable = ({
         row.toggleSelected()
     },
     onSelectData,
+    defaultColumnSortingState = [],
     actionComponent = MemberProfileAction,
     RowContextComponent = MemberProfileRowContext,
 }: MemberProfileTableProps) => {
     const { pagination, setPagination } = usePagination()
     const { sortingStateBase64, tableSorting, setTableSorting } =
-        useDataTableSorting({ persistKey })
+        useDataTableSorting({
+            persistKey,
+            defaultSorting: defaultColumnSortingState,
+        })
 
     const columns = useMemo(
         () =>

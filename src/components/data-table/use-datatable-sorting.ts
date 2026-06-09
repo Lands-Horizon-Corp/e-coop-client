@@ -13,10 +13,12 @@ export const buildTableKeySorting = (key: string[]) => {
 
 interface UseDataTableSortingProps {
     persistKey?: (string | undefined | null)[]
+    defaultSorting?: SortingState
 }
 
 export const useDataTableSorting = ({
     persistKey,
+    defaultSorting = [],
 }: UseDataTableSortingProps = {}) => {
     const finalKeys = useMemo(
         () => persistKey?.filter((k): k is string => Boolean(k)),
@@ -28,23 +30,36 @@ export const useDataTableSorting = ({
         [finalKeys]
     )
 
-    // Initialize with useSortingState
     const { sortingState, setSortingState } = useSortingState()
 
-    // 1. HYDRATION: Load from IndexedDB on mount
     useEffect(() => {
-        if (storageKey) {
-            getIDB<any[]>(storageKey).then((persisted) => {
-                if (
-                    persisted &&
-                    Array.isArray(persisted) &&
-                    persisted.length > 0
-                ) {
-                    setSortingState(persisted)
-                }
-            })
+        if (!storageKey) {
+            if (defaultSorting.length > 0) {
+                setSortingState(
+                    defaultSorting.map((s) => ({
+                        field: s.id,
+                        order: s.desc ? 'desc' : 'asc',
+                    }))
+                )
+            }
+
+            return
         }
-    }, [storageKey, setSortingState])
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        getIDB<any[]>(storageKey).then((persisted) => {
+            if (persisted && Array.isArray(persisted) && persisted.length > 0) {
+                setSortingState(persisted)
+            } else if (defaultSorting.length > 0) {
+                setSortingState(
+                    defaultSorting.map((s) => ({
+                        field: s.id,
+                        order: s.desc ? 'desc' : 'asc',
+                    }))
+                )
+            }
+        })
+    }, [storageKey, defaultSorting, setSortingState])
 
     useEffect(() => {
         if (storageKey && sortingState.length > 0) {

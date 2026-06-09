@@ -121,6 +121,7 @@ const GeneralLedgerTable = ({
     onSelectData,
     actionComponent,
     RowContextComponent = GeneralLedgerRowContext,
+    defaultColumnSort = [''],
     ...modeProps
 }: TGeneralLedgerTableProps & {
     userOrganizationId?: TEntityId
@@ -136,7 +137,12 @@ const GeneralLedgerTable = ({
     const columns = useMemo(() => {
         const allColumns = GeneralLedgerTableColumns({
             actionComponent,
-        })
+        }).map((column) => ({
+            ...column,
+            enableSorting:
+                defaultColumnSort?.includes(column.id as string) ??
+                column.enableSorting,
+        }))
 
         if (excludeColumnIds && excludeColumnIds.length > 0) {
             return allColumns.filter(
@@ -145,7 +151,7 @@ const GeneralLedgerTable = ({
         }
 
         return allColumns
-    }, [actionComponent, excludeColumnIds])
+    }, [actionComponent, excludeColumnIds, defaultColumnSort])
 
     const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
         useResolvedColumnOrder({
