@@ -25,17 +25,9 @@ export const paymentORResolver = (userOrg: IUserOrganization): string => {
         payment_or_current,
         payment_padding,
         payment_prefix,
-        payment_or_use_date_or,
-        time_machine_time,
         payment_or_iteration,
     } = userOrg
 
-    if (payment_or_use_date_or) {
-        return (
-            (payment_prefix || '') +
-            mmddyyyy(new Date(time_machine_time ?? new Date()))
-        )
-    }
     return `${payment_prefix || ''}${receiptPrefix(payment_or_iteration)}${payment_or_current.toString().padStart(payment_padding, '0') || ''}`
 }
 

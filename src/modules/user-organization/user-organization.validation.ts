@@ -69,7 +69,6 @@ export const UserOrganizationSettingsSchema = z
             .min(1, 'Iteration must be at least 1')
             .optional(),
 
-        payment_or_use_date_or: z.boolean().optional(),
         payment_prefix: z.string().optional(),
 
         payment_padding: z.coerce

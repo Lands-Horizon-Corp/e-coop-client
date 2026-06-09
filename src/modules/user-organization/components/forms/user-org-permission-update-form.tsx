@@ -219,7 +219,7 @@ export const UserOrgPermissionUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('!max-w-5xl', className)}
+            className={cn('max-w-5xl!', className)}
             description={description}
             title={title}
             {...props}

@@ -59,7 +59,6 @@ export interface IUserOrganization<TUser = IUserBase>
     payment_or_current: number
     payment_or_end: number
     payment_or_iteration: number
-    payment_or_use_date_or: boolean
     payment_allow_prefix: boolean
     payment_padding: number
 
