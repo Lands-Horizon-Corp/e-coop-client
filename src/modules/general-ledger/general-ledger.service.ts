@@ -313,6 +313,7 @@ export const useFilteredPaginatedGeneralLedger = ({
         },
     })
 }
+
 export interface IChangeORRequest {
     or_from: string
     or_to: string
@@ -334,6 +335,20 @@ export const useChangeOR = createMutationFactory<
         [generalLedgerBaseKey],
         [transactionBaseQueryKey],
     ],
+})
+
+export const useGeneralLedgerEnforceBalance = createMutationFactory<
+    void,
+    Error,
+    { memberId: TEntityId; balance_by_date: boolean }
+>({
+    mutationFn: async ({ memberId, balance_by_date }) => {
+        const response = await API.post<void, void>(
+            `${generalLedgerAPIRoute}/${memberId}?=balance_by_date=${balance_by_date}`
+        )
+        return response.data
+    },
+    defaultInvalidates: [[generalLedgerBaseKey]],
 })
 
 export const logger = Logger.getInstance('general-ledger')

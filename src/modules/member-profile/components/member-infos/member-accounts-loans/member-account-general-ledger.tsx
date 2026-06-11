@@ -1,13 +1,18 @@
+import { useState } from 'react'
+
 import { cn } from '@/helpers'
 import { IAccount } from '@/modules/account'
 import AccountMiniCard from '@/modules/account/components/account-mini-card'
 import { currencyFormat } from '@/modules/currency'
+import { useGeneralLedgerEnforceBalance } from '@/modules/general-ledger'
 import GeneralLedgerRunningTable from '@/modules/general-ledger/components/tables/general-ledger-running-table'
 import { useMemberAccountGeneralLedgerTotal } from '@/modules/member-accounting-ledger/member-accounting-ledger.service'
 
 import { RefreshIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
 
 import { IBaseProps, TEntityId } from '@/types'
 
@@ -111,6 +116,10 @@ const MemberAccountGeneralLedger = ({
     defaultAccount,
     ...other
 }: Props) => {
+    const [enforceBalance, setEnforceBalance] = useState(false)
+
+    const enforceBalanceMutation = useGeneralLedgerEnforceBalance()
+
     return (
         <div
             className="space-y-4 min-h-[95vh] min-w-0 max-w-full"
@@ -123,11 +132,49 @@ const MemberAccountGeneralLedger = ({
                 />
                 <MemberAccountLedgerTotal {...other} />
             </div>
+
             <GeneralLedgerRunningTable
-                className={cn('bg-background p-2 rounded-xl', className)}
+                className={cn(
+                    'bg-background p-2 rounded-xl min-h-[70vh]',
+                    className
+                )}
                 excludeColumnIds={['account']}
                 memberAccountingLedgerId={other.memberAccountLedgerId}
                 mode="member-accounting-ledger"
+                toolbarProps={{
+                    otherActionLeft: (
+                        <div className="flex items-center">
+                            <Switch
+                                checked={enforceBalance}
+                                className="scale-50"
+                                id="enforce-balance"
+                                onCheckedChange={(checked) => {
+                                    setEnforceBalance(checked)
+
+                                    enforceBalanceMutation.mutate({
+                                        balance_by_date: checked,
+                                        memberId: other.memberProfileId,
+                                    })
+                                }}
+                            />
+
+                            <Label
+                                className="cursor-pointer flex items-center gap-x-4 text-sm font-medium"
+                                htmlFor="enforce-balance"
+                            >
+                                {enforceBalance
+                                    ? 'Date Based Balance'
+                                    : 'True Based Balance'}
+
+                                <p className="text-xs text-muted-foreground max-w-md">
+                                    {enforceBalance
+                                        ? 'Balances calculated based date.'
+                                        : 'Balances calculated based latest balance.'}
+                                </p>
+                            </Label>
+                        </div>
+                    ),
+                }}
             />
         </div>
     )

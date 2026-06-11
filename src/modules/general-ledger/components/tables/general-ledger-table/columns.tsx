@@ -429,6 +429,43 @@ const GeneralLedgerTableColumns = (
             size: 160,
             minSize: 120,
         },
+        {
+            id: 'entry_date',
+            accessorKey: 'entry_date',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Date Updated">
+                    <ColumnActions {...props}>
+                        <DateFilter
+                            displayText="Date Updated"
+                            field="entry_date"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { entry_date },
+                },
+            }) => (
+                <div>
+                    <p className="text-sm">
+                        {entry_date ? toReadableDate(entry_date) : ''}{' '}
+                    </p>
+                    {entry_date ? (
+                        <p className="text-xs text-muted-foreground/60">
+                            {toReadableDate(entry_date, 'h:mm a -')}{' '}
+                            {dateAgo(entry_date)}
+                        </p>
+                    ) : (
+                        ''
+                    )}
+                </div>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            minSize: 200,
+        },
 
         ...createUpdateColumns<IGeneralLedger>({ withFilter: false }).filter(
             (col) => col.id === 'updated_at'

@@ -6,6 +6,17 @@ export const GENERAL_LEDGER_TYPE = [
     'Expenses',
 ] as const
 
+export const GENERAL_LEDGER_SRC = [
+    'ADV',
+    'ADJ',
+    'CHK',
+    'CSH',
+    'WID',
+    'LNV',
+    'CDV',
+    'JV',
+]
+
 export const GENERAL_LEDGER_SOURCES = [
     'withdraw',
     'deposit',

@@ -12,6 +12,7 @@ import { ITransaction } from '../transaction/transaction.types'
 import { IUserBase } from '../user/user.types'
 import {
     GENERAL_LEDGER_SOURCES,
+    GENERAL_LEDGER_SRC,
     GENERAL_LEDGER_TYPE,
 } from './general-ledger.constants'
 
@@ -29,6 +30,8 @@ export type TEntryType =
     | 'check-voucher'
 
 export type TGeneralLedgerSource = (typeof GENERAL_LEDGER_SOURCES)[number]
+
+export type TGeneralLedgerSRC = (typeof GENERAL_LEDGER_SRC)[number]
 
 export type TGeneralLedgerType = (typeof GENERAL_LEDGER_TYPE)[number]
 
@@ -68,6 +71,7 @@ export interface IGeneralLedger extends IBaseEntityMeta {
     reference_number: string
 
     source: TGeneralLedgerSource
+    src: TGeneralLedgerSRC
     journal_voucher_id: TEntityId
     adjustment_entry_id: TEntityId
 

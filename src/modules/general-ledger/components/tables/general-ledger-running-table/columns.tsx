@@ -9,6 +9,7 @@ import { ColumnDef, Row } from '@tanstack/react-table'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
+import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 // import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import ImageNameDisplay from '@/components/image-name-display'
 import { Badge } from '@/components/ui/badge'
@@ -239,10 +240,10 @@ const GeneralLedgerRunningTableColumns = (
             minSize: 100,
         },
         {
-            id: 'type',
-            accessorKey: 'type',
+            id: 'source',
+            accessorKey: 'source',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Type">
+                <DataTableColumnHeader {...props} title="Source">
                     <ColumnActions {...props} />
                 </DataTableColumnHeader>
             ),
@@ -261,6 +262,67 @@ const GeneralLedgerRunningTableColumns = (
             enableHiding: true,
             size: 120,
             minSize: 100,
+        },
+        {
+            id: 'type',
+            accessorKey: 'src',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Type">
+                    <ColumnActions {...props} />
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { src },
+                },
+            }) => (
+                <Badge className="text-xs px-1.5" variant="secondary">
+                    {src || '-'}
+                </Badge>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 120,
+            minSize: 100,
+        },
+        {
+            id: 'entry_date',
+            accessorKey: 'entry_date',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Date Updated">
+                    <ColumnActions {...props}>
+                        <DateFilter
+                            displayText="Date Updated"
+                            field="entry_date"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { entry_date },
+                },
+            }) => (
+                <div>
+                    <p className="text-sm">
+                        {entry_date ? toReadableDate(entry_date) : ''}{' '}
+                    </p>
+                    {entry_date ? (
+                        <p className="text-xs text-muted-foreground/60">
+                            {toReadableDate(entry_date, 'h:mm a -')}{' '}
+                            {dateAgo(entry_date)}
+                        </p>
+                    ) : (
+                        ''
+                    )}
+                </div>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            minSize: 200,
         },
         ...createUpdateColumns<IGeneralLedger>().filter(
             (col) => col.id === 'created_at'
