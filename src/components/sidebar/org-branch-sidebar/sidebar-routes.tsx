@@ -475,6 +475,7 @@ export const generateSidebarGroups = (
                         action: 'Read',
                         resourceType: 'GenerateSavingsInterest',
                     }),
+                    shortDescription: 'Generate Savings Interest',
                 },
                 {
                     type: 'item',
@@ -485,11 +486,13 @@ export const generateSidebarGroups = (
                         action: 'Read',
                         resourceType: 'GenerateMutualFundAid',
                     }),
+                    shortDescription: 'Generate Mutual Funds',
                 },
                 {
                     type: 'item',
                     icon: ChartBarIcon,
                     title: 'Reports',
+                    shortDescription: 'Manage/Generate reports',
                     url: `${baseUrl}/system/report`,
                     canAccess: hasPermissionFromAuth({
                         action: 'Read',
@@ -869,12 +872,14 @@ export const generateSidebarGroups = (
                                 action: 'Read',
                                 resourceType: 'MyTimesheet',
                             }),
+                            shortDescription: 'See your timesheets',
                         },
                         {
                             type: 'item',
                             title: 'My Footsteps',
                             icon: FootstepsIcon,
                             url: `/my-all-footsteps`,
+                            shortDescription: 'See all of your footsteps',
                             canAccess: hasPermissionFromAuth({
                                 action: 'Read',
                                 resourceType: 'AllMyFootsteps',
@@ -884,6 +889,7 @@ export const generateSidebarGroups = (
                             type: 'item',
                             title: 'My Branch Footsteps',
                             icon: FootstepsIcon,
+                            shortDescription: 'See current branch footsteps',
                             url: `/my-branch-footsteps`,
                             canAccess: hasPermissionFromAuth({
                                 action: 'Read',
@@ -899,6 +905,7 @@ export const generateSidebarGroups = (
                                 action: 'Read',
                                 resourceType: 'MyDisbursements',
                             }),
+                            shortDescription: 'See Disbursement you made',
                         },
                         {
                             type: 'item',
@@ -909,6 +916,7 @@ export const generateSidebarGroups = (
                                 action: 'Read',
                                 resourceType: 'MyGeneralLedger',
                             }),
+                            shortDescription: 'See GL entries made by you',
                         },
                     ],
                 },

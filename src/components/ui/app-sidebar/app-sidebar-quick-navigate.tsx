@@ -162,7 +162,7 @@ const AppSidebarQuickNavigate = ({ groups }: Props) => {
                                                 <p>{groupItem.title}</p>
                                                 <p className="text-xs text-muted-foreground">
                                                     {groupItem.shortDescription ||
-                                                        'sa'}
+                                                        'no description'}
                                                 </p>
                                             </div>
                                             <div className="w-fit">

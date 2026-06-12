@@ -264,7 +264,7 @@ export function GenerateReportTemplatePicker<T = unknown>({
     )
 
     return (
-        <div className="max-w-6xl w-full mx-auto bg-popover ring-4 ring-muted border border-border overflow-clip rounded-xl h-[95vh] p-0 gap-0 flex">
+        <div className="max-w-7xl w-full mx-auto bg-popover ring-4 ring-muted border border-border overflow-clip rounded-xl h-[95vh] p-0 gap-0 flex">
             <aside className="flex !w-64 flex-col border-r border-border bg-muted/30">
                 <Command className="rounded-none border-0 bg-transparent">
                     <div className="p-4 pb-0">
@@ -647,7 +647,7 @@ export function GenerateReportTemplatePickerModal({
     return (
         <Dialog {...modalProps}>
             {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-            <DialogContent className="!max-w-6xl !bg-transparent p-0 gap-0 flex flex-col">
+            <DialogContent className="!max-w-7xl !bg-transparent p-0 gap-0 flex flex-col">
                 <DialogHeader className="px-6 py-4 hidden border-b border-border shrink-0">
                     <DialogTitle className="text-lg">
                         Select Template
