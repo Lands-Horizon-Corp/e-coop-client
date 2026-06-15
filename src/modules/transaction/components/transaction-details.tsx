@@ -45,17 +45,11 @@ const TransactionDetails = ({
             {/* CENTER CONTENT */}
             <div className="flex-1 min-w-0 space-y-0.5">
                 <p className="text-sm font-medium truncate">
+                    <span className="text-muted-foreground bg-primary/10 p-1 rounded">
+                        {item.reference_number && `${item.reference_number}`}
+                    </span>{' '}
                     {item.member_profile?.full_name || 'Unknown Member'}
                 </p>
-
-                <div className="flex items-center gap-1.5 flex-wrap">
-                    {item.reference_number && (
-                        <span className="text-[10px] text-muted-foreground">
-                            #{item.reference_number}
-                        </span>
-                    )}
-                </div>
-
                 <p className="text-[11px] text-muted-foreground">
                     {toReadableDateTime(item.created_at)}{' '}
                     {currentTransactionBatchId ===
