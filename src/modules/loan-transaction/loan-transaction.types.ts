@@ -23,7 +23,7 @@ import { ILoanTermsAndConditionAmountReceipt } from '../loan-terms-and-condition
 import { ILoanTermsAndConditionSuggestedPayment } from '../loan-terms-and-condition-suggested-payment'
 import { ILoanTransactionEntry } from '../loan-transaction-entry'
 import { IMedia } from '../media'
-import { IMemberAccountingLedger } from '../member-account-ledger'
+import { IMemberAccountingLedger } from '../member-accounting-ledger/member-accounting-ledger.types'
 import { IMemberProfile } from '../member-profile'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUser } from '../user'

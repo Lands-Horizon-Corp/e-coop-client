@@ -1,7 +1,7 @@
-import { IMemberAccountingLedger } from '@/modules/member-account-ledger'
 import { TransactionMemberAccountLedger } from '@/modules/member-accounting-ledger'
 import { MemberAccountGeneralLedgerAction } from '@/modules/member-accounting-ledger'
 import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
+import { IMemberAccountingLedger } from '@/modules/member-accounting-ledger/member-accounting-ledger.types'
 
 import { useModalState } from '@/hooks/use-modal-state'
 

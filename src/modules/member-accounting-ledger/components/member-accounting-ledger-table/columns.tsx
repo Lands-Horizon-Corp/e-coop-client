@@ -2,7 +2,6 @@ import { formatNumber } from '@/helpers'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { currencyFormat } from '@/modules/currency'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
-import { IMemberAccountingLedger } from '@/modules/member-account-ledger'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -10,6 +9,8 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+
+import { IMemberAccountingLedger } from '../../member-accounting-ledger.types'
 
 // import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 // import { PushPinSlashIcon } from '@/components/'

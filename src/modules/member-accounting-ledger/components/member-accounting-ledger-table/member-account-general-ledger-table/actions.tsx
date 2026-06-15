@@ -1,5 +1,5 @@
 import { cn } from '@/helpers/tw-utils'
-import { IMemberAccountingLedger } from '@/modules/member-account-ledger'
+import { IMemberAccountingLedger } from '@/modules/member-accounting-ledger/member-accounting-ledger.types'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
 import { EyeIcon } from 'lucide-react'
 

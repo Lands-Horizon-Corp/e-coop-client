@@ -12,7 +12,7 @@ import { IMemberGeneralLedgerTotal } from '../general-ledger'
 import {
     IMemberAccountingLedgerPaginated,
     IMemberAccountingLedgerTotal,
-} from '../member-account-ledger'
+} from './member-accounting-ledger.types'
 
 // ⚙️🛠️ API SERVICE HERE
 

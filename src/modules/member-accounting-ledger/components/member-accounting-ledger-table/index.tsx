@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
-import { IMemberAccountingLedger } from '@/modules/member-account-ledger'
 import {
     getCoreRowModel,
     getSortedRowModel,
@@ -29,6 +28,7 @@ import {
     TMemberAccountingLedgerHookMode,
     useFilteredPaginatedMemberAccountingLedger,
 } from '../../member-accounting-ledger.service'
+import { IMemberAccountingLedger } from '../../member-accounting-ledger.types'
 import MemberAccountingLedgerTableColumns, {
     IMemberAccountingLedgerTableColumnProps,
     memberGeneralLedgerGlobalSearchTargets,
