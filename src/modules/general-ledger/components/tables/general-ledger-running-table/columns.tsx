@@ -2,14 +2,12 @@ import { ReactNode } from 'react'
 
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { currencyFormat } from '@/modules/currency'
-import { LedgerSourceBadge } from '@/modules/general-ledger/components/ledger-source-badge'
 import { IGeneralLedger } from '@/modules/general-ledger/general-ledger.types'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
-import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 // import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import ImageNameDisplay from '@/components/image-name-display'
 import { Badge } from '@/components/ui/badge'
@@ -287,46 +285,6 @@ const GeneralLedgerRunningTableColumns = (
             size: 120,
             minSize: 100,
         },
-        {
-            id: 'entry_date',
-            accessorKey: 'entry_date',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Date Updated">
-                    <ColumnActions {...props}>
-                        <DateFilter
-                            displayText="Date Updated"
-                            field="entry_date"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { entry_date },
-                },
-            }) => (
-                <div>
-                    <p className="text-sm">
-                        {entry_date ? toReadableDate(entry_date) : ''}{' '}
-                    </p>
-                    {entry_date ? (
-                        <p className="text-xs text-muted-foreground/60">
-                            {toReadableDate(entry_date, 'h:mm a -')}{' '}
-                            {dateAgo(entry_date)}
-                        </p>
-                    ) : (
-                        ''
-                    )}
-                </div>
-            ),
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            minSize: 200,
-        },
-        ...createUpdateColumns<IGeneralLedger>().filter(
-            (col) => col.id === 'created_at'
-        ),
         // {
         //     id: 'member_profile',
         //     accessorKey: 'member_profile.full_name',
@@ -389,39 +347,9 @@ const GeneralLedgerRunningTableColumns = (
             size: 160,
             minSize: 120,
         },
-        {
-            id: 'source',
-            accessorKey: 'source',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Source">
-                    <ColumnActions {...props} />
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { source },
-                },
-            }) => (
-                <span>
-                    {source ? (
-                        <LedgerSourceBadge
-                            size={'sm'}
-                            source={source}
-                            variant={source}
-                        />
-                    ) : (
-                        <span className="text-muted-foreground">-</span>
-                    )}
-                </span>
-            ),
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: true,
-            size: 160,
-            minSize: 120,
-        },
-
+        ...createUpdateColumns<IGeneralLedger>().filter(
+            (col) => col.id === 'created_at'
+        ),
         ...createUpdateColumns<IGeneralLedger>().filter(
             (col) => col.id === 'updated_at'
         ),

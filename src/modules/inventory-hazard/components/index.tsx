@@ -191,6 +191,12 @@ const InventoryHazardTable = ({
                         }}
                         table={table}
                         {...toolbarProps}
+                        columnOrdererProps={{
+                            ...toolbarProps?.columnOrdererProps,
+                            defaultColumnOrder: columns
+                                .map((item) => item.id)
+                                .filter((id): id is string => id !== undefined),
+                        }}
                     />
 
                     <DataTable

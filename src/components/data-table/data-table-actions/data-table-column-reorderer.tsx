@@ -25,6 +25,7 @@ import {
     GripVerticalIcon,
     RefreshIcon,
 } from '@/components/icons'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 import {
     Popover,
@@ -36,6 +37,7 @@ export interface DataTableColumnOrderProps<TData> {
     table: Table<TData>
     className?: string
     labels?: Record<string, string>
+    defaultColumnOrder?: string[]
 }
 
 interface SortableItemProps {
@@ -91,6 +93,7 @@ export const DataTableColumnReorder = <TData,>({
     table,
     className,
     labels,
+    defaultColumnOrder,
 }: DataTableColumnOrderProps<TData>) => {
     const [open, setOpen] = useState(false)
 
@@ -101,6 +104,14 @@ export const DataTableColumnReorder = <TData,>({
         if (columnOrder?.length) return columnOrder
         return allLeafColumns.map((col) => col.id)
     }, [columnOrder, allLeafColumns])
+
+    const factoryOrder = useMemo(() => {
+        if (defaultColumnOrder?.length) {
+            return defaultColumnOrder
+        }
+
+        return allLeafColumns.map((col) => col.id)
+    }, [defaultColumnOrder, allLeafColumns])
 
     const [order, setOrder] = useState<string[]>(derivedOrder)
     const [initialOrder, setInitialOrder] = useState<string[]>(derivedOrder)
@@ -122,10 +133,15 @@ export const DataTableColumnReorder = <TData,>({
     const handleDragEnd = useCallback((event: DragEndEvent) => {
         const { active, over } = event
         if (!over || active.id === over.id) return
+
         setOrder((items) => {
             const oldIndex = items.indexOf(active.id as string)
             const newIndex = items.indexOf(over.id as string)
-            if (oldIndex === -1 || newIndex === -1) return items
+
+            if (oldIndex === -1 || newIndex === -1) {
+                return items
+            }
+
             return arrayMove(items, oldIndex, newIndex)
         })
     }, [])
@@ -133,16 +149,23 @@ export const DataTableColumnReorder = <TData,>({
     const handleApply = () => {
         table.setColumnOrder(order)
         setInitialOrder(order)
-        // setOpen(false)
     }
 
     const handleReset = () => {
         setOrder(initialOrder)
     }
 
+    const handleFactoryReset = () => {
+        setOrder(factoryOrder)
+    }
+
     const isDirty =
         order.length !== initialOrder.length ||
         order.some((id, i) => id !== initialOrder[i])
+
+    const isFactoryDefault =
+        order.length === factoryOrder.length &&
+        order.every((id, i) => id === factoryOrder[i])
 
     return (
         <Popover onOpenChange={setOpen} open={open}>
@@ -155,28 +178,49 @@ export const DataTableColumnReorder = <TData,>({
                     <ColumnOutlineIcon className="size-4" />
                 </Button>
             </PopoverTrigger>
+
             <PopoverContent
                 align="end"
-                className="w-72 rounded-xl overflow-clip p-0"
+                className="max-w-lg w-fit rounded-xl overflow-clip p-0"
             >
-                <div className="flex items-center justify-between px-3 py-2 border-b">
+                <div className="flex items-center justify-between gap-x-24 px-3 py-2 border-b">
                     <div className="flex items-center gap-2 text-sm font-medium">
                         <ColumnOutlineIcon className="size-4" />
                         Reorder columns
                     </div>
-                    <Button
-                        className="h-7 px-2 text-xs"
-                        disabled={!isDirty}
-                        onClick={handleReset}
-                        size="sm"
-                        type="button"
-                        variant="ghost"
-                    >
-                        <RefreshIcon className="size-3" />
-                        Reset
-                    </Button>
+
+                    <div className="flex items-center gap-1">
+                        <ActionTooltip tooltipContent="Reset to Prev. Ordering">
+                            <Button
+                                className="text-xs"
+                                disabled={!isDirty}
+                                onClick={handleReset}
+                                size="sm"
+                                type="button"
+                                variant="ghost"
+                            >
+                                <RefreshIcon className="size-3" />
+                                Reset
+                            </Button>
+                        </ActionTooltip>
+
+                        <ActionTooltip tooltipContent="Reset to Default Ordering">
+                            <Button
+                                className="px-1 text-xs"
+                                disabled={isFactoryDefault}
+                                onClick={handleFactoryReset}
+                                size="sm"
+                                type="button"
+                                variant="ghost"
+                            >
+                                <RefreshIcon className="size-3" />
+                                Default
+                            </Button>
+                        </ActionTooltip>
+                    </div>
                 </div>
-                <div className="max-h-[50vh] ecoop-scroll overflow-x-clip overflow-y-auto p-2">
+
+                <div className="max-h-[30vh] ecoop-scroll overflow-x-clip overflow-y-auto p-2">
                     {order.length === 0 ? (
                         <p className="text-sm text-muted-foreground px-2 py-6 text-center">
                             No columns to reorder
@@ -215,6 +259,7 @@ export const DataTableColumnReorder = <TData,>({
                     >
                         Cancel
                     </Button>
+
                     <Button
                         disabled={!isDirty}
                         onClick={handleApply}

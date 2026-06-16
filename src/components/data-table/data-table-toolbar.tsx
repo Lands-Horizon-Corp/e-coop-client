@@ -40,7 +40,6 @@ export interface IDataTableToolbarProps<TData> extends IClassProps {
     deleteActionProps?: Omit<IDataTableDeleteSelectedProps<TData>, 'table'>
     createActionProps?: IDataTableCreateActionProps
     columnOrdererProps?: Omit<DataTableColumnOrderProps<TData>, 'table'>
-
     otherActionRight?: ReactNode
     hideRefreshButton?: boolean
     hideDeleteButton?: boolean

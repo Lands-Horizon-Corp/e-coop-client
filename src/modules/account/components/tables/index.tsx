@@ -207,6 +207,12 @@ const AccountsTable = ({
                         scrollableProps={{ isScrollable, setIsScrollable }}
                         table={table}
                         {...toolbarProps}
+                        columnOrdererProps={{
+                            ...toolbarProps?.columnOrdererProps,
+                            defaultColumnOrder: columns
+                                .map((item) => item.id)
+                                .filter((id): id is string => id !== undefined),
+                        }}
                     />
                     <DataTable
                         className={cn('mb-2', isScrollable && 'flex-1')}
