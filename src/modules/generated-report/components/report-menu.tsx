@@ -210,9 +210,8 @@ const JOURNAL_GROUP: ReportItem[] = [
         label: 'ICPR',
         icon: ReceiptText,
         component: ICPRCreateReportFormModal,
-        is_available: false,
-        warning_message: 'No template',
         persistKey: 'form-report-accounting-icpr',
+        registry_key: 'icpr_templates',
     },
 ]
 

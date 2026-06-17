@@ -454,6 +454,7 @@ const ICPRCreateReportForm = ({ className, ...formProps }: IICPRFormProps) => {
                         form={
                             form as unknown as UseFormReturn<TWithReportConfigSchema>
                         }
+                        registryKey="icpr_templates"
                     />
                 </fieldset>
 

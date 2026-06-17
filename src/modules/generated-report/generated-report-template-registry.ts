@@ -16,6 +16,7 @@ import { DAILY_COLLECTION_SUMMARY_REPORT_TEMPLATES } from './reports/daily-colle
 import { DAILY_WITHDRAWAL_REPORT_TEMPLATES } from './reports/daily-withdrawal-report-templates'
 import { DEPOSIT_BALANCES_REPORT_TEMPLATES } from './reports/deposit-balances-templates'
 import { DIRECT_ADJUSTMENT_REPORT_TEMPLATES } from './reports/direct-adustment-report-template'
+import { ICPR_REPORT_TEMPLATES } from './reports/icpr-report-template'
 import { JOURNAL_VOUCHER_REPORT_TEMPLATES } from './reports/journal-voucher-report-templates'
 import { LEDGER_REPORT_TEMPLATES } from './reports/ledgger-report-templates'
 import { LOAN_COLLECTION_DETAIL_REPORT_TEMPLATES } from './reports/loan-collection-detail-templates'
@@ -81,6 +82,7 @@ export const REPORT_REGISTRY = {
 
     account_balance_template: ACCOUNT_BALANCE_REPORT_TEMPLATES,
     ledger_templates: LEDGER_REPORT_TEMPLATES,
+    icpr_templates: ICPR_REPORT_TEMPLATES,
 } as const
 
 export const getTemplateAt = <T>(
