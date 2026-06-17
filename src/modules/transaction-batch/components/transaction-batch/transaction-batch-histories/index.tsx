@@ -50,7 +50,7 @@ const HistoryTabs: {
         Icon: BillIcon,
         Component: ({ transactionBatchId }) => (
             <GeneralLedgerAllTable
-                className="grow p-0"
+                className="grow max-h-full p-0"
                 entryType="payment-entry"
                 excludeColumnIds={['balance']}
                 mode="transaction-batch"
@@ -69,7 +69,7 @@ const HistoryTabs: {
         Icon: HandCoinsIcon,
         Component: ({ transactionBatchId }) => (
             <GeneralLedgerAllTable
-                className="grow p-0"
+                className="grow max-h-full p-0"
                 entryType="deposit-entry"
                 excludeColumnIds={['balance']}
                 mode="transaction-batch"
@@ -88,7 +88,7 @@ const HistoryTabs: {
         Icon: HandCoinsIcon,
         Component: ({ transactionBatchId }) => (
             <GeneralLedgerAllTable
-                className="grow p-0"
+                className="grow max-h-full p-0"
                 entryType="withdraw-entry"
                 excludeColumnIds={['balance']}
                 mode="transaction-batch"
@@ -107,7 +107,7 @@ const HistoryTabs: {
         Icon: BillIcon,
         Component: ({ transactionBatchId }) => (
             <GeneralLedgerAllTable
-                className="grow p-0"
+                className="grow max-h-full p-0"
                 excludeColumnIds={['balance']}
                 mode="transaction-batch-loan-entry"
                 persistKey={[
@@ -125,7 +125,7 @@ const HistoryTabs: {
         Icon: HandCoinsIcon,
         Component: ({ transactionBatchId }) => (
             <GeneralLedgerAllTable
-                className="grow p-0"
+                className="grow max-h-full p-0"
                 entryType="cash-entry"
                 excludeColumnIds={['balance']}
                 mode="transaction-batch"
@@ -150,7 +150,7 @@ const HistoryTabs: {
         Icon: HandDropCoinsIcon,
         Component: ({ transactionBatchId }) => (
             <DisbursementAllTransactionTable
-                className="grow p-0"
+                className="grow max-h-full p-0"
                 mode="transaction-batch"
                 transactionBatchId={transactionBatchId}
             />
@@ -162,7 +162,7 @@ const HistoryTabs: {
         Icon: BookOpenIcon,
         Component: ({ transactionBatchId }) => (
             <GeneralLedgerAllTable
-                className="grow p-0"
+                className="grow max-h-full p-0"
                 entryType=""
                 excludeColumnIds={['balance']}
                 mode="transaction-batch"
@@ -181,7 +181,7 @@ const HistoryTabs: {
         Icon: MoneyCheckIcon,
         Component: ({ transactionBatchId }) => (
             <GeneralLedgerAllTable
-                className="grow p-0"
+                className="grow max-h-full p-0"
                 entryType="check-entry"
                 excludeColumnIds={['balance']}
                 mode="transaction-batch"
@@ -200,7 +200,7 @@ const HistoryTabs: {
         Icon: BillIcon,
         Component: ({ transactionBatchId }) => (
             <GeneralLedgerAllTable
-                className="grow p-0"
+                className="grow max-h-full p-0"
                 entryType="online-entry"
                 excludeColumnIds={['balance']}
                 mode="transaction-batch"
@@ -483,7 +483,7 @@ const TransactionBatchSummary = ({
                                 {currencyFormat(summary.total_balance, {
                                     currency,
                                     showSymbol: true,
-                                    absolute : true
+                                    absolute: true,
                                 })}
                             </span>
                         </div>
