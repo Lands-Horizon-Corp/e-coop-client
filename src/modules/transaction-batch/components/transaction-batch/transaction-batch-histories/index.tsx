@@ -266,7 +266,7 @@ const TransactionBatchHistories = ({
                 </div>
                 {HistoryTabs.map((tab) => (
                     <TabsContent asChild key={tab.value} value={tab.value}>
-                        <div className="flex-1 flex-row rounded-xl bg-background p-0">
+                        <div className="flex-1 min-h-0 flex-row rounded-xl min--bg-background p-0">
                             {tab.Component({ transactionBatchId })}
                         </div>
                     </TabsContent>
@@ -483,6 +483,7 @@ const TransactionBatchSummary = ({
                                 {currencyFormat(summary.total_balance, {
                                     currency,
                                     showSymbol: true,
+                                    absolute : true
                                 })}
                             </span>
                         </div>
@@ -682,24 +683,10 @@ const SidebarSummary = ({ transactionBatchId, activeTab }: SideBarSummary) => {
 
             {/* Scrollable rows */}
             <div className="flex-1 overflow-y-auto ecoop-scroll">
-                {/* Account section */}
-                <div className="flex items-center gap-2 px-3 pt-3 pb-1">
-                    <span className="text-xs font-semibold text-foreground uppercase tracking-wider whitespace-nowrap">
-                        Account
-                    </span>
-                    <div className="flex-1 border-t border-dashed border-border/60" />
-                </div>
-                <TransactionBatchSummary
-                    currency={currency}
-                    sectionLabel="Account"
-                    swapped={swapped}
-                    transactionBatchSummary={accountSummary}
-                />
-
                 {/* Cash section */}
                 <div className="flex items-center gap-2 px-3 pt-4 pb-1">
                     <span className="text-xs font-semibold text-foreground uppercase tracking-wider whitespace-nowrap">
-                        Cash &amp; Cash Equivalence
+                        Cash &amp; Cash Equivalence (DEBIT)
                     </span>
                     <div className="flex-1 border-t border-dashed border-border/60" />
                 </div>
@@ -708,6 +695,20 @@ const SidebarSummary = ({ transactionBatchId, activeTab }: SideBarSummary) => {
                     sectionLabel="Cash and Cash Equivalence"
                     swapped={swapped}
                     transactionBatchSummary={cashSummary}
+                />
+
+                {/* Account section */}
+                <div className="flex items-center gap-2 px-3 pt-3 pb-1">
+                    <span className="text-xs font-semibold text-foreground uppercase tracking-wider whitespace-nowrap">
+                        Account (CREDIT)
+                    </span>
+                    <div className="flex-1 border-t border-dashed border-border/60" />
+                </div>
+                <TransactionBatchSummary
+                    currency={currency}
+                    sectionLabel="Account"
+                    swapped={swapped}
+                    transactionBatchSummary={accountSummary}
                 />
             </div>
 

@@ -13,6 +13,8 @@ export interface ICurrencyFormatOptions {
      * Optional currency configuration object
      */
     currency?: ICurrency
+
+    absolute?: boolean
 }
 
 /**
@@ -35,7 +37,7 @@ export const currencyFormat = (
     value: number | string | undefined | null,
     options: ICurrencyFormatOptions = {}
 ): string => {
-    const { currency, showSymbol = !currency } = options
+    const { currency, absolute = false, showSymbol = !currency } = options
 
     // Handle null/undefined values
     if (value === null || value === undefined || value === '') {
@@ -96,12 +98,16 @@ export const currencyFormat = (
         : 2
 
     try {
+        const finalValue = absolute ? Math.abs(numericValue) : numericValue
+
         return new Intl.NumberFormat(locale, {
             style: showSymbol ? 'currency' : 'decimal',
             currency: showSymbol ? currencyCode : undefined,
+            signDisplay: absolute ? 'never' : 'auto',
+
             minimumFractionDigits,
             maximumFractionDigits,
-        }).format(numericValue)
+        }).format(finalValue)
     } catch (error) {
         console.warn(
             `Invalid locale or currency: ${locale}/${currencyCode}`,
