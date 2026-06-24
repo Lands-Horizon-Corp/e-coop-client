@@ -57,7 +57,7 @@ export function ReportViewer({
         id: reportId,
         options: {
             initialData: defaultReport,
-            refetchInterval: report?.status === 'pending' ? 10_000 : false,
+            refetchInterval: report?.status === 'pending' ? 5_000 : false,
             refetchOnWindowFocus: false,
         },
     })
@@ -81,8 +81,10 @@ export function ReportViewer({
 
     useSubscribe('generated_report', eventName, (data: IGeneratedReport) => {
         setReport((prev) => {
-            if (prev?.status !== data.status)
+            if (prev?.status !== data.status) {
                 onReportStatusChange?.(data.status)
+                if (data.status !== report?.status) refetch()
+            }
             return data
         })
     })
@@ -116,11 +118,15 @@ export function ReportViewer({
                     </div>
                 )}
 
-                {!isPending && report && isProcessing && !isFailed && (
-                    <div className="w-full min-w-0 h-[500px] rounded-2xl border border-dashed bg-muted/20 flex flex-col items-center justify-center">
-                        <ReportLoadingState status={report.status} />
-                    </div>
-                )}
+                {!isPending &&
+                    report &&
+                    !report.media &&
+                    isProcessing &&
+                    !isFailed && (
+                        <div className="w-full min-w-0 h-[500px] rounded-2xl border border-dashed bg-muted/20 flex flex-col items-center justify-center">
+                            <ReportLoadingState status={report.status} />
+                        </div>
+                    )}
 
                 {!isPending && isFailed ? (
                     <div className="w-full min-w-0 h-[500px] rounded-2xl border border-dashed bg-muted/20 flex flex-col items-center justify-center">
@@ -152,9 +158,9 @@ export function ReportViewer({
             </div>
 
             <div className="flex flex-wrap items-center gap-3 px-4 py-4">
-                {report ? (
+                {report && report.media ? (
                     <>
-                        {report.paper_size && (
+                        {report.paper_size && report.width && report.height && (
                             <>
                                 <span className="text-xs text-muted-foreground font-medium">
                                     {report.paper_size}
