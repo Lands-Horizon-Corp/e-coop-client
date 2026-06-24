@@ -215,6 +215,7 @@ export function PrintSettingsSection({
                                             : 'text-muted-foreground hover:bg-primary/5 hover:border hover:border-primary/20'
                                     )}
                                     htmlFor={id}
+                                    key={id}
                                 >
                                     <RadioGroupItem
                                         className="sr-only"

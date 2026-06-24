@@ -66,7 +66,6 @@ export const {
 } = apiCrudHooks
 
 const createGeneratedReport = async (data: IGeneratedReportRequest) => {
-    console.log('Report Payload', data)
     return (
         await API.post<IGeneratedReportRequest, IGeneratedReport>(
             generatedReportAPIRoute,
