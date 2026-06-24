@@ -8,7 +8,7 @@
 
 html::-webkit-scrollbar,
 .ecoop-scroll::-webkit-scrollbar {
-    @apply h-[1.5vh] w-[.5vw];
+    @apply h-[1.5vh] w-[.9vw];
 }
 
 html::-webkit-scrollbar-thumb,

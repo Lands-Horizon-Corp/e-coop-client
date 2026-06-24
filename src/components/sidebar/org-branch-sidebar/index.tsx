@@ -151,7 +151,7 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                 </SidebarMenu>
                 <AppSidebarQuickNavigate groups={item} />
             </SidebarHeader>
-            <SidebarContent className="ecoop-scroll group-data-[collapsible=icon]:overflow-y-auto ">
+            <SidebarContent className="ecoop-scroll group-data-[collapsible=icon]:overflow-y-auto  ![&::-webkit-scrollbar]:w-[8px]">
                 {memoizedSidebarRouteGroup.map((navGroupItem, i) => {
                     // if (!navGroupItem.userType.includes(currentUserType))
                     //     return null
