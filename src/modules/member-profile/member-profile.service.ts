@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
+import { toBase64 } from '@/helpers/encoding-utils'
 import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
@@ -95,10 +96,13 @@ export const getMemberProfileDashboardSummary = async () => {
     ).data
 }
 
-export const getMemberProfileQuickSearch = async (search: string) => {
+export const getMemberProfileQuickSearch = async (
+    search: string,
+    sort?: string
+) => {
     const url = qs.stringifyUrl({
         url: `${memberProfileAPIRoute}/quick/search`,
-        query: { search },
+        query: { search, sort },
     })
     const response = await API.get<IMemberProfileQuickSearchResponse[]>(url)
     return response.data
@@ -353,7 +357,20 @@ export const useGetMemberProfileQuickSearch = ({
 }) => {
     return useQuery<IMemberProfileQuickSearchResponse[], Error>({
         queryKey: [memberProfileBaseKey, 'quick-search', search],
-        queryFn: () => getMemberProfileQuickSearch(search),
+        queryFn: () =>
+            getMemberProfileQuickSearch(
+                search,
+                toBase64([
+                    {
+                        id: 'first_name',
+                        desc: false,
+                    },
+                    {
+                        id: 'last_name',
+                        desc: false,
+                    },
+                ])
+            ),
         enabled: search.length >= 2,
         staleTime: 1000 * 30,
         ...options,

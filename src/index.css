@@ -6,7 +6,6 @@
     @apply h-2 w-[.5vw];
 }
 
-// This is fix sample
 html::-webkit-scrollbar,
 .ecoop-scroll::-webkit-scrollbar {
     @apply h-[1.5vh] w-[.9vw];
