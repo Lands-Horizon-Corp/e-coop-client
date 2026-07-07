@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useMemo, useRef, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { cn } from '@/helpers'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -42,6 +42,13 @@ const PermissionMatrix = forwardRef<
     const [searchTerm, setSearchTerm] = useState('')
     const parentRef = useRef<HTMLDivElement>(null)
     const headerScrollRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (parentRef.current) {
+            parentRef.current.scrollTop = 0
+            parentRef.current.scrollLeft = 0
+        }
+    }, [searchTerm])
 
     const filteredResources = useMemo(() => {
         return PERMISSION_ALL_RESOURCE_ACTION.filter(
