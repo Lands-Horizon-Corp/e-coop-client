@@ -115,8 +115,7 @@ const MemberPersonalInfoForm = ({
                     memberId: memberProfileId,
                     data: {
                         ...formData,
-                        full_name:
-                            `${formData.first_name ?? ''} ${formData.middle_name ?? ''} ${formData.last_name ?? ''} ${formData.suffix ?? ''}`,
+                        full_name: `${formData.first_name ?? ''} ${formData.middle_name ?? ''} ${formData.last_name ?? ''} ${formData.suffix ?? ''}`,
                     },
                 },
                 {
