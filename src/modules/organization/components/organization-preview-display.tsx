@@ -77,18 +77,18 @@ export const OrganizationPreviewDisplay = ({
             <div>
                 <div
                     className={cn(
-                        'flex relative w-full mask-b-from-70% mask-b-to-95% rounded-lg bg-cover !h-[50vh] bg-center ecoop-scroll max-h-screen',
+                        'flex relative w-full mask-b-from-70% mask-b-to-95% rounded-lg bg-cover h-[50vh]! bg-center ecoop-scroll max-h-screen',
                         className
                     )}
                     style={{
                         backgroundImage: `url(${mediaUrl})`,
                     }}
                 >
-                    <div className="absolute w-full min-h-52 bottom-0 px-4 sm:px-8  bg-gradient-to-t from-background via-[80%] via-background/20  to-transparent" />
+                    <div className="absolute w-full min-h-52 bottom-0 px-4 sm:px-8  bg-linear-to-t from-background via-80% via-background/20  to-transparent" />
                 </div>
                 <UpdateOrganizationFormModal
                     {...updateModal}
-                    className="w-full min-w-[70rem] max-w-[80rem]"
+                    className="w-full min-w-[70rem] max-w-7xl"
                     formProps={{
                         organizationId,
                         defaultValues: organization,
@@ -130,7 +130,7 @@ export const OrganizationPreviewDisplay = ({
                                     <TooltipTrigger asChild>
                                         <h1
                                             className={cn(
-                                                'font-sans font-black  !leading-[52px] cursor-pointer hover:text-primary/80 transition-colors text-[min(50px,8vw)]'
+                                                'font-sans font-black  leading-[52px]! cursor-pointer hover:text-primary/80 transition-colors text-[min(50px,8vw)]'
                                             )}
                                         >
                                             {organization?.name}
@@ -157,7 +157,7 @@ export const OrganizationPreviewDisplay = ({
                             <>
                                 <div className="text-muted-foreground mt-3">
                                     <TruncatedText
-                                        className="text-muted-foreground !bg-inherit max-h-24 overflow-auto ecoop-scroll text-sm sm:text-base"
+                                        className="text-muted-foreground bg-inherit! max-h-24 overflow-auto ecoop-scroll text-sm sm:text-base"
                                         maxLength={250}
                                         showLessText="Read less"
                                         showMoreText="Read more"
@@ -166,7 +166,7 @@ export const OrganizationPreviewDisplay = ({
                                 </div>
                             </>
                         </div>
-                        <div className="flex-1 relative flex-col !h-full space-y-2">
+                        <div className="flex-1 relative flex-col h-full! space-y-2">
                             <div className="flex mask-b-from-50% mask-b-to-95% ecoop-scroll max-h-54 overflow-x-auto flex-wrap gap-1">
                                 <BranchInfoItem
                                     className="w-full"

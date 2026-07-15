@@ -281,7 +281,7 @@ export const BranchCard = ({
         <TooltipProvider>
             <CreateUpdateBranchFormModal
                 {...updateModal}
-                className="w-full min-w-[80rem] max-w-[80rem]"
+                className="w-full min-w-7xl max-w-7xl"
                 description="Update branch information"
                 formProps={{
                     organizationId,

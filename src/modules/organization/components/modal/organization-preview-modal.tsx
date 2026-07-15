@@ -37,7 +37,7 @@ const OrganizationPreviewModal = ({
         <Modal
             {...modalProps}
             className={cn(
-                '!max-w-4xl w-full border-0 p-0 !rounded-[10px] max-h-[90vh]',
+                'max-w-4xl! w-full border-0 p-0 rounded-[10px]! max-h-[90vh]',
                 isLoading ? 'overflow-y-hidden' : '',
                 className
             )}

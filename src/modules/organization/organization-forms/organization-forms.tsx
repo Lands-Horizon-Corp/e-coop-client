@@ -382,7 +382,7 @@ const OrganizationForm = () => {
                                         )}
                                     />
                                     <FormFieldWrapper
-                                        className="col-span-full !h-fit"
+                                        className="col-span-full h-fit!"
                                         control={form.control}
                                         label="Organization Description"
                                         name="description"
@@ -411,7 +411,7 @@ const OrganizationForm = () => {
                                                 <GradientBackground
                                                     gradientOnly
                                                 >
-                                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-2 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-2 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                                         <Checkbox
                                                             checked={
                                                                 field.value

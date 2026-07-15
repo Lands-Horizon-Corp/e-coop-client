@@ -136,7 +136,7 @@ const OrganizationPreviewModalDetails = ({
                             )}
                             {organization.address && (
                                 <div className="flex items-start gap-2 min-w-0 max-w-full">
-                                    <LocationIcon className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                                    <LocationIcon className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                                     <Tooltip delayDuration={800}>
                                         <TooltipTrigger className="truncate text-sm">
                                             {organization.address}

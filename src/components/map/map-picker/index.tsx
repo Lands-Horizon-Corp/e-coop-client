@@ -138,9 +138,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
     hideButtonCoordinates = true,
     modalState,
 }) => {
-    const { isLoaded, loadError } = useMap() // Internal modal state
-    // const [state, setState] = useState(false)
-
+    const { isLoaded, loadError } = useMap()
     const [state, setState] = useInternalState(
         false,
         modalState?.open,
@@ -453,22 +451,6 @@ export const MapPicker: React.FC<MapPickerProps> = ({
         [createOrMoveMarker, reverseGeocode, viewOnly]
     )
 
-    // // Sync internal state with external value
-    // useEffect(() => {
-    //     if (state) {
-    //         justOpenedRef.current = true
-    //     }
-    // }, [state])
-
-    // useEffect(() => {
-    //     if (state && justOpenedRef.current) {
-    //         // Ignore the first value change after opening
-    //         justOpenedRef.current = false
-    //         return
-    //     }
-    //     setSelectedLocation(value || null)
-    // }, [value, state])
-
     useEffect(() => {
         if (state) {
             setSelectedLocation(value || null)
@@ -621,7 +603,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
 
             {/* Modal */}
             <Dialog onOpenChange={setState} open={state}>
-                <DialogContent className="max-h-[100vh] min-w-7xl overflow-hidden p-0">
+                <DialogContent className="max-h-screen min-w-7xl overflow-hidden p-0">
                     <DialogHeader className="p-6 pb-4">
                         <DialogTitle className="flex items-center gap-2">
                             <PinLocationIcon className="h-5 w-5" /> {title}
@@ -761,7 +743,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                             {showSuggestions &&
                                                 (suggestions.length > 0 ||
                                                     isLoadingSuggestions) && (
-                                                    <div className="absolute top-full right-0 left-0 z-[9999] mt-1">
+                                                    <div className="absolute top-full right-0 left-0 z-9999 mt-1">
                                                         <Command className="rounded-md border shadow-md">
                                                             <CommandList>
                                                                 {isLoadingSuggestions ? (
@@ -795,7 +777,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                                                                         )
                                                                                     }}
                                                                                 >
-                                                                                    <div className="mt-0.5 flex-shrink-0">
+                                                                                    <div className="mt-0.5 shrink-0">
                                                                                         {getPlaceIcon(
                                                                                             suggestion.types
                                                                                         )}

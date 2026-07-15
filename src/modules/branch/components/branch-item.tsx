@@ -90,7 +90,7 @@ export const BranchItem = ({
                     className={cn('flex items-start gap-3', getCardPadding())}
                 >
                     {/* Branch Image */}
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                         <ImageDisplay
                             className={cn(
                                 'rounded-xl object-cover',
@@ -124,7 +124,7 @@ export const BranchItem = ({
 
                             {/* Join Button */}
                             <Button
-                                className="flex-shrink-0"
+                                className="shrink-0"
                                 disabled={!isUserCanJoin || isLoading}
                                 onClick={(e) => {
                                     e.stopPropagation()

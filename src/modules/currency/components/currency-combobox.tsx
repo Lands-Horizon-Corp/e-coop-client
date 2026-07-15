@@ -224,7 +224,7 @@ const CurrencyCombobox = ({
                         <ChevronDownIcon className="opacity-50 shrink-0" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
+                <PopoverContent className="max-h-[--radix-popover-content-available-height] v1 w-[--radix-popover-trigger-width] p-0">
                     <Command>
                         <CommandInput
                             className="h-9"
