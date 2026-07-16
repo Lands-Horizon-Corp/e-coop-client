@@ -132,7 +132,7 @@ const AccountHeaderForm = ({
                     control={form.control}
                     disabled={isReadOnly}
                     label="Account Short Name"
-                    name="name"
+                    name="short_name"
                     render={({ field }) => (
                         <Input
                             {...field}
