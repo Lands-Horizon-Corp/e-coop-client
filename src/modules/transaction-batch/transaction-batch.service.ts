@@ -336,6 +336,7 @@ export const useTransactionBatchEndCurrentBatch = createMutationFactory<
         updateMutationInvalidationFn('transaction-batch', args),
     defaultInvalidates: [
         [transactionBatchQueryKey, 'current'],
+        [transactionBatchQueryKey, 'cash-count'],
         [transactionBatchQueryKey, 'unclosed'],
         [transactionBatchQueryKey, 'end-approvals'],
         [transactionBatchQueryKey, 'view-requests'],

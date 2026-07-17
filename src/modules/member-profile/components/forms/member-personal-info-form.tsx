@@ -20,6 +20,7 @@ import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import SexCombobox from '@/components/comboboxes/sex-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
+    PencilFillIcon,
     PinLocationIcon,
     PlusIcon,
     TrashIcon,
@@ -106,8 +107,6 @@ const MemberPersonalInfoForm = ({
         },
     })
 
-    const error = serverRequestErrExtractor({ error: rawError })
-
     const handleSubmit = useCallback(
         (formData: TMemberProfilePersonalInfoFormValues) => {
             mutate(
@@ -134,10 +133,13 @@ const MemberPersonalInfoForm = ({
         [form, memberProfileId, mutate]
     )
 
-    const { formRef } = useFormHelper<TMemberProfilePersonalInfoFormValues>({
-        form,
-        autoSave: true,
-    })
+    const { formRef, firstError } =
+        useFormHelper<TMemberProfilePersonalInfoFormValues>({
+            form,
+            autoSave: true,
+        })
+
+    const error = serverRequestErrExtractor({ error: rawError }) || firstError
 
     const isDisabled = (field: Path<TMemberProfilePersonalInfoFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
@@ -626,6 +628,7 @@ const MemberAddressCard = ({
             <MemberAddressCreateUpdateFormModal
                 {...memberAddressModalState}
                 formProps={{
+                    defaultValues: address,
                     onSuccess(data) {
                         form.setValue(`member_addresses.${index}`, data)
                         memberAddressModalState.onOpenChange(false)
@@ -634,7 +637,7 @@ const MemberAddressCard = ({
             />
             <div className="flex items-start gap-3">
                 <div className="flex size-8 items-center justify-center rounded-md bg-primary/10">
-                    <PinLocationIcon className="h-4 w-4 text-primary" />
+                    <PinLocationIcon className="size-4 text-primary" />
                 </div>
 
                 <div className="flex-1 space-y-1">
@@ -661,18 +664,29 @@ const MemberAddressCard = ({
             </div>
 
             {!readOnly && (
-                <Button
-                    className="absolute right-2 top-2 opacity-0 transition group-hover:opacity-100"
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        onRemove(index, address)
-                    }}
-                    size="xs"
-                    type="button"
-                    variant="ghost"
-                >
-                    <TrashIcon />
-                </Button>
+                <div className="absolute right-2 flex top-2 opacity-0 transition group-hover:opacity-100">
+                    <Button
+                        onClick={() =>
+                            memberAddressModalState.onOpenChange(true)
+                        }
+                        size="xs"
+                        type="button"
+                        variant="ghost"
+                    >
+                        <PencilFillIcon />
+                    </Button>
+                    <Button
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            onRemove(index, address)
+                        }}
+                        size="xs"
+                        type="button"
+                        variant="ghost"
+                    >
+                        <TrashIcon />
+                    </Button>
+                </div>
             )}
         </div>
     )
