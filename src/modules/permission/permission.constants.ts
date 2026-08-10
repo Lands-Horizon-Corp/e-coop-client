@@ -850,6 +850,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         label: 'Other Fund',
         description: 'Allow delete action for other funds',
         supportedActions: [
+            'Read',
             'Create',
             'OwnDelete',
             'Delete',
